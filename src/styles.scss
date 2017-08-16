@@ -1,0 +1,193 @@
+/* You can add global styles to this file, and also import other style files */
+@import './app-theme';
+
+/* angular material fixes for using sidenav */
+/*font-family: Roboto, "Helvetica Neue", sans-serif;*/
+html {
+   /*font-family: "Helvetica Neue", sans-serif;*/
+   /*font-family: 'Open Sans', "Helvetica Neue", sans-serif;*/
+   /*font-family: 'Source Sans Pro', sans-serif;*/
+   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+html, body, .main-content {
+   margin: 0;
+}
+.container {
+   margin: 16px;
+}
+/* Helpers */
+.shingo-bg {
+   background: radial-gradient(#005fb3,#003768);
+}
+.md-primary {
+   background-color: #003768;
+}
+.md-primary-text {
+   color: #003768;
+}
+.md-accent {
+   background-color: #640921;
+}
+.md-accent-text {
+   color: #640921;
+}
+.md-warn {
+   background-color: #f44336;
+}
+.md-warn-text {
+   color: #f44336
+}
+.grey-text {
+   color: #757575;
+}
+.text-sm { font-size: 10px; }
+.text-md { font-size: 14px; }
+.text-lg { font-size: 18px; }
+/* Sidenav */
+md-sidenav {
+   margin-right: 4px;
+   box-shadow: 1px 0 3px rgba(0,0,0,.24);
+   width: 250px;
+}
+md-nav-list {
+   margin: 8px;
+}
+md-nav-list a.active {
+   background-color: #e5e5ff !important;
+   border-left: 5px solid #1E88E5;
+}
+md-nav-list p {
+   margin: 8px 0 8px 0;
+   font-weight: 600;
+}
+/* Text helpers */
+.bold-text {
+   font-weight: 600;
+}
+/* Cards */
+.card {
+   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+   border-radius: 2px;
+   padding: 0;
+   margin-bottom: 16px;
+}
+.card-content {
+   margin: 0;
+}
+.card-header {
+   display: flex;
+   align-items: center;
+   background-color: #003768;
+   color: white;
+   font-weight: 200;
+   font-size: 16px;
+   padding: 12px 16px 12px 16px;
+}
+.card-content {
+   margin: 0;
+   padding: 8px;
+}
+.card-actions {
+   margin: 8px;
+   padding: 8px;
+}
+/* Misc */
+button md-icon ~ span {
+   margin-left: 4px;
+}
+.mat-sort-header-container{
+   display: flex;
+   cursor: pointer
+}
+.mat-sort-header-position-before {
+   flex-direction: row-reverse
+}
+.mat-sort-header-button {
+   border: none;
+   background:0 0;
+   display: flex;
+   align-items: center;
+   padding: 0;
+   cursor: pointer;
+   outline: 0;
+   font: inherit;
+   color: currentColor
+}
+.mat-sort-header-arrow {
+   display: none;
+   height: 10px;
+   width: 10px;
+   position: relative;
+   margin: 0 0 0 6px
+}
+.mat-sort-header-position-before .mat-sort-header-arrow {
+   margin:0 6px 0 0
+}
+.mat-sort-header-asc {
+   display: block;
+   transform: rotate(45deg)
+}
+.mat-sort-header-desc {
+   display: block;
+   transform: rotate(225deg);
+   top: 2px;
+}
+.mat-sort-header-stem {
+   background: currentColor;
+   transform: rotate(135deg);
+   height: 10px;
+   width: 2px;
+   margin: auto
+}
+.mat-sort-header-pointer-left {
+   background: currentColor;
+   width: 2px;
+   height: 8px;
+   position: absolute;
+   bottom: 0;
+   right: 0
+}
+.mat-sort-header-pointer-right { 
+   background: currentColor;width:8px;height:2px;position:absolute;bottom:0;right:0
+}
+md-row md-cell,
+md-header-row md-header-cell {
+   padding: 0 24px 0 4px;
+}
+md-row md-cell:last-child,
+md-header-row md-header-cell:last-child {
+   padding-left: -4px;
+}
+md-row md-cell:first-child,
+md-header-row md-header-cell:first-child {
+   padding: 0;
+   margin-right: 16px;
+}
+md-cell > p {
+   margin: 4px 0 4px 0;
+}
+md-row {
+   height: 56px;
+}
+/* Flex helpers */
+.flex-1 {
+   flex: 1 0;
+}
+.flex-2 {
+   flex: 2 0;
+}
+.flex-1-shrink {
+   flex: 0 1;
+}
+.flex-2-shrink {
+   flex: 0 2;
+}
+.flex-container {
+   display: flex;
+   display: -webkit-flex;
+   -webkit-flex-direction: row;
+   flex-direction: row;
+}
+.--flex-center {
+   align-items: center;
+}

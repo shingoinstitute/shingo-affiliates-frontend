@@ -1,0 +1,106 @@
+@import '../node_modules/@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$affiliate-brand-red: (
+    50 : #ece1e4,
+    100 : #d1b5bc,
+    200 : #b28490,
+    300 : #935364,
+    400 : #7b2e42,
+    500 : #640921,
+    600 : #5c081d,
+    700 : #520618,
+    800 : #480514,
+    900 : #36020b,
+    A100 : #ff6e7d,
+    A200 : #ff3b4f,
+    A400 : #ff0821,
+    A700 : #ed0018,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$affiliate-brand-blue: (
+    50 : #e0e7ed,
+    100 : #b3c3d2,
+    200 : #809bb4,
+    300 : #4d7395,
+    400 : #26557f,
+    500 : #003768,
+    600 : #003160,
+    700 : #002a55,
+    800 : #00234b,
+    900 : #00163a,
+    A100 : #7096ff,
+    A200 : #3d70ff,
+    A400 : #0a4aff,
+    A700 : #003ff0,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+// $affiliate-app-primary: mat-palette($mat-indigo);
+// $affiliate-app-accent:  mat-palette($mat-red, 900, A100, A700);
+$affiliate-app-primary: mat-palette($affiliate-brand-red);
+$affiliate-app-accent:  mat-palette($affiliate-brand-blue);
+
+// The warn palette is optional (defaults to red).
+$affiliate-app-warn:    mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-accent, $affiliate-app-warn);
+
+@mixin button($affiliate-app-theme) {
+   .mat-raised-button.mat-primary,
+   .mat-raised-button.mat-accent,
+   .mat-raised-button.mat-warn {
+      font-weight: 400;
+   }
+   md-select > div.mat-select-trigger {
+      margin-top: 17px;
+   }
+}
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($affiliate-app-theme);
+@include button($affiliate-app-theme);

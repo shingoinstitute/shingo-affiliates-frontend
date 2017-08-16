@@ -1,0 +1,20 @@
+@import '../../../assets/sass/_globals';
+
+.form-group-container {
+   max-width: 960px;
+   margin-bottom: 142px;
+}
+form .input-item:nth-child(even) {
+   background-color: $rowBackground;
+}
+.form-actions {
+   margin: 16px 0 16px 0;
+}
+.input-item {
+   padding: 8px;
+   display: flex;
+   flex-direction: column;
+}
+.input-item > p {
+   margin: 0;
+}
