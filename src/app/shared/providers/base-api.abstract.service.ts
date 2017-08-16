@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { HttpService } from './http.service';
+import { BaseService } from './base.abstract.service';
 import 'rxjs/add/observable/throw';
 
 
@@ -9,33 +11,46 @@ export interface SFSuccessResult {
     errors: any[]
 }
 
-export abstract class BaseAPIService {
-    protected APIBaseUrl: string = "http://129.123.47.167";
-    protected APIBasePort: string = "8080";
+export abstract class BaseAPIService extends BaseService {
+    protected BaseUrl: string = "http://129.123.47.167";
+    protected BasePort: string = "8080";
 
-    public APIHost() { return `${this.APIBaseUrl}:${this.APIBasePort}`; }
-
-    /** 
-     * @description Handles errors from http requests
-     */
-    handleError(error: Response | any): ErrorObservable {
-        let err: string;
-        if (error instanceof Response) {
-            const body = error.json() || '';
-            err = body['error'] || JSON.stringify(body);
-        } else {
-            err = error.message ? error.message : error.toString();
-        }
-        return Observable.throw(err);
-    }
+    protected APIHost() { return `${this.BaseUrl}:${this.BasePort}`; }
 
     // Contract for all APIServices;
-    abstract getAll(): Observable<any[]>;
-    abstract getById(id: string): Observable<any>;
-    abstract create(obj: any): Observable<SFSuccessResult>;
-    abstract update(obj: any): Observable<SFSuccessResult>;
-    abstract delete(obj: any): Observable<SFSuccessResult>;
-    abstract describe(obj: any): Observable<any>;
-    abstract search(query: string): Observable<any[]>;
+    public abstract getAll(): Observable<any[]>;
+    public abstract getById(id: string): Observable<any>;
+    public abstract create(obj: any): Observable<SFSuccessResult>;
+    public abstract update(obj: any): Observable<SFSuccessResult>;
+    public abstract delete(obj: any): Observable<SFSuccessResult>;
+    public abstract search(query: string): Observable<any[]>;
 
+    public describe(route: 'workshops' | 'facilitators' | 'affiliates', http: HttpService): Observable<any> {
+        return http.get(`${this.APIHost()}/${route}/describe`)
+            .map(res => {
+                let data = res.json();
+                console.log('describe', data);
+                let props = {};
+                data.fields.filter(field => {
+                    return field.inlineHelpText || field.label || field.picklistValues;
+                })
+                    .map(field => {
+                        let props = {};
+                        if (field.inlineHelpText)
+                            props['inlineHelpText'] = field.inlineHelpText;
+                        if (field.label)
+                            props['label'] = field.label;
+                        if (field.name)
+                            props['name'] = field.name;
+                        if (field.picklistValues && field.picklistValues.length > 0)
+                            props['picklistValues'] = field.picklistValues;
+                        return props;
+                    })
+                    .forEach(field => {
+                        props[this.toCamelCase(field.name)] = field;
+                    });
+                return props;
+            })
+            .catch(this.handleError);
+    }
 }

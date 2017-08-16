@@ -8,14 +8,15 @@ import { Workshop } from './Workshop';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-export const DEFAULT_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affilaite__c'];
+export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affilaite__c'];
 
 @Injectable()
 export class WorkshopService extends BaseAPIService {
 
-  constructor(private http: HttpService) { super(); }
+  private route: string = 'workshops';
+  private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  get baseUrl() { return `${this.APIHost()}/workshops`; }
+  constructor(private http: HttpService) { super(); }
 
   public getAll(): Observable<Workshop[]> {
     return this.http.get(this.baseUrl)
@@ -47,13 +48,7 @@ export class WorkshopService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public describe(): Observable<any> {
-    return this.http.get(this.baseUrl + '/describe')
-      .map(res => res.json())
-      .catch(this.handleError);
-  }
-
-  public search(query: string, fields: string[] = DEFAULT_SEARCH_FIELDS): Observable<Workshop[]> {
+  public search(query: string, fields: string[] = DEFAULT_WORKSHOP_SEARCH_FIELDS): Observable<Workshop[]> {
     // Set headers (NOTE: Must include token here)
     const headers = new Headers();
     headers.set('x-jwt', this.http.jwt);
@@ -63,6 +58,10 @@ export class WorkshopService extends BaseAPIService {
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true } as RequestOptionsArgs)
       .map(res => res.json().map(wkJSON => new Workshop(wkJSON)))
       .catch(this.handleError);
+  }
+
+  public describe(): Observable<any> {
+    return super.describe('workshops', this.http);
   }
 
 }

@@ -77,7 +77,7 @@
       </div>
     </div>
 
-    <div class="input-item">
+    <!-- <div class="input-item">
       <p class="mat-caption"> {{ describe.courseManager && describe.courseManager.inlineHelpText }} </p>
       <md-input-container>
         <input mdInput [mdAutocomplete]="autoCourseManager" placeholder="Course Manager (e.g. John Doe)" formControlName="courseManager">
@@ -86,7 +86,7 @@
       <md-autocomplete #autoCourseManager="mdAutocomplete">
         <md-option *ngFor="let cm of courseManagers" [value]="cm"> {{ cm.Name }} </md-option>
       </md-autocomplete>
-    </div>
+    </div> -->
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
@@ -98,11 +98,13 @@
 
     <div class="input-item">
       <md-input-container>
-        <input mdInput placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}" [mdAutocomplete]="autoInstructors">
+        <input mdInput formControlName="facilitator" placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"
+          [mdAutocomplete]="autoInstructors">
       </md-input-container>
 
       <md-autocomplete #autoInstructors="mdAutocomplete" [displayWith]="instructorDisplayWith.bind(this)">
-        <md-option *ngFor="let facilitator of facilitatorOpts" [value]="facilitator.Id"> {{ facilitator.Name }} </md-option>
+        <md-option *ngFor="let facilitator of facilitatorOpts" [value]="facilitator" (onSelectionChange)="facilitatorChanged(facilitator)">
+          {{ facilitator.Name }} </md-option>
       </md-autocomplete>
     </div>
 
@@ -111,7 +113,7 @@
         <h4>{{facilitator.Name}}</h4>
         <i>{{facilitator.Email}}</i>
       </div>
-      <button md-button type="button" (click)="removeFacilitator(i)">
+      <button md-button type="button" (click)="workshop.removeInstructorById(facilitator.sfId)">
         <md-icon svgIcon="x_red"></md-icon>
       </button>
     </div>

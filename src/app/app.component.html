@@ -1,1 +1,48 @@
-<router-outlet></router-outlet>
+<!-- <md-toolbar class="mat-primary" *ngIf="isAuthenticated">   -->
+<md-toolbar class="mat-primary">
+  <img [style.height]="'150px'" src="http://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
+  <span fxFlex></span>
+
+  <button md-button [mdMenuTriggerFor]="menu" *ngIf="isAuthenticated">
+      <md-icon svgIcon="account_box_white"></md-icon>
+   </button>
+
+  <md-menu #menu="mdMenu">
+    <div class="menu-btn-container">
+      <a class="toolbar-menu-btn" routerLink="/profile">
+        <md-icon svgIcon="person_black"></md-icon>
+        <p>Profile</p>
+      </a>
+      <a class="toolbar-menu-btn" routerLink="/support">
+        <md-icon svgIcon="support_black"></md-icon>
+        <p>Support</p>
+      </a>
+      <a class="toolbar-menu-btn" routerLink="/login" (click)="logoutHandler()">
+        <md-icon svgIcon="logout_black"></md-icon>
+        <p>Logout</p>
+      </a>
+    </div>
+  </md-menu>
+
+</md-toolbar>
+
+<!-- <md-sidenav-container *ngIf="isAuthenticated"> -->
+<md-sidenav-container>
+  <md-sidenav #sidenav mode="side" [opened]="isAuthenticated">
+    <md-nav-list>
+      <p class="bold-text">Main</p>
+      <a md-list-item routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a md-list-item routerLink="/workshops" routerLinkActive="active">Workshops</a>
+      <p class="bold-text">Affiliate Materials</p>
+      <a md-list-item nohref>Workshop Materials</a>
+      <a md-list-item nohref>Forms/Evaluations</a>
+      <a md-list-item nohref>Marketing Materials</a>
+    </md-nav-list>
+  </md-sidenav>
+
+  <router-outlet class="main-content"></router-outlet>
+
+</md-sidenav-container>
+
+<!-- Show when user is *not* logged in -->
+<!-- <app-login *ngIf="!isAuthenticated"></app-login> -->
