@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { WorkshopService } from '../workshop.service';
+import { WorkshopService, Workshop } from '../workshop.service';
 
 @Component({
   selector: 'app-add-workshop',
@@ -8,9 +8,9 @@ import { WorkshopService } from '../workshop.service';
 })
 export class AddWorkshopComponent {
 
-  constructor(private _ws: WorkshopService) { }
+  constructor(private _ws: WorkshopService) { console.log('_ws in AddWorkshopComponent: ', this._ws); }
 
-  add(data) {
+  add(data: Workshop) {
     return this._ws.create(data);
   }
 

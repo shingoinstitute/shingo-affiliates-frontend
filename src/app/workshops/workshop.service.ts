@@ -8,6 +8,7 @@ import { Workshop } from './Workshop';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+export { SFSuccessResult, Workshop }
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affilaite__c'];
 
 @Injectable()
@@ -31,13 +32,13 @@ export class WorkshopService extends BaseAPIService {
   }
 
   public create(obj: Workshop): Observable<SFSuccessResult> {
-    return this.http.post(this.baseUrl, obj.toSfJSON())
+    return this.http.post(this.baseUrl, obj.toSFJSON())
       .map(res => res.json() as SFSuccessResult)
       .catch(this.handleError);
   }
 
   public update(obj: Workshop): Observable<SFSuccessResult> {
-    return this.http.put(this.baseUrl + `/${obj.sfId}`, obj.toSfJSON())
+    return this.http.put(this.baseUrl + `/${obj.sfId}`, obj.toSFJSON())
       .map(res => res.json() as SFSuccessResult)
       .catch(this.handleError);
   }

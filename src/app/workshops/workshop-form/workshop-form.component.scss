@@ -1,14 +1,14 @@
 @import '../../../assets/sass/_globals';
 
 .form-group-container {
-   max-width: 960px;
+   max-width: $mediumBreak;
    margin-bottom: 142px;
 }
 form .input-item:nth-child(even) {
    background-color: $rowBackground;
 }
 .form-actions {
-   margin: 16px 0 16px 0;
+   margin: ($defaultMargin * 2) 0 ($defaultMargin * 2) 0;
 }
 .input-item {
    padding: 8px;
@@ -17,4 +17,25 @@ form .input-item:nth-child(even) {
 }
 .input-item > p {
    margin: 0;
+}
+
+form .facilitator {
+    padding: $defaultMargin;
+    width: 50%;
+}
+
+form .facilitator > button {
+    float: right;
+}
+
+form .facilitator:nth-child(even) {
+    background-color: $rowBackground;
+}
+
+form .facilitator, form .facilitator > button {
+    margin-left: $defaultMargin * 2;
+}
+
+form .facilitator > div {
+    float: left
 }

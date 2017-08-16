@@ -2,7 +2,7 @@
   <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
     <div class="input-item">
       <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
-      <md-checkbox formControlName="public"> Yes, publish to web. </md-checkbox>
+      <md-checkbox formControlName="isPublic"> Yes, publish to web. </md-checkbox>
     </div>
 
     <div class="input-item">
@@ -51,7 +51,7 @@
       <p class="mat-caption"> {{ describe.billingContact && describe.billingContact.inlineHelpText }} </p>
       <md-input-container>
         <input mdInput placeholder="{{ describe.billingContact && describe.billingContact.label || 'Billing Contact' }}" required
-          formControlName="billingContact">
+          formControlName="billing">
       </md-input-container>
     </div>
 
@@ -77,22 +77,22 @@
       </div>
     </div>
 
-    <!-- <div class="input-item">
+    <div class="input-item">
       <p class="mat-caption"> {{ describe.courseManager && describe.courseManager.inlineHelpText }} </p>
       <md-input-container>
         <input mdInput [mdAutocomplete]="autoCourseManager" placeholder="Course Manager (e.g. John Doe)" formControlName="courseManager">
       </md-input-container>
 
-      <md-autocomplete #autoCourseManager="mdAutocomplete">
+      <md-autocomplete #autoCourseManager="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">
         <md-option *ngFor="let cm of courseManagers" [value]="cm"> {{ cm.Name }} </md-option>
       </md-autocomplete>
-    </div> -->
+    </div>
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
       <md-input-container>
         <input mdInput placeholder="{{ describe.registrationWebsite && describe.registrationWebsite.label || 'Registration URL' }}"
-          formControlName="registrationWebsite">
+          formControlName="website">
       </md-input-container>
     </div>
 
@@ -102,15 +102,16 @@
           [mdAutocomplete]="autoInstructors">
       </md-input-container>
 
-      <md-autocomplete #autoInstructors="mdAutocomplete" [displayWith]="instructorDisplayWith.bind(this)">
-        <md-option *ngFor="let facilitator of facilitatorOpts" [value]="facilitator" (onSelectionChange)="facilitatorChanged(facilitator)">
+      <md-autocomplete #autoInstructors="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">
+        <md-option *ngFor="let facilitator of facilitatorOpts" [value]="facilitator" (onSelectionChange)="onFacilitatorSelected(facilitator)">
           {{ facilitator.Name }} </md-option>
       </md-autocomplete>
     </div>
 
-    <div class="input-item" *ngFor="let facilitator of workshop.facilitators">
+    <h5 *ngIf="workshop.instructors.length">Instructors</h5>
+    <div class="facilitator" *ngFor="let facilitator of workshop.instructors">
       <div>
-        <h4>{{facilitator.Name}}</h4>
+        <b>{{facilitator.Name}}</b><br>
         <i>{{facilitator.Email}}</i>
       </div>
       <button md-button type="button" (click)="workshop.removeInstructorById(facilitator.sfId)">
@@ -119,7 +120,7 @@
     </div>
 
     <div class="form-actions">
-      <button md-raised-button type="submit" class="mat-primary" [disabled]="!workshopForm.valid">Save</button>
+      <button md-raised-button type="submit" class="mat-primary" [disabled]="!workshopForm.valid || !workshop.facilitators.length">Save</button>
     </div>
 
   </form>

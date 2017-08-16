@@ -1,13 +1,9 @@
 import { Facilitator } from '../facilitators/Facilitator';
+import { SFObject } from '../shared/SFObject.abstract';
+import { CourseManager } from '../shared/CourseManager';
 import * as dateFormat from 'dateformat';
 
-export interface CourseManager {
-    Id: string,
-    Email: string,
-    FirstName: string,
-    LastName: string,
-    Name: string
-}
+export { CourseManager }
 
 export type WorkshopType = 'Discover' | 'Enable' | 'Improve' | 'Align' | 'Build' | '' | undefined;
 export type WorkshopStatusType = 'Invoiced, Not Paid' |
@@ -27,12 +23,12 @@ export type WorkshopStatusType = 'Invoiced, Not Paid' |
  * @export
  * @class Workshop
  */
-export class Workshop {
+export class Workshop extends SFObject {
     // Private members
     private Id: string = '';
     private Start_Date__c: Date = new Date();
-    private End_Date__c: Date = new Date();
-    private Course_Manager__r: CourseManager = { Id: '', Email: '', FirstName: '', LastName: '', Name: '' };
+    private End_Date__c: Date = new Date(Date.now() + (1000 * 60 * 60 * 24));
+    private Course_Manager__r: CourseManager = new CourseManager();
     private Course_Manager__c: string = '';
     private facilitators: Facilitator[] = [];
     private Event_City__c: string = '';
@@ -49,6 +45,7 @@ export class Workshop {
     // Be careful because Object.assign will assign variables dynamically: eg
     //  new Workshop({Id: 'some id', otherProp: 42}) => {Id: 'some id', otherProp: 42} that has type Workshop
     constructor(workshop?: any) {
+        super();
         if (workshop) return Object.assign(this, workshop);
     }
 
@@ -57,8 +54,8 @@ export class Workshop {
     public get startDate(): Date { return this.Start_Date__c; }
     public get endDate(): Date { return this.End_Date__c; }
     public get courseManager(): CourseManager { return this.Course_Manager__r; }
-    public get courseManagerId(): string { return (this.Course_Manager__r ? this.Course_Manager__r.Id : this.Course_Manager__c); }
-    public get instructors(): Facilitator[] { return this.facilitators; }
+    public get courseManagerId(): string { return (this.Course_Manager__r ? this.Course_Manager__r.sfId : this.Course_Manager__c); }
+    public get instructors(): Facilitator[] { return this.facilitators.map(fac => new Facilitator(fac)); }
     public get city(): string { return this.Event_City__c; }
     public get country(): string { return this.Event_Country__c; }
     public get hostSite(): string { return this.Host_Site__c; }
@@ -112,11 +109,11 @@ export class Workshop {
         if (this.facilitators.findIndex(fac => fac.sfId === facilitator.sfId) !== -1) return;
         this.facilitators.push(facilitator);
     }
-    public removeInstructorById(sfId: string): void { this.facilitators = this.facilitators.filter(f => f.sfId !== sfId); }
+    public removeInstructorById(sfId: string): void { this.facilitators = this.facilitators.filter(f => f['Id'] !== sfId); }
     public removeInstructorByIndex(index: number): void { this.facilitators.splice(index, 1); }
 
     // Utility methods
-    public toSfJSON(): object {
+    public toSFJSON(): object {
         const sfWorkshop = {
             Id: this.sfId,
             Start_Date__c: this.startDate,

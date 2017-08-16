@@ -35,9 +35,11 @@ import { AffiliateDataTableComponent } from './affiliates/affiliate-data-table/a
 import { AffiliateFormComponent } from './affiliates/affiliate-form/affiliate-form.component';
 import { AffiliateService } from './affiliates/affiliate.service';
 import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component';
+import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component';
 
 export const appRoutes: Routes = [
   { path: 'workshop/new', component: AddWorkshopComponent },
+  { path: 'workshop/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
   { path: 'workshop/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } }
 ]
 
@@ -53,15 +55,16 @@ export const appRoutes: Routes = [
     AffiliateComponent,
     AffiliateDataTableComponent,
     AffiliateFormComponent,
-    AddWorkshopComponent
+    AddWorkshopComponent,
+    EditWorkshopComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    SharedModule,
-    RouterModule.forRoot(appRoutes),
     HttpModule,
+    SharedModule,
     CookieModule.forRoot(),
+    RouterModule.forRoot(appRoutes),
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
