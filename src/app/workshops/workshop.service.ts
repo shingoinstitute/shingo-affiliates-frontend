@@ -27,7 +27,7 @@ export class WorkshopService extends BaseAPIService {
 
   public getById(id: string): Observable<Workshop> {
     return this.http.get(this.baseUrl + `/${id}`)
-      .map(res => new Workshop(res.json()))
+      .map(res => {console.log(res.json()); return new Workshop(res.json()[0])})
       .catch(this.handleError);
   }
 

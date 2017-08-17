@@ -37,10 +37,31 @@ import { AffiliateService } from './affiliates/affiliate.service';
 import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component';
 import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component';
 
+/** Interface Components */
+import { DashboardComponent } from './interface-components/dashboard/dashboard.component';
+import { LoginComponent } from './interface-components/login/login.component';
+import { FormsEvalsComponent } from './interface-components/materials/forms-evals/forms-evals.component';
+import { MarketingMaterialsComponent } from './interface-components/materials/marketing-materials/marketing-materials.component';
+import { WorkshopMaterialsComponent } from './interface-components/materials/workshop-materials/workshop-materials.component';
+import { ProfileComponent } from './interface-components/profile/profile.component';
+import { QuickDetailsComponent } from './interface-components/quick-details/quick-details.component';
+import { QuickDetailItemComponent } from './interface-components/quick-details/quick-detail-item/quick-detail-item.component';
+import { SupportComponent } from './interface-components/support/support.component';
+import { SupportTrainingComponent } from './interface-components/support/support-training/support-training.component';
+import { AnnouncementService, SidenavService, SupportService} from './interface-components/providers';
+
+
 export const appRoutes: Routes = [
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'workshop/new', component: AddWorkshopComponent },
   { path: 'workshop/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
-  { path: 'workshop/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } }
+  { path: 'workshop/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'support', component: SupportComponent },
+  { path: 'support/training', component: SupportTrainingComponent },
+  { path: 'support/training/:video', component: SupportTrainingComponent }
 ]
 
 @NgModule({
@@ -56,7 +77,17 @@ export const appRoutes: Routes = [
     AffiliateDataTableComponent,
     AffiliateFormComponent,
     AddWorkshopComponent,
-    EditWorkshopComponent
+    EditWorkshopComponent,
+    DashboardComponent,
+    LoginComponent,
+    FormsEvalsComponent,
+    MarketingMaterialsComponent,
+    WorkshopMaterialsComponent,
+    ProfileComponent,
+    QuickDetailItemComponent,
+    QuickDetailsComponent,
+    SupportComponent,
+    SupportTrainingComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +108,10 @@ export const appRoutes: Routes = [
     WorkshopService,
     WorkshopResolver,
     FacilitatorService,
-    AffiliateService
+    AffiliateService,
+    AnnouncementService,
+    SidenavService,
+    SupportService
   ],
   bootstrap: [AppComponent]
 })

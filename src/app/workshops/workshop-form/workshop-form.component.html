@@ -1,6 +1,6 @@
 <md-card class="form-group-container">
   <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
-    <h1 *ngIf="auth.user.roleName === 'Affiliate Manager'">{{auth.user.name}} is an Affiliate Manager</h1>
+    <h1 *ngIf="auth.user && auth.user.isAdmin">{{auth.user.name}} is an Affiliate Manager</h1>
     <div class="input-item">
       <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
       <md-checkbox formControlName="isPublic"> Yes, publish to web. </md-checkbox>

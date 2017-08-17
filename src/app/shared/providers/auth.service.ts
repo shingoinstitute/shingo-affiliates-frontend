@@ -11,18 +11,19 @@ import 'rxjs/add/observable/from';
 @Injectable()
 export class AuthService extends BaseService {
 
-  protected BaseUrl: string = 'http://129.123.47.167:8080';
-  protected BasePort: string = '8080';
-
+  private _user: User;
   private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth` }
 
+  protected BaseUrl: string = 'http://192.168.0.136';
+  protected BasePort: string = '8080';
+
   public authenticationChange$: BehaviorSubject<boolean>;
-
-  private _user: User;
-
-  constructor(private http: HttpService) { super(); }
-
   public get user() { return this._user; }
+
+  constructor(private http: HttpService) { 
+    super();
+    this.authenticationChange$ = new BehaviorSubject<boolean>(!!this.http.jwt);
+  }
 
   /**
     * Logs in the user after succesful authentication with email and password
