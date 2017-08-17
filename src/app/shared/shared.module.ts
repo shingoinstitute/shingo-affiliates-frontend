@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpService } from './providers/http.service';
-import { CountriesService } from './providers/countries.service';
+import { HttpService, CountriesService, RouterService, AuthService } from './providers';
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  providers: [HttpService, CountriesService]
+  providers: [HttpService, CountriesService, RouterService, AuthService]
 })
 export class SharedModule { }

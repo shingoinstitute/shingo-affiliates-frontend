@@ -1,0 +1,19 @@
+@import '../../../assets/sass/_globals';
+
+.--profile-container {
+   min-height: 90vh; /* min height pushes screen down when content doesn't take up enough vertical space */
+}
+.profile-body {
+   margin: $defaultMargin;
+}
+.profile-actions {
+   margin: $defaultMargin;
+}
+.profile-img-container {
+   width: 150px;
+   height: 150px;
+}
+.profile-img {
+   width: 100%;
+   height: 100%;
+}

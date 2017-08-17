@@ -4,7 +4,14 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": []
+    "types": [
+      "node",
+      "lodash",
+      "jquery",
+      "q",
+      "selenium-webdriver",
+      "jasmine"
+    ]
   },
   "exclude": [
     "test.ts",

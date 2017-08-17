@@ -1,16 +1,18 @@
+@import '../../../assets/sass/_globals';
+
 .toolbar-menu-btn {
    text-decoration: none;
    color: black;
    display: flex;
    flex-direction: row;
    align-items: center;
-   padding: 8px 16px 8px 8px;
+   padding: $defaultMargin ($defaultMargin * 2) $defaultMargin $defaultMargin;
 }
 a.toolbar-menu-btn:hover {
    background-color: #e0e0e0;
 }
 .toolbar-menu-btn > md-icon {
-   margin-right: 16px;
+   margin-right: $defaultMargin * 2;
 }
 .toolbar-menu-btn > p {
    margin: 0;

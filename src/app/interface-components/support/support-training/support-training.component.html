@@ -1,0 +1,21 @@
+<div fill-height class="container" fxLayout="column" fxLayoutGap="8px" *ngIf="video">
+   <h3 class="mat-title">{{ video.title }}</h3>
+   <p class="mat-body-1">{{ video.description }}</p>
+   <video controls>
+      <source src="{{ video.link }}">
+         <p>Sorry, your browser does not support HTML5 embedded videos.</p>
+         <ul>
+            <span style="text-decoration-line: underline;">Supported Browsers</span>:
+            <li>Internet Explorer 9.0 / Edge</li>
+            <li>Chrome 4.0 or greater</li>
+            <li>Firefox 3.5 or greater</li>
+            <li>Safari 4.0 or greater</li>
+            <li>Opera 10.5 or greater</li>
+         </ul>
+   </video>
+   
+   <div fxLayout.gt-sm fxLayout="column">
+      <p fxFlex *ngIf="prevVideo">Previous Video: <a routerLink="/support/training/{{ prevVideo.id }}">{{ prevVideo.title }}</a></p>
+      <p fxFlex *ngIf="nextVideo">Next Up: <a routerLink="/support/training/{{ nextVideo.id }}">{{ nextVideo.title }}</a></p>
+   </div>
+</div>

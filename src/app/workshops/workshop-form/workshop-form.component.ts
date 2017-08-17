@@ -12,7 +12,7 @@ import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSe
 import { Facilitator } from '../../facilitators/Facilitator';
 import { FacilitatorService } from '../../facilitators/facilitator.service';
 import { AffiliateService } from '../../affiliates/affiliate.service';
-import { CountriesService } from '../../shared/providers/countries.service';
+import { CountriesService, AuthService } from '../../shared/providers/';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
@@ -47,6 +47,7 @@ export class WorkshopFormComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
     private router: Router,
+    private auth: AuthService,
     private _cs: CountriesService,
     private _fs: FacilitatorService,
     private _as: AffiliateService,
@@ -80,6 +81,7 @@ export class WorkshopFormComponent implements OnInit {
 
   private onSubmit() {
     this.workshop = merge(this.workshop, this.workshopForm.value);
+    this.workshop.affiliateId = this.auth.user.affilaite;
 
     console.log('SUBMITTED DATA', this.workshop);
     this.submitFunction(this.workshop)
