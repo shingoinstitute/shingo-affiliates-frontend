@@ -1,24 +1,36 @@
+// Angular Modules
 import { Component, ViewChild, ElementRef, QueryList, Input, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from "@angular/forms";
-import { Workshop, WorkshopType, CourseManager } from "../Workshop";
-import { SFSuccessResult, WorkshopService } from '../workshop.service';
-import { without, merge } from 'lodash';
+import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange } from "@angular/material";
+
+// App Modules
+import { AuthService } from '../../services/auth/auth.service';
+import { CountriesService } from '../../services/countries/countries.service';
+import { FacilitatorService } from '../../services/facilitator/facilitator.service';
+import { AffiliateService } from '../../services/affiliate/affiliate.service';
+import { WorkshopService } from '../../services/workshop/workshop.service';
+import { SFSuccessResult } from '../../services/base-api.abstract.service';
+import { Workshop, WorkshopType } from "../Workshop";
+import { CourseManager } from '../../shared/models/CourseManager';
+import { Facilitator } from '../../facilitators/Facilitator';
+
+// RxJS Modules
 import { Observable } from "rxjs/Observable";
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from "rxjs/Subject";
-import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange } from "@angular/material";
-import { Facilitator } from '../../facilitators/Facilitator';
-import { FacilitatorService } from '../../facilitators/facilitator.service';
-import { AffiliateService } from '../../affiliates/affiliate.service';
-import { CountriesService, AuthService } from '../../shared/providers/';
+
+// RxJS operators
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/onErrorResumeNext';
 import 'rxjs/add/observable/merge';
 import 'rxjs/add/observable/throw';
+
+// Lodash functions
+import { merge } from 'lodash';
 
 @Component({
   selector: 'app-workshop-form',
@@ -31,10 +43,12 @@ export class WorkshopFormComponent implements OnInit {
   @Input() workshop: Workshop = new Workshop();
 
   private debounceTime: number = 250;
-  private facilitatorQueryChange$ = new Subject<string>();
-  private facilitatorChange$ = new BehaviorSubject<Facilitator[]>([]);
-  private courseManagerQuery$ = new Subject<string>();
-  private courseManagersChange$ = new BehaviorSubject<CourseManager[]>([]);
+  private loadingInstructors: boolean = false;
+  private facilitatorQueryChange$: Subject<string> = new Subject<string>();
+  private facilitatorChange$: BehaviorSubject<Facilitator[]> = new BehaviorSubject<Facilitator[]>([]);
+  private loadingCms: boolean = false;
+  private courseManagerQuery$: Subject<string> = new Subject<string>();
+  private courseManagersChange$: BehaviorSubject<CourseManager[]> = new BehaviorSubject<CourseManager[]>([]);
 
   private countries: string[] = [];
   private countryOptions: string[] = [];
@@ -70,7 +84,7 @@ export class WorkshopFormComponent implements OnInit {
       city: [this.workshop.city, Validators.required],
       country: [this.workshop.country, Validators.required],
       hostSite: [this.workshop.hostSite, Validators.required],
-      courseManager: [new CourseManager(this.workshop.courseManager), Validators.required],
+      courseManager: [this.workshop.courseManager, Validators.required],
       startDate: [this.workshop.startDate || new Date(), Validators.required],
       endDate: [this.workshop.endDate || new Date(Date.now() + (1000 * 60 * 60 * 24)), Validators.required],
       website: [this.workshop.website],
@@ -90,12 +104,19 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   private contactDisplayWith(value) {
-    return value ? value.name : value.Name;
+    return value ? value.name : '';
   }
 
   private onFacilitatorSelected(facilitator: Facilitator) {
     this.workshop.addInstructor(facilitator);
     this.workshopForm.controls.facilitator.setValue('');
+  }
+
+  private checkValidCM(): void {
+    const cmControl = this.workshopForm.controls.courseManager;
+    if (!cmControl.value.sfId) {
+      cmControl.setValue(undefined);
+    }
   }
 
   /**
@@ -107,13 +128,19 @@ export class WorkshopFormComponent implements OnInit {
     facilitator.valueChanges
       .distinctUntilChanged()
       .subscribe(value => {
-        if (value && value.length > 2)
+        if (value && value.length > 2) {
+          this.loadingInstructors = true;
           this.facilitatorQueryChange$.next(`${value}*`);
+        }
       });
 
     this.facilitatorValueChanges()
-      .subscribe((data: Facilitator[]) => this.facilitatorOpts = data, err => console.error(err));
+      .subscribe((data: Facilitator[]) => {
+        setTimeout(() => this.loadingInstructors = false, 150);
+        this.facilitatorOpts = data;
+      }, err => console.error(err));
   }
+
 
   /**
    * @description Returns a stream of facilitators returned from queries emitted from `this.facilitatorQueryChange$`.
@@ -143,12 +170,17 @@ export class WorkshopFormComponent implements OnInit {
       .valueChanges
       .distinctUntilChanged()
       .subscribe((query: string) => {
-        if (query && query.length > 1)
+        if (query && query.length > 1) {
+          this.loadingCms = true;
           this.courseManagerQuery$.next(`${query}*`);
+        }
       });
 
     this.courseManagerValueChanges()
-      .subscribe((cms: CourseManager[]) => this.courseManagers = cms);
+      .subscribe((cms: CourseManager[]) => {
+        setTimeout(() => this.loadingCms = false, 150);
+        this.courseManagers = cms;
+      });
   }
 
   /**

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/Rx';
-import { WorkshopService } from './workshop.service';
+
+import { WorkshopService } from '../services/workshop/workshop.service';
 import { Workshop } from './Workshop';
 
+import { Observable } from 'rxjs/Rx';
 @Injectable()
 export class WorkshopResolver implements Resolve<Workshop> {
     constructor(private _ws: WorkshopService) { }

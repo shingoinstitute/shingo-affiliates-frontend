@@ -1,14 +1,22 @@
+// Angular Modules
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { MdIconRegistry, MdSidenav } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
-import { AuthService, RouterService } from './shared/providers';
-import { SidenavService } from './interface-components/providers';
-import { WorkshopService } from './workshops/workshop.service';
+
+// App Modules
+import { AuthService } from './services/auth/auth.service';
+import { WorkshopService } from './services/workshop/workshop.service';
+import { SidenavService } from './services/sidenav/sidenav.service';
+import { RouterService } from './services/router/router.service';
+
+// RxJS Modules
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subscription } from 'rxjs/Subscription';
+
+// RxJS operators
 import 'rxjs/add/operator/distinctUntilChanged';
 
 @Component({
@@ -55,75 +63,75 @@ export class AppComponent {
     });
   }
 
-   ngAfterViewInit() {
-      this.sidenavService.sidenav = this.sidenav;
-      this.winResizeHandler();
-      this.windowWidthChangeSource.next(window.innerWidth);
-   }
+  ngAfterViewInit() {
+    this.sidenavService.sidenav = this.sidenav;
+    this.winResizeHandler();
+    this.windowWidthChangeSource.next(window.innerWidth);
+  }
 
-   /**
-    * @description authenticateOnLoad starts listening to an event stream
-    * then calls a function on authService that emits an event to the event stream.
-    * The event stream subscription continues listening to changes that may be 
-    * emitted by other parts of the app.
-    */
-   authenticateOnLoad() {
-      // Subscribe to event stream of authentication change events
-      this.auth.authenticationChange$
+  /**
+   * @description authenticateOnLoad starts listening to an event stream
+   * then calls a function on authService that emits an event to the event stream.
+   * The event stream subscription continues listening to changes that may be 
+   * emitted by other parts of the app.
+   */
+  authenticateOnLoad() {
+    // Subscribe to event stream of authentication change events
+    this.auth.authenticationChange$
       .distinctUntilChanged()
       .subscribe({
-         next: isValid => {
-            this.isAuthenticated = isValid;
-            if (!this.isAuthenticated)
-               this.routerService.navigateRoutes(['/login', this.activeRoute]);
-         },
-         error: () => {
+        next: isValid => {
+          this.isAuthenticated = isValid;
+          if (!this.isAuthenticated)
             this.routerService.navigateRoutes(['/login', this.activeRoute]);
-         }
+        },
+        error: () => {
+          this.routerService.navigateRoutes(['/login', this.activeRoute]);
+        }
       });
 
-      // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
-      this.auth.userIsValid();
-   }
+    // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
+    this.auth.userIsValid();
+  }
 
-   /**
-    * Handles logging out... yeah.
-    */
-   logoutHandler() {
-      this.auth.logout().subscribe(() => {
-         this.auth.authenticationChange$.next(false);
-      }, err => {
-         console.error(err);
-         this.auth.authenticationChange$.next(false);
-      });
-   }
+  /**
+   * Handles logging out... yeah.
+   */
+  logoutHandler() {
+    this.auth.logout().subscribe(() => {
+      this.auth.authenticationChange$.next(false);
+    }, err => {
+      console.error(err);
+      this.auth.authenticationChange$.next(false);
+    });
+  }
 
-   /**
-    * Creates a subscription that listens to events emitted by `this.onResize()`
-    * and opens or closes the sidenav depending on the screen size. Also closes
-    * the sidenav if the user is not logged in.
-    */
-   winResizeHandler() {
-      this.windowWidthChange
+  /**
+   * Creates a subscription that listens to events emitted by `this.onResize()`
+   * and opens or closes the sidenav depending on the screen size. Also closes
+   * the sidenav if the user is not logged in.
+   */
+  winResizeHandler() {
+    this.windowWidthChange
       .debounceTime(100)
       .subscribe((width: number) => {
-         if (!this.sidenavService.sidenav)
-            return setTimeout(() => { 
-               this.sidenavService.sidenav = this.sidenav;
-               this.windowWidthChangeSource.next(width); 
-            });
-         else if (width < 960 && this.sidenavService.canToggle)
-            this.sidenavService.close();
-         else if (this.sidenavService.canToggle)
-            this.sidenavService.open();
+        if (!this.sidenavService.sidenav)
+          return setTimeout(() => {
+            this.sidenavService.sidenav = this.sidenav;
+            this.windowWidthChangeSource.next(width);
+          });
+        else if (width < 960 && this.sidenavService.canToggle)
+          this.sidenavService.close();
+        else if (this.sidenavService.canToggle)
+          this.sidenavService.open();
       });
-   }
+  }
 
-   /**
-    * Emits an event whenever the window is resized.
-    */
-   @HostListener('window:resize', ['$event'])
-   onResize(event) {
-      this.windowWidthChangeSource.next(event.target.innerWidth);
-   }
+  /**
+   * Emits an event whenever the window is resized.
+   */
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.windowWidthChangeSource.next(event.target.innerWidth);
+  }
 }

@@ -1,4 +1,4 @@
-import { SFObject } from '../shared/SFObject.abstract';
+import { SFObject } from '../shared/models/SFObject.abstract';
 
 export class Facilitator extends SFObject {
 

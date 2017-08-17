@@ -1,7 +1,12 @@
-import { NgModule } from '@angular/core';
-import { HttpService, CountriesService, RouterService, AuthService } from './providers';
+import { NgModule, ModuleWithProviders } from '@angular/core';
+import { FillViewHeightDirective } from './directives/fill-height.directive';
 
-@NgModule({
-  providers: [HttpService, CountriesService, RouterService, AuthService]
-})
-export class SharedModule { }
+@NgModule({})
+export class SharedModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SharedModule,
+      providers: [FillViewHeightDirective]
+    }
+  }
+}

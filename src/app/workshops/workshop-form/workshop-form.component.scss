@@ -21,11 +21,14 @@ form .input-item:nth-child(even) {
 
 form .facilitator {
     padding: $defaultMargin;
-    width: 50%;
+    width: 30%;
+    display: flex;
+    vertical-align: middle;
 }
 
 form .facilitator > button {
-    float: right;
+    left: 23%;
+    position: absolute;
 }
 
 form .facilitator:nth-child(even) {
@@ -38,4 +41,15 @@ form .facilitator, form .facilitator > button {
 
 form .facilitator > div {
     float: left
+}
+
+form md-input-container md-spinner {
+    height: 25px;
+    width: 25px;
+    float: right;
+    opacity: 0.75;
+}
+
+form md-input-container input.autoComplete {
+    width: fit-content;
 }

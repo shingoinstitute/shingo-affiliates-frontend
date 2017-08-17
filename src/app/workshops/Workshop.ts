@@ -1,9 +1,7 @@
 import { Facilitator } from '../facilitators/Facilitator';
-import { SFObject } from '../shared/SFObject.abstract';
-import { CourseManager } from '../shared/CourseManager';
+import { CourseManager } from '../shared/models/CourseManager';
+import { SFObject } from '../shared/models/SFObject.abstract';
 import * as dateFormat from 'dateformat';
-
-export { CourseManager }
 
 export type WorkshopType = 'Discover' | 'Enable' | 'Improve' | 'Align' | 'Build' | '' | undefined;
 export type WorkshopStatusType = 'Invoiced, Not Paid' |
@@ -46,7 +44,11 @@ export class Workshop extends SFObject {
     //  new Workshop({Id: 'some id', otherProp: 42}) => {Id: 'some id', otherProp: 42} that has type Workshop
     constructor(workshop?: any) {
         super();
-        if (workshop) return Object.assign(this, workshop);
+        if (workshop) {
+            workshop.Course_Manager__r = new CourseManager(workshop.Course_Manager__r);
+            workshop.facilitators = workshop.facilitators.map(fac => new Facilitator(fac));
+            return Object.assign(this, workshop)
+        }
     }
 
     // Public getters
@@ -55,7 +57,7 @@ export class Workshop extends SFObject {
     public get endDate(): Date { return this.End_Date__c; }
     public get courseManager(): CourseManager { return this.Course_Manager__r; }
     public get courseManagerId(): string { return (this.Course_Manager__r ? this.Course_Manager__r.sfId : this.Course_Manager__c); }
-    public get instructors(): Facilitator[] { return this.facilitators.map(fac => new Facilitator(fac)); }
+    public get instructors(): Facilitator[] { return this.facilitators; }
     public get city(): string { return this.Event_City__c; }
     public get country(): string { return this.Event_Country__c; }
     public get hostSite(): string { return this.Host_Site__c; }
@@ -106,7 +108,7 @@ export class Workshop extends SFObject {
 
     // Public "setter" for instructors
     public addInstructor(facilitator: Facilitator): void {
-        if (this.facilitators.findIndex(fac => fac.sfId === facilitator.sfId) !== -1) return;
+        if (this.facilitators.findIndex(fac => fac['Id'] === facilitator.sfId) !== -1) return;
         this.facilitators.push(facilitator);
     }
     public removeInstructorById(sfId: string): void { this.facilitators = this.facilitators.filter(f => f['Id'] !== sfId); }
@@ -127,7 +129,9 @@ export class Workshop extends SFObject {
             Public__c: this.isPublic,
             Registration_Website__c: this.website,
             Status__c: this.status,
-            Workshop_Type__c: this.type
+            Workshop_Type__c: this.type,
+            Billing_Contact__c: this.billing,
+            Language__c: this.language
         }
         return sfWorkshop;
     }

@@ -1,7 +1,10 @@
+// Angular Modules
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+// App Modules
+import { WorkshopService } from '../../services/workshop/workshop.service';
 import { Workshop } from '../Workshop';
-import { WorkshopService } from '../workshop.service';
 
 @Component({
   selector: 'app-workshop',

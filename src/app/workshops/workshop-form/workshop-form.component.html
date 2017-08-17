@@ -1,6 +1,8 @@
 <md-card class="form-group-container">
   <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
-    <h1 *ngIf="auth.user && auth.user.isAdmin">{{auth.user.name}} is an Affiliate Manager</h1>
+    <!-- <div class="input-item">
+
+    </div> -->
     <div class="input-item">
       <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
       <md-checkbox formControlName="isPublic"> Yes, publish to web. </md-checkbox>
@@ -81,7 +83,9 @@
     <div class="input-item">
       <p class="mat-caption"> {{ describe.courseManager && describe.courseManager.inlineHelpText }} </p>
       <md-input-container>
-        <input mdInput [mdAutocomplete]="autoCourseManager" placeholder="Course Manager (e.g. John Doe)" formControlName="courseManager">
+        <input mdInput class="autoComplete" [mdAutocomplete]="autoCourseManager" (focusout)="checkValidCM()" placeholder="Course Manager (e.g. John Doe)"
+          formControlName="courseManager">
+        <md-spinner *ngIf="loadingCms"></md-spinner>
       </md-input-container>
 
       <md-autocomplete #autoCourseManager="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">
@@ -99,8 +103,10 @@
 
     <div class="input-item">
       <md-input-container>
-        <input mdInput formControlName="facilitator" placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"
+        <input mdInput formControlName="facilitator" class="autoComplete" placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"
           [mdAutocomplete]="autoInstructors">
+        <md-spinner *ngIf="loadingInstructors"></md-spinner>
+        <div><b *ngIf="!workshop.instructors.length" class="warn">Need to Add an Instructor</b></div>
       </md-input-container>
 
       <md-autocomplete #autoInstructors="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">
@@ -121,7 +127,7 @@
     </div>
 
     <div class="form-actions">
-      <button md-raised-button type="submit" class="mat-primary" [disabled]="!workshopForm.valid || !workshop.facilitators.length">Save</button>
+      <button md-raised-button type="submit" class="mat-primary" [disabled]="!workshopForm.valid || !workshop.facilitators.length || !workshopForm.controls.courseManager.value.sfId">Save</button>
     </div>
 
   </form>

@@ -1,55 +1,41 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModule } from '@angular/material';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { CookieModule } from 'ngx-cookie';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
-import { MdNativeDateModule, MdDatepickerModule } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import 'hammerjs';
 
+/** Shared Modules */
 import { SharedModule } from './shared/shared.module';
+import { ServicesModule } from './services/services.module';
 
-import { AppComponent } from './app.component';
-
+console.log('loading workshop module');
 /** Workshops  */
+import { WorkshopsModule } from './workshops/workshops.module';
 import { WorkshopComponent } from './workshops/workshop/workshop.component';
-import { WorkshopDataTableComponent } from './workshops/workshop-data-table/workshop-data-table.component';
-import { WorkshopFormComponent } from './workshops/workshop-form/workshop-form.component';
-import { WorkshopService } from './workshops/workshop.service';
 import { WorkshopResolver } from './workshops/workshop.resolver';
 
 /** Facilitators */
-import { FacilitatorComponent } from './facilitators/facilitator/facilitator.component';
-import { FacilitatorDataTableComponent } from './facilitators/facilitator-data-table/facilitator-data-table.component';
-import { FacilitatorFormComponent } from './facilitators/facilitator-form/facilitator-form.component';
-import { FacilitatorService } from './facilitators/facilitator.service';
+import { FacilitatorsModule } from './facilitators/facilitators.module';
 
 /** Affiliates */
-import { AffiliateComponent } from './affiliates/affiliate/affiliate.component';
-import { AffiliateDataTableComponent } from './affiliates/affiliate-data-table/affiliate-data-table.component';
-import { AffiliateFormComponent } from './affiliates/affiliate-form/affiliate-form.component';
-import { AffiliateService } from './affiliates/affiliate.service';
-import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component';
-import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component';
+import { AffiliatesModule } from './affiliates/affiliates.module';
 
 /** Interface Components */
-import { DashboardComponent } from './interface-components/dashboard/dashboard.component';
-import { LoginComponent } from './interface-components/login/login.component';
-import { FormsEvalsComponent } from './interface-components/materials/forms-evals/forms-evals.component';
-import { MarketingMaterialsComponent } from './interface-components/materials/marketing-materials/marketing-materials.component';
-import { WorkshopMaterialsComponent } from './interface-components/materials/workshop-materials/workshop-materials.component';
-import { ProfileComponent } from './interface-components/profile/profile.component';
-import { QuickDetailsComponent } from './interface-components/quick-details/quick-details.component';
-import { QuickDetailItemComponent } from './interface-components/quick-details/quick-detail-item/quick-detail-item.component';
-import { SupportComponent } from './interface-components/support/support.component';
-import { SupportTrainingComponent } from './interface-components/support/support-training/support-training.component';
-import { AnnouncementService, SidenavService, SupportService} from './interface-components/providers';
+import { InterfaceModule } from './interface/interface.module';
+import { DashboardComponent } from './interface/dashboard/dashboard.component';
+import { AddWorkshopComponent } from './interface/add-workshop/add-workshop.component';
+import { EditWorkshopComponent } from './interface/edit-workshop/edit-workshop.component';
+import { ProfileComponent } from './interface/profile/profile.component';
+import { LoginComponent } from './interface/login/login.component';
+import { SupportComponent } from './interface/support/support.component';
+import { SupportTrainingComponent } from './interface/support/support-training/support-training.component';
 
+// App Components
+import { AppComponent } from './app.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -66,53 +52,24 @@ export const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    AppComponent,
-    WorkshopComponent,
-    WorkshopDataTableComponent,
-    WorkshopFormComponent,
-    FacilitatorComponent,
-    FacilitatorDataTableComponent,
-    FacilitatorFormComponent,
-    AffiliateComponent,
-    AffiliateDataTableComponent,
-    AffiliateFormComponent,
-    AddWorkshopComponent,
-    EditWorkshopComponent,
-    DashboardComponent,
-    LoginComponent,
-    FormsEvalsComponent,
-    MarketingMaterialsComponent,
-    WorkshopMaterialsComponent,
-    ProfileComponent,
-    QuickDetailItemComponent,
-    QuickDetailsComponent,
-    SupportComponent,
-    SupportTrainingComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
-    SharedModule,
+    ServicesModule.forRoot(),
+    SharedModule.forRoot(),
     CookieModule.forRoot(),
     RouterModule.forRoot(appRoutes),
-    ReactiveFormsModule,
-    FormsModule,
-    MaterialModule,
-    CdkTableModule,
-    MdDatepickerModule,
-    MdNativeDateModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    InterfaceModule,
+    FacilitatorsModule,
+    WorkshopsModule,
+    AffiliatesModule,
+    MaterialModule
   ],
-  providers: [
-    WorkshopService,
-    WorkshopResolver,
-    FacilitatorService,
-    AffiliateService,
-    AnnouncementService,
-    SidenavService,
-    SupportService
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

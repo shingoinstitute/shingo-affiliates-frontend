@@ -84,6 +84,9 @@ $affiliate-app-accent:  mat-palette($affiliate-brand-blue);
 
 // The warn palette is optional (defaults to red).
 $affiliate-app-warn:    mat-palette($mat-red);
+.warn {
+    color: #f44336;
+}
 
 // Create the theme object (a Sass map containing all of the palettes).
 $affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-accent, $affiliate-app-warn);
