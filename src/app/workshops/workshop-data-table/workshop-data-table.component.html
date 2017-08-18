@@ -52,6 +52,14 @@
     </md-cell>
   </ng-container>
 
+  <!-- Edit Button Column -->
+  <ng-container cdkColumnDef="edit">
+    <md-header-cell *cdkHeaderCellDef> Edit </md-header-cell>
+    <md-cell *cdkCellDef="let workshop">
+      <button (click)="onEditClick(workshop.sfId)" md-raised-button> Edit &ensp;<md-icon svgIcon="edit"></md-icon></button>
+    </md-cell>
+  </ng-container>
+
   <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
   <md-row *cdkRowDef="let workshop; columns: displayedColumns;"></md-row>
 </md-table>

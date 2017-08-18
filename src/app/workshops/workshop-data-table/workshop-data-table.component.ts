@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angu
 import { WorkshopDataSource } from '../../services/workshop/workshop-data-source.service';
 import { WorkshopDataProvider } from '../../services/workshop/workshop-data-provider.service';
 import { WorkshopService, WorkshopProperties, WorkshopTrackByStrategy } from '../../services/workshop/workshop.service';
-import { MdSort, MdPaginator } from '@angular/material';
+import { MdSort, MdPaginator, MdButton } from '@angular/material';
 import { Workshop, WorkshopStatusType } from '../Workshop';
 import { Filter } from '../../services/filters/filter.abstract';
 
@@ -18,11 +18,11 @@ export class WorkshopDataTableComponent implements OnInit {
   @Input() displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'instructors', 'verified'];
   @Input() dataSource: WorkshopDataSource | null;
   @Input() filters: Filter[] = [];
+  @Output() editClick: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild(MdSort) sort: MdSort;
 
   @ViewChild(MdPaginator) paginator: MdPaginator;
-
 
   constructor(public _workshopDataProvider: WorkshopDataProvider, private _ws: WorkshopService) { }
 
@@ -45,6 +45,10 @@ export class WorkshopDataTableComponent implements OnInit {
       case 'reference': return item;
       case 'index': return index;
     }
+  }
+
+  onEditClick(workshopId: string) {
+    this.editClick.emit(workshopId);
   }
 
 }

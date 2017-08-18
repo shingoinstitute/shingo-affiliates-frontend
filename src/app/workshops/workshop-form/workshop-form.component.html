@@ -1,8 +1,17 @@
 <md-card class="form-group-container">
   <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
-    <!-- <div class="input-item">
+    <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
+      <p class="mat-caption"> {{ describe.organizingAffiliate && describe.organizingAffiliate.inlineHelpText }} </p>
+      <md-input-container>
+        <input required mdInput class="autoComplete" [mdAutocomplete]="autoAffiliate" (focusout)="checkValidCM()" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affilaite'}}"
+          formControlName="affiliate">
+        <md-spinner *ngIf="loadingAF"></md-spinner>
+      </md-input-container>
 
-    </div> -->
+      <md-autocomplete #autoAffiliate="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">
+        <md-option *ngFor="let af of affiliates" [value]="af"> {{ af.Name }} </md-option>
+      </md-autocomplete>
+    </div>
     <div class="input-item">
       <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
       <md-checkbox formControlName="isPublic"> Yes, publish to web. </md-checkbox>
@@ -21,6 +30,14 @@
       <md-select placeholder="{{ describe.language && describe.language.label || 'Language' }}" floatPlaceholder="auto" required
         formControlName="language">
         <md-option *ngFor="let lang of languages" [value]="lang">{{ lang }}</md-option>
+      </md-select>
+    </div>
+
+    <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
+      <p class="mat-caption"> {{ describe.status && describe.status.inlineHelpText }} </p>
+      <md-select placeholder="{{ describe.status && describe.status.label || 'Workshop Status'}}" floatPlaceholder="auto" required
+        formControlName="status">
+        <md-option *ngFor="let status of statuses" [value]="status">{{ status }}</md-option>
       </md-select>
     </div>
 
@@ -62,7 +79,7 @@
       <div fxLayout="column">
         <p class="mat-caption"> {{ describe.startDate && describe.startDate.inlineHelpText }} </p>
         <md-input-container>
-          <input mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
+          <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
             formControlName="startDate">
           <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
         </md-input-container>
@@ -72,7 +89,7 @@
       <div fxLayout="column">
         <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
         <md-input-container>
-          <input mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
+          <input required mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
             formControlName="endDate">
           <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
         </md-input-container>
@@ -83,7 +100,7 @@
     <div class="input-item">
       <p class="mat-caption"> {{ describe.courseManager && describe.courseManager.inlineHelpText }} </p>
       <md-input-container>
-        <input mdInput class="autoComplete" [mdAutocomplete]="autoCourseManager" (focusout)="checkValidCM()" placeholder="Course Manager (e.g. John Doe)"
+        <input required mdInput class="autoComplete" [mdAutocomplete]="autoCourseManager" (focusout)="checkValidCM()" placeholder="Course Manager (e.g. John Doe)"
           formControlName="courseManager">
         <md-spinner *ngIf="loadingCms"></md-spinner>
       </md-input-container>
@@ -106,7 +123,7 @@
         <input mdInput formControlName="facilitator" class="autoComplete" placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"
           [mdAutocomplete]="autoInstructors">
         <md-spinner *ngIf="loadingInstructors"></md-spinner>
-        <div><b *ngIf="!workshop.instructors.length" class="warn">Need to Add an Instructor</b></div>
+        <div><h4 class="mat-subheading" *ngIf="!workshop.instructors.length" class="warn">*Need to Add an Instructor</h4></div>
       </md-input-container>
 
       <md-autocomplete #autoInstructors="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">

@@ -38,6 +38,9 @@ export class AppComponent {
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private router: Router, private auth: AuthService, private ws: WorkshopService, public sidenavService: SidenavService, public routerService: RouterService) {
     iconRegistry.addSvgIcon('search_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_search_grey_18px.svg'));
+    iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_black_18px.svg'));
+    iconRegistry.addSvgIcon('expand_less', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_expand_less_black_18px.svg'));
+    iconRegistry.addSvgIcon('expand_more', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_expand_more_black_18px.svg'));
     iconRegistry.addSvgIcon('folder_special_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_folder_special_white_18px.svg'));
     iconRegistry.addSvgIcon('cancel_red', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_cancel_red_18px.svg'));
     iconRegistry.addSvgIcon('checkmark_green', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_check_circle_green_18px.svg'));

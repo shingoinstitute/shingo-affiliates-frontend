@@ -1,3 +1,4 @@
+import { Affiliate } from '../affiliates/Affiliate';
 import { Facilitator } from '../facilitators/Facilitator';
 import { CourseManager } from '../shared/models/CourseManager';
 import { SFObject } from '../shared/models/SFObject.abstract';
@@ -33,6 +34,7 @@ export class Workshop extends SFObject {
     private Event_Country__c: string = '';
     private Host_Site__c: string = '';
     private Organizing_Affiliate__c: string = '';
+    private Organizing_Affiliate__r: Affiliate = new Affiliate();
     private Public__c: boolean = false;
     private Registration_Website__c: string = '';
     private Status__c: WorkshopStatusType = 'Proposed';
@@ -45,6 +47,7 @@ export class Workshop extends SFObject {
     constructor(workshop?: any) {
         super();
         if (workshop) {
+            workshop.Organizing_Affiliate__r = new Affiliate(workshop.Organizing_Affiliate__r);
             workshop.Course_Manager__r = new CourseManager(workshop.Course_Manager__r);
             if (workshop.facilitators && workshop.facilitators instanceof Array)
                 workshop.facilitators = workshop.facilitators.map(fac => new Facilitator(fac));
@@ -62,7 +65,8 @@ export class Workshop extends SFObject {
     public get city(): string { return this.Event_City__c; }
     public get country(): string { return this.Event_Country__c; }
     public get hostSite(): string { return this.Host_Site__c; }
-    public get affiliateId(): string { return this.Organizing_Affiliate__c; }
+    public get affiliate(): Affiliate { return this.Organizing_Affiliate__r; }
+    public get affiliateId(): string { return this.Organizing_Affiliate__c ||  this.Organizing_Affiliate__r.sfId; }
     public get isPublic(): boolean { return this.Public__c; }
     public get website(): string { return this.Registration_Website__c; }
     public get status(): WorkshopStatusType { return this.Status__c; }
@@ -99,6 +103,7 @@ export class Workshop extends SFObject {
     public set city(city: string) { this.Event_City__c = city; }
     public set country(country: string) { this.Event_Country__c = country; }
     public set hostSite(site: string) { this.Host_Site__c = site; }
+    public set affiliate(affiliate: Affiliate){ this.Organizing_Affiliate__r = affiliate; }
     public set affiliateId(id: string) { this.Organizing_Affiliate__c = id; }
     public set isPublic(isPublic: boolean) { this.Public__c = isPublic; }
     public set website(website: string) { this.Registration_Website__c = website; }

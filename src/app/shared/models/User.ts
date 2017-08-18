@@ -16,7 +16,7 @@ export class User {
     public get sfId(): string { return this.Id; }
     public get name(): string { return this.Name; }
     public get email(): string { return this.Email; }
-    public get affilaite(): string { return this.AccountId; }
+    public get affiliate(): string { return this.AccountId; }
     public get authId(): number { return this.id; }
     public get roleName(): string { return this.role.name; }
     public get isAdmin(): boolean { return this.role && this.roleName === 'Affiliate Manager'; }

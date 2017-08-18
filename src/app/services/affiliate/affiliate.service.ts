@@ -11,10 +11,12 @@ import { Affiliate } from '../../affiliates/Affiliate';
 // RxJS Modules
 import { Observable } from "rxjs/Observable";
 
+export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languages__c', 'Logo__c', 'Website'];
+
 @Injectable()
 export class AffiliateService extends BaseAPIService {
 
-  private route: string = 'facilitators';
+  private route: string = 'affiliates';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
   constructor(private http: HttpService) { super(); }
@@ -39,8 +41,16 @@ export class AffiliateService extends BaseAPIService {
     throw new Error("Method not implemented.");
   }
 
-  public search(query: string): Observable<Affiliate[]> {
-    throw new Error("Method not implemented.");
+  public search(query: string, fields: string[] = DEFAULT_AFFILIATE_SEARCH_FIELDS): Observable<Affiliate[]> {
+    // Set headers (NOTE: Must include token here)
+    const headers = new Headers();
+    headers.set('x-jwt', this.http.jwt);
+    headers.set('x-search', query);
+    headers.set('x-retrieve', fields.join());
+
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true } as RequestOptionsArgs)
+      .map(res => res.json().map(JSONaf => new Affiliate(JSONaf)))
+      .catch(this.handleError);
   }
 
   public searchCMS(query: string): Observable<CourseManager[]> {

@@ -17,7 +17,7 @@ import 'rxjs/add/operator/map';
 export { SFSuccessResult, Workshop }
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affilaite__c'];
 
-export type WorkshopProperties = 'actionType' | 'workshopType' | 'dueDate' | 'instructors' | 'location' | 'verified' | 'startDate' | 'endDate' | 'hostCity' | 'hostCountry' | 'daysLate' | 'status' | undefined;
+export type WorkshopProperties = 'actionType' | 'workshopType' | 'dueDate' | 'instructors' | 'location' | 'verified' | 'startDate' | 'endDate' | 'hostCity' | 'hostCountry' | 'daysLate' | 'status' | 'edit' | undefined;
 export type WorkshopTrackByStrategy = 'id' | 'reference' | 'index';
 
 @Injectable()

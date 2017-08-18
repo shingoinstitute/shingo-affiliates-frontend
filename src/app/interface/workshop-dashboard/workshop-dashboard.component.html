@@ -1,41 +1,57 @@
 <div class="filter-options-container" fxLayout="column">
     <div class="filter-options-header">
-        <h3 class="mat-subheading-2">Advanced Filter Options</h3>
+        <button md-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<md-icon [svgIcon]="showFilters ? 'expand_less' : 'expand_more'"></md-icon></button>
     </div>
-    <div class="filter-options-body" fxLayout="column" fxLayoutGap="36px">
-        <div fxLayout="column">
-            <md-radio-group fxLayout="column" name="Filter Options" [(ngModel)]="filterOption" (change)="applyFilter($event)">
-                <md-radio-button *ngFor="let filter of filterOptions" [value]="filter">{{ filter }}</md-radio-button>
-            </md-radio-group>
-        </div>
-
-
-        <div fxLayout fxLayoutGap="8px">
-            <div fxLayout="column">
-                <div fxLayout fxLayoutGap="8px">
-                    <p class="text-md" [style.color]="'#757575'">Date</p>
-
-                    <md-input-container floatPlaceholder="always">
-                        <input mdInput [mdDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
-                        <button mdSuffix [mdDatepickerToggle]="startDateFilterPicker"></button>
+    <div #filterBox class="filter-options-body" fxLayout="column" fxLayoutGap="36px" [style.opacity]="showFilters ? '1' : '0'" [style.height]="showFilters ? '225px' : '0'">
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex="20%">
+                <h4 class="mat-subheading">Filter:</h4>
+                <md-radio-group fxLayout="column" name="Filter Options" [(ngModel)]="filterOption" (change)="applyFilter($event)">
+                    <md-radio-button *ngFor="let filter of filterOptions" [value]="filter">{{ filter }}</md-radio-button>
+                </md-radio-group>
+            </div>
+            <div fxLayout="column" fxFlex="80%" fxLayoutGap="16px">
+                <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange">Special Filters</h3>
+                <div fxLayout="row" fxLayoutGap="8px" [style.display]="showTextFilter ? 'flex' : 'none'">
+                    <md-input-container>
+                        <input mdInput #textSearchInput placeholder="filter..." [(ngModel)]="textSearch">
+                        <md-icon mdSuffix svgIcon="search_grey"></md-icon>
                     </md-input-container>
-                    <md-datepicker #startDateFilterPicker></md-datepicker>
-
-                    <md-input-container floatPlaceholder="always">
-                        <input mdInput [mdDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
-                        <button mdSuffix [mdDatepickerToggle]="endDateFilterPicker"></button>
-                    </md-input-container>
-                    <md-datepicker #endDateFilterPicker></md-datepicker>
                 </div>
-
-                <div fxLayout fxLayoutGap="8px">
-                    <button fxFlex md-raised-button (click)="clearDateFilter()">Cancel</button>
-                    <button fxFlex md-raised-button class="mat-accent" (click)="filterByDate()">Filter</button>
+        
+                <div fxLayout="row" fxLayoutGap="8px" [style.display]="showDateRange ? 'flex' : 'none'">
+                    <div fxLayout="column">
+                        <div fxLayout fxLayoutGap="8px">
+                            <p class="text-md" [style.color]="'#757575'">Date</p>
+        
+                            <md-input-container floatPlaceholder="always">
+                                <input mdInput [mdDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
+                                <button mdSuffix [mdDatepickerToggle]="startDateFilterPicker"></button>
+                            </md-input-container>
+                            <md-datepicker #startDateFilterPicker></md-datepicker>
+        
+                            <md-input-container floatPlaceholder="always">
+                                <input mdInput [mdDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
+                                <button mdSuffix [mdDatepickerToggle]="endDateFilterPicker"></button>
+                            </md-input-container>
+                            <md-datepicker #endDateFilterPicker></md-datepicker>
+                            <button md-button type="button" (click)="clearDateFilter()">
+                                <md-icon svgIcon="x_red"></md-icon>
+                            </button>
+                        </div>
+        
+                        <!-- Refactored to call the behavior update on date selected -->
+                        <!-- <div fxLayout fxLayoutGap="8px">
+                            <button fxFlex md-raised-button (click)="clearDateFilter()">Cancel</button>
+                            <button fxFlex md-raised-button class="mat-accent" (click)="filterByDate()">Filter</button>
+                        </div> -->
+                    </div>
                 </div>
             </div>
         </div>
 
+
     </div>
 
-    <app-workshop-data-table [dataSource]="dataSource" [displayedColumns]="displayedColumns"></app-workshop-data-table>
+    <app-workshop-data-table [dataSource]="dataSource" [displayedColumns]="displayedColumns" (editClick)="goToWorkshopEdit($event)"></app-workshop-data-table>
 </div>

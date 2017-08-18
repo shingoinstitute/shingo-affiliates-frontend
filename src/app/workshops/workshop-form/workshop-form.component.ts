@@ -14,6 +14,7 @@ import { SFSuccessResult } from '../../services/base-api.abstract.service';
 import { Workshop, WorkshopType } from "../Workshop";
 import { CourseManager } from '../../shared/models/CourseManager';
 import { Facilitator } from '../../facilitators/Facilitator';
+import { Affiliate } from '../../affiliates/Affiliate';
 
 // RxJS Modules
 import { Observable } from "rxjs/Observable";
@@ -43,9 +44,15 @@ export class WorkshopFormComponent implements OnInit {
   @Input() workshop: Workshop = new Workshop();
 
   private debounceTime: number = 250;
+
+  private loadingAF: boolean = false;
+  private queryChangeAF$: Subject<string> = new Subject<string>();
+  private changeAF$: BehaviorSubject<Affiliate[]> = new BehaviorSubject<Affiliate[]>([]);
+
   private loadingInstructors: boolean = false;
   private facilitatorQueryChange$: Subject<string> = new Subject<string>();
   private facilitatorChange$: BehaviorSubject<Facilitator[]> = new BehaviorSubject<Facilitator[]>([]);
+
   private loadingCms: boolean = false;
   private courseManagerQuery$: Subject<string> = new Subject<string>();
   private courseManagersChange$: BehaviorSubject<CourseManager[]> = new BehaviorSubject<CourseManager[]>([]);
@@ -55,9 +62,13 @@ export class WorkshopFormComponent implements OnInit {
   private workshopForm: FormGroup;
   private courseManagers: CourseManager[] = [];
   private facilitatorOpts: Facilitator[] = [];
+  private affiliates: Affiliate[] = [];
   private describe: any = {};
+
+
   private workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
   private languages: string[] = ['English', 'Spanish', 'German', 'French', 'Mandarin', 'Cantonese', 'Italian', 'Hindi', 'Portuguese (Brazilian)', 'Japanese', 'Dutch', 'Chinese'];
+  private statuses: string[] = ['Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice', 'Proposed', 'Archived', 'Cancelled', 'Active, not ready for app', 'Active Event' ];
 
   constructor(public fb: FormBuilder,
     private router: Router,
@@ -69,6 +80,7 @@ export class WorkshopFormComponent implements OnInit {
 
   public ngOnInit() {
     this.createForm();
+    this.subscribeToQueryAF();
     this.subscribeToFacilitatorQuery();
     this.subscribeToCourseManagerQuery();
     this.subscribeToCountry();
@@ -78,7 +90,9 @@ export class WorkshopFormComponent implements OnInit {
 
   private createForm() {
     this.workshopForm = this.fb.group({
+      affiliate: [this.workshop.affiliate, Validators.required],
       type: [this.workshop.type, Validators.required],
+      status: [this.workshop.status, Validators.required],
       language: [this.workshop.language],
       isPublic: [this.workshop.isPublic, Validators.required],
       city: [this.workshop.city, Validators.required],
@@ -95,11 +109,12 @@ export class WorkshopFormComponent implements OnInit {
 
   private onSubmit() {
     this.workshop = merge(this.workshop, this.workshopForm.value);
-    this.workshop.affiliateId = this.auth.user.affilaite;
+    if(!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
+    else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
     console.log('SUBMITTED DATA', this.workshop);
     this.submitFunction(this.workshop)
-      .subscribe((result: SFSuccessResult) => this.router.navigateByUrl(`/workshop/${result.id}`)
+      .subscribe((result: SFSuccessResult) => this.router.navigateByUrl(`/workshops/${result.id}`)
       , err => console.error(err));
   }
 
@@ -119,6 +134,39 @@ export class WorkshopFormComponent implements OnInit {
     }
   }
 
+  private subscribeToQueryAF() {
+    const affiliate = this.workshopForm.controls.affiliate;
+    affiliate.valueChanges
+      .distinctUntilChanged()
+      .subscribe(value => {
+        if(value && value.length >2) {
+          this.loadingAF = true;
+          this.queryChangeAF$.next(`${value}*`);
+        }
+      });
+
+      this.valueChangesAF()
+        .subscribe((data: Affiliate[]) => {
+          setTimeout(() => this.loadingAF = false, 150);
+          this.affiliates = data;
+        }, err => console.log(err));
+  }
+
+
+  private valueChangesAF(): BehaviorSubject<Affiliate[]> {
+    this.queryChangeAF$.distinctUntilChanged()
+      .debounceTime(this.debounceTime)
+      .subscribe((query: string) => {
+        this._as.search(query)
+          .subscribe((affiliates: Affiliate[]) => this.changeAF$.next(affiliates),
+          err => {
+            console.error(err);
+            return this.changeAF$.next([]);
+          });
+      });
+
+      return this.changeAF$;
+  }
   /**
      * @description Retrieves a list of instructors from the api then listens to value changes
      * on the instructors FormControl and displays filtered results in the auto-complete.
@@ -233,6 +281,7 @@ export class WorkshopFormComponent implements OnInit {
     this._ws.describe().subscribe(data => {
       this.describe = data;
       this.getWorkshopTypes();
+      this.getWorkshopStatuses();
     }, err => {
       console.error(err);
     });
@@ -246,6 +295,15 @@ export class WorkshopFormComponent implements OnInit {
       this.workshopTypes = this.describe.workshopType.picklistValues.map(option => { return option.label; });
     } catch (e) {
       console.warn('Failed to get workshop types from `this.describe.workshopType.picklistValues`. Using default values.');
+    }
+  }
+
+  private getWorkshopStatuses() {
+    try {
+      this.statuses = this.describe.status.picklistValues.map(option => option.label);
+    } catch (e) {
+      console.warn('Failed to get workshop statuses from `this.describe.status.picklistValues`. Using default values.', this.describe);
+      
     }
   }
 
