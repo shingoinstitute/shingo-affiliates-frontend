@@ -22,6 +22,7 @@ import { SupportComponent } from './support/support.component';
 import { SupportTrainingComponent } from './support/support-training/support-training.component';
 import { AddWorkshopComponent } from './add-workshop/add-workshop.component';
 import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
+import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
     SupportComponent,
     SupportTrainingComponent,
     AddWorkshopComponent,
-    EditWorkshopComponent
+    EditWorkshopComponent,
+    WorkshopDashboardComponent
   ],
   exports: [
     DashboardComponent,
@@ -62,7 +64,8 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
     SupportComponent,
     SupportTrainingComponent,
     AddWorkshopComponent,
-    EditWorkshopComponent
+    EditWorkshopComponent,
+    WorkshopDashboardComponent
   ]
 })
 export class InterfaceModule { }

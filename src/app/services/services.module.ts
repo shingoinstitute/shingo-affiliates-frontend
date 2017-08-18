@@ -9,6 +9,8 @@ import { RouterService } from './router/router.service';
 import { SidenavService } from './sidenav/sidenav.service';
 import { SupportService, Video } from './support/support.service';
 import { WorkshopService } from './workshop/workshop.service';
+import { WorkshopDataProvider } from './workshop/workshop-data-provider.service';
+import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-factory.service';
 
 @NgModule()
 export class ServicesModule {
@@ -16,16 +18,18 @@ export class ServicesModule {
     return {
       ngModule: ServicesModule,
       providers: [
-        AffiliateService,
+        HttpService,
         AnnouncementService,
         AuthService,
         CountriesService,
         FacilitatorService,
-        HttpService,
         RouterService,
         SidenavService,
         SupportService,
-        WorkshopService
+        AffiliateService,
+        WorkshopService,
+        WorkshopFilterFactory,
+        WorkshopDataProvider
       ]
     }
   }

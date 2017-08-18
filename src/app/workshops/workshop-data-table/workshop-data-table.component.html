@@ -1,3 +1,59 @@
-<p>
-  workshop-data-table works!
-</p>
+<md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [mdSortDisableClear]="true">
+
+  <!-- Workshop Type Column -->
+  <ng-container cdkColumnDef="workshopType">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Course Type </md-header-cell>
+    <md-cell *cdkCellDef="let workshop" class="course-type">
+      <img src="{{ workshop.image }}">
+    </md-cell>
+  </ng-container>
+
+  <!-- Location Column -->
+  <ng-container cdkColumnDef="location">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Location </md-header-cell>
+    <md-cell *cdkCellDef="let workshop">
+      <p>{{ workshop.Event_City__c }}</p>
+      <p *ngIf="workshop.Event_Country__c !== ''" [style.font-size]="'12px'">{{ workshop.Event_Country__c }}</p>
+    </md-cell>
+  </ng-container>
+
+  <!-- Start Date Column -->
+  <ng-container cdkColumnDef="startDate">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Start Date </md-header-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.Start_Date__c }} </md-cell>
+  </ng-container>
+
+  <!-- End Date Column -->
+  <ng-container cdkColumnDef="endDate">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> End Date </md-header-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.End_Date__c }} </md-cell>
+  </ng-container>
+
+  <!-- Instructors Column -->
+  <ng-container cdkColumnDef="instructors">
+    <md-header-cell *cdkHeaderCellDef> Instructor(s) </md-header-cell>
+    <md-cell *cdkCellDef="let workshop">
+      <p *ngFor="let facilitator of workshop.facilitator">{{ facilitator.Name }}</p>
+    </md-cell>
+  </ng-container>
+
+  <!-- Status Column -->
+  <ng-container cdkColumnDef="status">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.Status__c }} </md-cell>
+  </ng-container>
+
+  <!-- Verified Column -->
+  <ng-container cdkColumnDef="verified">
+    <md-header-cell *cdkHeaderCellDef md-sort-header arrowPosition="center"> Verified? </md-header-cell>
+    <md-cell *cdkCellDef="let workshop">
+      <md-icon svgIcon="checkmark_green" *ngIf="workshop.isVerified"></md-icon>
+      <md-icon svgIcon="cancel_red" *ngIf="!workshop.isVerified"></md-icon>
+    </md-cell>
+  </ng-container>
+
+  <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+  <md-row *cdkRowDef="let workshop; columns: displayedColumns;"></md-row>
+</md-table>
+
+<md-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></md-paginator>

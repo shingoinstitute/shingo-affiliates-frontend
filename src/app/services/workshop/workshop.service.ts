@@ -17,17 +17,22 @@ import 'rxjs/add/operator/map';
 export { SFSuccessResult, Workshop }
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affilaite__c'];
 
+export type WorkshopProperties = 'actionType' | 'workshopType' | 'dueDate' | 'instructors' | 'location' | 'verified' | 'startDate' | 'endDate' | 'hostCity' | 'hostCountry' | 'daysLate' | 'status' | undefined;
+export type WorkshopTrackByStrategy = 'id' | 'reference' | 'index';
+
 @Injectable()
 export class WorkshopService extends BaseAPIService {
 
   private route: string = 'workshops';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  constructor(private http: HttpService) { super(); }
+  constructor(private http: HttpService) { super(); console.log('creating workshopService with', http); }
 
   public getAll(): Observable<Workshop[]> {
+    console.log('calling getAll() on ws');
+    if (!this.http.get(this.baseUrl)) console.error(`http.get(${this.baseUrl}) didn't work!`, this.http);
     return this.http.get(this.baseUrl)
-      .map(res => res.json.map(wkJSON => new Workshop(wkJSON)))
+      .map(res => res.json().map(wkJSON => new Workshop(wkJSON)))
       .catch(this.handleError);
   }
 

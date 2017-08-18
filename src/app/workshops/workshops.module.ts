@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@angular/material';
+import { CdkTableModule } from '@angular/cdk';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -15,7 +16,8 @@ import { WorkshopResolver } from './workshop.resolver';
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    CdkTableModule
   ],
   declarations: [
     WorkshopComponent,

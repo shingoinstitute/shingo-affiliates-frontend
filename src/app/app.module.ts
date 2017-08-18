@@ -33,6 +33,7 @@ import { ProfileComponent } from './interface/profile/profile.component';
 import { LoginComponent } from './interface/login/login.component';
 import { SupportComponent } from './interface/support/support.component';
 import { SupportTrainingComponent } from './interface/support/support-training/support-training.component';
+import { WorkshopDashboardComponent } from './interface/workshop-dashboard/workshop-dashboard.component';
 
 // App Components
 import { AppComponent } from './app.component';
@@ -40,9 +41,10 @@ import { AppComponent } from './app.component';
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'workshop/new', component: AddWorkshopComponent },
-  { path: 'workshop/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
-  { path: 'workshop/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } },
+  { path: 'workshops/new', component: AddWorkshopComponent },
+  { path: 'workshops/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
+  { path: 'workshops/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } },
+  { path: 'workshops', component: WorkshopDashboardComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: LoginComponent },
   { path: 'support', component: SupportComponent },
@@ -64,8 +66,8 @@ export const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FlexLayoutModule,
     InterfaceModule,
-    FacilitatorsModule,
     WorkshopsModule,
+    FacilitatorsModule,
     AffiliatesModule,
     MaterialModule
   ],

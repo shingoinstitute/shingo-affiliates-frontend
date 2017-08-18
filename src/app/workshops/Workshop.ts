@@ -46,7 +46,8 @@ export class Workshop extends SFObject {
         super();
         if (workshop) {
             workshop.Course_Manager__r = new CourseManager(workshop.Course_Manager__r);
-            workshop.facilitators = workshop.facilitators.map(fac => new Facilitator(fac));
+            if (workshop.facilitators && workshop.facilitators instanceof Array)
+                workshop.facilitators = workshop.facilitators.map(fac => new Facilitator(fac));
             return Object.assign(this, workshop)
         }
     }
@@ -87,7 +88,7 @@ export class Workshop extends SFObject {
     public get isVerified(): boolean {
         return this.Status__c.toLowerCase() === 'verified';
     }
-    public get Due_Date__c(): string {
+    public get dueDate(): string {
         return Workshop.formatDate(new Date(this.endDate.valueOf() + (1000 * 60 * 60 * 24 * 7)))
     }
 

@@ -1,0 +1,41 @@
+<div class="filter-options-container" fxLayout="column">
+    <div class="filter-options-header">
+        <h3 class="mat-subheading-2">Advanced Filter Options</h3>
+    </div>
+    <div class="filter-options-body" fxLayout="column" fxLayoutGap="36px">
+        <div fxLayout="column">
+            <md-radio-group fxLayout="column" name="Filter Options" [(ngModel)]="filterOption" (change)="applyFilter($event)">
+                <md-radio-button *ngFor="let filter of filterOptions" [value]="filter">{{ filter }}</md-radio-button>
+            </md-radio-group>
+        </div>
+
+
+        <div fxLayout fxLayoutGap="8px">
+            <div fxLayout="column">
+                <div fxLayout fxLayoutGap="8px">
+                    <p class="text-md" [style.color]="'#757575'">Date</p>
+
+                    <md-input-container floatPlaceholder="always">
+                        <input mdInput [mdDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
+                        <button mdSuffix [mdDatepickerToggle]="startDateFilterPicker"></button>
+                    </md-input-container>
+                    <md-datepicker #startDateFilterPicker></md-datepicker>
+
+                    <md-input-container floatPlaceholder="always">
+                        <input mdInput [mdDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
+                        <button mdSuffix [mdDatepickerToggle]="endDateFilterPicker"></button>
+                    </md-input-container>
+                    <md-datepicker #endDateFilterPicker></md-datepicker>
+                </div>
+
+                <div fxLayout fxLayoutGap="8px">
+                    <button fxFlex md-raised-button (click)="clearDateFilter()">Cancel</button>
+                    <button fxFlex md-raised-button class="mat-accent" (click)="filterByDate()">Filter</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <app-workshop-data-table [dataSource]="dataSource" [displayedColumns]="displayedColumns"></app-workshop-data-table>
+</div>

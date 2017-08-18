@@ -1,0 +1,15 @@
+.add-workshop {
+   font-weight: 300;
+   margin: 0 0 0 12px;
+}
+.course-type {
+   display: flex;
+}
+.course-type img {
+   margin-left: 12px;
+}
+@media only screen and (max-width: 480px) {
+   .course-type img {
+      margin: 0 auto;
+   }
+}
