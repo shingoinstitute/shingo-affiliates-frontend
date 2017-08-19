@@ -8,4 +8,19 @@ if (environment.production) {
   enableProdMode();
 }
 
+declare global {
+  interface Date {
+    withoutTime: () => Date;
+  }
+}
+
+(function () {
+  Date.prototype.withoutTime = function () {
+    let d: Date = new Date(this);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+}
+)();
 platformBrowserDynamic().bootstrapModule(AppModule);

@@ -35,4 +35,8 @@ export class Facilitator extends SFObject {
         }
         return sfFacilitator;
     }
+
+    public toString(): string {
+        return this.name;
+    }
 }

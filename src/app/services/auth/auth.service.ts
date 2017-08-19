@@ -21,7 +21,7 @@ export class AuthService extends BaseService {
   private _user: User;
   private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth` }
 
-  protected BaseUrl: string = 'http://192.168.0.136';
+  protected BaseUrl: string = 'http://129.123.47.167';
   protected BasePort: string = '8080';
 
   public authenticationChange$: BehaviorSubject<boolean>;
@@ -90,6 +90,16 @@ export class AuthService extends BaseService {
       }, (err: Response | any) => {
         this._user = null;
         this.authenticationChange$.next(err.json ? err.json() : err);
+      });
+  }
+
+  public getUser(): Observable<User> {
+    return this.http.get(`${this.authHost}/valid`)
+      .map(res => {
+        const data = res.json();
+        this._user = new User(data);
+        this.authenticationChange$.next(res.status === 200);
+        return this._user;
       });
   }
 

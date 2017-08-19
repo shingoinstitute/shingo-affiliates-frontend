@@ -66,7 +66,7 @@ export class Workshop extends SFObject {
     public get country(): string { return this.Event_Country__c; }
     public get hostSite(): string { return this.Host_Site__c; }
     public get affiliate(): Affiliate { return this.Organizing_Affiliate__r; }
-    public get affiliateId(): string { return this.Organizing_Affiliate__c ||  this.Organizing_Affiliate__r.sfId; }
+    public get affiliateId(): string { return this.Organizing_Affiliate__c || this.Organizing_Affiliate__r.sfId; }
     public get isPublic(): boolean { return this.Public__c; }
     public get website(): string { return this.Registration_Website__c; }
     public get status(): WorkshopStatusType { return this.Status__c; }
@@ -90,10 +90,11 @@ export class Workshop extends SFObject {
         }
     }
     public get isVerified(): boolean {
-        return this.Status__c.toLowerCase() === 'verified';
+        return this.Status__c.toLowerCase() !== 'proposed';
     }
     public get dueDate(): string {
-        return Workshop.formatDate(new Date(this.endDate.valueOf() + (1000 * 60 * 60 * 24 * 7)))
+        const dueDate = new Date(this.endDate).valueOf() + (1000 * 60 * 60 * 24 * 7)
+        return Workshop.formatDate(new Date(dueDate));
     }
 
     // Public Setters
@@ -103,7 +104,7 @@ export class Workshop extends SFObject {
     public set city(city: string) { this.Event_City__c = city; }
     public set country(country: string) { this.Event_Country__c = country; }
     public set hostSite(site: string) { this.Host_Site__c = site; }
-    public set affiliate(affiliate: Affiliate){ this.Organizing_Affiliate__r = affiliate; }
+    public set affiliate(affiliate: Affiliate) { this.Organizing_Affiliate__r = affiliate; }
     public set affiliateId(id: string) { this.Organizing_Affiliate__c = id; }
     public set isPublic(isPublic: boolean) { this.Public__c = isPublic; }
     public set website(website: string) { this.Registration_Website__c = website; }

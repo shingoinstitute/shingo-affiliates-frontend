@@ -12,7 +12,10 @@ import { Observable } from 'rxjs/Observable';
 
 // RxJS operators
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/retryWhen';
+import 'rxjs/add/operator/take';
 
 export { SFSuccessResult, Workshop }
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affilaite__c'];
@@ -33,6 +36,7 @@ export class WorkshopService extends BaseAPIService {
     if (!this.http.get(this.baseUrl)) console.error(`http.get(${this.baseUrl}) didn't work!`, this.http);
     return this.http.get(this.baseUrl)
       .map(res => res.json().map(wkJSON => new Workshop(wkJSON)))
+      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
@@ -40,6 +44,7 @@ export class WorkshopService extends BaseAPIService {
     console.log('getting ', id);
     return this.http.get(this.baseUrl + `/${id}`)
       .map(res => { console.log('got', res.json()); return new Workshop(res.json()) })
+      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
@@ -52,12 +57,14 @@ export class WorkshopService extends BaseAPIService {
   public update(obj: Workshop): Observable<SFSuccessResult> {
     return this.http.put(this.baseUrl + `/${obj.sfId}`, obj.toSFJSON())
       .map(res => res.json() as SFSuccessResult)
+      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
   public delete(obj: Workshop): Observable<SFSuccessResult> {
     return this.http.delete(this.baseUrl + `/${obj.sfId}`)
       .map(res => res.json() as SFSuccessResult)
+      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
@@ -70,6 +77,7 @@ export class WorkshopService extends BaseAPIService {
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true } as RequestOptionsArgs)
       .map(res => res.json().map(wkJSON => new Workshop(wkJSON)))
+      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 

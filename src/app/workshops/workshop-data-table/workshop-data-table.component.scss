@@ -13,3 +13,39 @@
       margin: 0 auto;
    }
 }
+
+.past-due {
+   background-color: #ffd8c9;
+}
+.in-grace-period {
+   background-color: #c3cfdc;
+}
+md-row {
+   cursor: pointer;
+}
+md-row.past-due:hover {
+   background-color: #DDC4BC;
+}
+md-row.in-grace-period:hover {
+   background-color: #B7BFC7;
+}
+.action-type-header-cell,
+.action-type-cell {
+   flex: 1 0;
+}
+.workshop-type-header-cell,
+.workshop-type-cell {
+   flex: 2 0;
+}
+.due-date-header-cell,
+.due-date-cell {
+   flex: 1 0;
+}
+.days-late-header-cell,
+.days-late-cell {
+   flex: 1 0;
+}
+.instructors-header-cell,
+.instructors-cell {
+   flex: 1 0;
+}

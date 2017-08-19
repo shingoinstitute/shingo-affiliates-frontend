@@ -3,7 +3,7 @@
     <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
       <p class="mat-caption"> {{ describe.organizingAffiliate && describe.organizingAffiliate.inlineHelpText }} </p>
       <md-input-container>
-        <input required mdInput class="autoComplete" [mdAutocomplete]="autoAffiliate" (focusout)="checkValidCM()" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affilaite'}}"
+        <input required mdInput class="autoComplete" [mdAutocomplete]="autoAffiliate" (focusout)="checkValidAutoComplete(this)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affilaite'}}"
           formControlName="affiliate">
         <md-spinner *ngIf="loadingAF"></md-spinner>
       </md-input-container>
@@ -123,7 +123,9 @@
         <input mdInput formControlName="facilitator" class="autoComplete" placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"
           [mdAutocomplete]="autoInstructors">
         <md-spinner *ngIf="loadingInstructors"></md-spinner>
-        <div><h4 class="mat-subheading" *ngIf="!workshop.instructors.length" class="warn">*Need to Add an Instructor</h4></div>
+        <div>
+          <h4 class="mat-subheading" *ngIf="!workshop.instructors.length" class="warn">*Need to Add an Instructor</h4>
+        </div>
       </md-input-container>
 
       <md-autocomplete #autoInstructors="mdAutocomplete" [displayWith]="contactDisplayWith.bind(this)">

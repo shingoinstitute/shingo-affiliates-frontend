@@ -53,14 +53,14 @@ export class AffiliateService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public searchCMS(query: string): Observable<CourseManager[]> {
+  public searchCMS(query: string, id: string): Observable<CourseManager[]> {
     // Set headers (NOTE: Must include token here)
     const headers = new Headers();
     headers.set('x-jwt', this.http.jwt);
     headers.set('x-search', query);
     headers.set('x-retrieve', ['Id', 'Name', 'Email']);
 
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true } as RequestOptionsArgs)
+    return this.http.get(`${this.baseUrl}/${id}/coursemanagers`, { headers, withCredentials: true } as RequestOptionsArgs)
       .map(res => res.json().map(cmJSON => new CourseManager(cmJSON)))
       .catch(this.handleError);
   }

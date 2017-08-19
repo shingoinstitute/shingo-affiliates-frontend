@@ -68,7 +68,7 @@ export class WorkshopFormComponent implements OnInit {
 
   private workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
   private languages: string[] = ['English', 'Spanish', 'German', 'French', 'Mandarin', 'Cantonese', 'Italian', 'Hindi', 'Portuguese (Brazilian)', 'Japanese', 'Dutch', 'Chinese'];
-  private statuses: string[] = ['Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice', 'Proposed', 'Archived', 'Cancelled', 'Active, not ready for app', 'Active Event' ];
+  private statuses: string[] = ['Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice', 'Proposed', 'Archived', 'Cancelled', 'Active, not ready for app', 'Active Event'];
 
   constructor(public fb: FormBuilder,
     private router: Router,
@@ -90,7 +90,7 @@ export class WorkshopFormComponent implements OnInit {
 
   private createForm() {
     this.workshopForm = this.fb.group({
-      affiliate: [this.workshop.affiliate, Validators.required],
+      affiliate: [this.workshop.affiliate || new Affiliate(), Validators.required],
       type: [this.workshop.type, Validators.required],
       status: [this.workshop.status, Validators.required],
       language: [this.workshop.language],
@@ -109,7 +109,7 @@ export class WorkshopFormComponent implements OnInit {
 
   private onSubmit() {
     this.workshop = merge(this.workshop, this.workshopForm.value);
-    if(!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
+    if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
     else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
     console.log('SUBMITTED DATA', this.workshop);
@@ -134,22 +134,26 @@ export class WorkshopFormComponent implements OnInit {
     }
   }
 
+  private checkValidAutoComplete(event): void {
+    console.log(event);
+  }
+
   private subscribeToQueryAF() {
     const affiliate = this.workshopForm.controls.affiliate;
     affiliate.valueChanges
       .distinctUntilChanged()
       .subscribe(value => {
-        if(value && value.length >2) {
+        if (value && value.length > 2) {
           this.loadingAF = true;
           this.queryChangeAF$.next(`${value}*`);
         }
       });
 
-      this.valueChangesAF()
-        .subscribe((data: Affiliate[]) => {
-          setTimeout(() => this.loadingAF = false, 150);
-          this.affiliates = data;
-        }, err => console.log(err));
+    this.valueChangesAF()
+      .subscribe((data: Affiliate[]) => {
+        setTimeout(() => this.loadingAF = false, 150);
+        this.affiliates = data;
+      }, err => console.log(err));
   }
 
 
@@ -165,7 +169,7 @@ export class WorkshopFormComponent implements OnInit {
           });
       });
 
-      return this.changeAF$;
+    return this.changeAF$;
   }
   /**
      * @description Retrieves a list of instructors from the api then listens to value changes
@@ -235,10 +239,11 @@ export class WorkshopFormComponent implements OnInit {
    * @description Returns a stream of course managers returned from queries emitted from `this.courseManagerQuery$`.
    */
   private courseManagerValueChanges(): BehaviorSubject<CourseManager[]> {
+    const id = this.workshopForm.controls && this.workshopForm.controls.affiliate.value.sfId || this.auth.user.affiliate;
     this.courseManagerQuery$.distinctUntilChanged()
       .debounceTime(this.debounceTime)
       .subscribe((query: string) => {
-        this._as.searchCMS(query)
+        this._as.searchCMS(query, id)
           .subscribe((cms: CourseManager[]) => {
             return this.courseManagersChange$.next(cms);
           }, err => {
@@ -303,7 +308,7 @@ export class WorkshopFormComponent implements OnInit {
       this.statuses = this.describe.status.picklistValues.map(option => option.label);
     } catch (e) {
       console.warn('Failed to get workshop statuses from `this.describe.status.picklistValues`. Using default values.', this.describe);
-      
+
     }
   }
 

@@ -6,8 +6,8 @@ export class PropertyFilter<T> extends Filter {
     private _filter: { key: string, value: any };
     protected dataChangeSource: BehaviorSubject<{ key: string, value: any }>;
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
         this.dataChangeSource = new BehaviorSubject<{ key: string, value: any }>(null);
         this.dataChangeSource.subscribe(filter => this._filter = filter);
     }

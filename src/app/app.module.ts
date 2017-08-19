@@ -11,8 +11,9 @@ import 'hammerjs';
 /** Shared Modules */
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
+import { IsValidResolver } from './services/auth/is-valid.resolver';
+import { UserResolver } from './services/auth/user.resolver';
 
-console.log('loading workshop module');
 /** Workshops  */
 import { WorkshopsModule } from './workshops/workshops.module';
 import { WorkshopComponent } from './workshops/workshop/workshop.component';
@@ -41,10 +42,10 @@ import { AppComponent } from './app.component';
 export const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'workshops/new', component: AddWorkshopComponent },
+  { path: 'workshops/new', component: AddWorkshopComponent, resolve: { user: UserResolver } },
   { path: 'workshops/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
   { path: 'workshops/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } },
-  { path: 'workshops', component: WorkshopDashboardComponent },
+  { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
   { path: 'profile', component: ProfileComponent },
   { path: 'login', component: LoginComponent },
   { path: 'support', component: SupportComponent },

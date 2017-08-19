@@ -7,8 +7,8 @@ export class WorkshopDateRangeFilter extends Filter {
     private _range: DateRange;
     protected dataChangeSource: BehaviorSubject<DateRange>;
 
-    constructor() {
-        super();
+    constructor(name: string) {
+        super(name);
         this.dataChangeSource = new BehaviorSubject<DateRange>(null);
         this.dataChangeSource.subscribe(range => this._range = range);
     }

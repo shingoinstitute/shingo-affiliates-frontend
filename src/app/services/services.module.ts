@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
 import { AffiliateService } from './affiliate/affiliate.service';
 import { AnnouncementService, Announcement } from './announcement/announcement.service';
 import { AuthService } from './auth/auth.service';
@@ -9,8 +9,11 @@ import { RouterService } from './router/router.service';
 import { SidenavService } from './sidenav/sidenav.service';
 import { SupportService, Video } from './support/support.service';
 import { WorkshopService } from './workshop/workshop.service';
-import { WorkshopDataProvider } from './workshop/workshop-data-provider.service';
 import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-factory.service';
+import { Workshop } from '../workshops/Workshop';
+import { DataProviderFactory } from './data-provider-factory.service';
+import { IsValidResolver } from './auth/is-valid.resolver';
+import { UserResolver } from './auth/user.resolver';
 
 @NgModule()
 export class ServicesModule {
@@ -29,7 +32,9 @@ export class ServicesModule {
         AffiliateService,
         WorkshopService,
         WorkshopFilterFactory,
-        WorkshopDataProvider
+        DataProviderFactory,
+        IsValidResolver,
+        UserResolver
       ]
     }
   }

@@ -8,39 +8,53 @@
     </md-cell>
   </ng-container>
 
+  <!-- Action Type Column -->
+  <ng-container cdkColumnDef="actionType">
+    <md-header-cell *cdkHeaderCellDef md-sort-header class="action-type-header-cell"> Action Type </md-header-cell>
+    <md-cell *cdkCellDef="let workshop" class="action-type-cell"> {{ workshop.status }} </md-cell>
+  </ng-container>
+
   <!-- Location Column -->
   <ng-container cdkColumnDef="location">
     <md-header-cell *cdkHeaderCellDef md-sort-header> Location </md-header-cell>
     <md-cell *cdkCellDef="let workshop">
-      <p>{{ workshop.Event_City__c }}</p>
-      <p *ngIf="workshop.Event_Country__c !== ''" [style.font-size]="'12px'">{{ workshop.Event_Country__c }}</p>
+      <p>{{ workshop.city }}</p>
+      <p *ngIf="workshop.country !== ''" [style.font-size]="'12px'">{{ workshop.country }}</p>
     </md-cell>
   </ng-container>
 
   <!-- Start Date Column -->
   <ng-container cdkColumnDef="startDate">
     <md-header-cell *cdkHeaderCellDef md-sort-header> Start Date </md-header-cell>
-    <md-cell *cdkCellDef="let workshop"> {{ workshop.Start_Date__c }} </md-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.startDate }} </md-cell>
   </ng-container>
 
   <!-- End Date Column -->
   <ng-container cdkColumnDef="endDate">
     <md-header-cell *cdkHeaderCellDef md-sort-header> End Date </md-header-cell>
-    <md-cell *cdkCellDef="let workshop"> {{ workshop.End_Date__c }} </md-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.endDate }} </md-cell>
+  </ng-container>
+
+  <!-- Days Late Column -->
+  <ng-container cdkColumnDef="daysLate">
+    <md-header-cell *cdkHeaderCellDef class="days-late-header-cell"> Days Late </md-header-cell>
+    <md-cell *cdkCellDef="let workshop" class="days-late-cell"> Due: {{ formatDaysLate(workshop) }} </md-cell>
   </ng-container>
 
   <!-- Instructors Column -->
   <ng-container cdkColumnDef="instructors">
     <md-header-cell *cdkHeaderCellDef> Instructor(s) </md-header-cell>
-    <md-cell *cdkCellDef="let workshop">
-      <p *ngFor="let facilitator of workshop.facilitator">{{ facilitator.Name }}</p>
+    <md-cell *cdkCellDef="let workshop" class="instructors-cell">
+      <i *ngIf="!workshop.instructors.length">No Instructors</i>
+      <p [style.margin]="'0'">{{ workshop.instructors.join(', ') }}</p>
+      <!-- <p [style.margin]="'0'" [style.padding-bottom]="'4px'" *ngFor="let facilitator of workshop.instructors">{{ facilitator.name }}</p> -->
     </md-cell>
   </ng-container>
 
   <!-- Status Column -->
   <ng-container cdkColumnDef="status">
     <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
-    <md-cell *cdkCellDef="let workshop"> {{ workshop.Status__c }} </md-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.status }} </md-cell>
   </ng-container>
 
   <!-- Verified Column -->
@@ -60,8 +74,17 @@
     </md-cell>
   </ng-container>
 
+  <!-- Due Date Column -->
+  <ng-container cdkColumnDef="dueDate">
+    <md-header-cell *cdkHeaderCellDef md-sort-header class="due-date-header-cell"> Due Date </md-header-cell>
+    <md-cell *cdkCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </md-cell>
+  </ng-container>
+
   <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-  <md-row *cdkRowDef="let workshop; columns: displayedColumns;"></md-row>
+  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" (click)="onSelectRow($event)" [ngClass]="{
+                'past-due': isPastDue(workshop),
+                'in-grace-period': isDue(workshop)
+              }"></md-row>
 </md-table>
 
 <md-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
