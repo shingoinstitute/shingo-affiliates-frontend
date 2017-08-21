@@ -22,23 +22,33 @@ export class AffiliateService extends BaseAPIService {
   constructor(private http: HttpService) { super(); }
 
   public getAll(): Observable<Affiliate[]> {
-    throw new Error("Method not implemented.");
+    return this.http.get(`${this.baseUrl}`)
+      .map(res => res.json().map(JSONaf => new Affiliate(JSONaf)))
+      .catch(this.handleError);
   }
 
   public getById(id: string): Observable<Affiliate> {
-    throw new Error("Method not implemented.");
+    return this.http.get(`${this.baseUrl}/${id}`)
+      .map(res => new Affiliate(res.json()))
+      .catch(this.handleError);
   }
 
   public create(obj: Affiliate): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.post(`${this.baseUrl}`, obj)
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   public update(obj: Affiliate): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   public delete(obj: Affiliate): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   public search(query: string, fields: string[] = DEFAULT_AFFILIATE_SEARCH_FIELDS): Observable<Affiliate[]> {
