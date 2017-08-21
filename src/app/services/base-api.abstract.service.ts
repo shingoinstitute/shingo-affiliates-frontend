@@ -16,7 +16,7 @@ export interface SFSuccessResult {
 }
 
 export abstract class BaseAPIService extends BaseService {
-    protected BaseUrl: string = "http://129.123.47.167";
+    protected BaseUrl: string = "http://144.39.192.15";
     protected BasePort: string = "8080";
 
     protected APIHost() { return `${this.BaseUrl}:${this.BasePort}`; }
