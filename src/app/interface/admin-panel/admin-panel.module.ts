@@ -20,4 +20,4 @@ import { AdminPanelRoutingModule } from './admin-panel-routing.module';
       AdminFacilitatorTabComponent
    ]
 })
-export class AdminPanelModule { }
+export class AdminPanelModule {}

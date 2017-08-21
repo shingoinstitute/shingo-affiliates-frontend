@@ -7,12 +7,19 @@ import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliat
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
 
 const adminRoutes: Routes = [
-   { 
-      path: '', 
-      component: AdminTabsComponent,
+   {
+      path: '',
+      component: AdminPanelComponent,
       children: [
-         { path: 'affiliates', component: AdminAffiliateTabComponent },
-         { path: 'facilitators', component: AdminFacilitatorTabComponent }
+         {
+            path: '',
+            component: AdminTabsComponent,
+            children: [
+               { path: 'affiliates', component: AdminAffiliateTabComponent },
+               { path: 'facilitators', component: AdminFacilitatorTabComponent },
+               { path: '**', redirectTo: 'affiliates'}
+            ]
+         }
       ]
    }
 ]

@@ -11,13 +11,9 @@ import 'hammerjs';
 /** Shared Modules */
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
-import { IsValidResolver } from './services/auth/is-valid.resolver';
-import { UserResolver } from './services/auth/user.resolver';
 
 /** Workshops  */
 import { WorkshopsModule } from './workshops/workshops.module';
-import { WorkshopComponent } from './workshops/workshop/workshop.component';
-import { WorkshopResolver } from './workshops/workshop.resolver';
 
 /** Facilitators */
 import { FacilitatorsModule } from './facilitators/facilitators.module';
@@ -25,36 +21,14 @@ import { FacilitatorsModule } from './facilitators/facilitators.module';
 /** Affiliates */
 import { AffiliatesModule } from './affiliates/affiliates.module';
 
-/** Interface Components */
+/** Interface Module */
 import { InterfaceModule } from './interface/interface.module';
-import { DashboardComponent } from './interface/dashboard/dashboard.component';
-import { AddWorkshopComponent } from './interface/add-workshop/add-workshop.component';
-import { EditWorkshopComponent } from './interface/edit-workshop/edit-workshop.component';
-import { ProfileComponent } from './interface/profile/profile.component';
-import { LoginComponent } from './interface/login/login.component';
-import { SupportComponent } from './interface/support/support.component';
-import { SupportTrainingComponent } from './interface/support/support-training/support-training.component';
-import { WorkshopDashboardComponent } from './interface/workshop-dashboard/workshop-dashboard.component';
-import { AdminPanelComponent } from "./interface/admin-panel/admin-panel.component";
+
+// App Routing Module
+import { AppRoutingModule } from './app-routing.module';
 
 // App Components
 import { AppComponent } from './app.component';
-
-export const appRoutes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'workshops/new', component: AddWorkshopComponent, resolve: { user: UserResolver } },
-  { path: 'workshops/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
-  { path: 'workshops/:id', component: WorkshopComponent, resolve: { workshop: WorkshopResolver } },
-  { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
-  { path: 'profile', component: ProfileComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'support', component: SupportComponent },
-  { path: 'support/training', component: SupportTrainingComponent },
-  { path: 'support/training/:video', component: SupportTrainingComponent },
-  { path: 'admin', redirectTo: 'admin/affiliates' },
-  { path: 'admin/**', component: AdminPanelComponent }
-]
 
 @NgModule({
   declarations: [
@@ -67,7 +41,7 @@ export const appRoutes: Routes = [
     ServicesModule.forRoot(),
     SharedModule.forRoot(),
     CookieModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
+    AppRoutingModule,
     FlexLayoutModule,
     InterfaceModule,
     WorkshopsModule,
