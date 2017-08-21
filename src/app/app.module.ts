@@ -35,6 +35,7 @@ import { LoginComponent } from './interface/login/login.component';
 import { SupportComponent } from './interface/support/support.component';
 import { SupportTrainingComponent } from './interface/support/support-training/support-training.component';
 import { WorkshopDashboardComponent } from './interface/workshop-dashboard/workshop-dashboard.component';
+import { AdminPanelComponent } from "./interface/admin-panel/admin-panel.component";
 
 // App Components
 import { AppComponent } from './app.component';
@@ -50,7 +51,9 @@ export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'support', component: SupportComponent },
   { path: 'support/training', component: SupportTrainingComponent },
-  { path: 'support/training/:video', component: SupportTrainingComponent }
+  { path: 'support/training/:video', component: SupportTrainingComponent },
+  { path: 'admin', redirectTo: 'admin/affiliates' },
+  { path: 'admin/**', component: AdminPanelComponent }
 ]
 
 @NgModule({

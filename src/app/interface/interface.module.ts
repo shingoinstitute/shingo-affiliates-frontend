@@ -25,6 +25,7 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
 import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-workshops.component';
 import { ActionPendingComponent } from './action-pending/action-pending.component';
+import { AdminPanelModule } from './admin-panel/admin-panel.module';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { ActionPendingComponent } from './action-pending/action-pending.componen
     MdNativeDateModule,
     FlexLayoutModule,
     WorkshopsModule,
-    CommonModule
+    CommonModule,
+    AdminPanelModule
   ],
   declarations: [
     DashboardComponent,
