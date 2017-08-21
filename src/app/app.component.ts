@@ -82,16 +82,16 @@ export class AppComponent {
     // Subscribe to event stream of authentication change events
     this.auth.authenticationChange$
       .distinctUntilChanged()
-      .subscribe({
-        next: isValid => {
-          this.isAuthenticated = isValid;
-          if (!this.isAuthenticated)
-            this.routerService.navigateRoutes(['/login', this.activeRoute]);
-        },
-        error: () => {
+      .subscribe(isValid => {
+        this.isAuthenticated = isValid;
+        if (!this.isAuthenticated)
           this.routerService.navigateRoutes(['/login', this.activeRoute]);
-        }
-      });
+      },
+      error => {
+        this.isAuthenticated = false;
+        this.routerService.navigateRoutes(['/login', this.activeRoute]);
+      }
+      );
 
     // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
     this.auth.userIsValid();
