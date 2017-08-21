@@ -87,9 +87,13 @@ export class AuthService extends BaseService {
         let data: any = res.json();
         this._user = new User(data);
         this.authenticationChange$.next(res.status === 200);
-      }, (err: Response | any) => {
+      }, (res: Response | any) => {
         this._user = null;
-        this.authenticationChange$.next(err.json ? err.json() : err);
+        if (res.status === 403) this.authenticationChange$.next(false);
+        else {
+          console.error('Unknown error in AuthService.userIsValid(): ', res);
+          this.authenticationChange$.error(res.json ? res.json() : res);
+        }
       });
   }
 

@@ -84,6 +84,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
             this.filterOptions = ["by Upcoming Workshops"];
             this.filters = [this.filterFactory.createDateRangeFilter("by Upcoming Workshops") /* Upcoming */];
             const isAdmin: boolean = this.auth.user && this.auth.user.isAdmin;
+
             if (isAdmin) {
                   this.filterOptions.push("by Status")
                   this.filters.push(this.filterFactory.createPropertyFilter('by Status')); // By Status (for admin)
@@ -199,7 +200,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
             this.textSearch = '';
             this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null;
             this.startDFPicker._selected = this.endDFPicker._selected = null;
-            this._showDateRange = this._showTextFilter = false;
+            this._showDateRange = this._showTextFilter = this._showStatusFilter = false;
             this.filters.map(f => f.dataChange.next(undefined));
             this.deactivated = [];
             this.checkboxen.map(cb => cb.checked = false);

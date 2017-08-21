@@ -24,9 +24,7 @@ export class UpcomingWorkshopsComponent {
         ];
         const upcomingFilter = filterFactory.createDateRangeFilter();
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        upcomingFilter.dataChange.next([today, null]);
+        upcomingFilter.dataChange.next([new Date().withoutTime(), null]);
 
         this.filters = [upcomingFilter];
     }
