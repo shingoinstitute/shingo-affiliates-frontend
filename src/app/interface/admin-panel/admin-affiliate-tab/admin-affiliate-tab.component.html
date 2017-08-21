@@ -1,3 +1,20 @@
 <div class="container">
-  <p>Affiliate Tab</p>
+
+  <div class="affiliate-form card" *ngIf="selectedAffiliate">
+    <app-affiliate-form [affiliate]="selectedAffiliate"></app-affiliate-form>
+    <div class="affiliate-form-actions">
+      <button md-raised-button (click)="cancel()">Cancel</button>
+      <button md-raised-button class="mat-accent" (click)="save()">Save</button>
+      <md-spinner [style.height]="'42px'" *ngIf="isLoading"></md-spinner>
+    </div>
+  </div>
+
+  <div class="tab-actions" *ngIf="!selectedAffiliate">
+    <button md-raised-button class="mat-primary" (click)="onClickCreate()"> + Create </button>
+  </div>
+
+  <app-affiliate-data-table [displayedColumns]="displayedColumns"
+                            (onClickDelete)="onClickDeleteHandler($event)"
+                            (onClickEdit)="onClickEditHandler($event)">
+  </app-affiliate-data-table>
 </div>

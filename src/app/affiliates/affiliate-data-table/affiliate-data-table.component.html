@@ -1,3 +1,39 @@
-<p>
-  affiliate-data-table works!
-</p>
+<md-table #table [dataSource]="dataSource" [mdSortDisableClear]="true" mdSort>
+
+  <!-- Logo Column -->
+  <ng-container cdkColumnDef="logo">
+    <md-header-cell *cdkHeaderCellDef> Logo </md-header-cell>
+    <md-cell *cdkCellDef="let aff" class="logo-cell">
+      <img src="{{ aff.logo }}">
+    </md-cell>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container cdkColumnDef="name">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Name </md-header-cell>
+     <md-cell *cdkCellDef="let aff"> {{aff.name}} </md-cell> 
+  </ng-container>
+
+  <!-- Website Column -->
+  <ng-container cdkColumnDef="website">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Website </md-header-cell>
+    <md-cell *cdkCellDef="let aff"> {{aff.website}} </md-cell>
+  </ng-container>
+
+  <!-- Actions -->
+  <ng-container cdkColumnDef="actions">
+    <md-header-cell *cdkHeaderCellDef> Actions </md-header-cell>
+    <md-cell *cdkCellDef="let aff">
+      <div>
+        <button md-raised-button class="mat-accent" (click)="onClickEdit(aff)">Edit</button>
+        <button md-raised-button class="mat-warn" (click)="onClickDelete(aff)">Delete</button>
+      </div>
+    </md-cell>
+  </ng-container>
+
+  <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+  <md-row *cdkRowDef="let aff; columns: displayedColumns;"></md-row>
+</md-table>
+
+<md-paginator #paginator [length]="affiliateDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+</md-paginator>

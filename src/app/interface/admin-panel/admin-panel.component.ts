@@ -10,6 +10,7 @@ import { FillViewHeightDirective } from "../../shared/directives/fill-height.dir
 })
 export class AdminPanelComponent {
   @ViewChild('pageRoot') pageRoot;
+  
   constructor(private fillHeight: FillViewHeightDirective, private router: Router) {}
 
   ngAfterViewInit() {

@@ -4,11 +4,17 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '@angular/material';
 
+/** Affiliate Components */
+import { AffiliatesModule } from "../../affiliates/affiliates.module";
+
+/** Faciliatator Components */
+import { FacilitatorsModule } from "../../facilitators/facilitators.module";
+
+/** Admin Panel Components */
 import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
-
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 
 @NgModule({
@@ -16,7 +22,9 @@ import { AdminPanelRoutingModule } from './admin-panel-routing.module';
       CommonModule,
       AdminPanelRoutingModule,
       FlexLayoutModule,
-      MaterialModule
+      MaterialModule,
+      FacilitatorsModule,
+      AffiliatesModule
    ],
    declarations: [
       AdminPanelComponent,
