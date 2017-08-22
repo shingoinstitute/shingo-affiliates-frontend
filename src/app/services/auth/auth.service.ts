@@ -101,7 +101,7 @@ export class AuthService extends BaseService {
         if (res.status === 403) this.authenticationChange$.next(false);
         else {
           console.error('Unknown error in AuthService.userIsValid(): ', res);
-          this.authenticationChange$.error(res.json ? res : res);
+          this.authenticationChange$.error(res.json ? res.json() : res);
         }
       });
   }

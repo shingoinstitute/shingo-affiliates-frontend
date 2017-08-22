@@ -1,5 +1,5 @@
 // Angular Modules
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 // App Modules
@@ -13,33 +13,38 @@ import { FillViewHeightDirective } from '../../shared/directives/fill-height.dir
     styleUrls: ['./login.component.scss'],
     providers: [FillViewHeightDirective]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, AfterViewInit {
 
-    email: string;
-    password: string;
+    private email: string;
+    private password: string;
 
-    isLoading: boolean = true;
-    didLoad: boolean = false;
+    private isLoading: boolean = true;
+    private didLoad: boolean = false;
 
-    errBody: string;
-    errMsg: string;
+    private errBody: string;
+    private errMsg: string;
 
     @ViewChild('loginRoot') root: ElementRef;
 
     constructor(private auth: AuthService,
         private router: Router,
         private fillHeight: FillViewHeightDirective,
-        private routerService: RouterService) { this.onLoad(); }
+        private routerService: RouterService) { }
 
     /**
      * @description Dimisses loading indicator after seeing if a user is authenticated.
      * If the user is authenticated, this component is dismissed by 
      * the root app component.
      */
-    onLoad(): void {
+    ngOnInit(): void {
         this.auth.authenticationChange$.subscribe((auth: boolean) => {
-            if (auth)
+            if (auth) {
                 this.routerService.nextRoute();
+            }
+            this.isLoading = false;
+            this.didLoad = true;
+        }, err => {
+            console.error('error: Login.onLoad():', err);
             this.isLoading = false;
             this.didLoad = true;
         });
