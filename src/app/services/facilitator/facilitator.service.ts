@@ -1,5 +1,6 @@
 // Angular Modules
 import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { RequestOptionsArgs, Headers } from '@angular/http'
 
 // App Modules
@@ -26,43 +27,52 @@ export class FacilitatorService extends BaseAPIService {
 
   public getAll(): Observable<Facilitator[]> {
     return this.http.get(this.baseUrl)
-      .map(res => res.json().map(facJSON => new Facilitator(facJSON)))
+      .map(res => res.map(facJSON => new Facilitator(facJSON)))
       .catch(this.handleError);
   }
 
   public getById(id: string): Observable<Facilitator> {
     return this.http.get(`${this.baseUrl}/${id}`)
-      .map(res => new Facilitator(res.json()))
+      .map(res => new Facilitator(res))
       .catch(this.handleError);
   }
 
   public create(obj: Facilitator): Observable<SFSuccessResult> {
     return this.http.post(`${this.baseUrl}`, obj)
-      .map(res => res.json())
+      .map(res => res)
       .catch(this.handleError);
   }
 
   public update(obj: Facilitator): Observable<SFSuccessResult> {
     return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
-      .map(res => res.json())
+      .map(res => res)
       .catch(this.handleError);
   }
 
   public delete(obj: Facilitator): Observable<SFSuccessResult> {
     return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
-      .map(res => res.json())
+      .map(res => res)
       .catch(this.handleError);
+  }
+
+  /**
+  * @description Removes service from a facilitator
+  */
+  public disable(obj: Facilitator): Observable<SFSuccessResult> {
+    return this.http.delete(`${this.baseUrl}/${obj.sfId}/unmap`)
+    .map(res => res)
+    .catch(this.handleError);
   }
 
   public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
     // Set headers (NOTE: Must include token here)
-    const headers = new Headers();
+    const headers = new HttpHeaders();
     headers.set('x-jwt', this.http.jwt);
     headers.set('x-search', query);
     headers.set('x-retrieve', fields.join());
 
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true } as RequestOptionsArgs)
-      .map(res => res.json().map(facJSON => new Facilitator(facJSON)))
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+      .map(res => res.map(facJSON => new Facilitator(facJSON)))
       .catch(this.handleError);
   }
 
@@ -75,14 +85,6 @@ export class FacilitatorService extends BaseAPIService {
    * @description Sends a reset password email to facilitator (or something like that...)
    */
   public resetPassword(obj: Facilitator): Observable<SFSuccessResult> {
-    return Observable.throw('Method not implemented!');
-  }
-
-  /**
-   * @todo Implement me too!
-   * @description Removes service from a facilitator
-   */
-  public disable(obj: Facilitator): Observable<SFSuccessResult> {
     return Observable.throw('Method not implemented!');
   }
 

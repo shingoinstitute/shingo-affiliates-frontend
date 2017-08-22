@@ -26,6 +26,8 @@ import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashbo
 import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-workshops.component';
 import { ActionPendingComponent } from './action-pending/action-pending.component';
 import { AdminPanelModule } from './admin-panel/admin-panel.module';
+import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component';
+import { Ng2FileDropModule } from 'ng2-file-drop';
 
 @NgModule({
   imports: [
@@ -39,7 +41,8 @@ import { AdminPanelModule } from './admin-panel/admin-panel.module';
     FlexLayoutModule,
     WorkshopsModule,
     CommonModule,
-    AdminPanelModule
+    AdminPanelModule,
+    Ng2FileDropModule
   ],
   declarations: [
     DashboardComponent,
@@ -56,7 +59,8 @@ import { AdminPanelModule } from './admin-panel/admin-panel.module';
     EditWorkshopComponent,
     WorkshopDashboardComponent,
     UpcomingWorkshopsComponent,
-    ActionPendingComponent
+    ActionPendingComponent,
+    WorkshopDetailComponent
   ],
   exports: [
     DashboardComponent,

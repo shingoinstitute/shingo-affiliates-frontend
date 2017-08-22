@@ -6,6 +6,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { CookieModule } from 'ngx-cookie';
+import { HttpClientModule } from '@angular/common/http';
 import 'hammerjs';
 
 /** Shared Modules */
@@ -14,6 +15,7 @@ import { ServicesModule } from './services/services.module';
 
 /** Workshops  */
 import { WorkshopsModule } from './workshops/workshops.module';
+import { WorkshopResolver } from './workshops/workshop.resolver';
 
 /** Facilitators */
 import { FacilitatorsModule } from './facilitators/facilitators.module';
@@ -21,7 +23,8 @@ import { FacilitatorsModule } from './facilitators/facilitators.module';
 /** Affiliates */
 import { AffiliatesModule } from './affiliates/affiliates.module';
 
-/** Interface Module */
+/** Interface Components */
+import { WorkshopDetailComponent } from './interface/workshops/workshop-detail/workshop-detail.component';
 import { InterfaceModule } from './interface/interface.module';
 
 // App Routing Module
@@ -39,6 +42,7 @@ import { AppComponent } from './app.component';
       BrowserAnimationsModule,
       MaterialModule,
       HttpModule,
+      HttpClientModule,
       ServicesModule.forRoot(),
       CookieModule.forRoot(),
       SharedModule.forRoot(),

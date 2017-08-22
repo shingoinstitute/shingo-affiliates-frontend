@@ -14,39 +14,41 @@ export class AdminFacilitatorTabComponent {
 
    displayedColumns = ["name"];
 
-   constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar) {
-
-   }
-
-   ngOnInit() {
-   }
+   constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar) {}
 
    resetPassword(fac: Facilitator) {
       this.isLoading = true;
+      this.snackbar.open(`Sending password reset email to ${fac.email}...`);
       this._fs.resetPassword(fac).subscribe(data => {
          this.apiCallbackHandler(data);
+         this.snackbar.open('Password reset email has been sent.', 'Okay', { duration: 2000 });
       }, err => { this.apiCallbackHandler(null, err); })
    }
 
    save(fac: Facilitator) {
       this.isLoading = true;
+      this.snackbar.open('Saving Changes...');
       this._fs.update(fac).subscribe(data => {
          this.apiCallbackHandler(data);
-         this.snackbar.open('Facilitator Update Successful', null, { duration: 1500 });
+         this.snackbar.open('Facilitator Successfully Updated', 'Okay', { duration: 2000 });
       }, err => { this.apiCallbackHandler(null, err); });
    }
 
    delete(fac: Facilitator) {
       this.isLoading = true;
+      this.snackbar.open(`Deleting ${fac.name}'s Account...`);
       this._fs.delete(fac).subscribe(data => {
          this.apiCallbackHandler(data);
+         this.snackbar.open('Facilitator Successfully Deleted.', 'Okay', { duration: 2000 });
       }, err => { this.apiCallbackHandler(null, err); });
    }
 
    disable(fac: Facilitator) {
       this.isLoading = true;
+      this.snackbar.open(`Disabling ${fac.name}'s Account...`);
       this._fs.disable(fac).subscribe(data => {
          this.apiCallbackHandler(data);
+         this.snackbar.open('Facilitator Successfully Disabled', 'Okay', { duration: 2000 });
       }, err => { this.apiCallbackHandler(null, err); });
    }
 
@@ -55,7 +57,7 @@ export class AdminFacilitatorTabComponent {
       if (data)
          console.log(data);
       if (err) {
-         this.snackbar.open('An error occured and the requested operation could not be completed.', 'Okay');
+         this.snackbar.open('An error occured and the requested operation could not be completed.', 'Okay', { duration: 3000 });
          console.error(err);
       }
    }

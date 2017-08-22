@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
+import { HttpRequest, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http, Headers, RequestOptionsArgs } from '@angular/http';
 import { Observable } from "rxjs/Observable";
 import { CookieService } from "ngx-cookie";
-
-export { Headers, RequestOptionsArgs };
 
 @Injectable()
 export class HttpService {
@@ -12,29 +11,37 @@ export class HttpService {
 
   public set jwt(token: string) { this._cs.put('x-jwt', token); }
 
-  private get _defaultReqOpts(): RequestOptionsArgs {
+  public get _defaultReqOpts() {
     return {
-      headers: new Headers({ 'x-jwt': this.jwt }),
-      withCredentials: true
-    }
+      headers: new HttpHeaders().set('x-jwt', this.jwt || '') || [],
+      withCredentials: true,
+      observe: 'body',
+      responseType: 'json'
+    } as any;
   };
 
-  constructor(public http: Http, public _cs: CookieService) { }
+  constructor(public http: HttpClient, public _cs: CookieService) { }
 
-  public get(url: string, options: RequestOptionsArgs = this._defaultReqOpts): Observable<any> {
-    return this.http.get(url, options);
+  public get<T>(url: string, options = this._defaultReqOpts): Observable<any> {
+    return this.http.get<T>(url, options);
   }
 
-  public post(url: string, body: any, options: RequestOptionsArgs = this._defaultReqOpts): Observable<any> {
-    return this.http.post(url, body, options);
+  public post<T>(url: string, body: any, options = this._defaultReqOpts): Observable<any> {
+    return this.http.post<T>(url, body, options);
   }
 
-  public put(url: string, body: any, options: RequestOptionsArgs = this._defaultReqOpts): Observable<any> {
-    return this.http.put(url, body, options);
+  public put<T>(url: string, body: any, options = this._defaultReqOpts): Observable<any> {
+    return this.http.put<T>(url, body, options);
   }
 
-  public delete(url: string, options: RequestOptionsArgs = this._defaultReqOpts): Observable<any> {
-    return this.http.delete(url, options);
+  public delete<T>(url: string, options = this._defaultReqOpts): Observable<any> {
+    return this.http.delete<T>(url, options);
+  }
+
+  public request<T>(req: HttpRequest<any>): Observable<any> {
+    console.log('request.serializeBody()', req.serializeBody());
+    console.log('requres.detectContentType', req.detectContentTypeHeader());
+    return this.http.request<T>(req);
   }
 
   removeToken() {
