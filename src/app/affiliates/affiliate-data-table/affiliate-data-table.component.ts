@@ -3,7 +3,7 @@ import { DataProvider } from "../../services/data-provider.service";
 import { AffiliateService } from "../../services/affiliate/affiliate.service";
 import { Affiliate } from "../Affiliate";
 import { DataProviderFactory } from "../../services/data-provider-factory.service";
-import { AffiliateDataSource } from "../../services/affiliate/affilaite-data-source.service";
+import { AffiliateDataSource } from "../../services/affiliate/affiliate-data-source.service";
 import { MdPaginator, MdSort } from "@angular/material";
 
 @Component({
@@ -14,7 +14,7 @@ import { MdPaginator, MdSort } from "@angular/material";
 export class AffiliateDataTableComponent {
 
   affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
-  
+
   @ViewChild('paginator') paginator: MdPaginator;
   @ViewChild(MdSort) sort: MdSort;
 
@@ -23,15 +23,27 @@ export class AffiliateDataTableComponent {
 
   @Output('onClickEdit') onClickEditEventEmitter = new EventEmitter<Affiliate>();
   @Output('onClickDelete') onClickDeleteEventEmitter = new EventEmitter<Affiliate>();
+  @Output('onLoadComplete') onLoadCompleteEventEmitter = new EventEmitter<void>();
 
-  constructor(private providerFactory: DataProviderFactory) {
+  constructor(private providerFactory: DataProviderFactory, private _as: AffiliateService) {
     this.affiliateDataProvider = providerFactory.getAffiliateDataProvider();
   }
 
   ngOnInit() {
+    // Init dataSource for data table
     this.dataSource = new AffiliateDataSource(this.affiliateDataProvider, this.paginator, this.sort);
-
+    // Set 'name' as default sorted column
     this.sort.sort({ id: 'name', start: 'asc', disableClear: false });
+    // Listen to reload data event
+    this._as.shouldReloadData$.subscribe(() => {
+      console.log('refreshing data');
+      this.affiliateDataProvider.refresh();
+    });
+
+    this.affiliateDataProvider.dataChange.subscribe(() => {
+      if (this.affiliateDataProvider.data.length > 0)
+        this.onLoadCompleteEventEmitter.emit();
+    });
   }
 
   onClickEdit(affiliate: Affiliate) {

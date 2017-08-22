@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Affiliate } from "../../../affiliates/Affiliate";
 import { AffiliateService } from "../../../services/affiliate/affiliate.service";
 import { SFSuccessResult } from "../../../services/base-api.abstract.service";
-import { MdSnackBar } from "@angular/material";
+import { MdSnackBar, MdDialog } from "@angular/material";
 
 @Component({
   selector: 'app-admin-affiliate-tab',
@@ -11,33 +11,26 @@ import { MdSnackBar } from "@angular/material";
 })
 export class AdminAffiliateTabComponent implements OnInit {
 
-
   displayedColumns = ["logo", "name", "website", "actions"];
 
   selectedAffiliate: Affiliate;
 
-  isLoading: boolean;
+  isLoading: boolean = true;
 
-  constructor(private _as: AffiliateService, private snackbar: MdSnackBar) { }
+  constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar) { }
 
   ngOnInit() {
   }
 
-  save() {
+  onClickSave() {
     this.isLoading = true;
-    this._as.update(this.selectedAffiliate).subscribe((data: SFSuccessResult) => {
-      console.log(data);
-      this.selectedAffiliate = null;
-      this.isLoading = false;
-      this.snackbar.open('Affiliate successfully updated/created.', null, { duration: 1500 });
-    }, err => {
-      console.error(err);
-      this.selectedAffiliate = null;
-      this.isLoading = false;
-    });
+    if (this.selectedAffiliate.sfId == '')
+      this.createAffiliate(this.selectedAffiliate);
+    else
+      this.updateAffiliate(this.selectedAffiliate);
   }
 
-  cancel() {
+  onClickCancel() {
     this.selectedAffiliate = null;
   }
 
@@ -50,7 +43,60 @@ export class AdminAffiliateTabComponent implements OnInit {
   }
 
   onClickDeleteHandler(affiliate: Affiliate) {
-    
+    let dialogRef = this.dialog.open(ConfirmDeleteAffiliateDialogComponent, {
+      data: affiliate
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Result: ${result}`);
+      if (result === true)
+        this.deleteAffiliate(affiliate);
+    });
   }
 
+  createAffiliate(a: Affiliate) {
+    this._as.create(a).subscribe((data: SFSuccessResult) => {
+      this.onHandleCallback(data);
+      this.snackbar.open('Affiliate Successfully Created.', null, { duration: 1500 });
+    }, err => { this.onHandleCallback(null, err); })
+  }
+
+  updateAffiliate(a: Affiliate) {
+    this._as.update(a).subscribe((data: SFSuccessResult) => {
+      this.onHandleCallback(data);
+      this.snackbar.open('Affiliate Successfully Updated.', null, { duration: 1500 });
+    }, err => { this.onHandleCallback(null, err); });
+  }
+
+  deleteAffiliate(a: Affiliate) {
+    this._as.delete(a).subscribe(data => {
+      this.onHandleCallback(data);
+      this.snackbar.open('Affiliate Successfully Deleted', 'Okay', { duration: 3000 });
+    }, err => { this.onHandleCallback(null, err); });
+  }
+
+  onHandleCallback(data?: any, err?: any) {
+    delete this.selectedAffiliate;
+    this.isLoading = false;
+    if (data) { console.log(data); }
+    if (err) {
+      console.error(err);
+      this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay');
+    }
+    this._as.reloadData$.next();
+  }
+
+}
+
+import { Inject } from '@angular/core';
+import { MD_DIALOG_DATA } from '@angular/material';
+
+@Component({
+  selector: 'confirm-delete-affiliate-dialog',
+  templateUrl: './confirm-delete-affiliate-dialog.component.html' 
+})
+export class ConfirmDeleteAffiliateDialogComponent {
+  affiliate: Affiliate;
+  constructor(@Inject(MD_DIALOG_DATA) public data: any) {
+    this.affiliate = data as Affiliate;
+  }
 }

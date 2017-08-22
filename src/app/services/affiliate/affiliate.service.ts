@@ -10,11 +10,15 @@ import { Affiliate } from '../../affiliates/Affiliate';
 
 // RxJS Modules
 import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
 
 export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languages__c', 'Logo__c', 'Website'];
 
 @Injectable()
 export class AffiliateService extends BaseAPIService {
+
+  public reloadData$ = new Subject<void>();
+  public shouldReloadData$: Observable<void> = this.reloadData$.asObservable();
 
   private route: string = 'affiliates';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }

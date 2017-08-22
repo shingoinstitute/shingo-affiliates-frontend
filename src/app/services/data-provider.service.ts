@@ -48,6 +48,14 @@ export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
     return intersection;
   }
 
+  public refresh() {
+    this._s.getAll().subscribe(data => {
+      this.dataChangeSource.next(data);
+    }, err => {
+      console.error(err);
+    });
+  }
+
   public addFilter(filter: Filter) {
     this._filters.push(filter);
   }

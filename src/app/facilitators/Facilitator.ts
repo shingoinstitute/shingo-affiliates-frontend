@@ -23,7 +23,7 @@ export class Facilitator extends SFObject {
     public set email(email: string) { this.Email = email; }
     public set firstName(name: string) { this.FirstName = name; }
     public set lastName(name: string) { this.LastName = name; }
-    public set affilaiteId(sfId: string) { this.AccountId = sfId; }
+    public set affiliateId(sfId: string) { this.AccountId = sfId; }
 
     public toSFJSON(): object {
         const sfFacilitator = {
@@ -31,7 +31,7 @@ export class Facilitator extends SFObject {
             Email: this.email,
             FirstName: this.firstName,
             LastName: this.lastName,
-            AccountId: this.affilaiteId
+            AccountId: this.affiliateId
         }
         return sfFacilitator;
     }
