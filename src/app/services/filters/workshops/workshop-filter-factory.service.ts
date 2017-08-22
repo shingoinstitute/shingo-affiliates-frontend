@@ -13,14 +13,17 @@ export class WorkshopFilterFactory extends FilterFactory {
   constructor() { super(); }
 
   createDateRangeFilter(name: string = `WorkshopDateRangeFilter:${WorkshopFilterFactory.id}`): WorkshopDateRangeFilter {
+    WorkshopFilterFactory.id++;
     return new WorkshopDateRangeFilter(name);
   }
 
   createPropertyFilter(name: string = `WorkshopDateRangeFilter:${WorkshopFilterFactory.id}`): PropertyFilter<Workshop> {
+    WorkshopFilterFactory.id++;
     return new PropertyFilter<Workshop>(name);
   }
 
   createTextFilter(name: string = `WorkshopDateRangeFilter:${WorkshopFilterFactory.id}`): TextFilter<Workshop> {
+    WorkshopFilterFactory.id++;
     return new TextFilter<Workshop>(name);
   }
 

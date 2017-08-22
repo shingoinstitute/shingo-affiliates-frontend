@@ -36,7 +36,6 @@ export class WorkshopService extends BaseAPIService {
     if (!this.http.get(this.baseUrl)) console.error(`http.get(${this.baseUrl}) didn't work!`, this.http);
     return this.http.get(this.baseUrl)
       .map(res => res.json().map(wkJSON => new Workshop(wkJSON)))
-      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 

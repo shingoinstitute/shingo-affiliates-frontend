@@ -25,23 +25,33 @@ export class FacilitatorService extends BaseAPIService {
   constructor(private http: HttpService) { super(); }
 
   public getAll(): Observable<Facilitator[]> {
-    throw new Error("Method not implemented.");
+    return this.http.get(this.baseUrl)
+      .map(res => res.json().map(facJSON => new Facilitator(facJSON)))
+      .catch(this.handleError);
   }
 
   public getById(id: string): Observable<Facilitator> {
-    throw new Error("Method not implemented.");
+    return this.http.get(`${this.baseUrl}/${id}`)
+      .map(res => new Facilitator(res.json()))
+      .catch(this.handleError);
   }
 
   public create(obj: Facilitator): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.post(`${this.baseUrl}`, obj)
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   public update(obj: Facilitator): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   public delete(obj: Facilitator): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
+      .map(res => res.json())
+      .catch(this.handleError);
   }
 
   public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
