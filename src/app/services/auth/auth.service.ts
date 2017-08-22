@@ -21,7 +21,7 @@ export class AuthService extends BaseService {
   private _user: User;
   private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth` }
 
-  protected BaseUrl: string = 'http://129.123.47.167';
+  protected BaseUrl: string = 'http://129.123.47.34';
   protected BasePort: string = '8080';
 
   public authenticationChange$: BehaviorSubject<boolean>;
@@ -39,10 +39,13 @@ export class AuthService extends BaseService {
     * @returns {Observable<any>} 
     * @memberof AuthService
     */
-  public login(paylod: { email: string, password: string }): Observable<any> {
-    return this.http.post(`${this.authHost}/login`, paylod)
+  public login(paylod: { email: string, password: string }): any {
+    const options = this.http._defaultReqOpts;
+    options.observe = 'response';
+    console.log('options in login, ', options);
+    return this.http.post<{ email: string, password: string }>(`${this.authHost}/login`, paylod, options)
       .map(res => {
-        const data = res.json();
+        const data = res.body;
         this._user = new User(data);
         this.http.jwt = data.jwt;
         this.authenticationChange$.next(res.status === 200);
@@ -58,9 +61,12 @@ export class AuthService extends BaseService {
       * @memberof AuthService
       */
   public logout(): Observable<any> {
-    return this.http.get(`${this.authHost}/logout`)
+    const options = this.http._defaultReqOpts;
+    options.observe = 'response';
+
+    return this.http.get(`${this.authHost}/logout`, options)
       .map((res: Response) => {
-        let data = res.json();
+        let data = res;
         this._user = null;
         this.http.removeToken();
         this.authenticationChange$.next(false);
@@ -79,24 +85,33 @@ export class AuthService extends BaseService {
     if (!this.http.jwt)
       return this.authenticationChange$.next(false);
 
-    this.http.get(`${this.authHost}/valid`)
+    const options = this.http._defaultReqOpts;
+    options.observe = 'response';
+
+    this.http.get<User>(`${this.authHost}/valid`, options)
       .catch(err => {
         return Observable.throw(err);
       })
-      .subscribe((res: Response) => {
-        let data: any = res.json();
+      .subscribe(res => {
+        const data: any = res.body;
         this._user = new User(data);
         this.authenticationChange$.next(res.status === 200);
-      }, (err: Response | any) => {
+      }, res => {
         this._user = null;
-        this.authenticationChange$.next(err.json ? err.json() : err);
+        if (res.status === 403) this.authenticationChange$.next(false);
+        else {
+          console.error('Unknown error in AuthService.userIsValid(): ', res);
+          this.authenticationChange$.error(res.json ? res : res);
+        }
       });
   }
 
   public getUser(): Observable<User> {
-    return this.http.get(`${this.authHost}/valid`)
+    const options = this.http._defaultReqOpts;
+    options.observe = 'response';
+    return this.http.get<User>(`${this.authHost}/valid`, options)
       .map(res => {
-        const data = res.json();
+        const data = res.body;
         this._user = new User(data);
         this.authenticationChange$.next(res.status === 200);
         return this._user;
@@ -109,7 +124,7 @@ export class AuthService extends BaseService {
    */
   sendPasswordReset(email: string): Observable<any> {
     return this.http.get(`${this.authHost}/resetpassword`)
-      .map(res => { return res.json(); })
+      .map(res => { return res; })
       .catch(err => { return Observable.throw(err); });
   }
 }

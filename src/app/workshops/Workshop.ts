@@ -41,6 +41,7 @@ export class Workshop extends SFObject {
     private Workshop_Type__c: WorkshopType = 'Discover';
     private Billing_Contact__c: string = '';
     private Language__c: string = 'English';
+    public files: any[] = [];
 
     // Be careful because Object.assign will assign variables dynamically: eg
     //  new Workshop({Id: 'some id', otherProp: 42}) => {Id: 'some id', otherProp: 42} that has type Workshop
@@ -58,7 +59,9 @@ export class Workshop extends SFObject {
     // Public getters
     public get sfId(): string { return this.Id; }
     public get startDate(): Date { return this.Start_Date__c; }
+    public get startDateFormatted(): string { return Workshop.formatDate(this.startDate); }
     public get endDate(): Date { return this.End_Date__c; }
+    public get endDateFormatted(): string { return Workshop.formatDate(this.endDate); }
     public get courseManager(): CourseManager { return this.Course_Manager__r; }
     public get courseManagerId(): string { return (this.Course_Manager__r ? this.Course_Manager__r.sfId : this.Course_Manager__c); }
     public get instructors(): Facilitator[] { return this.facilitators; }
@@ -95,6 +98,9 @@ export class Workshop extends SFObject {
     public get dueDate(): string {
         const dueDate = new Date(this.endDate).valueOf() + (1000 * 60 * 60 * 24 * 7)
         return Workshop.formatDate(new Date(dueDate));
+    }
+    public get location(): string {
+        return `${this.city}, ${this.country}`;
     }
 
     // Public Setters
