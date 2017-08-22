@@ -16,7 +16,9 @@ export interface SFSuccessResult {
 }
 
 export abstract class BaseAPIService extends BaseService {
-    protected BaseUrl: string = "http://144.39.192.15";
+
+    protected BaseUrl: string = "http://129.123.47.34";
+
     protected BasePort: string = "8080";
 
     protected APIHost() { return `${this.BaseUrl}:${this.BasePort}`; }
@@ -32,7 +34,7 @@ export abstract class BaseAPIService extends BaseService {
     public describe(route: 'workshops' | 'facilitators' | 'affiliates', http: HttpService): Observable<any> {
         return http.get(`${this.APIHost()}/${route}/describe`)
             .map(res => {
-                let data = res.json();
+                let data = res;
                 console.log('describe', data);
                 let props = {};
                 data.fields.filter(field => {

@@ -39,6 +39,7 @@ export class AppComponent {
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private router: Router, private auth: AuthService, private ws: WorkshopService, public sidenavService: SidenavService, public routerService: RouterService) {
     iconRegistry.addSvgIcon('search_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_search_grey_18px.svg'));
     iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_black_18px.svg'));
+    iconRegistry.addSvgIcon('edit_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_white_18px.svg'));
     iconRegistry.addSvgIcon('expand_less', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_expand_less_black_18px.svg'));
     iconRegistry.addSvgIcon('expand_more', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_expand_more_black_18px.svg'));
     iconRegistry.addSvgIcon('folder_special_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_folder_special_white_18px.svg'));
@@ -51,6 +52,7 @@ export class AppComponent {
     iconRegistry.addSvgIcon('logout_black', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_exit_to_app_black_24px.svg'));
     iconRegistry.addSvgIcon('person_black', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_person_outline_black_24px.svg'));
     iconRegistry.addSvgIcon('label_outline', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_label_outline_black_24px.svg'));
+    iconRegistry.addSvgIcon('file_upload', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_file_upload_black_18px.svg'));
 
     // Subscribe to router event stream 
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {
