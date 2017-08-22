@@ -1,5 +1,6 @@
 // Angular Modules
 import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 import { RequestOptionsArgs, Headers } from '@angular/http';
 
 // App Modules
@@ -22,46 +23,56 @@ export class AffiliateService extends BaseAPIService {
   constructor(private http: HttpService) { super(); }
 
   public getAll(): Observable<Affiliate[]> {
-    throw new Error("Method not implemented.");
+    return this.http.get(`${this.baseUrl}`)
+      .map(res => res.map(JSONaf => new Affiliate(JSONaf)))
+      .catch(this.handleError);
   }
 
   public getById(id: string): Observable<Affiliate> {
-    throw new Error("Method not implemented.");
+    return this.http.get(`${this.baseUrl}/${id}`)
+      .map(res => new Affiliate(res))
+      .catch(this.handleError);
   }
 
   public create(obj: Affiliate): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.post(`${this.baseUrl}`, obj)
+      .map(res => res)
+      .catch(this.handleError);
   }
 
   public update(obj: Affiliate): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+      .map(res => res)
+      .catch(this.handleError);
   }
 
   public delete(obj: Affiliate): Observable<SFSuccessResult> {
-    throw new Error("Method not implemented.");
+    return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
+      .map(res => res)
+      .catch(this.handleError);
   }
 
   public search(query: string, fields: string[] = DEFAULT_AFFILIATE_SEARCH_FIELDS): Observable<Affiliate[]> {
     // Set headers (NOTE: Must include token here)
-    const headers = new Headers();
+    const headers = new HttpHeaders();
     headers.set('x-jwt', this.http.jwt);
     headers.set('x-search', query);
     headers.set('x-retrieve', fields.join());
 
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true } as RequestOptionsArgs)
-      .map(res => res.json().map(JSONaf => new Affiliate(JSONaf)))
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+      .map(res => res.map(JSONaf => new Affiliate(JSONaf)))
       .catch(this.handleError);
   }
 
   public searchCMS(query: string, id: string): Observable<CourseManager[]> {
     // Set headers (NOTE: Must include token here)
-    const headers = new Headers();
+    const headers = new HttpHeaders();
     headers.set('x-jwt', this.http.jwt);
     headers.set('x-search', query);
     headers.set('x-retrieve', ['Id', 'Name', 'Email']);
 
-    return this.http.get(`${this.baseUrl}/${id}/coursemanagers`, { headers, withCredentials: true } as RequestOptionsArgs)
-      .map(res => res.json().map(cmJSON => new CourseManager(cmJSON)))
+    return this.http.get(`${this.baseUrl}/${id}/coursemanagers`, { headers, withCredentials: true })
+      .map(res => res.map(cmJSON => new CourseManager(cmJSON)))
       .catch(this.handleError);
   }
 

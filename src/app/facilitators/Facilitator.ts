@@ -7,6 +7,7 @@ export class Facilitator extends SFObject {
     private FirstName: string = '';
     private LastName: string = '';
     private AccountId: string = '';
+    private Photograph__c: string = 'http://res.cloudinary.com/shingo/image/upload/c_thumb,e_trim:10,g_center,h_100,w_100/v1414874243/silhouette_vzugec.png';
 
     constructor(facilitator?: any) {
         super();
@@ -19,11 +20,13 @@ export class Facilitator extends SFObject {
     public get firstName() { return this.FirstName; }
     public get lastName() { return this.LastName; }
     public get affiliateId() { return this.AccountId; }
+    public get photo() { return this.Photograph__c; }
 
     public set email(email: string) { this.Email = email; }
     public set firstName(name: string) { this.FirstName = name; }
     public set lastName(name: string) { this.LastName = name; }
     public set affilaiteId(sfId: string) { this.AccountId = sfId; }
+    public set photo(url: string) { this.Photograph__c = url; }
 
     public toSFJSON(): object {
         const sfFacilitator = {

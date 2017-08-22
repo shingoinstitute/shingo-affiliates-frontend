@@ -25,6 +25,9 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
 import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-workshops.component';
 import { ActionPendingComponent } from './action-pending/action-pending.component';
+import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component';
+
+import { Ng2FileDropModule } from 'ng2-file-drop';
 
 @NgModule({
   imports: [
@@ -37,7 +40,8 @@ import { ActionPendingComponent } from './action-pending/action-pending.componen
     MdNativeDateModule,
     FlexLayoutModule,
     WorkshopsModule,
-    CommonModule
+    CommonModule,
+    Ng2FileDropModule
   ],
   declarations: [
     DashboardComponent,
@@ -54,7 +58,8 @@ import { ActionPendingComponent } from './action-pending/action-pending.componen
     EditWorkshopComponent,
     WorkshopDashboardComponent,
     UpcomingWorkshopsComponent,
-    ActionPendingComponent
+    ActionPendingComponent,
+    WorkshopDetailComponent
   ],
   exports: [
     DashboardComponent,

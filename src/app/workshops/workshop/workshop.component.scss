@@ -1,0 +1,43 @@
+@import '../../../assets/sass/_globals';
+
+.container {
+   max-width: fit-content;
+   margin-bottom: 142px;
+}
+
+.detail-row {
+    padding: $defaultMargin;    
+}
+
+.container .detail-row:nth-child(even) {
+    background-color: $rowBackground;
+ }
+
+.course-img {
+    width: 100px;
+    height: 100px;
+}
+
+.instructor {
+    background: white;
+    margin: 8px;
+    border: 1px solid #e4e4e4;
+    padding: 8px;
+    box-shadow: 3px 3px 3px #e4e4e4;
+    // width: fit-content;
+}
+
+.instructor div.instructor-details > h3 {
+    margin: 0;
+}
+
+.instructor div.instructor-img {
+    margin-left: 24px;
+    position: relative;
+    right: 0;
+}
+
+.instructor div.instructor-img > img {
+    width: 50px;
+    height: 50px;
+}
