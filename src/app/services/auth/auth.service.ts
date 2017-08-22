@@ -21,7 +21,7 @@ export class AuthService extends BaseService {
   private _user: User;
   private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth` }
 
-  protected BaseUrl: string = 'http://144.39.192.15';
+  protected BaseUrl: string = 'http://129.123.47.34';
   protected BasePort: string = '8080';
 
   public authenticationChange$: BehaviorSubject<boolean>;

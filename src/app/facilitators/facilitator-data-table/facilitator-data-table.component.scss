@@ -1,0 +1,12 @@
+@import '../../../app-theme';
+
+md-input-container { width: 100%; }
+
+.fac-input {
+   background-color: $primary-color;
+   color: white;
+   padding: 3px;
+   border-radius: 2px;
+   width: 97%;
+   font-weight: 300;
+}

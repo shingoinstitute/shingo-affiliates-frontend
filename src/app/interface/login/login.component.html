@@ -14,11 +14,11 @@
 
       <form class="login-form">
          <md-input-container floatPlaceholder="always">
-            <input name="email" mdInput type="text" [(ngModel)]="email" placeholder="email">
+            <input mdInput type="text" [(ngModel)]="email" name="email" placeholder="email">
          </md-input-container>
 
-         <md-input-container>
-            <input id="search-password" mdInput type="password" [(ngModel)]="password" name="searchpassword" placeholder="password">
+         <md-input-container floatPlaceholder="always">
+            <input mdInput type="password" [(ngModel)]="password" name="password" placeholder="password">
          </md-input-container>
       </form>
 

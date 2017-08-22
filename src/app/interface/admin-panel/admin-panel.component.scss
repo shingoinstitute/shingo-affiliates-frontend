@@ -1,0 +1,12 @@
+.spinner-container {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+.spinner-container > md-spinner {
+   height: 24px;
+   flex: 1;
+   margin: 8px;
+   position: relative;
+   bottom: 64px;
+}

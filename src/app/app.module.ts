@@ -1,8 +1,8 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { CookieModule } from 'ngx-cookie';
@@ -31,25 +31,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpModule,
-    ServicesModule.forRoot(),
-    SharedModule.forRoot(),
-    CookieModule.forRoot(),
-    AppRoutingModule,
-    FlexLayoutModule,
-    InterfaceModule,
-    WorkshopsModule,
-    FacilitatorsModule,
-    AffiliatesModule,
-    MaterialModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+   declarations: [
+      AppComponent
+   ],
+   imports: [
+      BrowserModule,
+      BrowserAnimationsModule,
+      MaterialModule,
+      HttpModule,
+      ServicesModule.forRoot(),
+      CookieModule.forRoot(),
+      SharedModule.forRoot(),
+      AppRoutingModule,
+      FlexLayoutModule,
+      InterfaceModule,
+      WorkshopsModule,
+      FacilitatorsModule,
+      AffiliatesModule
+   ],
+   providers: [],
+   bootstrap: [AppComponent]
 })
 export class AppModule { }

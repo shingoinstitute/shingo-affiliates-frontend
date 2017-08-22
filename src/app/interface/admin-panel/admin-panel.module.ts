@@ -13,7 +13,8 @@ import { FacilitatorsModule } from "../../facilitators/facilitators.module";
 /** Admin Panel Components */
 import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
-import { AdminAffiliateTabComponent, ConfirmDeleteAffiliateDialogComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
+import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
+import { ConfirmDeleteAffiliateDialogComponent } from './admin-affiliate-tab/confirm-delete-affiliate-dialog.component';
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 

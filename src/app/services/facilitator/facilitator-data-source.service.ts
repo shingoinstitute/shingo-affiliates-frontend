@@ -2,22 +2,22 @@
 import { MdPaginator, MdSort } from '@angular/material';
 
 // App Modules
-import { AffiliateService } from './affiliate.service';
+import { FacilitatorService } from './facilitator.service';
 import { DataProvider } from '../data-provider.service';
 import { APIDataSource } from '../api-data-source.abstract.service';
-import { Affiliate } from "../../affiliates/Affiliate";
+import { Facilitator } from "../../facilitators/Facilitator";
 
 
-export class AffiliateDataSource extends APIDataSource<AffiliateService, Affiliate>{
+export class FacilitatorDataSource extends APIDataSource<FacilitatorService, Facilitator>{
 
    constructor(
-      private _adp: DataProvider<AffiliateService, Affiliate>,
+      private _fdp: DataProvider<FacilitatorService, Facilitator>,
       public paginator?: MdPaginator,
       public sort?: MdSort
-   ) { super(_adp, paginator, sort); }
+   ) { super(_fdp, paginator, sort); }
 
-   protected getSortedData(): Affiliate[] {
-      const data = this._adp.data.slice();
+   protected getSortedData(): Facilitator[] {
+      const data = this._fdp.data.slice();
 
       if (!this.sort.active || this.sort.direction == '') { return data; }
 
@@ -27,7 +27,6 @@ export class AffiliateDataSource extends APIDataSource<AffiliateService, Affilia
 
          switch (this.sort.active) {
             case 'name': [propA, propB] = [a.name, b.name]; break;
-            case 'website': [propA, propB] = [a.website, b.website]; break;
             default: [propA, propB] = [a.name, b.name]
          }
 

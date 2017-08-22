@@ -70,4 +70,20 @@ export class FacilitatorService extends BaseAPIService {
     return super.describe('facilitators', this.http);
   }
 
+  /**
+   * @todo Implement me please
+   * @description Sends a reset password email to facilitator (or something like that...)
+   */
+  public resetPassword(obj: Facilitator): Observable<SFSuccessResult> {
+    return Observable.throw('Method not implemented!');
+  }
+
+  /**
+   * @todo Implement me too!
+   * @description Removes service from a facilitator
+   */
+  public disable(obj: Facilitator): Observable<SFSuccessResult> {
+    return Observable.throw('Method not implemented!');
+  }
+
 }

@@ -43,8 +43,10 @@ export class AppComponent {
     iconRegistry.addSvgIcon('expand_more', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_expand_more_black_18px.svg'));
     iconRegistry.addSvgIcon('folder_special_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_folder_special_white_18px.svg'));
     iconRegistry.addSvgIcon('cancel_red', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_cancel_red_18px.svg'));
+    iconRegistry.addSvgIcon('cancel_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_cancel_grey_18px.svg'));
     iconRegistry.addSvgIcon('checkmark_green', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_check_circle_green_18px.svg'));
     iconRegistry.addSvgIcon('save_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_save_white_18px.svg'));
+    iconRegistry.addSvgIcon('save_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_save_grey_18px.svg'));
     iconRegistry.addSvgIcon('x_red', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_x_red_18px.svg'));
     iconRegistry.addSvgIcon('account_box_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_account_box_white_24px.svg'));
     iconRegistry.addSvgIcon('support_black', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_help_black_24px.svg'));
@@ -55,6 +57,7 @@ export class AppComponent {
     iconRegistry.addSvgIcon('block_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_block_grey_24px.svg'));
     iconRegistry.addSvgIcon('delete_forever_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_delete_forever_grey_24px.svg'));
     iconRegistry.addSvgIcon('delete_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_delete_grey_24px.svg'));
+    iconRegistry.addSvgIcon('renew_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_autorenew_grey_18px.svg'));
 
     // Subscribe to router event stream 
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {

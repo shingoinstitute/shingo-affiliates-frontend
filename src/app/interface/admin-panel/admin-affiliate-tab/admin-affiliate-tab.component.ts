@@ -1,15 +1,16 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Affiliate } from "../../../affiliates/Affiliate";
 import { AffiliateService } from "../../../services/affiliate/affiliate.service";
 import { SFSuccessResult } from "../../../services/base-api.abstract.service";
 import { MdSnackBar, MdDialog } from "@angular/material";
+import { ConfirmDeleteAffiliateDialogComponent } from "./confirm-delete-affiliate-dialog.component";
 
 @Component({
   selector: 'app-admin-affiliate-tab',
   templateUrl: './admin-affiliate-tab.component.html',
-  styleUrls: ['./admin-affiliate-tab.component.scss']
+  styleUrls: ['./admin-affiliate-tab.component.scss', '../admin-panel.component.scss']
 })
-export class AdminAffiliateTabComponent implements OnInit {
+export class AdminAffiliateTabComponent {
 
   displayedColumns = ["logo", "name", "website", "actions"];
 
@@ -18,9 +19,6 @@ export class AdminAffiliateTabComponent implements OnInit {
   isLoading: boolean = true;
 
   constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar) { }
-
-  ngOnInit() {
-  }
 
   onClickSave() {
     this.isLoading = true;
@@ -85,18 +83,4 @@ export class AdminAffiliateTabComponent implements OnInit {
     this._as.reloadData$.next();
   }
 
-}
-
-import { Inject } from '@angular/core';
-import { MD_DIALOG_DATA } from '@angular/material';
-
-@Component({
-  selector: 'confirm-delete-affiliate-dialog',
-  templateUrl: './confirm-delete-affiliate-dialog.component.html' 
-})
-export class ConfirmDeleteAffiliateDialogComponent {
-  affiliate: Affiliate;
-  constructor(@Inject(MD_DIALOG_DATA) public data: any) {
-    this.affiliate = data as Affiliate;
-  }
 }
