@@ -66,10 +66,9 @@ export class FacilitatorService extends BaseAPIService {
 
   public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
     // Set headers (NOTE: Must include token here)
-    const headers = new HttpHeaders();
-    headers.set('x-jwt', this.http.jwt);
-    headers.set('x-search', query);
-    headers.set('x-retrieve', fields.join());
+    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
+    headers = headers.set('x-search', query);
+    headers = headers.set('x-retrieve', fields.join());
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(facJSON => new Facilitator(facJSON)))
