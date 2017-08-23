@@ -30,7 +30,7 @@ const appRoutes: Routes = [
   { path: 'workshops/:id/edit', component: EditWorkshopComponent, resolve: { workshop: WorkshopResolver } },
   { path: 'workshops/:id', component: WorkshopDetailComponent, resolve: { workshop: WorkshopResolver } },
   { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'profile', component: ProfileComponent, resolve: { user: UserResolver } },
   { path: 'login', component: LoginComponent },
   { path: 'support', component: SupportComponent },
   { path: 'support/training', component: SupportTrainingComponent },
