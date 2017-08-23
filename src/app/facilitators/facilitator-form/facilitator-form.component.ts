@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit, Input } from '@angular/core';
+import { Component, Inject, OnInit, Input, ViewChild } from '@angular/core';
 import { Facilitator } from "../Facilitator";
 import { MD_DIALOG_DATA, MdSnackBar } from "@angular/material";
 import { FacilitatorService } from "../../services/facilitator/facilitator.service";
+import { Affiliate } from "../../affiliates/Affiliate";
 
 @Component({
   selector: 'app-facilitator-form',
@@ -12,6 +13,8 @@ export class FacilitatorFormComponent implements OnInit {
 
   @Input('facilitator') facilitator: Facilitator;
   @Input('isDialog') isDialog: boolean;
+
+  isValid: boolean = true;
 
   constructor(@Inject(MD_DIALOG_DATA) public data: any, private snackbar: MdSnackBar, private _fs: FacilitatorService) {
     
@@ -25,6 +28,12 @@ export class FacilitatorFormComponent implements OnInit {
 
     if (!this.facilitator) {
       this.facilitator = new Facilitator();
+    }
+  }
+
+  onSelectAffiliate(affiliate: Affiliate) {
+    if (affiliate) {
+      this.facilitator.affiliate = affiliate;
     }
   }
 
@@ -47,6 +56,7 @@ export class FacilitatorFormComponent implements OnInit {
   }
 
   create() {
+    console.log(this.facilitator);
     this._fs.create(this.facilitator).subscribe(data => {
       console.log(data);
       this.snackbar.open('Successfully Created New Facilitator.', null, { duration: 2000 });

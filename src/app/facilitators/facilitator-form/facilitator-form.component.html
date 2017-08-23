@@ -32,20 +32,17 @@
   </div>
 
   <div class="input-item">
-    <md-input-container>
-      <input mdInput [(ngModel)]="facilitator.affiliateId" placeholder="Affiliate ID">
-    </md-input-container>
-
+    <app-affiliate-lookup (onSelect)="onSelectAffiliate($event)" [affiliate]="facilitator.affiliate"></app-affiliate-lookup>
   </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button md-raised-button class="mat-accent" [md-dialog-close]="facilitator"> Save </button>
+      <button md-raised-button class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!isValid"> Save </button>
       <button md-raised-button [md-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+      <button md-raised-button class="mat-accent" (click)="onClickSave()" [disabled]="!isValid"> Save </button>
     </ng-container>
   </div>
 

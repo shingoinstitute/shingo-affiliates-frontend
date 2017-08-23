@@ -57,28 +57,26 @@ export class AffiliateService extends BaseAPIService {
    }
 
    public search(query: string, fields: string[] = DEFAULT_AFFILIATE_SEARCH_FIELDS): Observable<Affiliate[]> {
-      // Set headers (NOTE: Must include token here)
-      const headers = new HttpHeaders();
-      headers.set('x-jwt', this.http.jwt);
-      headers.set('x-search', query);
-      headers.set('x-retrieve', fields.join());
+    // Set headers (NOTE: Must include token here)
+    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
+    headers = headers.set('x-search', query);
+    headers = headers.set('x-retrieve', fields.join());
 
-      return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
-         .map(res => res.map(JSONaf => new Affiliate(JSONaf)))
-         .catch(this.handleError);
-   }
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+          .map(res => res.map(JSONaf => new Affiliate(JSONaf)))
+          .catch(this.handleError);
+  }
 
-   public searchCMS(query: string, id: string): Observable<CourseManager[]> {
+  public searchCMS(query: string, id: string): Observable<CourseManager[]> {
       // Set headers (NOTE: Must include token here)
-      const headers = new HttpHeaders();
-      headers.set('x-jwt', this.http.jwt);
-      headers.set('x-search', query);
-      headers.set('x-retrieve', ['Id', 'Name', 'Email']);
+      let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
+      headers = headers.set('x-search', query);
+      headers = headers.set('x-retrieve', ['Id', 'Name', 'Email']);
 
       return this.http.get(`${this.baseUrl}/${id}/coursemanagers`, { headers, withCredentials: true })
-         .map(res => res.map(cmJSON => new CourseManager(cmJSON)))
-         .catch(this.handleError);
-   }
+            .map(res => res.map(cmJSON => new CourseManager(cmJSON)))
+            .catch(this.handleError);
+  }
 
    public describe(): Observable<any> {
       return super.describe('affiliates', this.http);

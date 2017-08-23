@@ -7,6 +7,7 @@ import { CdkTableModule } from '@angular/cdk';
 import { AffiliateComponent } from './affiliate/affiliate.component';
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { AffiliateFormComponent } from './affiliate-form/affiliate-form.componen
     CommonModule,
     MaterialModule,
     FlexLayoutModule,
-    CdkTableModule
+    CdkTableModule,
+    SharedModule.forRoot()
   ],
   declarations: [
     AffiliateComponent,
@@ -24,6 +26,9 @@ import { AffiliateFormComponent } from './affiliate-form/affiliate-form.componen
   exports: [
     AffiliateComponent,
     AffiliateDataTableComponent,
+    AffiliateFormComponent
+  ],
+  entryComponents: [
     AffiliateFormComponent
   ]
 })

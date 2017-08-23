@@ -1,13 +1,40 @@
-<div fxLayout="column">
-  <md-input-container>
-    <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
-  </md-input-container>
+<div class="form-container">
 
-  <md-input-container>
-    <input mdInput placeholder="Name" [(ngModel)]="affiliate.name">
-  </md-input-container>
+  <div class="form-header">
+    <h3>Affiliate Form</h3>
+  </div>
 
-  <md-input-container>
-    <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
-  </md-input-container>
+  <div class="input-item">
+    <div class="logo-img">
+      <img src="{{ affiliate.logo }}" alt="logo image">
+    </div>
+
+    <md-input-container>
+      <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
+    </md-input-container>
+  </div>
+
+  <div class="input-item">
+    <md-input-container>
+      <input mdInput placeholder="Name" [(ngModel)]="affiliate.name">
+    </md-input-container>
+  </div>
+
+  <div class="input-item">
+    <md-input-container>
+        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+      </md-input-container>
+  </div>
+
+  <div class="form-actions">
+    <ng-container *ngIf="isDialog">
+      <button md-raised-button class="mat-accent" [md-dialog-close]="affiliate"> Save </button>
+      <button md-raised-button [md-dialog-close]="false"> Cancel </button>
+    </ng-container>
+
+    <ng-container *ngIf="!isDialog">
+        <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+    </ng-container>
+  </div>
 </div>
+

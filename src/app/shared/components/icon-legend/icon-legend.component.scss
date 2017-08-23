@@ -1,14 +1,13 @@
 .icon-legend-container {
    display: flex;
    flex-direction: row;
-   align-items: center;
+   align-items: right;
 }
 .icon-legend-item {
    display: flex;
    flex-direction: row;
    align-items: center;
-   flex: 1 0;
-   margin: 4px 8px;
+   margin: 4px 16px;
 }
 md-icon {
    height: 18px;

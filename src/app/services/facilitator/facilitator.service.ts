@@ -1,5 +1,5 @@
 // Angular Modules
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { RequestOptionsArgs, Headers } from '@angular/http'
 
@@ -23,6 +23,8 @@ export class FacilitatorService extends BaseAPIService {
   private route: string = 'facilitators';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
+  public reloadData$ = new EventEmitter<void>();
+
   constructor(private http: HttpService) { super(); }
 
   public getAll(): Observable<Facilitator[]> {
@@ -38,13 +40,13 @@ export class FacilitatorService extends BaseAPIService {
   }
 
   public create(obj: Facilitator): Observable<SFSuccessResult> {
-    return this.http.post(`${this.baseUrl}`, obj)
+    return this.http.post(`${this.baseUrl}`, obj.toSFJSON())
       .map(res => res)
       .catch(this.handleError);
   }
 
   public update(obj: Facilitator): Observable<SFSuccessResult> {
-    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
       .map(res => res)
       .catch(this.handleError);
   }

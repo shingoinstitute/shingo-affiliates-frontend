@@ -16,7 +16,7 @@ import { FacilitatorFormComponent } from "../facilitators.module";
 export class FacilitatorDataTableComponent implements OnInit {
 
    facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
-   selectedFacId: string = '';
+   selectedId: string = '';
 
    @Output('onLoadComplete') onLoadCompleteEvent = new EventEmitter<void>();
    @Output('onClickDelete') onClickDeleteEvent = new EventEmitter<Facilitator>();
@@ -24,7 +24,7 @@ export class FacilitatorDataTableComponent implements OnInit {
    @Output('onClickReset') onClickResetEvent = new EventEmitter<Facilitator>();
    @Output('onClickSave') onClickSaveEvent = new EventEmitter<Facilitator>();
 
-   @Input('displayedColumns') displayedColumns = ["name", "email", /* "organization", */ "actions"];
+   @Input('displayedColumns') displayedColumns = ["name", "email", "organization", "actions"];
    @Input('dataSource') dataSource: FacilitatorDataSource | null;
 
    @ViewChild('paginator') paginator: MdPaginator;
@@ -32,27 +32,28 @@ export class FacilitatorDataTableComponent implements OnInit {
 
    displayedIcons: IconType[] = ["edit", "delete", "disable", "reset", "form"];
 
-   constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory) {
+   constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _fs: FacilitatorService) {
       this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();
    }
 
-   ngOnInit() {
+  ngOnInit() {
+    this.onClickSaveEvent.subscribe(() => { this.selectedId = ''; });
       // Init dataSource
       this.dataSource = new FacilitatorDataSource(this.facilitatorDataProvider, this.paginator, this.sort);
 
       // Set default sorted column
       this.sort.sort({ id: 'name', start: 'asc', disableClear: false });
 
+      this._fs.reloadData$.subscribe(() => {
+        this.facilitatorDataProvider.refresh();
+      });
+
       // Let parent component know when data has been loaded
       this.facilitatorDataProvider.dataChange.subscribe(() => {
-         if (this.facilitatorDataProvider.data.length > 0)
-            this.onLoadCompleteEvent.emit();
+         if (this.facilitatorDataProvider.data.length > 0) {
+          this.onLoadCompleteEvent.emit();
+         }
       });
-   }
-
-   onClickSave(fac: Facilitator) {
-      this.selectedFacId = '';
-      this.onClickSaveEvent.emit(fac);
    }
 
   onClickForm(facilitator: Facilitator) {
