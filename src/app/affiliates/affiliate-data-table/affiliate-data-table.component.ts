@@ -6,7 +6,8 @@ import { DataProviderFactory } from "../../services/data-provider-factory.servic
 import { AffiliateDataSource } from "../../services/affiliate/affiliate-data-source.service";
 import { MdPaginator, MdSort, MdDialog } from "@angular/material";
 import { IconType } from "../../shared/components/icon-legend/icon-legend.component";
-import { AffiliateFormComponent } from "../affiliates.module";
+import { AffiliateFormComponent } from "../affiliate-form/affiliate-form.component";
+
 
 @Component({
   selector: 'app-affiliate-data-table',

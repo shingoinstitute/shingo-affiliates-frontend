@@ -1,7 +1,5 @@
 <div class="card">
-
    <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
-
    <md-table #table [dataSource]="dataSource" [mdSortDisableClear]="true" mdSort>
    
       <!-- Name Column -->
@@ -84,8 +82,5 @@
       <md-row *cdkRowDef="let fac; columns: displayedColumns;"></md-row>
    </md-table>
    
-   <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]">
-   </md-paginator>
-
-   
+   <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
 </div>

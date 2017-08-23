@@ -4,7 +4,7 @@ import { AffiliateService } from "../../../services/affiliate/affiliate.service"
 import { SFSuccessResult } from "../../../services/base-api.abstract.service";
 import { MdSnackBar, MdDialog } from "@angular/material";
 import { ConfirmDeleteAffiliateDialogComponent } from "./confirm-delete-affiliate-dialog.component";
-import { AffiliateFormComponent } from "../../../affiliates/affiliates.module";
+import { AffiliateFormComponent } from "../../../affiliates/affiliate-form/affiliate-form.component";
 
 @Component({
   selector: 'app-admin-affiliate-tab',

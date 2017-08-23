@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { DataProvider } from "../../services/data-provider.service";
-import { FacilitatorService } from "../../services/facilitator/facilitator.service";
+import { DataProvider } from '../../services/data-provider.service';
+import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { Facilitator } from '../Facilitator';
 import { MdDialog, MdPaginator, MdSort } from "@angular/material";
 import { FacilitatorDataSource } from "../../services/facilitator/facilitator-data-source.service";
@@ -9,9 +9,9 @@ import { IconType } from "../../shared/components/icon-legend/icon-legend.compon
 import { FacilitatorFormComponent } from "../facilitators.module";
 
 @Component({
-   selector: 'app-facilitator-data-table',
-   templateUrl: './facilitator-data-table.component.html',
-   styleUrls: ['./facilitator-data-table.component.scss']
+      selector: 'app-facilitator-data-table',
+      templateUrl: './facilitator-data-table.component.html',
+      styleUrls: ['./facilitator-data-table.component.scss']
 })
 export class FacilitatorDataTableComponent implements OnInit {
 
@@ -24,11 +24,11 @@ export class FacilitatorDataTableComponent implements OnInit {
    @Output('onClickReset') onClickResetEvent = new EventEmitter<Facilitator>();
    @Output('onClickSave') onClickSaveEvent = new EventEmitter<Facilitator>();
 
-   @Input('displayedColumns') displayedColumns = ["name", "email", "organization", "actions"];
-   @Input('dataSource') dataSource: FacilitatorDataSource | null;
+      @Input('displayedColumns') displayedColumns = ['name', 'email', 'organization', 'actions'];
+      @Input('dataSource') dataSource: FacilitatorDataSource | null;
 
-   @ViewChild('paginator') paginator: MdPaginator;
-   @ViewChild(MdSort) sort: MdSort;
+      @ViewChild('paginator') paginator: MdPaginator;
+      @ViewChild(MdSort) sort: MdSort;
 
    displayedIcons: IconType[] = ["edit", "delete", "disable", "reset", "form"];
 
@@ -44,6 +44,7 @@ export class FacilitatorDataTableComponent implements OnInit {
       // Set default sorted column
       this.sort.sort({ id: 'name', start: 'asc', disableClear: false });
 
+      // Listen to refresh data event
       this._fs.reloadData$.subscribe(() => {
         this.facilitatorDataProvider.refresh();
       });

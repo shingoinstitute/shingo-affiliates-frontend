@@ -31,7 +31,9 @@ export class AffiliateLookupComponent implements AfterViewInit {
         .debounceTime(250)
         .subscribe(data => {
           this.isSearching = false;
-          this.affiliates = data.map(n => { return new Affiliate(n); });
+          this.affiliates = data.map(n => { return new Affiliate(n); }).sort((a: Affiliate, b: Affiliate) => {
+            return a.name > b.name ? 1 : -1;
+          });
         }, err => {
           this.isSearching = false;
           console.error(err);

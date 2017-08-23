@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { User } from '../../shared/models/User';
 
 @Component({
   selector: 'app-profile',
@@ -7,11 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-   user: { name: string, title: string } = { name: "Shingo Coordinator", title: "Instructor" }
+  private user: User;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.user = this.route.snapshot.data['user'];
   }
 
   changePassword() {

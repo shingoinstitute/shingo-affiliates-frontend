@@ -5,15 +5,15 @@ import { MdSnackBar, MdDialog } from "@angular/material";
 import { FacilitatorFormComponent } from "../../../facilitators/facilitators.module";
 
 @Component({
-   selector: 'app-admin-facilitator-tab',
-   templateUrl: './admin-facilitator-tab.component.html',
-   styleUrls: ['./admin-facilitator-tab.component.scss', '../admin-panel.component.scss']
+  selector: 'app-admin-facilitator-tab',
+  templateUrl: './admin-facilitator-tab.component.html',
+  styleUrls: ['./admin-facilitator-tab.component.scss', '../admin-panel.component.scss']
 })
 export class AdminFacilitatorTabComponent {
 
-   isLoading: boolean = true;
+  isLoading: boolean = true;
 
-   displayedColumns = ["name"];
+  displayedColumns = ["name"];
 
    newFacilitator: Facilitator;
 
@@ -32,7 +32,7 @@ export class AdminFacilitatorTabComponent {
    resetPassword(fac: Facilitator) {
       this.isLoading = true;
       this.snackbar.open(`Sending password reset email to ${fac.email}...`);
-      this._fs.resetPassword(fac).subscribe(data => {
+      this._fs.resetPassword(fac.email).subscribe(data => {
          this.apiCallbackHandler(data);
          this.snackbar.open('Password reset email has been sent.', null, { duration: 2000 });
       }, err => { 

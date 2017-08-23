@@ -34,10 +34,4 @@ import { SharedModule } from "../shared/shared.module";
 })
 export class AffiliatesModule { }
 
-export {
-  AffiliateComponent,
-  AffiliateDataTableComponent,
-  AffiliateFormComponent
-}
-
 export * from './Affiliate';
