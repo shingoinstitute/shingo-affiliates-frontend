@@ -60,8 +60,8 @@ export class FacilitatorService extends BaseAPIService {
   */
   public disable(obj: Facilitator): Observable<SFSuccessResult> {
     return this.http.delete(`${this.baseUrl}/${obj.sfId}/unmap`)
-    .map(res => res)
-    .catch(this.handleError);
+      .map(res => res)
+      .catch(this.handleError);
   }
 
   public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
@@ -84,8 +84,16 @@ export class FacilitatorService extends BaseAPIService {
    * @todo Implement me please
    * @description Sends a reset password email to facilitator (or something like that...)
    */
-  public resetPassword(obj: Facilitator): Observable<SFSuccessResult> {
-    return Observable.throw('Method not implemented!');
+  public resetPassword(email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/resetpassword/${email}`)
+      .map(res => res)
+      .catch(this.handleError);
+  }
+
+  public changePassword(token: string, password): Observable<Facilitator> {
+    return this.http.post(`${this.baseUrl}/resetpassword/token`, { token, password })
+      .map(res => new Facilitator(res))
+      .catch(this.handleError);
   }
 
 }

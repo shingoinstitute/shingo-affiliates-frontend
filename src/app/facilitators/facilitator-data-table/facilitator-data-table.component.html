@@ -1,93 +1,93 @@
 <div class="card">
 
-   <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
+  <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
 
-   <md-table #table [dataSource]="dataSource" [mdSortDisableClear]="true" mdSort>
-   
-      <!-- Name Column -->
-      <ng-container cdkColumnDef="name">
-         <md-header-cell *cdkHeaderCellDef md-sort-header> Facilitator </md-header-cell>
-         <md-cell *cdkCellDef="let fac">
-   
-            <span [class.hidden]="selectedFacId == fac.sfId"> {{ fac.name }} </span>
-   
-            <md-input-container [class.hidden]="selectedFacId != fac.sfId">
-               <input mdInput class="fac-input" [(ngModel)]="fac.name">
-            </md-input-container>
-   
-         </md-cell>
-      </ng-container>
-   
-      <!-- Email Column -->
-      <ng-container cdkColumnDef="email">
-         <md-header-cell *cdkHeaderCellDef md-sort-header> Email </md-header-cell>
-         <md-cell *cdkCellDef="let fac">
-   
-            <span [class.hidden]="selectedFacId == fac.sfId">{{ fac.email }}</span>
-   
-            <md-input-container [class.hidden]="selectedFacId != fac.sfId">
-               <input mdInput class="fac-input" [(ngModel)]="fac.email">
-            </md-input-container>
-   
-         </md-cell>
-      </ng-container>
-   
-      <!-- Organization Column -->
-      <ng-container cdkColumnDef="organization">
-         <md-header-cell *cdkHeaderCellDef md-sort-header> Organization </md-header-cell>
-         <md-cell *cdkCellDef="let fac">
-   
-            <span [class.hidden]="selectedFacId == fac.sfId">{{ fac.affiliateId }}</span>
-   
-            <md-input-container [class.hidden]="selectedFacId != fac.sfId">
-               <input mdInput class="fac-input" [(ngModel)]="fac.affiliateId">
-            </md-input-container>
-   
-         </md-cell>
-      </ng-container>
-   
-      <!-- Actions -->
-      <ng-container cdkColumnDef="actions">
-         <md-header-cell *cdkHeaderCellDef> Actions </md-header-cell>
-         <md-cell *cdkCellDef="let fac">
-            <div fxLayout>
-               <button md-icon-button [class.hidden]="selectedFacId == fac.sfId" (click)="selectedFacId = fac.sfId">
+  <md-table #table [dataSource]="dataSource" [mdSortDisableClear]="true" mdSort>
+
+    <!-- Name Column -->
+    <ng-container cdkColumnDef="name">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Facilitator </md-header-cell>
+      <md-cell *cdkCellDef="let fac">
+
+        <span [class.hidden]="selectedFacId == fac.sfId"> {{ fac.name }} </span>
+
+        <md-input-container [class.hidden]="selectedFacId != fac.sfId">
+          <input mdInput class="fac-input" [(ngModel)]="fac.name">
+        </md-input-container>
+
+      </md-cell>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container cdkColumnDef="email">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Email </md-header-cell>
+      <md-cell *cdkCellDef="let fac">
+
+        <span [class.hidden]="selectedFacId == fac.sfId">{{ fac.email }}</span>
+
+        <md-input-container [class.hidden]="selectedFacId != fac.sfId">
+          <input mdInput class="fac-input" [(ngModel)]="fac.email">
+        </md-input-container>
+
+      </md-cell>
+    </ng-container>
+
+    <!-- Organization Column -->
+    <ng-container cdkColumnDef="organization">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Organization </md-header-cell>
+      <md-cell *cdkCellDef="let fac">
+
+        <span [class.hidden]="selectedFacId == fac.sfId">{{ fac.affiliateId }}</span>
+
+        <md-input-container [class.hidden]="selectedFacId != fac.sfId">
+          <input mdInput class="fac-input" [(ngModel)]="fac.affiliateId">
+        </md-input-container>
+
+      </md-cell>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container cdkColumnDef="actions">
+      <md-header-cell *cdkHeaderCellDef> Actions </md-header-cell>
+      <md-cell *cdkCellDef="let fac">
+        <div fxLayout>
+          <button md-icon-button [class.hidden]="selectedFacId == fac.sfId" (click)="selectedFacId = fac.sfId">
                   <md-icon class="icon-sm" svgIcon="edit_mode_grey"></md-icon>
                </button>
-      
-               <button md-icon-button [class.hidden]="selectedFacId == fac.sfId">
+
+          <button md-icon-button [class.hidden]="selectedFacId == fac.sfId">
                   <md-icon class="icon-sm" svgIcon="delete_grey"></md-icon>
                </button>
-      
-               <button md-icon-button [class.hidden]="selectedFacId == fac.sfId">
+
+          <button md-icon-button [class.hidden]="selectedFacId == fac.sfId">
                   <md-icon class="icon-sm" svgIcon="block_grey"></md-icon>
                </button>
-   
-               <button md-icon-button [class.hidden]="selectedFacId == fac.sfId">
+
+          <button md-icon-button [class.hidden]="selectedFacId == fac.sfId" (click)="resetClicked(fac)">
                   <md-icon class="icon-sm" svgIcon="renew_grey"></md-icon>
                </button>
-            </div>
+        </div>
 
-            <!-- Edit Row Actions -->
-            <button md-button [class.hidden]="selectedFacId != fac.sfId" (click)="onClickSave(fac)">
+        <!-- Edit Row Actions -->
+        <button md-button [class.hidden]="selectedFacId != fac.sfId" (click)="onClickSave(fac)">
                <md-icon svgIcon="save_grey"></md-icon>
                <span>Save</span>
             </button>
-   
-            <button md-button [class.hidden]="selectedFacId != fac.sfId" (click)="selectedFacId = ''">
+
+        <button md-button [class.hidden]="selectedFacId != fac.sfId" (click)="selectedFacId = ''">
                <md-icon svgIcon="cancel_grey"></md-icon>
                <span>Cancel</span>
             </button>
-   
-         </md-cell>
-      </ng-container>
-   
-      <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-      <md-row *cdkRowDef="let fac; columns: displayedColumns;"></md-row>
-   </md-table>
-   
-   <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]">
-   </md-paginator>
 
-   
+      </md-cell>
+    </ng-container>
+
+    <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *cdkRowDef="let fac; columns: displayedColumns;"></md-row>
+  </md-table>
+
+  <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]">
+  </md-paginator>
+
+
 </div>

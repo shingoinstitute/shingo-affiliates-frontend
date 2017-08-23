@@ -29,10 +29,4 @@ import { AffiliateFormComponent } from './affiliate-form/affiliate-form.componen
 })
 export class AffiliatesModule { }
 
-export {
-  AffiliateComponent,
-  AffiliateDataTableComponent,
-  AffiliateFormComponent
-}
-
 export * from './Affiliate';

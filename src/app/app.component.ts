@@ -1,3 +1,4 @@
+/* tslint:disable */
 // Angular Modules
 import { Component, ViewChild, HostListener } from '@angular/core';
 import { MdIconRegistry, MdSidenav } from '@angular/material';
@@ -28,6 +29,7 @@ export class AppComponent {
 
   private windowWidthChangeSource = new Subject<number>();
   private windowWidthChange = this.windowWidthChangeSource.asObservable();
+  private isPublic: boolean = false; // For /forgotpassword and /resetpassword?token=...
 
   isAuthenticated: boolean = false;
 
@@ -62,16 +64,15 @@ export class AppComponent {
     iconRegistry.addSvgIcon('renew_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_autorenew_grey_18px.svg'));
     iconRegistry.addSvgIcon('file_upload', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_file_upload_black_18px.svg'));
 
-    // Subscribe to router event stream 
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {
+      // Subscribe to router event stream 
       if (route instanceof NavigationEnd) {
         // On `NavigationEnd`, capture current route so we can re-redirect the user (if they aren't authenticated)
         // to the route they originally intended to visit, *after* a successful log in.
         this.activeRoute = route.url;
+        console.log('activeRoute', this.activeRoute);
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        this.authenticateOnLoad();
-        // Unsubscribe from this observable to prevent an infinite loop of route change detection in the event `this.authenticateOnLoad()` redirects them to '/login'.
-        this.routeToLoginSubscription.unsubscribe();
+        if (!this.activeRoute.match(/.*login.*/gi) && !this.activeRoute.match(/.*password.*/gi)) this.authenticateOnLoad();
       }
     });
   }
@@ -85,7 +86,7 @@ export class AppComponent {
   /**
    * @description authenticateOnLoad starts listening to an event stream
    * then calls a function on authService that emits an event to the event stream.
-   * The event stream subscription continues listening to changes that may be 
+   * The event stream subscription continues listening to changes that may be
    * emitted by other parts of the app.
    */
   authenticateOnLoad() {
@@ -94,8 +95,9 @@ export class AppComponent {
       .distinctUntilChanged()
       .subscribe(isValid => {
         this.isAuthenticated = isValid;
-        if (!this.isAuthenticated)
+        if (!this.isAuthenticated) {
           this.routerService.navigateRoutes(['/login', this.activeRoute]);
+        }
       },
       error => {
         this.isAuthenticated = false;
@@ -128,15 +130,16 @@ export class AppComponent {
     this.windowWidthChange
       .debounceTime(100)
       .subscribe((width: number) => {
-        if (!this.sidenavService.sidenav)
+        if (!this.sidenavService.sidenav) {
           return setTimeout(() => {
             this.sidenavService.sidenav = this.sidenav;
             this.windowWidthChangeSource.next(width);
           });
-        else if (width < 960 && this.sidenavService.canToggle)
+        } else if (width < 960 && this.sidenavService.canToggle) {
           this.sidenavService.close();
-        else if (this.sidenavService.canToggle)
+        } else if (this.sidenavService.canToggle) {
           this.sidenavService.open();
+        }
       });
   }
 

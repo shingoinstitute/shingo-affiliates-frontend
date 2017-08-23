@@ -10,6 +10,7 @@ export abstract class BaseService {
      * @description Handles errors from http requests
      */
     protected handleError(error: Response | any): ErrorObservable {
+        console.warn('got an error', error);
         let err: string;
         if (error instanceof Response) {
             const body = error.json() || '';
