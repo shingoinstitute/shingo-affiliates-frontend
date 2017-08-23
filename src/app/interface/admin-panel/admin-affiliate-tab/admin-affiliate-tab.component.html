@@ -1,0 +1,41 @@
+<div class="container">
+
+  <!-- Affiliate Form Card -->
+  <div class="affiliate-form card" *ngIf="selectedAffiliate">
+    <!-- Header -->
+    <div class="affiliate-form-header">
+      <h3 *ngIf="selectedAffiliate.sfId.length == 0">Create New Affiliate</h3>
+      <h3 *ngIf="selectedAffiliate.sfId.length > 0">Editing Affiliate</h3>
+    </div>
+
+    <!-- Affiliate Form -->
+    <app-affiliate-form [affiliate]="selectedAffiliate"></app-affiliate-form>
+
+    <!-- Actions -->
+    <div class="affiliate-form-actions">
+      <button md-raised-button (click)="onClickCancel()">Cancel</button>
+      <button md-raised-button class="mat-success" (click)="onClickSave()">
+        <span>Save</span>
+        <md-icon svgIcon="save_white"></md-icon>
+      </button>
+      <md-spinner [style.height]="'42px'" *ngIf="isLoading"></md-spinner>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="tab-actions" *ngIf="!selectedAffiliate">
+    <button md-raised-button class="mat-primary" (click)="onClickCreate()"> + Create </button>
+  </div>
+
+  <!-- Data Table -->
+  <app-affiliate-data-table [displayedColumns]="displayedColumns"
+                            (onClickDelete)="onClickDeleteHandler($event)"
+                            (onClickEdit)="onClickEditHandler($event)"
+                            (onLoadComplete)="isLoading = false">
+  </app-affiliate-data-table>
+
+  <div class="spinner-container">
+    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
+  </div>
+
+</div>

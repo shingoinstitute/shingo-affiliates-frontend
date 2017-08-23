@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Affiliate } from "../Affiliate";
 
 @Component({
   selector: 'app-affiliate-form',
@@ -7,9 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AffiliateFormComponent implements OnInit {
 
+  @Input('affiliate') affiliate: Affiliate;
+
   constructor() { }
 
   ngOnInit() {
+    if (!this.affiliate)
+      this.affiliate = new Affiliate();
   }
 
 }

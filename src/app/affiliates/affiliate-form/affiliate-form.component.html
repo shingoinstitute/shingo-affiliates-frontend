@@ -1,3 +1,13 @@
-<p>
-  affiliate-form works!
-</p>
+<div fxLayout="column">
+  <md-input-container>
+    <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
+  </md-input-container>
+
+  <md-input-container>
+    <input mdInput placeholder="Name" [(ngModel)]="affiliate.name">
+  </md-input-container>
+
+  <md-input-container>
+    <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+  </md-input-container>
+</div>

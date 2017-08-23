@@ -1,36 +1,36 @@
 <div class="login-page-wrapper shingo-bg" #loginRoot>
 
-   <!-- Login Form -->
-   <div class="login-form-container" *ngIf="didLoad">
-      <div class="login-form-header">
-         <img src="http://res.cloudinary.com/shingo/image/upload/c_scale,h_100/v1392063084/Shingo_Logo_mini_nzegar.png">
-         <h1 class="md-accent-text mat-title">Shingo Affiliate Portal</h1>
-      </div>
+  <!-- Login Form -->
+  <div class="login-form-container" *ngIf="didLoad">
+    <div class="login-form-header">
+      <img src="http://res.cloudinary.com/shingo/image/upload/c_scale,h_100/v1392063084/Shingo_Logo_mini_nzegar.png">
+      <h1 class="md-accent-text mat-title">Shingo Affiliate Portal</h1>
+    </div>
 
-      <div class="message-container">
-         <p class="md-warn-text" *ngIf="errMsg"> {{ errMsg }} </p>
-         <p class="md-warn-text" *ngIf="errBody">{{ errBody }} </p>
-      </div>
+    <div class="message-container">
+      <p class="md-warn-text" *ngIf="errMsg"> {{ errMsg }} </p>
+      <p class="md-warn-text" *ngIf="errBody">{{ errBody }} </p>
+    </div>
 
-      <form class="login-form">
-         <md-input-container floatPlaceholder="always">
-            <input id="search-email" mdInput type="text" [(ngModel)]="email" name="searchemail" placeholder="email">
-         </md-input-container>
+    <form class="login-form">
+      <md-input-container floatPlaceholder="always">
+        <input mdInput type="text" [(ngModel)]="email" name="email" placeholder="email">
+      </md-input-container>
 
-         <md-input-container>
-            <input id="search-password" mdInput type="password" [(ngModel)]="password" name="searchpassword" placeholder="password">
-         </md-input-container>
-      </form>
+      <md-input-container floatPlaceholder="always">
+        <input mdInput type="password" [(ngModel)]="password" name="password" placeholder="password" (keyup.enter)="onSubmit()">
+      </md-input-container>
+    </form>
 
-      <div class="login-actions">
-         <button md-raised-button class="mat-primary" type="button" (click)="onSubmit()">Login</button>
-         <a routerLink="/forgotpassword">Forgot Password?</a>
-         <a href="#">Help?</a>
-      </div>
-   </div>
+    <div class="login-actions">
+      <button md-raised-button class="mat-primary" type="button" (click)="onSubmit()">Login</button>
+      <a routerLink="/forgotpassword">Forgot Password?</a>
+      <a href="#">Help?</a>
+    </div>
+  </div>
 
-   <div class="md-spinner-container" *ngIf="isLoading">
-      <md-spinner></md-spinner>
-   </div>
+  <div class="md-spinner-container" *ngIf="isLoading">
+    <md-spinner></md-spinner>
+  </div>
 
 </div>

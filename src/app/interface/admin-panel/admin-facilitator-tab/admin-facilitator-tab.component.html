@@ -1,0 +1,15 @@
+<div class="container">
+
+  <!-- Data Table -->
+  <app-facilitator-data-table (onClickDisable)="disable($event)"
+                              (onClickDelete)="delete($event)"
+                              (onClickReset)="resetPassword($event)"
+                              (onClickSave)="save($event)"
+                              (onLoadComplete)="isLoading = false">
+  </app-facilitator-data-table>
+
+  <div class="spinner-container">
+    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
+  </div>
+
+</div>

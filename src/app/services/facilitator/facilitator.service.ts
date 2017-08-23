@@ -55,6 +55,15 @@ export class FacilitatorService extends BaseAPIService {
       .catch(this.handleError);
   }
 
+  /**
+  * @description Removes service from a facilitator
+  */
+  public disable(obj: Facilitator): Observable<SFSuccessResult> {
+    return this.http.delete(`${this.baseUrl}/${obj.sfId}/unmap`)
+      .map(res => res)
+      .catch(this.handleError);
+  }
+
   public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
     // Set headers (NOTE: Must include token here)
     const headers = new HttpHeaders();
@@ -69,6 +78,22 @@ export class FacilitatorService extends BaseAPIService {
 
   public describe(): Observable<Facilitator> {
     return super.describe('facilitators', this.http);
+  }
+
+  /**
+   * @todo Implement me please
+   * @description Sends a reset password email to facilitator (or something like that...)
+   */
+  public resetPassword(email: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/resetpassword/${email}`)
+      .map(res => res)
+      .catch(this.handleError);
+  }
+
+  public changePassword(token: string, password): Observable<Facilitator> {
+    return this.http.post(`${this.baseUrl}/resetpassword/token`, { token, password })
+      .map(res => new Facilitator(res))
+      .catch(this.handleError);
   }
 
 }

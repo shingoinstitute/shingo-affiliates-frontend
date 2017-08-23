@@ -72,7 +72,13 @@ $affiliate-brand-blue: (
     )
 );
 
-
+$primary-color: #003768;
+$primary-color-lighten-1: #26557f;
+$primary-color-lighten-2: #4d7395;
+$accent-color: #640921;
+$warn-color: #f44336;
+$success-color: #4CAF50;
+$grey-color: #757575;
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -85,7 +91,11 @@ $affiliate-app-accent:  mat-palette($affiliate-brand-blue);
 // The warn palette is optional (defaults to red).
 $affiliate-app-warn:    mat-palette($mat-red);
 .warn {
-    color: #f44336;
+    color: $warn-color;
+}
+.mat-success,
+.success {
+    background-color: $success-color;
 }
 
 // Create the theme object (a Sass map containing all of the palettes).
@@ -94,11 +104,19 @@ $affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-acc
 @mixin button($affiliate-app-theme) {
    .mat-raised-button.mat-primary,
    .mat-raised-button.mat-accent,
+   .mat-raised-button.mat-success,
    .mat-raised-button.mat-warn {
       font-weight: 400;
    }
    md-select > div.mat-select-trigger {
       margin-top: 17px;
+   }
+   .mat-raised-button.mat-success {
+       background-color: $success-color;
+       color: white;
+   }
+   .mat-button.mat-success {
+       color: $success-color;
    }
 }
 

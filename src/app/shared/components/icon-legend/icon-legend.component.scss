@@ -1,0 +1,22 @@
+.icon-legend-container {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+.icon-legend-item {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   flex: 1 0;
+   margin: 4px 8px;
+}
+md-icon {
+   height: 18px;
+   width: 18px;
+}
+.icon-legend-item p {
+   display: inline-block;
+   margin: 0;
+   text-align: center;
+   font-size: 12px;
+}

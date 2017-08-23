@@ -9,6 +9,7 @@ import { CdkTableModule } from '@angular/cdk';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { WorkshopsModule } from '../workshops/workshops.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
@@ -25,9 +26,11 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
 import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
 import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-workshops.component';
 import { ActionPendingComponent } from './action-pending/action-pending.component';
+import { AdminPanelModule } from './admin-panel/admin-panel.module';
 import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component';
-
 import { Ng2FileDropModule } from 'ng2-file-drop';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   imports: [
@@ -41,7 +44,9 @@ import { Ng2FileDropModule } from 'ng2-file-drop';
     FlexLayoutModule,
     WorkshopsModule,
     CommonModule,
-    Ng2FileDropModule
+    AdminPanelModule,
+    Ng2FileDropModule,
+    SharedModule.forRoot()
   ],
   declarations: [
     DashboardComponent,
@@ -59,7 +64,9 @@ import { Ng2FileDropModule } from 'ng2-file-drop';
     WorkshopDashboardComponent,
     UpcomingWorkshopsComponent,
     ActionPendingComponent,
-    WorkshopDetailComponent
+    WorkshopDetailComponent,
+    PasswordResetComponent,
+    ForgotPasswordComponent
   ],
   exports: [
     DashboardComponent,
