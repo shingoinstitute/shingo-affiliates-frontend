@@ -1,5 +1,16 @@
 <div class="container">
 
+  <ng-container *ngIf="newFacilitator">
+    <app-facilitator-form [facilitator]="newFacilitator"></app-facilitator-form>
+  </ng-container>
+
+  <div class="actions">
+    <button md-raised-button class="mat-primary" (click)="onClickCreate()">
+      <md-icon svgIcon="edit_white"></md-icon>
+      <span> Create </span>
+    </button>
+  </div>
+
   <!-- Data Table -->
   <app-facilitator-data-table (onClickDisable)="disable($event)"
                               (onClickDelete)="delete($event)"

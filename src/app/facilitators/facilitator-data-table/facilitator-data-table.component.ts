@@ -6,6 +6,7 @@ import { MdDialog, MdPaginator, MdSort } from "@angular/material";
 import { FacilitatorDataSource } from "../../services/facilitator/facilitator-data-source.service";
 import { DataProviderFactory } from "../../services/data-provider-factory.service";
 import { IconType } from "../../shared/components/icon-legend/icon-legend.component";
+import { FacilitatorFormComponent } from "../facilitators.module";
 
 @Component({
    selector: 'app-facilitator-data-table',
@@ -20,16 +21,16 @@ export class FacilitatorDataTableComponent implements OnInit {
    @Output('onLoadComplete') onLoadCompleteEvent = new EventEmitter<void>();
    @Output('onClickDelete') onClickDeleteEvent = new EventEmitter<Facilitator>();
    @Output('onClickDisable') onClickDisableEvent = new EventEmitter<Facilitator>();
-   @Output('onClickReset') onClickRestEvent = new EventEmitter<Facilitator>();
+   @Output('onClickReset') onClickResetEvent = new EventEmitter<Facilitator>();
    @Output('onClickSave') onClickSaveEvent = new EventEmitter<Facilitator>();
 
-   @Input('displayedColumns') displayedColumns = ["name", "email", "organization", "actions"];
+   @Input('displayedColumns') displayedColumns = ["name", "email", /* "organization", */ "actions"];
    @Input('dataSource') dataSource: FacilitatorDataSource | null;
 
    @ViewChild('paginator') paginator: MdPaginator;
    @ViewChild(MdSort) sort: MdSort;
 
-   displayedIcons: IconType[] = ["edit", "delete", "disable", "reset"];
+   displayedIcons: IconType[] = ["edit", "delete", "disable", "reset", "form"];
 
    constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory) {
       this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();
@@ -53,5 +54,20 @@ export class FacilitatorDataTableComponent implements OnInit {
       this.selectedFacId = '';
       this.onClickSaveEvent.emit(fac);
    }
+
+  onClickForm(facilitator: Facilitator) {
+    let dialogRef = this.dialog.open(FacilitatorFormComponent, {
+      data: {
+        isDialog: true,
+        facilitator: facilitator
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(facilitator => {
+      if (facilitator) {
+        this.onClickSaveEvent.emit(facilitator);
+      }
+    });
+  }
 
 }

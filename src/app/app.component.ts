@@ -61,6 +61,9 @@ export class AppComponent {
     iconRegistry.addSvgIcon('delete_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_delete_grey_24px.svg'));
     iconRegistry.addSvgIcon('renew_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_autorenew_grey_18px.svg'));
     iconRegistry.addSvgIcon('file_upload', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_file_upload_black_18px.svg'));
+    iconRegistry.addSvgIcon('description_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_grey_24px.svg'));
+    iconRegistry.addSvgIcon('description_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_white_24px.svg'));
+
 
     // Subscribe to router event stream 
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {

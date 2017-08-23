@@ -14,6 +14,8 @@ export class AdminFacilitatorTabComponent {
 
    displayedColumns = ["name"];
 
+   newFacilitator: Facilitator;
+
    constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar) {}
 
    resetPassword(fac: Facilitator) {
@@ -52,10 +54,15 @@ export class AdminFacilitatorTabComponent {
       }, err => { this.apiCallbackHandler(null, err); });
    }
 
+   onClickCreate() {
+     this.newFacilitator = new Facilitator();
+   }
+
    apiCallbackHandler(data?: any, err?: any) {
       this.isLoading = false;
-      if (data)
-         console.log(data);
+
+      if (data) { console.log(data); }
+
       if (err) {
          this.snackbar.open('An error occured and the requested operation could not be completed.', 'Okay', { duration: 3000 });
          console.error(err);
