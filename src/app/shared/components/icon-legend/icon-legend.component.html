@@ -31,6 +31,16 @@
             <p> = Cancel </p>
          </ng-template>
 
+         <ng-template [ngSwitchCase]="'form'">
+           <md-icon svgIcon="description_grey"></md-icon>
+           <p> = Open Edit Detail </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'accept'">
+           <md-icon svgIcon="checkmark_grey"></md-icon>
+           <p> = Accept </p>
+         </ng-template>
+
           <ng-template *ngSwitchDefault></ng-template> 
       </div>
    </ng-container>

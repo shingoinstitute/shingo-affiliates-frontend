@@ -17,7 +17,7 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languag
 
 @Injectable()
 export class AffiliateService extends BaseAPIService {
-
+  
       public reloadData$ = new Subject<void>();
       public shouldReloadData$: Observable<void> = this.reloadData$.asObservable();
 

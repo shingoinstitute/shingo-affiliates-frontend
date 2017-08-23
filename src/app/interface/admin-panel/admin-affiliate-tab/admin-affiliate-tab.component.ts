@@ -4,6 +4,7 @@ import { AffiliateService } from "../../../services/affiliate/affiliate.service"
 import { SFSuccessResult } from "../../../services/base-api.abstract.service";
 import { MdSnackBar, MdDialog } from "@angular/material";
 import { ConfirmDeleteAffiliateDialogComponent } from "./confirm-delete-affiliate-dialog.component";
+import { AffiliateFormComponent } from "../../../affiliates/affiliate-form/affiliate-form.component";
 
 @Component({
   selector: 'app-admin-affiliate-tab',
@@ -20,24 +21,30 @@ export class AdminAffiliateTabComponent {
 
   constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar) { }
 
-  onClickSave() {
+  onClickSave(affiliate?: Affiliate) {
     this.isLoading = true;
-    if (this.selectedAffiliate.sfId == '')
-      this.createAffiliate(this.selectedAffiliate);
-    else
-      this.updateAffiliate(this.selectedAffiliate);
-  }
-
-  onClickCancel() {
-    this.selectedAffiliate = null;
+    this.snackbar.open('Saving Changes...');
+    if (affiliate) { this.selectedAffiliate = affiliate; }
+    if (this.selectedAffiliate.sfId == '') {
+      this.create(this.selectedAffiliate);
+    } else {
+      this.update(this.selectedAffiliate);
+    }
   }
 
   onClickCreate() {
-    this.selectedAffiliate = new Affiliate();
-  }
+    let dialogRef = this.dialog.open(AffiliateFormComponent, {
+      data: {
+        isDialog: true,
+        affiliate: new Affiliate()
+      }
+    });
 
-  onClickEditHandler(affiliate: Affiliate) {
-    this.selectedAffiliate = affiliate;
+    dialogRef.afterClosed().subscribe(affiliate => {
+      if (affiliate) {
+        this.create(affiliate);
+      }
+    });
   }
 
   onClickDeleteHandler(affiliate: Affiliate) {
@@ -45,27 +52,27 @@ export class AdminAffiliateTabComponent {
       data: affiliate
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Result: ${result}`);
-      if (result === true)
-        this.deleteAffiliate(affiliate);
+      if (result === true) {
+        this.delete(affiliate);
+      }
     });
   }
 
-  createAffiliate(a: Affiliate) {
+  create(a: Affiliate) {
     this._as.create(a).subscribe((data: SFSuccessResult) => {
       this.onHandleCallback(data);
       this.snackbar.open('Affiliate Successfully Created.', null, { duration: 1500 });
     }, err => { this.onHandleCallback(null, err); })
   }
 
-  updateAffiliate(a: Affiliate) {
+  update(a: Affiliate) {
     this._as.update(a).subscribe((data: SFSuccessResult) => {
       this.onHandleCallback(data);
       this.snackbar.open('Affiliate Successfully Updated.', null, { duration: 1500 });
     }, err => { this.onHandleCallback(null, err); });
   }
 
-  deleteAffiliate(a: Affiliate) {
+  delete(a: Affiliate) {
     this._as.delete(a).subscribe(data => {
       this.onHandleCallback(data);
       this.snackbar.open('Affiliate Successfully Deleted', 'Okay', { duration: 3000 });

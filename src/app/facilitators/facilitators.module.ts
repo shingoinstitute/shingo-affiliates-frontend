@@ -27,6 +27,9 @@ import { SharedModule } from "../shared/shared.module";
     FacilitatorComponent,
     FacilitatorDataTableComponent,
     FacilitatorFormComponent
+  ],
+  entryComponents: [
+    FacilitatorFormComponent
   ]
 })
 export class FacilitatorsModule { }
