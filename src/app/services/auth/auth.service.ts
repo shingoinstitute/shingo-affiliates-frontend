@@ -121,7 +121,6 @@ export class AuthService extends BaseService {
         const data = res.body;
         console.log('got login data: ', data);
         this._user = new User(data);
-        this.authenticationChange$.next(res.status === 200);
         return this._user;
       });
   }

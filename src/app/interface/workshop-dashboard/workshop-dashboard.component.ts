@@ -1,6 +1,7 @@
+/* tslint:disable */
 import { Component, OnInit, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
 import { MdRadioButton, MdDatepicker, MdSort, MdPaginator, MdCheckboxChange, MdCheckbox, MdSelect, MdSelectChange } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Filter } from '../../services/filters/filter.abstract';
 import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service';
@@ -8,6 +9,7 @@ import { WorkshopStatusType } from '../../workshops/Workshop';
 import { WorkshopProperties, WorkshopService } from '../../services/workshop/workshop.service';
 import { WorkshopDataTableComponent } from '../../workshops/workshop-data-table/workshop-data-table.component';
 import { AuthService } from '../../services/auth/auth.service';
+import { User } from '../../shared/models/User';
 
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/observable/fromEvent';
@@ -37,6 +39,8 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       private filterOption: string = this.filterOptions[0];
       private textSearch: string = '';
 
+      private get user(): User { return this.route.snapshot.data['user']; }
+
       public get showFilters(): boolean { return this._showFilters; }
       public get showTextFilter(): boolean { return this._showTextFilter; }
       public get showDateRange(): boolean { return this._showDateRange; }
@@ -51,7 +55,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       @ViewChildren(MdCheckbox) checkboxen: MdCheckbox[];
       @ViewChild(WorkshopDataTableComponent) workshopTable: WorkshopDataTableComponent;
 
-      constructor(private filterFactory: WorkshopFilterFactory, private router: Router, private auth: AuthService, private _ws: WorkshopService) {
+      constructor(private filterFactory: WorkshopFilterFactory, private _ws: WorkshopService, private router: Router, private route: ActivatedRoute) {
             this.setStatuses();
       }
 
@@ -83,9 +87,8 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       initFilters() {
             this.filterOptions = ["by Upcoming Workshops"];
             this.filters = [this.filterFactory.createDateRangeFilter("by Upcoming Workshops") /* Upcoming */];
-            const isAdmin: boolean = this.auth.user && this.auth.user.isAdmin;
 
-            if (isAdmin) {
+            if (this.user.isAdmin) {
                   this.filterOptions.push("by Status")
                   this.filters.push(this.filterFactory.createPropertyFilter('by Status')); // By Status (for admin)
             } else {

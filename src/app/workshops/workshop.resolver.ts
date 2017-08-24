@@ -10,6 +10,10 @@ export class WorkshopResolver implements Resolve<Workshop> {
     constructor(private _ws: WorkshopService) { }
 
     resolve(route: ActivatedRouteSnapshot): Observable<Workshop> {
-        return this._ws.getById(route.params.id);
+        return this._ws.getById(route.params.id)
+            .catch(error => {
+                console.error(`error in resolving workshop ${route.params.id}`, error);
+                return Observable.throw(error);
+            });
     }
 }
