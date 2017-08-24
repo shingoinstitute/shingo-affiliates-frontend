@@ -39,7 +39,7 @@ export class AuthService extends BaseService {
     * @returns {Observable<any>} 
     * @memberof AuthService
     */
-  public login(paylod: { email: string, password: string }): any {
+  public login(paylod: { email: string, password: string }): Observable<any> {
     const options = this.http._defaultReqOpts;
     options.observe = 'response';
     console.log('options in login, ', options);
@@ -106,25 +106,40 @@ export class AuthService extends BaseService {
       });
   }
 
+  /**
+   * @desc !! Forces Refresh of user !!
+   * 
+   * @returns {Observable<User>}
+   * @memberof AuthService
+   */
   public getUser(): Observable<User> {
     const options = this.http._defaultReqOpts;
+    options.headers = options.headers.set('x-force-refresh', 'true');
     options.observe = 'response';
     return this.http.get<User>(`${this.authHost}/valid`, options)
       .map(res => {
         const data = res.body;
+        console.log('got login data: ', data);
         this._user = new User(data);
         this.authenticationChange$.next(res.status === 200);
         return this._user;
       });
   }
 
+  public changeUserPassword(password: string): Observable<any> {
+    return this.http.post<User>(`${this.authHost}/changepassword`, { password }).map(res => {
+      this.http.jwt = res.jwt;
+      return res;
+    });
+  }
+
   /**
    * @description Sends request to server to send password reset link to specified email address
    * @todo Implement actual API route for sending password reset email
    */
-  sendPasswordReset(email: string): Observable<any> {
-    return this.http.get(`${this.authHost}/resetpassword`)
-      .map(res => { return res; })
-      .catch(err => { return Observable.throw(err); });
-  }
+  // sendPasswordReset(email: string): Observable<any> {
+  //   return this.http.get(`${this.authHost}/resetpassword`)
+  //     .map(res => res)
+  //     .catch(err => { return Observable.throw(err); });
+  // }
 }

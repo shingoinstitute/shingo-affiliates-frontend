@@ -1,12 +1,17 @@
 <div class="container --profile-container" fxLayout="column">
-   <div class="profile-body" fxLayout>
-      <div class="profile-img-container">
-         <img class="profile-img" src="http://res.cloudinary.com/shingo/image/upload/c_fill,g_center,h_300,w_300/v1414874243/silhouette_vzugec.png">
+  <div class="profile-body" fxLayout fxLayoutGap="8px">
+    <img class="profile-img" [src]="user.photo">
+    <div fxLayout="column">
+      <h1 class="mat-title">{{ user.name }}</h1>
+      <b>{{user.title}}</b>
+      <br>
+      <i>{{user.email}}</i>
+      <h3>Biography</h3>
+      <div class="bio" [innerHtml]="user.bio || '<i>Please contact the Shingo Coordinator with a draft biography...</i>'"></div>
+      <div class="profile-actions" fxLayout>
+        <button md-raised-button (click)="changePassword()">Change Password</button>
       </div>
-      <h1 class="mat-title"> {{ user.name }}{{ user.title ? ", " + user.title : "" }} </h1>
-   </div>
+    </div>
+  </div>
 
-   <div class="profile-actions" fxLayout>
-      <button md-raised-button (click)="changePassword()">Change Password</button>
-   </div>
 </div>
