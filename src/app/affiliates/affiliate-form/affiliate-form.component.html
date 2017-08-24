@@ -1,7 +1,12 @@
 <div class="form-container">
 
   <div class="form-header">
-    <h3>Affiliate Form</h3>
+    <h3>
+      Affiliate Form
+      <ng-container *ngIf="affiliate.sfId != ''">
+        - {{ affiliate.sfId }}
+      </ng-container>
+    </h3>
   </div>
 
   <div class="input-item">

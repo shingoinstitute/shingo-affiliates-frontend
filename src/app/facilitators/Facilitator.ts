@@ -9,6 +9,8 @@ export class Facilitator extends SFObject {
    private LastName: string = '';
    private AccountId: string = '';
    private Photograph__c: string = 'http://res.cloudinary.com/shingo/image/upload/c_thumb,e_trim:10,g_center,h_100,w_100/v1414874243/silhouette_vzugec.png';
+   private Biography__c: string = '';
+   private Title: string = '';
    private Account: Affiliate = new Affiliate();
 
    constructor(facilitator?: any) {
@@ -25,6 +27,8 @@ export class Facilitator extends SFObject {
    public get lastName() { return this.LastName; }
    public get affiliateId() { return this.AccountId || this.Account.sfId || ''; }
    public get photo() { return this.Photograph__c; }
+   public get biography() { return this.Biography__c; }
+   public get title() { return this.Title; }
    public get affiliate() { return this.Account; }
    public get name() {
       return `${this.FirstName} ${this.LastName}`
@@ -38,6 +42,8 @@ export class Facilitator extends SFObject {
    public set lastName(name: string) { this.LastName = name; }
    public set affiliateId(sfId: string) { this.AccountId = sfId; }
    public set photo(url: string) { this.Photograph__c = url; }
+   public set title(title: string) { this.Title = title; }
+   public set biography(bio: string) { this.Biography__c = bio; }
    public set affiliate(a: Affiliate) {
     this.Account = a; 
     this.affiliateId = a.sfId;
@@ -57,11 +63,13 @@ export class Facilitator extends SFObject {
 
    public toSFJSON(): object {
       let sfFacilitator = {
-         Email: this.email,
-         FirstName: this.firstName,
-         LastName: this.lastName,
-         AccountId: this.affiliateId,
-         Id: this.Id
+        Id: this.Id,
+        Email: this.email,
+        FirstName: this.firstName,
+        LastName: this.lastName,
+        AccountId: this.affiliateId,
+        Title: this.title,
+        Biography__c: this.biography
       };
 
       return sfFacilitator;
