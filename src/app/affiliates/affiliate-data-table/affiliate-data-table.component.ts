@@ -4,10 +4,9 @@ import { AffiliateService } from "../../services/affiliate/affiliate.service";
 import { Affiliate } from "../Affiliate";
 import { DataProviderFactory } from "../../services/data-provider-factory.service";
 import { AffiliateDataSource } from "../../services/affiliate/affiliate-data-source.service";
-import { MdPaginator, MdSort, MdDialog } from "@angular/material";
+import { MdPaginator, MdSort, MdDialog, MdDialogRef } from "@angular/material";
 import { IconType } from "../../shared/components/icon-legend/icon-legend.component";
 import { AffiliateFormComponent } from "../affiliate-form/affiliate-form.component";
-
 
 @Component({
   selector: 'app-affiliate-data-table',
@@ -26,6 +25,7 @@ export class AffiliateDataTableComponent {
   
   @Output('onClickSave') onClickSaveEventEmitter = new EventEmitter<Affiliate>();
   @Output('onClickDelete') onClickDeleteEventEmitter = new EventEmitter<Affiliate>();
+  @Output('onClickForm') onClickFormEventEmitter = new EventEmitter<Affiliate>();
   @Output('onLoadComplete') onLoadCompleteEventEmitter = new EventEmitter<void>();
   
   // `selectedId` used to track which row is being edited.
@@ -62,20 +62,30 @@ export class AffiliateDataTableComponent {
     this.onClickDeleteEventEmitter.emit(affiliate);
   }
 
-  onClickForm(affiliate: Affiliate) {
+  /**
+   * @deprecated keeping this function around just in case, but we're most 
+   * likely moving away from using dialogs to open edit-detail-forms completely.
+   */
+  openFormDialog(affiliate: Affiliate) {
+    // determine height and width value of dialog
+    const height = window.innerWidth < 960 ? '100vh' : '90vh'; 
+    const width = window.innerWidth < 960 ? String(window.innerWidth) : null;
+
     let dialogRef = this.dialog.open(AffiliateFormComponent, {
       data: {
         isDialog: true,
         affiliate: affiliate
-      }
+      },
+      height: height,
+      width: width
     });
-    
+
     dialogRef.afterClosed().subscribe(affiliate => {
       console.log(affiliate);
       if (affiliate) {
         this.onClickSaveEventEmitter.emit(affiliate);
       }
     });
-  }  
+  }
 
 }

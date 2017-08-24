@@ -63,7 +63,7 @@
                 <md-icon svgIcon="delete_grey"></md-icon>
               </button>
 
-              <button md-icon-button (click)="onClickForm(aff)">
+              <button md-icon-button (click)="onClickFormEventEmitter.emit(aff)">
                 <md-icon svgIcon="description_grey"></md-icon>
               </button>
             </ng-container> 

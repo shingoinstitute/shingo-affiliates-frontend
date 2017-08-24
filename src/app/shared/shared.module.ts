@@ -6,6 +6,8 @@ import { MaterialModule, MdDialogModule } from '@angular/material';
 import { FillViewHeightDirective } from './directives/fill-height.directive';
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+
 @NgModule({
    declarations: [
       IconLegendComponent,
@@ -17,13 +19,17 @@ import { SimpleMessageDialog } from './components/simple-message-dialog/simple-m
       FormsModule,
       ReactiveFormsModule,
       MaterialModule,
-      MdDialogModule
+      MdDialogModule,
+      FroalaEditorModule.forRoot(),
+      FroalaViewModule.forRoot()
    ],
    exports: [
       IconLegendComponent,
       SimpleMessageDialog,
       AffiliateLookupComponent,
-      MdDialogModule
+      MdDialogModule,
+      FroalaEditorModule,
+      FroalaViewModule
    ],
    entryComponents: [
     SimpleMessageDialog
