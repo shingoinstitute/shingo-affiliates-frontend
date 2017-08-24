@@ -6,9 +6,12 @@ export class Affiliate extends SFObject {
     private Name: string = '';
     private Summary__c: string = '';
     private Logo__c: string = '';
-    private Page_Path__c: string = '';
+    private Page_Path__c: string = '/affiliates';
     private Website: string = '';
     private Languages__c: string = '';
+    private Public_Contact__c: string = '';
+    private Public_Contact_Phone__c: string = '';
+    private Public_Contact_Email__c: string = '';
 
     constructor(affiliate?: any) {
         super();
@@ -19,15 +22,20 @@ export class Affiliate extends SFObject {
     public get name() { return this.Name; }
     public get summary() { return this.Summary__c; }
     public get logo() { return this.Logo__c; }
-    public get pagePath() { return this.Page_Path__c; }
+    public get pagePath() { return `${this.Page_Path__c}/${this.sfId}`; }
     public get website() { return this.Website; }
     public get languages() { return this.Languages__c.split(','); }
+    public get publicContact() { return this.Public_Contact__c; }
+    public get publicContactPhone() { return this.Public_Contact_Phone__c; }
+    public get publicContactEmail() { return this.Public_Contact_Email__c; }
 
     public set name(name: string) { this.Name = name; }
     public set summary(summary: string) { this.Summary__c = summary; }
     public set logo(logo: string) { this.Logo__c = logo; }
-    public set pagePath(path: string) { this.Page_Path__c = path; }
     public set website(site: string) { this.Website = site; }
+    public set publicContact(contact: string) { this.Public_Contact__c = contact; }
+    public set publicContactPhone(phone: string) { this.Public_Contact_Phone__c = phone; }
+    public set publicContactEmail(email: string) { this.Public_Contact_Email__c = email; }
 
     public addLanguage(language: string): void {
         if (this.languages.findIndex(l => l.toLowerCase() === language.toLowerCase()) !== -1) return;
@@ -46,7 +54,10 @@ export class Affiliate extends SFObject {
             Logo__c: this.logo,
             Page_Path__c: this.pagePath,
             Website: this.website,
-            Languages__c: this.Languages__c
+            Languages__c: this.Languages__c,
+            Public_Contact__c: this.publicContact,
+            Public_Contact_Phone__c: this.publicContactPhone,
+            Public_Contact_Email__c: this.publicContactEmail
         }
         return sfAffiliate;
     }
