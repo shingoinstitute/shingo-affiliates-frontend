@@ -40,7 +40,6 @@ export class AppComponent {
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private router: Router, private auth: AuthService, private ws: WorkshopService, public sidenavService: SidenavService, public routerService: RouterService) {
     iconRegistry.addSvgIcon('search_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_search_grey_18px.svg'));
-    iconRegistry.addSvgIcon('edit', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_black_18px.svg'));
     iconRegistry.addSvgIcon('edit_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_grey_18px.svg'));
     iconRegistry.addSvgIcon('edit_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_white_18px.svg'));
     iconRegistry.addSvgIcon('expand_less', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_expand_less_black_18px.svg'));
@@ -75,7 +74,8 @@ export class AppComponent {
         this.activeRoute = route.url;
         console.log('activeRoute', this.activeRoute);
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        if (!this.activeRoute.match(/.*login.*/gi) && !this.activeRoute.match(/.*password.*/gi)) this.authenticateOnLoad();
+        if (!this.activeRoute.match(/.*password.*/gi)) this.authenticateOnLoad();
+        this.routeToLoginSubscription.unsubscribe();
       }
     });
   }

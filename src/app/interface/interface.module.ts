@@ -32,6 +32,7 @@ import { Ng2FileDropModule } from 'ng2-file-drop';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ChangePasswordDialog } from './profile/change-password-dialog/change-password-dialog.component';
+import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 
 @NgModule({
   imports: [
@@ -68,7 +69,8 @@ import { ChangePasswordDialog } from './profile/change-password-dialog/change-pa
     WorkshopDetailComponent,
     PasswordResetComponent,
     ForgotPasswordComponent,
-    ChangePasswordDialog
+    ChangePasswordDialog,
+    ForbiddenPageComponent
   ],
   exports: [
     DashboardComponent,

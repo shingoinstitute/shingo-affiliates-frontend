@@ -14,6 +14,7 @@ import { AdminPanelComponent } from './interface/admin-panel/admin-panel.compone
 import { WorkshopDetailComponent } from './interface/workshops/workshop-detail/workshop-detail.component';
 import { PasswordResetComponent } from './interface/password-reset/password-reset.component';
 import { ForgotPasswordComponent } from './interface/forgot-password/forgot-password.component';
+import { ForbiddenPageComponent } from './interface/forbidden-page/forbidden-page.component';
 
 /** Shared Module Components */
 import { IsValidResolver } from './services/auth/is-valid.resolver';
@@ -37,6 +38,7 @@ const appRoutes: Routes = [
   { path: 'support/training/:video', component: SupportTrainingComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'resetpassword', component: PasswordResetComponent },
+  { path: '403', component: ForbiddenPageComponent },
   {
     path: 'admin',
     loadChildren: 'app/interface/admin-panel/admin-panel.module#AdminPanelModule'
