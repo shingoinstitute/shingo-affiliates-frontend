@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -16,6 +17,7 @@ import { SharedModule } from "../shared/shared.module";
     FlexLayoutModule,
     CdkTableModule,
     FormsModule,
+    RouterModule,
     SharedModule.forRoot()
   ],
   declarations: [
