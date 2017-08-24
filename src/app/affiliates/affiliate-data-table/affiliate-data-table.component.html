@@ -63,9 +63,9 @@
                 <md-icon svgIcon="delete_grey"></md-icon>
               </button>
 
-              <button md-icon-button (click)="onClickFormEventEmitter.emit(aff)">
+               <a md-icon-button routerLink="/admin/affiliates/form/{{ aff.sfId }}">
                 <md-icon svgIcon="description_grey"></md-icon>
-              </button>
+              </a> 
             </ng-container> 
 
             <ng-container *ngIf="selectedId == aff.sfId">

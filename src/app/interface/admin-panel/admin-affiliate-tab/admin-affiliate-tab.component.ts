@@ -92,7 +92,7 @@ export class AdminAffiliateTabComponent {
   }
 
   onClickFormHandler(affiliate: Affiliate) {
-    this.router.navigate(['affiliate', 'form', affiliate.sfId]);
+    this.router.navigateByUrl(`/admin/affiliate/form/${affiliate.sfId}`);
   }
 
 }

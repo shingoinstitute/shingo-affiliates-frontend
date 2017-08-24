@@ -1,8 +1,20 @@
-<div class="form-container" #formContainer>
+<div class="form-container" #formContainer [class.loading-active]="isLoading">
+
+  <div class="spinner-container">
+    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
+  </div>
+
+
+  <div class="form-actions">
+    <ng-container *ngIf="!isDialog">
+        <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+        <button md-raised-button (click)="location.back()"> Cancel </button>
+    </ng-container>
+  </div>
 
   <div class="form-header">
     <h3 class="mat-headline"> Affiliate Form </h3>
-    <p *ngIf="affiliate.sfId != ''"> Salesforce ID: {{ affiliate.sfId }} </p>
+    <p *ngIf="affiliate.sfId!==''"> Salesforce ID: {{ affiliate.sfId }} </p>
   </div>
 
    <div class="form-body"> 
@@ -47,7 +59,7 @@
       </md-input-container>
     </div>
 
-    <!-- <div class="input-item">
+     <div class="input-item">
       <md-input-container [floatPlaceholder]="always">
         <input type="text" mdInput [formControl]="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
       </md-input-container>
@@ -59,6 +71,7 @@
       </md-autocomplete>
 
       <div class="language-list">
+        <p class="mat-body-2"> Languages </p>
         <div class="language-list-item" *ngFor="let lang of affiliate.languages">
           <button md-icon-button (click)="removeLanguage(lang)">
             <md-icon svgIcon="delete_grey"></md-icon>
@@ -66,7 +79,7 @@
           {{ lang }}
         </div>
       </div>
-    </div>  -->
+    </div>  
 
      <div class="input-item">
       <p class="mat-body-2">Summary</p>
@@ -82,6 +95,7 @@
 
     <ng-container *ngIf="!isDialog">
         <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+        <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 </div>
