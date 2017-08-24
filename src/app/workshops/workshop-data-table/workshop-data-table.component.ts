@@ -16,6 +16,7 @@ import { Filter } from '../../services/filters/filter.abstract';
 })
 export class WorkshopDataTableComponent implements OnInit {
 
+  private isLoading: boolean = true;
   private _workshopDataProvider: DataProvider<WorkshopService, Workshop>;
   public trackByStrategy: WorkshopTrackByStrategy = 'reference';
   public pendingTypes = {
@@ -41,6 +42,7 @@ export class WorkshopDataTableComponent implements OnInit {
 
   constructor(private providerFactory: DataProviderFactory, private _ws: WorkshopService, private router: Router) {
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider();
+    this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
 
   ngOnInit() {
@@ -128,4 +130,7 @@ export class WorkshopDataTableComponent implements OnInit {
     this.router.navigateByUrl(`/workshops/${workshop.sfId}`);
   }
 
+  refresh() {
+    this._workshopDataProvider.refresh();
+  }
 }

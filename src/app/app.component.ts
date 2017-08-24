@@ -1,6 +1,6 @@
 /* tslint:disable */
 // Angular Modules
-import { Component, ViewChild, HostListener } from '@angular/core';
+import { Component, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { MdIconRegistry, MdSidenav } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
@@ -29,7 +29,7 @@ export class AppComponent {
 
   private windowWidthChangeSource = new Subject<number>();
   private windowWidthChange = this.windowWidthChangeSource.asObservable();
-  private isPublic: boolean = false; // For /forgotpassword and /resetpassword?token=...
+  private isLoading: boolean = true;
 
   isAuthenticated: boolean = false;
 
@@ -64,6 +64,7 @@ export class AppComponent {
     iconRegistry.addSvgIcon('file_upload', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_file_upload_black_18px.svg'));
     iconRegistry.addSvgIcon('description_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_grey_24px.svg'));
     iconRegistry.addSvgIcon('description_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_white_24px.svg'));
+    iconRegistry.addSvgIcon('refresh_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_refresh_grey_18px.svg'));
 
 
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {
@@ -78,6 +79,11 @@ export class AppComponent {
         this.routeToLoginSubscription.unsubscribe();
       }
     });
+
+    this.router.events.subscribe(route => {
+      if (route instanceof NavigationStart) this.isLoading = true;
+      else if (route instanceof NavigationEnd) this.isLoading = false;
+    })
   }
 
   ngAfterViewInit() {

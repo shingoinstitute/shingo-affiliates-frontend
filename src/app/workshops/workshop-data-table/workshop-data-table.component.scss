@@ -49,3 +49,20 @@ md-row.in-grace-period:hover {
 .instructors-cell {
    flex: 1 0;
 }
+
+div.spinner-container {
+  width: 100%;
+  text-align: center;
+  background: white;
+}
+
+div.spinner-container md-spinner {
+  display: inline-block;
+  max-width: 25px;
+  max-height: 25px;
+  padding: 8px;
+}
+
+button.refresh-button {
+  margin-left: 15%;
+}

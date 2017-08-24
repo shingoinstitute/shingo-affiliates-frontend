@@ -145,8 +145,9 @@
       </button>
     </div>
 
-    <div class="form-actions">
+    <div class="form-actions" fxLayout="row" fxLayoutGap="8px">
       <button md-raised-button type="submit" class="mat-primary" [disabled]="!workshopForm.valid || !workshop.facilitators.length || !workshopForm.controls.courseManager.value.sfId">Save</button>
+      <md-spinner *ngIf="isLoading" [color]="'accent'"></md-spinner>
     </div>
 
   </form>
