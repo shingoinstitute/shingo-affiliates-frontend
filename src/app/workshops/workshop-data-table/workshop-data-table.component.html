@@ -81,7 +81,7 @@
   </ng-container>
 
   <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" (click)="onSelectRow($event)" [ngClass]="{
+  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" (click)="onSelectRow(workshop)" [ngClass]="{
                 'past-due': isPastDue(workshop),
                 'in-grace-period': isDue(workshop)
               }"></md-row>
