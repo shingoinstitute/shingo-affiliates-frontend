@@ -1,7 +1,7 @@
 /* tslint:disable */
 // Angular Modules
 import { Component, ViewChild, HostListener, ElementRef } from '@angular/core';
-import { MdIconRegistry, MdSidenav } from '@angular/material';
+import { MdIconRegistry, MdSidenav, MdSidenavToggleResult } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
 
@@ -30,6 +30,7 @@ export class AppComponent {
   private windowWidthChangeSource = new Subject<number>();
   private windowWidthChange = this.windowWidthChangeSource.asObservable();
   private isLoading: boolean = true;
+  private showSidenav: boolean = true;
 
   isAuthenticated: boolean = false;
 
@@ -65,7 +66,8 @@ export class AppComponent {
     iconRegistry.addSvgIcon('description_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_grey_24px.svg'));
     iconRegistry.addSvgIcon('description_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_white_24px.svg'));
     iconRegistry.addSvgIcon('refresh_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_refresh_grey_18px.svg'));
-
+    iconRegistry.addSvgIcon('menu_grey', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_menu_grey_18px.svg'));
+    iconRegistry.addSvgIcon('menu_white', sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_menu_white_18px.svg'));
 
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {
       // Subscribe to router event stream 
@@ -82,7 +84,10 @@ export class AppComponent {
 
     this.router.events.subscribe(route => {
       if (route instanceof NavigationStart) this.isLoading = true;
-      else if (route instanceof NavigationEnd) this.isLoading = false;
+      else if (route instanceof NavigationEnd) {
+        if (this.sidenav && !this.showSidenav) setTimeout(() => this.sidenav.close(), 250);
+        this.isLoading = false;
+      }
     })
   }
 
@@ -138,18 +143,7 @@ export class AppComponent {
   winResizeHandler() {
     this.windowWidthChange
       .debounceTime(100)
-      .subscribe((width: number) => {
-        if (!this.sidenavService.sidenav) {
-          return setTimeout(() => {
-            this.sidenavService.sidenav = this.sidenav;
-            this.windowWidthChangeSource.next(width);
-          });
-        } else if (width < 960 && this.sidenavService.canToggle) {
-          this.sidenavService.close();
-        } else if (this.sidenavService.canToggle) {
-          this.sidenavService.open();
-        }
-      });
+      .subscribe((width: number) => this.showSidenav = width >= 960);
   }
 
   /**

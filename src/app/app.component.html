@@ -1,5 +1,6 @@
 <!-- <md-toolbar class="mat-primary" *ngIf="isAuthenticated">   -->
 <md-toolbar class="mat-primary">
+  <button md-button *ngIf="!showSidenav" (click)="sidenav.toggle()"><md-icon svgIcon="menu_white"></md-icon></button>
   <img [style.height]="'150px'" src="http://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
   <span fxFlex></span>
 
@@ -28,7 +29,7 @@
 
 <!-- <md-sidenav-container *ngIf="isAuthenticated"> -->
 <md-sidenav-container>
-  <md-sidenav #sidenav mode="side" [opened]="isAuthenticated">
+  <md-sidenav #sidenav mode="side" [opened]="isAuthenticated && showSidenav">
     <md-nav-list>
       <p class="bold-text">Main</p>
       <a md-list-item routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
