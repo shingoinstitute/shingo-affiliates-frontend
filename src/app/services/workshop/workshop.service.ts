@@ -32,8 +32,6 @@ export class WorkshopService extends BaseAPIService {
   constructor(private http: HttpService) { super(); console.log('creating workshopService with', http); }
 
   public getAll(): Observable<Workshop[]> {
-    console.log('calling getAll() on ws');
-    if (!this.http.get(this.baseUrl)) console.error(`http.get(${this.baseUrl}) didn't work!`, this.http);
     return this.http.get(this.baseUrl)
       .map(res => res.map(wkJSON => new Workshop(wkJSON)))
       .catch(this.handleError);
@@ -42,8 +40,7 @@ export class WorkshopService extends BaseAPIService {
   public getById(id: string): Observable<Workshop> {
     console.log('getting ', id);
     return this.http.get(this.baseUrl + `/${id}`)
-      .map(res => { console.log('got', res); return new Workshop(res) })
-      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
+      .map(res => new Workshop(res))
       .catch(this.handleError);
   }
 
@@ -56,14 +53,12 @@ export class WorkshopService extends BaseAPIService {
   public update(obj: Workshop): Observable<SFSuccessResult> {
     return this.http.put(this.baseUrl + `/${obj.sfId}`, obj.toSFJSON())
       .map(res => res as SFSuccessResult)
-      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
   public delete(obj: Workshop): Observable<SFSuccessResult> {
     return this.http.delete(this.baseUrl + `/${obj.sfId}`)
       .map(res => res as SFSuccessResult)
-      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
@@ -75,7 +70,6 @@ export class WorkshopService extends BaseAPIService {
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(wkJSON => new Workshop(wkJSON)))
-      .retryWhen(errors => errors.delay(1000).take(3).concat(Observable.throw))
       .catch(this.handleError);
   }
 
