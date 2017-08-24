@@ -124,16 +124,8 @@ export class WorkshopDataTableComponent implements OnInit {
     return Math.floor((now - dueAt) / _1day);
   }
 
-  onSelectRow(ev) {
-    let sfId = ''
-    if (ev.target.id.match(/a[\w\d]{14,17}/)) {
-      sfId = ev.target.id;
-    } else if (ev.parentNode && ev.parentNode.id.match(/a[\w\d]{14,17}/)) {
-      sfId = ev.parentNode.id;
-    } else {
-      return;
-    }
-    this.router.navigateByUrl(`/workshops/${sfId}`)
+  onSelectRow(workshop) {
+    this.router.navigateByUrl(`/workshops/${workshop.sfId}`);
   }
 
 }
