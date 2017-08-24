@@ -88,7 +88,6 @@ export class AdminAffiliateTabComponent {
       console.error(err);
       this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay');
     }
-    this._as.reloadData$.next();
   }
 
   onClickFormHandler(affiliate: Affiliate) {

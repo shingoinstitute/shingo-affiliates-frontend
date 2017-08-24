@@ -3,21 +3,14 @@
   <!-- Actions -->
   <div class="tab-actions">
     <a md-raised-button class="mat-primary" routerLink="/admin/affiliates/form/create">
-        <md-icon svgIcon="edit_white"></md-icon>
-        <span> Create </span>
+      <md-icon svgIcon="edit_white"></md-icon>
+      <span> Create </span>
     </a>
   </div>
 
   <!-- Data Table -->
-  <app-affiliate-data-table [displayedColumns]="displayedColumns"
-                            (onClickDelete)="onClickDeleteHandler($event)"
-                            (onClickSave)="onClickSave($event)"
-                            (onClickForm)="onClickFormHandler($event)"
-                            (onLoadComplete)="isLoading = false">
+  <app-affiliate-data-table [displayedColumns]="displayedColumns" (onClickDelete)="onClickDeleteHandler($event)" (onClickSave)="onClickSave($event)"
+    (onClickForm)="onClickFormHandler($event)">
   </app-affiliate-data-table>
-
-  <div class="spinner-container">
-    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
-  </div>
 
 </div>

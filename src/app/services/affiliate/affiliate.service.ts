@@ -17,9 +17,6 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languag
 
 @Injectable()
 export class AffiliateService extends BaseAPIService {
-  
-      public reloadData$ = new Subject<void>();
-      public shouldReloadData$: Observable<void> = this.reloadData$.asObservable();
 
       private route: string = 'affiliates';
       private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
@@ -39,13 +36,13 @@ export class AffiliateService extends BaseAPIService {
       }
 
       public create(obj: Affiliate): Observable<SFSuccessResult> {
-            return this.http.post(`${this.baseUrl}`, obj)
+            return this.http.post(`${this.baseUrl}`, obj.toSFJSON())
                   .map(res => res)
                   .catch(this.handleError);
       }
 
       public update(obj: Affiliate): Observable<SFSuccessResult> {
-            return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+            return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
                   .map(res => res)
                   .catch(this.handleError);
       }
