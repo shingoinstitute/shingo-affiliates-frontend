@@ -3,7 +3,7 @@
     <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
       <p class="mat-caption"> {{ describe.organizingAffiliate && describe.organizingAffiliate.inlineHelpText }} </p>
       <md-input-container>
-        <input required mdInput class="autoComplete" [mdAutocomplete]="autoAffiliate" (focusout)="checkValidAutoComplete(this)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affilaite'}}"
+        <input required mdInput class="autoComplete" [mdAutocomplete]="autoAffiliate" (focusout)="checkValidAutoComplete(this)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affiliate'}}"
           formControlName="affiliate">
         <md-spinner *ngIf="loadingAF"></md-spinner>
       </md-input-container>
@@ -145,8 +145,9 @@
       </button>
     </div>
 
-    <div class="form-actions">
+    <div class="form-actions" fxLayout="row" fxLayoutGap="8px">
       <button md-raised-button type="submit" class="mat-primary" [disabled]="!workshopForm.valid || !workshop.facilitators.length || !workshopForm.controls.courseManager.value.sfId">Save</button>
+      <md-spinner *ngIf="isLoading" [color]="'accent'"></md-spinner>
     </div>
 
   </form>

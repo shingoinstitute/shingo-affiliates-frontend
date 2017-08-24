@@ -53,3 +53,8 @@ form md-input-container md-spinner {
 form md-input-container input.autoComplete {
     width: fit-content;
 }
+
+form div.form-actions md-spinner {
+    max-height: 36px;
+    max-width: 25px;
+}

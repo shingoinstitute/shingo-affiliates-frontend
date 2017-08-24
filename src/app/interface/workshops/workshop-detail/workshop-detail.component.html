@@ -1,0 +1,59 @@
+<div fxLayout="row" fxLayoutGap="24px" class="container" fxFlex>
+  <app-workshop [workshop]="workshop"></app-workshop>
+
+  <div fxLayout="column" fxFlex *ngIf="workshop.status === 'Action Pending'">
+
+    <div class="errors" fxLayout="column">
+      <div class="error" *ngFor="let error of errors">{{error}}</div>
+    </div>
+
+    <div class="fileUploads" fxLayout="row" fxLayoutGap="16px">
+      <!-- Attendee Upload area -->
+      <div fxFlex="50%">
+
+        <div class="file-dz" ng2FileDrop (ng2FileDropFileAccepted)="uploadAttendeeList($event)" [ng2FileDropSupportedFileTypes]="supportedFileTypes"
+          [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes" (ng2FileDropFileRejected)="rejectedFile($event)">
+          <h2 class="roboto">Drop Attendee List Here</h2>
+        </div>
+
+        <md-progress-bar *ngIf="uploadAttendeeProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadAttendeeProgress"></md-progress-bar>
+
+        <div class="files">
+          <div class="file" *ngIf="attendeeFile">
+            <img [src]="fileIcon[attendeeFile.type]" />
+            <div class="file-detail" fxLayout="column">
+              <b>{{attendeeFile.name}}</b>
+              <i>{{fileSize(attendeeFile.size)}}</i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Evaluations Upload area -->
+      <div fxFlex="50% ">
+
+        <div class="file-dz " ng2FileDrop (ng2FileDropFilesDropped)="uploadEvaluations($event)
+          " [ng2FileDropAcceptMultiple]=" 'true' " [ng2FileDropSupportedFileTypes]="supportedFileTypes " [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes">
+          <h2 class="roboto ">Drop Evaluations Here</h2>
+        </div>
+
+        <md-progress-bar *ngIf="uploadEvalutationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvalutationsProgress"></md-progress-bar>
+
+        <div class="files " fxLayout="row " fxLayoutGap="8px">
+          <div class="file " *ngFor="let file of evaluations ">
+            <img [src]="fileIcon[file.type] " />
+            <div class="file-detail " fxLayout="column ">
+              <b>{{file.name}}</b>
+              <i>{{fileSize(file.size)}}</i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <button md-raised-button class="mat-primary " (click)="upload() " [disabled]="!attendeeFile && !evaluations.length ">Upload Files</button>
+  </div>
+</div>

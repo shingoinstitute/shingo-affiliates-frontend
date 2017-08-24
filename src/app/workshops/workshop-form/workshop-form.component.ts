@@ -1,8 +1,8 @@
 // Angular Modules
 import { Component, ViewChild, ElementRef, QueryList, Input, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from "@angular/forms";
-import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange } from "@angular/material";
+import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange } from '@angular/material';
 
 // App Modules
 import { AuthService } from '../../services/auth/auth.service';
@@ -11,16 +11,16 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
 import { WorkshopService } from '../../services/workshop/workshop.service';
 import { SFSuccessResult } from '../../services/base-api.abstract.service';
-import { Workshop, WorkshopType } from "../Workshop";
+import { Workshop, WorkshopType } from '../Workshop';
 import { CourseManager } from '../../shared/models/CourseManager';
 import { Facilitator } from '../../facilitators/Facilitator';
 import { Affiliate } from '../../affiliates/Affiliate';
 
 // RxJS Modules
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from "rxjs/Subject";
+import { Subject } from 'rxjs/Subject';
 
 // RxJS operators
 import 'rxjs/add/operator/catch';
@@ -56,6 +56,8 @@ export class WorkshopFormComponent implements OnInit {
   private loadingCms: boolean = false;
   private courseManagerQuery$: Subject<string> = new Subject<string>();
   private courseManagersChange$: BehaviorSubject<CourseManager[]> = new BehaviorSubject<CourseManager[]>([]);
+
+  private isLoading: boolean = false;
 
   private countries: string[] = [];
   private countryOptions: string[] = [];
@@ -108,14 +110,18 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   private onSubmit() {
+    this.isLoading = true;
     this.workshop = merge(this.workshop, this.workshopForm.value);
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
     else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
     console.log('SUBMITTED DATA', this.workshop);
     this.submitFunction(this.workshop)
-      .subscribe((result: SFSuccessResult) => this.router.navigateByUrl(`/workshops/${result.id}`)
-      , err => console.error(err));
+      .subscribe((result: SFSuccessResult) => {
+        this.router.navigateByUrl(`/workshops/${result.id}`);
+        this.isLoading = false;
+      }
+      , err => console.error('error submitting workshop', err));
   }
 
   private contactDisplayWith(value) {
@@ -297,7 +303,7 @@ export class WorkshopFormComponent implements OnInit {
    */
   private getWorkshopTypes() {
     try {
-      this.workshopTypes = this.describe.workshopType.picklistValues.map(option => { return option.label; });
+      this.workshopTypes = this.describe.workshopType.picklistValues.map(option => option.label);
     } catch (e) {
       console.warn('Failed to get workshop types from `this.describe.workshopType.picklistValues`. Using default values.');
     }

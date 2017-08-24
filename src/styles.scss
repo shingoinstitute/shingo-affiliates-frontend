@@ -15,34 +15,19 @@ html, body, .main-content {
 .container {
    margin: 16px;
 }
-/* Helpers */
-.shingo-bg {
-   background: radial-gradient(#005fb3,#003768);
-}
-.md-primary {
-   background-color: #003768;
-}
-.md-primary-text {
-   color: #003768;
-}
-.md-accent {
-   background-color: #640921;
-}
-.md-accent-text {
-   color: #640921;
-}
-.md-warn {
-   background-color: #f44336;
-}
-.md-warn-text {
-   color: #f44336
-}
-.grey-text {
-   color: #757575;
-}
-.text-sm { font-size: 10px; }
-.text-md { font-size: 14px; }
-.text-lg { font-size: 18px; }
+/* Styling */
+.shingo-bg { background: radial-gradient($primary-color-lighten-1,$primary-color); }
+.md-primary { background-color: $primary-color; }
+.md-primary-text { color: $primary-color; }
+.md-accent { background-color: $accent-color; }
+.md-accent-text { color: $accent-color; }
+.md-warn { background-color: $warn-color; }
+.md-warn-text { color: $warn-color; }
+.md-success { background-color: $success-color; }
+.md-success-text { color: $success-color; }
+.md-grey, .grey { color: $grey-color; }
+.grey-text, .md-grey-text { color: $grey-color; }
+
 /* Sidenav */
 md-sidenav {
    margin-right: 4px;
@@ -54,30 +39,31 @@ md-nav-list {
 }
 md-nav-list a.active {
    background-color: #e5e5ff !important;
-   border-left: 5px solid #1E88E5;
+   border-left: 5px solid $primary-color-lighten-2;
 }
 md-nav-list p {
    margin: 8px 0 8px 0;
    font-weight: 600;
 }
+
 /* Text helpers */
-.bold-text {
-   font-weight: 600;
-}
-/* Cards */
+.bold-text { font-weight: 600; }
+.text-sm { font-size: 10px; }
+.text-md { font-size: 14px; }
+.text-lg { font-size: 18px; }
+
+/* Cards (because sometimes `md-card` is just too annoying) */
 .card {
    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
    border-radius: 2px;
    padding: 0;
    margin-bottom: 16px;
 }
-.card-content {
-   margin: 0;
-}
+.card-content { margin: 0; }
 .card-header {
    display: flex;
    align-items: center;
-   background-color: #003768;
+   background-color: $primary-color;
    color: white;
    font-weight: 200;
    font-size: 16px;
@@ -91,17 +77,14 @@ md-nav-list p {
    margin: 8px;
    padding: 8px;
 }
+
 /* Misc */
-button md-icon ~ span {
-   margin-left: 4px;
-}
+button md-icon ~ span { margin-left: 4px; }
 .mat-sort-header-container{
    display: flex;
    cursor: pointer
 }
-.mat-sort-header-position-before {
-   flex-direction: row-reverse
-}
+.mat-sort-header-position-before { flex-direction: row-reverse }
 .mat-sort-header-button {
    border: none;
    background:0 0;
@@ -163,12 +146,10 @@ md-header-row md-header-cell:first-child {
    padding: 0;
    margin-right: 16px;
 }
-md-cell > p {
-   margin: 4px 0 4px 0;
-}
-md-row {
-   height: 56px;
-}
+md-cell > p { margin: 4px 0 4px 0;}
+md-row { height: 56px; }
+.hidden { display: none !important; }
+
 /* Flex helpers */
 .flex-1 {
    flex: 1 0;

@@ -1,0 +1,21 @@
+.icon-legend-container {
+   display: flex;
+   flex-direction: row;
+   align-items: right;
+}
+.icon-legend-item {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   margin: 4px 16px;
+}
+md-icon {
+   height: 18px;
+   width: 18px;
+}
+.icon-legend-item p {
+   display: inline-block;
+   margin: 0;
+   text-align: center;
+   font-size: 12px;
+}

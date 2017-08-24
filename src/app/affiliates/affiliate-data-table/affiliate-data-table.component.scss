@@ -1,0 +1,19 @@
+.logo-cell {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   height: 100%;
+}
+.logo-img {
+  text-align: center;
+  vertical-align: middle;
+}
+.logo-cell > img {
+   height: 100%;
+}
+md-input-container input {
+  background-color: #efefef;
+  padding: 3px;
+  border-radius: 2px;
+  width: 97%;
+}

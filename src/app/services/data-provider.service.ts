@@ -13,19 +13,17 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
 
   private dataChangeSource: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
+  private _dataLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   private _filters: Filter[] = [];
 
   public get dataChange(): Observable<T[]> { return this.dataChangeSource.asObservable(); }
+  public get dataLoading(): Observable<boolean> { return this._dataLoading.asObservable(); }
   public get filters(): Filter[] { return this._filters; }
+
 
   constructor(private _s: S) {
     this.dataChangeSource.next([]);
-    this._s.getAll()
-      .subscribe(data => {
-        this.dataChangeSource.next(data);
-      }, err => {
-        console.error(err);
-      });
+    this.refresh();
   }
 
   public get data(): T[] {
@@ -46,6 +44,16 @@ export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
     });
 
     return intersection;
+  }
+
+  public refresh() {
+    this._dataLoading.next(true);
+    this._s.getAll().subscribe(data => {
+      this.dataChangeSource.next(data);
+      this._dataLoading.next(false);
+    }, err => {
+      console.error(err);
+    });
   }
 
   public addFilter(filter: Filter) {

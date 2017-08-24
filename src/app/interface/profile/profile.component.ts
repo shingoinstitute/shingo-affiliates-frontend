@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { MdDialog } from '@angular/material';
+
+import { User } from '../../shared/models/User';
+import { ChangePasswordDialog } from './change-password-dialog/change-password-dialog.component';
+import { SimpleMessageDialog } from '../../shared/components/simple-message-dialog/simple-message-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -7,15 +13,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
-   user: { name: string, title: string } = { name: "Shingo Coordinator", title: "Instructor" }
+  private user: User;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute, private dialog: MdDialog) { }
 
   ngOnInit() {
+    this.user = this.route.snapshot.data['user'];
   }
 
   changePassword() {
-
+    const dialogRef = this.dialog.open(ChangePasswordDialog);
+    dialogRef.afterClosed().subscribe(message => this.dialog.open(SimpleMessageDialog, { data: message }));
   }
 
 }

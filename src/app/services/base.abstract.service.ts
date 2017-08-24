@@ -10,14 +10,8 @@ export abstract class BaseService {
      * @description Handles errors from http requests
      */
     protected handleError(error: Response | any): ErrorObservable {
-        let err: string;
-        if (error instanceof Response) {
-            const body = error.json() || '';
-            err = body['error'] || JSON.stringify(body);
-        } else {
-            err = error.message ? error.message : error.toString();
-        }
-        return Observable.throw(err);
+        console.warn('got an http error', error);
+        return Observable.throw(error);
     }
 
     protected toCamelCase(s: string): string {

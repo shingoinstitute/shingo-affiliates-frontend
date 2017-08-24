@@ -1,0 +1,47 @@
+<div class="icon-legend-container">
+   <ng-container *ngFor="let icon of displayedIcons">
+      <div [ngSwitch]="icon" class="icon-legend-item">
+         <ng-template [ngSwitchCase]="'edit'">
+            <md-icon svgIcon="edit_mode_grey"></md-icon>
+            <p> = Edit </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'delete'">
+            <md-icon svgIcon="delete_grey"></md-icon>
+            <p> = Delete </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'disable'">
+            <md-icon svgIcon="block_grey"></md-icon>
+            <p> = Disable Account </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'save'">
+            <md-icon svgIcon="save_grey"></md-icon>
+            <p> = Save </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'reset'">
+            <md-icon svgIcon="renew_grey"></md-icon>
+            <p> = Reset Password </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'cancel'">
+            <md-icon svgIcon="cancel_grey"></md-icon>
+            <p> = Cancel </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'form'">
+           <md-icon svgIcon="description_grey"></md-icon>
+           <p> = Open Edit Detail </p>
+         </ng-template>
+
+         <ng-template [ngSwitchCase]="'accept'">
+           <md-icon svgIcon="checkmark_grey"></md-icon>
+           <p> = Accept </p>
+         </ng-template>
+
+          <ng-template *ngSwitchDefault></ng-template> 
+      </div>
+   </ng-container>
+</div>
