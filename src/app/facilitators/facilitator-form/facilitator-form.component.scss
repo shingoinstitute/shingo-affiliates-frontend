@@ -1,7 +1,12 @@
 .form-container {
+  width: 680px;
   display: flex;
   flex-direction: column;
-  max-width: 960px;
+}
+@media only screen and (max-width: 680px) {
+  .form-container {
+    width: 100%;
+  }
 }
 .input-item {
   flex: 1 0;

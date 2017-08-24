@@ -1,12 +1,14 @@
 <div class="form-container">
 
   <div class="form-header">
-    <h3>
-      Affiliate Form
-      <ng-container *ngIf="affiliate.sfId != ''">
-        - {{ affiliate.sfId }}
-      </ng-container>
-    </h3>
+    <h3 class="mat-headline"> Affiliate Form </h3>
+    <p *ngIf="affiliate.sfId != ''"> Salesforce ID: {{ affiliate.sfId }} </p>
+  </div>
+
+  <div class="input-item">
+    <md-input-container>
+      <input mdInput placeholder="Affiliate Name" [(ngModel)]="affiliate.name">
+    </md-input-container>
   </div>
 
   <div class="input-item">
@@ -21,14 +23,51 @@
 
   <div class="input-item">
     <md-input-container>
-      <input mdInput placeholder="Name" [(ngModel)]="affiliate.name">
-    </md-input-container>
+        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+      </md-input-container>
   </div>
 
   <div class="input-item">
     <md-input-container>
-        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
-      </md-input-container>
+      <input mdInput placeholder="Public Contact Name" [(ngModel)]="affiliate.publicContact">
+    </md-input-container>
+  <!-- </div> -->
+
+  <!-- <div class="input-item"> -->
+    <md-input-container>
+      <input mdInput placeholder="Public Contact Email" [(ngModel)]="affiliate.publicContactEmail">
+    </md-input-container>
+  <!-- </div> -->
+
+  <!-- <div class="input-item"> -->
+    <md-input-container>
+      <input mdInput placeholder="Public Contact Phone" [(ngModel)]="affiliate.publicContactPhone">
+    </md-input-container>
+  </div>
+
+   <div class="input-item">
+    <md-input-container [floatPlaceholder]="always">
+      <input type="text" mdInput [formControl]="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
+    </md-input-container>
+
+    <md-autocomplete #langSearch="mdAutocomplete">
+      <md-option *ngFor="let lang of languageOptions | async" [value]="lang" (onSelectionChange)="onSelectLanguage(lang)">
+          {{ lang }}
+      </md-option>
+    </md-autocomplete>
+
+    <div class="language-list">
+      <div class="language-list-item" *ngFor="let lang of affiliate.languages">
+        <button md-icon-button (click)="removeLanguage(lang)">
+          <md-icon svgIcon="delete_grey"></md-icon>
+        </button>
+        {{ lang }}
+      </div>
+    </div>
+  </div> 
+
+  <div class="input-item">
+    
   </div>
 
   <div class="form-actions">

@@ -67,7 +67,7 @@ export class WorkshopFormComponent implements OnInit {
 
 
   private workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
-  private languages: string[] = ['English', 'Spanish', 'German', 'French', 'Mandarin', 'Cantonese', 'Italian', 'Hindi', 'Portuguese (Brazilian)', 'Japanese', 'Dutch', 'Chinese'];
+  private languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
   private statuses: string[] = ['Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice', 'Proposed', 'Archived', 'Cancelled', 'Active, not ready for app', 'Active Event'];
 
   constructor(public fb: FormBuilder,
