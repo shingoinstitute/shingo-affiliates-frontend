@@ -5,6 +5,8 @@ import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
+import { AffiliateFormComponent } from "../../affiliates/affiliate-form/affiliate-form.component";
+import { FacilitatorFormComponent } from "../../facilitators/facilitators.module";
 
 const adminRoutes: Routes = [
    {
@@ -17,6 +19,8 @@ const adminRoutes: Routes = [
             children: [
                { path: 'affiliates', component: AdminAffiliateTabComponent },
                { path: 'facilitators', component: AdminFacilitatorTabComponent },
+               { path: 'facilitators/form/:id', component: FacilitatorFormComponent },
+               { path: 'affiliates/form/:id', component: AffiliateFormComponent },
                { path: '**', redirectTo: 'affiliates'}
             ]
          }

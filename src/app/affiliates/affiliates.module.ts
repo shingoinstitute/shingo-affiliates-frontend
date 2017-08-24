@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -12,6 +13,8 @@ import { SharedModule } from "../shared/shared.module";
 @NgModule({
   imports: [
     FormsModule,
+    RouterModule,
+    ReactiveFormsModule,
     CommonModule,
     MaterialModule,
     FlexLayoutModule,

@@ -1,35 +1,91 @@
-<div class="form-container">
+<div class="form-container" #formContainer [class.loading-active]="isLoading">
+
+  <div class="spinner-container">
+    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
+  </div>
+
+
+  <div class="form-actions">
+    <ng-container *ngIf="!isDialog">
+        <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+        <button md-raised-button (click)="location.back()"> Cancel </button>
+    </ng-container>
+  </div>
 
   <div class="form-header">
-    <h3>
-      Affiliate Form
-      <ng-container *ngIf="affiliate.sfId != ''">
-        - {{ affiliate.sfId }}
-      </ng-container>
-    </h3>
+    <h3 class="mat-headline"> Affiliate Form </h3>
+    <p *ngIf="affiliate.sfId!==''"> Salesforce ID: {{ affiliate.sfId }} </p>
   </div>
 
-  <div class="input-item">
-    <div class="logo-img">
-      <img src="{{ affiliate.logo }}" alt="logo image">
+   <div class="form-body"> 
+    <div class="input-item">
+      <md-input-container>
+        <input mdInput placeholder="Affiliate Name" [(ngModel)]="affiliate.name">
+      </md-input-container>
     </div>
 
-    <md-input-container>
-      <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
-    </md-input-container>
-  </div>
+    <div class="input-item">
+      <div class="logo-img">
+        <img src="{{ affiliate.logo }}" alt="logo image">
+      </div>
 
-  <div class="input-item">
-    <md-input-container>
-      <input mdInput placeholder="Name" [(ngModel)]="affiliate.name">
-    </md-input-container>
-  </div>
-
-  <div class="input-item">
-    <md-input-container>
-        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+      <md-input-container>
+        <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
       </md-input-container>
-  </div>
+    </div>
+
+    <div class="input-item">
+      <md-input-container>
+          <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+        </md-input-container>
+    </div>
+
+    <div class="input-item">
+      <p class="mat-body-2">Contact Information</p>
+      <md-input-container>
+        <input mdInput placeholder="Public Contact Name" [(ngModel)]="affiliate.publicContact">
+      </md-input-container>
+    <!-- </div> -->
+
+    <!-- <div class="input-item"> -->
+      <md-input-container>
+        <input mdInput placeholder="Public Contact Email" [(ngModel)]="affiliate.publicContactEmail">
+      </md-input-container>
+    <!-- </div> -->
+
+    <!-- <div class="input-item"> -->
+      <md-input-container>
+        <input mdInput placeholder="Public Contact Phone" [(ngModel)]="affiliate.publicContactPhone">
+      </md-input-container>
+    </div>
+
+     <div class="input-item">
+      <md-input-container [floatPlaceholder]="always">
+        <input type="text" mdInput [formControl]="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
+      </md-input-container>
+
+      <md-autocomplete #langSearch="mdAutocomplete">
+        <md-option *ngFor="let lang of languageOptions | async" [value]="lang" (onSelectionChange)="onSelectLanguage(lang)">
+            {{ lang }}
+        </md-option>
+      </md-autocomplete>
+
+      <div class="language-list">
+        <p class="mat-body-2"> Languages </p>
+        <div class="language-list-item" *ngFor="let lang of affiliate.languages">
+          <button md-icon-button (click)="removeLanguage(lang)">
+            <md-icon svgIcon="delete_grey"></md-icon>
+          </button>
+          {{ lang }}
+        </div>
+      </div>
+    </div>  
+
+     <div class="input-item">
+      <p class="mat-body-2">Summary</p>
+      <div [froalaEditor] [(froalaModel)]="affiliate.summary"></div>
+    </div> 
+   </div> 
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
@@ -39,6 +95,7 @@
 
     <ng-container *ngIf="!isDialog">
         <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+        <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 </div>

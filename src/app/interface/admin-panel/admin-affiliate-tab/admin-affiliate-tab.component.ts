@@ -5,6 +5,7 @@ import { SFSuccessResult } from "../../../services/base-api.abstract.service";
 import { MdSnackBar, MdDialog } from "@angular/material";
 import { ConfirmDeleteAffiliateDialogComponent } from "./confirm-delete-affiliate-dialog.component";
 import { AffiliateFormComponent } from "../../../affiliates/affiliate-form/affiliate-form.component";
+import { Router, NavigationExtras } from "@angular/router";
 
 @Component({
   selector: 'app-admin-affiliate-tab',
@@ -19,7 +20,7 @@ export class AdminAffiliateTabComponent {
 
   isLoading: boolean = true;
 
-  constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar) { }
+  constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar, private router: Router) { }
 
   onClickSave(affiliate?: Affiliate) {
     this.isLoading = true;
@@ -88,6 +89,10 @@ export class AdminAffiliateTabComponent {
       this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay');
     }
     this._as.reloadData$.next();
+  }
+
+  onClickFormHandler(affiliate: Affiliate) {
+    this.router.navigateByUrl(`/admin/affiliate/form/${affiliate.sfId}`);
   }
 
 }

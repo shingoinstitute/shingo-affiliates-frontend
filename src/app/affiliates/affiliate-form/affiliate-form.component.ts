@@ -1,7 +1,10 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input, Inject, Optional, ElementRef, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
 import { Affiliate } from "../Affiliate";
 import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { AffiliateService } from "../../services/affiliate/affiliate.service";
+import { FormControl } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-affiliate-form',
@@ -12,9 +15,26 @@ export class AffiliateFormComponent implements OnInit {
 
   @Input('affiliate') affiliate: Affiliate;
 
-  private isDialog: boolean;
+  @ViewChild('formContainer') formContainer: ElementRef;
 
-  constructor(@Inject(MD_DIALOG_DATA) public data: any, private _as: AffiliateService, private snackbar: MdSnackBar) { }
+  langControl: FormControl;
+  languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
+  languageOptions: any;
+  isLoading: boolean;
+
+  private isDialog: boolean;
+  private routeSubscription;
+
+  constructor(
+    @Optional() @Inject(MD_DIALOG_DATA) public data: any, 
+    private _as: AffiliateService, 
+    private snackbar: MdSnackBar, 
+    private location: Location, 
+    private route: ActivatedRoute
+  ) {
+    this.langControl = new FormControl();
+    this.languageOptions = this.langControl.valueChanges.map(val => this.filterLanguages(val));
+  }
 
   ngOnInit() {
     if (this.data) {
@@ -24,7 +44,44 @@ export class AffiliateFormComponent implements OnInit {
 
     if (!this.affiliate) {
       this.affiliate = new Affiliate();
+      this.routeSubscription = this.route.params.subscribe((route) => {
+        const id = route['id'];
+        if (typeof id === 'string' && id !== 'create') {
+          this.isLoading = true;
+          this._as.getById(id).subscribe((affiliate: Affiliate) => {
+            this.affiliate = affiliate ? affiliate : new Affiliate();
+            this.isLoading = false;
+          }, err => {
+            console.error(err);
+            this.isLoading = false;
+          });
+        }
+      });
     }
+  }
+
+  ngOnDestroy() {
+    this.routeSubscription && this.routeSubscription.unsubscribe();
+  }
+
+  ngAfterViewInit() {
+    // center element if it's not a dialog
+    if (!this.isDialog) {
+      $(this.formContainer.nativeElement).css('margin', '0 auto');
+    }
+  }
+
+  filterLanguages(val: string) { 
+    return val ? this.languages.filter(s => s.toLowerCase().indexOf(val.toLowerCase()) === 0) : this.languages;
+  }
+
+  onSelectLanguage(lang: string) {
+    this.affiliate.addLanguage(lang);
+    this.langControl.setValue(null);
+  }
+
+  removeLanguage(lang: string) {
+    this.affiliate.removeLangauge(lang);
   }
 
   onClickSave() {
@@ -40,6 +97,9 @@ export class AffiliateFormComponent implements OnInit {
     this._as.create(this.affiliate).subscribe(data => {
       console.log(data);
       this.snackbar.open('Successfully Created New Affiliate', null, { duration: 2000 });
+      if (!this.isDialog) {
+        this.location.back();
+      }
     }, err => {
       this.handleError(err);
     });
@@ -49,6 +109,9 @@ export class AffiliateFormComponent implements OnInit {
     this._as.update(this.affiliate).subscribe(data => {
       console.log(data);
       this.snackbar.open('Update Successful', null, { duration: 2000 });
+      if (!this.isDialog) {
+        this.location.back();
+      }
     }, err => {
       this.handleError(err);
     });
