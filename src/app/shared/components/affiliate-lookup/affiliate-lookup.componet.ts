@@ -28,16 +28,16 @@ export class AffiliateLookupComponent implements AfterViewInit {
       if (query && query.length > 2) {
         this.isSearching = true;
         this._as.search(query)
-        .debounceTime(250)
-        .subscribe(data => {
-          this.isSearching = false;
-          this.affiliates = data.map(n => { return new Affiliate(n); }).sort((a: Affiliate, b: Affiliate) => {
-            return a.name > b.name ? 1 : -1;
+          .debounceTime(250)
+          .subscribe(data => {
+            this.isSearching = false;
+            this.affiliates = data.map(n => new Affiliate(n)).sort((a: Affiliate, b: Affiliate) => {
+              return a.name > b.name ? 1 : -1;
+            });
+          }, err => {
+            this.isSearching = false;
+            console.error(err);
           });
-        }, err => {
-          this.isSearching = false;
-          console.error(err);
-        });
       }
     });
 
