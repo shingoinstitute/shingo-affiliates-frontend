@@ -1,9 +1,8 @@
-<div class="form-container" #formContainer [class.loading-active]="isLoading">
+<div class="form-container" [class.loading-active]="isLoading" #formContainer>
 
   <div class="spinner-container">
     <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
   </div>
-
 
   <div class="form-actions">
     <ng-container *ngIf="!isDialog">

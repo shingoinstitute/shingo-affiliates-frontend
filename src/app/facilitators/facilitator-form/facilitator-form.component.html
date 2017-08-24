@@ -1,4 +1,21 @@
-<div class="form-container">
+<div class="form-container" [class.loading-active]="isLoading" #formContainer>
+
+  <div class="spinner-container">
+    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
+  </div>
+
+  <div class="form-actions">
+    <ng-container *ngIf="isDialog">
+      <button md-raised-button class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!isValid"> Save </button>
+      <button md-raised-button [md-dialog-close]="false"> Cancel </button>
+    </ng-container>
+
+    <ng-container *ngIf="!isDialog">
+      <button md-raised-button class="mat-accent" (click)="onClickSave()" [disabled]="!isValid"> Save </button>
+      <button md-raised-button (click)="location.back()"> Cancel </button>
+    </ng-container>
+  </div>
+
   <div class="form-header">
     <h3> Facilitator Form </h3>
   </div>
@@ -13,7 +30,9 @@
     <md-input-container>
       <input mdInput [(ngModel)]="facilitator.firstName" placeholder="First Name">
     </md-input-container>
+  </div>
 
+  <div class="input-item">
     <md-input-container>
       <input mdInput [(ngModel)]="facilitator.lastName" placeholder="Last Name">
     </md-input-container>
@@ -23,9 +42,7 @@
     <div class="facilitator-img">
       <img src="{{ facilitator.photo }}">
     </div>
-  </div>
 
-  <div class="input-item">
     <md-input-container>
       <input mdInput [(ngModel)]="facilitator.photo" placeholder="Photograph URL">
     </md-input-container>
@@ -43,6 +60,7 @@
 
     <ng-container *ngIf="!isDialog">
       <button md-raised-button class="mat-accent" (click)="onClickSave()" [disabled]="!isValid"> Save </button>
+      <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 

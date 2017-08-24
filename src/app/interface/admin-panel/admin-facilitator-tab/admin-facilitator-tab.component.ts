@@ -3,6 +3,7 @@ import { Facilitator } from "../../../facilitators/Facilitator";
 import { FacilitatorService } from "../../../services/facilitator/facilitator.service";
 import { MdSnackBar, MdDialog } from "@angular/material";
 import { FacilitatorFormComponent } from "../../../facilitators/facilitators.module";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-admin-facilitator-tab',
@@ -17,7 +18,7 @@ export class AdminFacilitatorTabComponent {
 
    newFacilitator: Facilitator;
 
-   constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar, private dialog: MdDialog) {}
+   constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar, private dialog: MdDialog, private router: Router) { }
 
    onClickSaveHandler(facilitator: Facilitator) {
      this.isLoading = true;

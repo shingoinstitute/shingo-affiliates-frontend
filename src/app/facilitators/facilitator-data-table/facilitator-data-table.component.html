@@ -58,10 +58,10 @@
                   <md-icon class="icon-sm" svgIcon="renew_grey"></md-icon>
                </button>
 
-               <button md-icon-button (click)="onClickForm(fac)">
+               <a md-icon-button routerLink="/admin/facilitators/form/{{ fac.sfId }}">
                  <md-icon class="icon-sm" svgIcon="description_grey"></md-icon>
-               </button>
-              </ng-container>
+               </a>
+            </ng-container>
 
             <!-- Edit Row Actions -->
             <ng-container *ngIf="selectedId == fac.sfId">
