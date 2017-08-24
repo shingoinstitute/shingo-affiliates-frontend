@@ -44,6 +44,9 @@
   <router-outlet class="main-content"></router-outlet>
 
 </md-sidenav-container>
+<div class="spinner-container" *ngIf="isLoading">
+  <md-spinner></md-spinner>
+</div>
 
 <!-- Show when user is *not* logged in -->
 <!-- <app-login *ngIf="!isAuthenticated"></app-login> -->

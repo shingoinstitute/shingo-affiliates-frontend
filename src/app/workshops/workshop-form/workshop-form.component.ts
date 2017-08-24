@@ -57,6 +57,8 @@ export class WorkshopFormComponent implements OnInit {
   private courseManagerQuery$: Subject<string> = new Subject<string>();
   private courseManagersChange$: BehaviorSubject<CourseManager[]> = new BehaviorSubject<CourseManager[]>([]);
 
+  private isLoading: boolean = false;
+
   private countries: string[] = [];
   private countryOptions: string[] = [];
   private workshopForm: FormGroup;
@@ -108,13 +110,17 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   private onSubmit() {
+    this.isLoading = true;
     this.workshop = merge(this.workshop, this.workshopForm.value);
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
     else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
     console.log('SUBMITTED DATA', this.workshop);
     this.submitFunction(this.workshop)
-      .subscribe((result: SFSuccessResult) => this.router.navigateByUrl(`/workshops/${result.id}`)
+      .subscribe((result: SFSuccessResult) => {
+        this.router.navigateByUrl(`/workshops/${result.id}`);
+        this.isLoading = false;
+      }
       , err => console.error('error submitting workshop', err));
   }
 

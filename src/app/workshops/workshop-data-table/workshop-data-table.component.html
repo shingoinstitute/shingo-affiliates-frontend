@@ -68,7 +68,9 @@
 
   <!-- Edit Button Column -->
   <ng-container cdkColumnDef="edit">
-    <md-header-cell *cdkHeaderCellDef> Edit </md-header-cell>
+    <md-header-cell *cdkHeaderCellDef> Edit &emsp;&emsp;&emsp;&emsp;
+      <button class="refresh-button" md-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
+    </md-header-cell>
     <md-cell *cdkCellDef="let workshop">
       <button (click)="onEditClick(workshop.sfId)" md-raised-button> Edit &ensp;<md-icon svgIcon="edit_grey"></md-icon></button>
     </md-cell>
@@ -81,10 +83,11 @@
   </ng-container>
 
   <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" (click)="onSelectRow(workshop)" [ngClass]="{
-                'past-due': isPastDue(workshop),
-                'in-grace-period': isDue(workshop)
-              }"></md-row>
+  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" (click)="onSelectRow(workshop)" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></md-row>
 </md-table>
+
+<div class="spinner-container" *ngIf="isLoading">
+  <md-spinner></md-spinner>
+</div>
 
 <md-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
