@@ -1,8 +1,15 @@
+/* tslint:disable */
+
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { HttpRequest, HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Http, Headers, RequestOptionsArgs } from '@angular/http';
-import { Observable } from "rxjs/Observable";
-import { CookieService } from "ngx-cookie";
+
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/throw';
+
+import { CookieService } from 'ngx-cookie';
 
 @Injectable()
 export class HttpService {
@@ -18,9 +25,9 @@ export class HttpService {
       observe: 'body',
       responseType: 'json'
     } as any;
-  };
+  }
 
-  constructor(public http: HttpClient, public _cs: CookieService) { }
+  constructor(public http: HttpClient, public _cs: CookieService, private router: Router) { }
 
   public get<T>(url: string, options = this._defaultReqOpts): Observable<any> {
     return this.http.get<T>(url, options);
