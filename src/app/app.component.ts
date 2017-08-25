@@ -1,6 +1,6 @@
 /* tslint:disable */
 // Angular Modules
-import { Component, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, ViewChild, HostListener, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { MdIconRegistry, MdSidenav, MdDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
@@ -26,7 +26,7 @@ import 'rxjs/add/operator/distinctUntilChanged';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit, OnDestroy {
 
   private windowWidthChangeSource = new Subject<number>();
   private windowWidthChange = this.windowWidthChangeSource.asObservable();
@@ -77,23 +77,28 @@ export class AppComponent {
         // On `NavigationEnd`, capture current route so we can re-redirect the user (if they aren't authenticated)
         // to the route they originally intended to visit, *after* a successful log in.
         this.activeRoute = route.url;
-        console.log('activeRoute', this.activeRoute);
+
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        if (!this.activeRoute.match(/.*password.*/gi)) this.authenticateOnLoad();
-        this.routeToLoginSubscription.unsubscribe();
+        if (!this.activeRoute.match(/.*password.*/gi)) {
+          this.authenticateOnLoad();
+        }
       }
     });
 
     this.router.events.subscribe(route => {
       if (route instanceof NavigationStart) this.isLoading = true;
       else if (route instanceof NavigationEnd) this.isLoading = false;
-    })
+    });
   }
 
   ngAfterViewInit() {
     this.sidenavService.sidenav = this.sidenav;
     this.winResizeHandler();
     this.windowWidthChangeSource.next(window.innerWidth);
+  }
+
+  ngOnDestroy() {
+    this.routeToLoginSubscription && this.routeToLoginSubscription.unsubscribe();
   }
 
   /**
@@ -111,12 +116,10 @@ export class AppComponent {
         if (!this.isAuthenticated) {
           this.routerService.navigateRoutes(['/login', this.activeRoute]);
         }
-      },
-      error => {
+      }, error => {
         this.isAuthenticated = false;
         this.routerService.navigateRoutes(['/login', this.activeRoute]);
-      }
-      );
+      });
 
     // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
     this.auth.userIsValid();

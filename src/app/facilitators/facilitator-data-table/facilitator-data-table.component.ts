@@ -17,6 +17,7 @@ export class FacilitatorDataTableComponent implements OnInit {
 
    facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
    selectedId: string = '';
+   roles = Facilitator.DEFAULT_ROLE_OPTIONS;
 
    @Output('onLoadComplete') onLoadCompleteEvent = new EventEmitter<void>();
    @Output('onClickDelete') onClickDeleteEvent = new EventEmitter<Facilitator>();
@@ -24,7 +25,7 @@ export class FacilitatorDataTableComponent implements OnInit {
    @Output('onClickReset') onClickResetEvent = new EventEmitter<Facilitator>();
    @Output('onClickSave') onClickSaveEvent = new EventEmitter<Facilitator>();
 
-      @Input('displayedColumns') displayedColumns = ['name', 'email', 'organization', 'actions'];
+      @Input('displayedColumns') displayedColumns = ['name', 'email', 'organization', 'role', 'actions'];
       @Input('dataSource') dataSource: FacilitatorDataSource | null;
 
       @ViewChild('paginator') paginator: MdPaginator;

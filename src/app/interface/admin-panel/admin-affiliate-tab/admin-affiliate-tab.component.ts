@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Affiliate } from "../../../affiliates/Affiliate";
 import { AffiliateService } from "../../../services/affiliate/affiliate.service";
 import { SFSuccessResult } from "../../../services/base-api.abstract.service";
@@ -6,6 +6,7 @@ import { MdSnackBar, MdDialog } from "@angular/material";
 import { ConfirmDeleteAffiliateDialogComponent } from "./confirm-delete-affiliate-dialog.component";
 import { AffiliateFormComponent } from "../../../affiliates/affiliate-form/affiliate-form.component";
 import { Router, NavigationExtras } from "@angular/router";
+import { AffiliateDataTableComponent } from '../../../affiliates/affiliate-data-table/affiliate-data-table.component';
 
 @Component({
   selector: 'app-admin-affiliate-tab',
@@ -19,6 +20,8 @@ export class AdminAffiliateTabComponent {
   selectedAffiliate: Affiliate;
 
   isLoading: boolean = true;
+
+  @ViewChild('app-affiliate-data-table') dataTable: AffiliateDataTableComponent;
 
   constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar, private router: Router) { }
 
@@ -76,6 +79,7 @@ export class AdminAffiliateTabComponent {
   delete(a: Affiliate) {
     this._as.delete(a).subscribe(data => {
       this.onHandleCallback(data);
+      this.dataTable.refresh();
       this.snackbar.open('Affiliate Successfully Deleted', 'Okay', { duration: 3000 });
     }, err => { this.onHandleCallback(null, err); });
   }

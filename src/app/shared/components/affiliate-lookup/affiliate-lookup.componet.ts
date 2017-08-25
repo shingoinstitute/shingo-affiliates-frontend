@@ -1,5 +1,6 @@
-import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/core';
-import { AffiliateService } from '../../../services/affiliate/affiliate.service';
+/* tslint:disable */
+import { Component, AfterViewInit, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { AffiliateService, DEFAULT_AFFILIATE_SEARCH_FIELDS } from '../../../services/affiliate/affiliate.service';
 import { Affiliate } from "../../../affiliates/Affiliate";
 import { FormControl } from "@angular/forms";
 
@@ -8,13 +9,15 @@ import { FormControl } from "@angular/forms";
   templateUrl: './affiliate-lookup.component.html',
   styleUrls: ['./affiliate-lookup.component.scss']
 })
-export class AffiliateLookupComponent implements AfterViewInit {
+export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
 
   affiliates: Affiliate[] = [];
 
-  @Input() affiliate: Affiliate;
+  @Input('affiliate') affiliate: Affiliate;
+  @Input() fields: string[] = [];
 
   @Output('onSelect') onSelectEventEmitter = new EventEmitter<Affiliate>();
+  @Output() onChange = new EventEmitter<string>();
 
   formControl: FormControl = new FormControl();
 
@@ -24,10 +27,12 @@ export class AffiliateLookupComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     // Listen to changes in auto-complete search field
+    if (this.fields.length) this.fields = this.fields.concat(DEFAULT_AFFILIATE_SEARCH_FIELDS);
     this.formControl.valueChanges.subscribe((query: string) => {
       if (query && query.length > 2) {
         this.isSearching = true;
-        this._as.search(query)
+        this.onChange.emit(query);
+        this._as.search(query, this.fields)
           .debounceTime(250)
           .subscribe(data => {
             this.isSearching = false;
@@ -44,6 +49,17 @@ export class AffiliateLookupComponent implements AfterViewInit {
     // Set input value if affiliate already exists
     if (this.affiliate) {
       this.formControl.setValue(this.affiliate);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      if (propName === 'affiliate') {
+        let change = changes[propName];
+        let obj = change.currentValue;
+        this.affiliate = new Affiliate(obj);
+        this.formControl.setValue(this.affiliate);
+      }
     }
   }
 

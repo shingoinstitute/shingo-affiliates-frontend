@@ -1,7 +1,7 @@
 <div class="lookup-container">
   <div class="input-container">
     <md-input-container>
-      <input type="text" mdInput [formControl]="formControl" [mdAutocomplete]="auto" placeholder="Affiliate" value="affiliate.name">
+      <input type="text" mdInput [formControl]="formControl" [mdAutocomplete]="auto" placeholder="Affiliate" value="affiliate.name" required>
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
@@ -12,6 +12,6 @@
   </div>
 
   <div class="spinner-container">
-    <md-spinner *ngIf="isSearching"></md-spinner>  
+    <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>  
   </div>
 </div>

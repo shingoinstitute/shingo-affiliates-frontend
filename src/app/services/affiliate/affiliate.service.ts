@@ -58,6 +58,7 @@ export class AffiliateService extends BaseAPIService {
             let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
             headers = headers.set('x-search', query);
             headers = headers.set('x-retrieve', fields.join());
+            headers = headers.set('x-force-refresh', 'true');
 
             return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
                   .map(res => res.map(JSONaf => new Affiliate(JSONaf)))
@@ -77,6 +78,12 @@ export class AffiliateService extends BaseAPIService {
 
       public describe(): Observable<any> {
             return super.describe('affiliates', this.http);
+      }
+
+      public map(affiliate: Affiliate): Observable<{ mapped: boolean }> {
+            return this.http.post(`${this.baseUrl}/${affiliate.sfId}/map`, {})
+                  .map(res => { if (res.mapped) return res; else throw { error: 'NOT_MAPPED', status: 500 } })
+                  .catch(this.handleError);
       }
 
 }
