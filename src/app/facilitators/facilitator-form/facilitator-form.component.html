@@ -20,27 +20,27 @@
     <h3> Facilitator Form </h3>
   </div>
 
-  <div class="input-item">
+  <!-- <div class="input-item">
     <md-input-container>
       <input mdInput [(ngModel)]="facilitator.email" placeholder="Email" formControlName="email" required>
     </md-input-container>
-  </div>
+  </div> -->
 
-  <!-- <div class="input-item">
+   <div class="input-item">
     <md-input-container>
-      <input type="text" mdInput [formControl]="formControl" [mdAutocomplete]="auto" placeholder="Facilitator" value="facilitator.name">
+      <input type="text" mdInput [mdAutocomplete]="auto" placeholder="Email" [(ngModel)]="facilitator.email" formControlName="email" required>
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
       <md-option *ngFor="let f of facilitatorsOpts" [value]="f" (onSelectionChange)="onSelectChange(f)">
-        {{ f.name }}
+        {{ f.email }}
       </md-option>
     </md-autocomplete>
 
     <div class="search-spinner-container">
       <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
     </div>
-  </div> -->
+  </div> 
 
   <div class="input-item">
     <md-input-container>

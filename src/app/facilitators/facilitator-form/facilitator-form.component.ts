@@ -88,13 +88,21 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
     this.formGroup.get('email').valueChanges
     .debounceTime(250)
     .subscribe(query => {
-      this._fs.search(query, false).subscribe(facilitators => {
-        console.log(facilitators);
-        this.facilitatorsOpts = facilitators;
-      }, err => {
-        console.error(err);
-      });
-    })
+      if (query && query.length > 2) {
+        this._fs.search(query, false).subscribe(facilitators => {
+          console.log(facilitators);
+          this.facilitatorsOpts = facilitators;
+        }, err => {
+          console.error(err);
+        });
+      }
+    });
+  }
+
+  onSelectChange(f: Facilitator) {
+    if (f && f instanceof Facilitator) {
+      this.facilitator = f;
+    }
   }
 
   getSFObject(id: string) {
@@ -148,6 +156,10 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
     }, err => {
       this.handleError(err);
     });
+  }
+
+  displayFn(facilitator: Facilitator): string {
+    return facilitator ? facilitator.email : '';
   }
 
   handleError(err: any){
