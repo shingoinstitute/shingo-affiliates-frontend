@@ -2,7 +2,21 @@ import { SFObject } from '../shared/models/SFObject.abstract';
 
 export class Affiliate extends SFObject {
 
-    public static DEFAULT_LANGUAGE_OPTIONS: string[] = ['English', 'Spanish', 'German', 'French', 'Mandarin', 'Cantonese', 'Italian', 'Hindi', 'Portuguese (Brazilian)', 'Japanese', 'Dutch', 'Chinese'];
+    public static DEFAULT_LANGUAGE_OPTIONS: string[] =  [
+        'English', 
+        'Spanish', 
+        'French', 
+        'Portuguese', 
+        'Chinese',
+        'Cantonese', 
+        'Dutch', 
+        'French', 
+        'German', 
+        'Hindi', 
+        'Italian', 
+        'Japanese', 
+        'Mandarin'
+    ];
 
     private Id: string = '';
     private Name: string = '';
