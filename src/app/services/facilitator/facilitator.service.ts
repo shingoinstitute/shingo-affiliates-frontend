@@ -39,8 +39,8 @@ export class FacilitatorService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public create(obj: Facilitator): Observable<SFSuccessResult> {
-    return this.http.post(`${this.baseUrl}`, obj.toSFJSON())
+  public create(f: Facilitator): Observable<SFSuccessResult> {
+    return this.http.post(`${this.baseUrl}`, f.toSFJSON())
       .map(res => res)
       .catch(this.handleError);
   }
@@ -66,11 +66,20 @@ export class FacilitatorService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
+  /**
+   * @description returns a stream of sf Contact objects
+   * @param query {string} - the query string
+   * @param filter {boolean} - filters out non-facilitator Contacts when true
+   */
+  public search(query: string, filter: boolean = true, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
     // Set headers (NOTE: Must include token here)
     let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
     headers = headers.set('x-search', query);
     headers = headers.set('x-retrieve', fields.join());
+
+    if (!filter) {
+      headers = headers.set('x-filter', 'false');
+    }
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(facJSON => new Facilitator(facJSON)))

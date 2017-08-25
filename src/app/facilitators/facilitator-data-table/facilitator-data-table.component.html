@@ -7,7 +7,10 @@
          <md-header-cell *cdkHeaderCellDef md-sort-header> Facilitator </md-header-cell>
          <md-cell *cdkCellDef="let fac">
    
-            <span [class.hidden]="selectedId == fac.sfId"> {{ fac.name }} </span>
+            <span [class.hidden]="selectedId == fac.sfId"> 
+              <p class="margin-none"> {{ fac.name }}  </p>
+              <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
+            </span>
    
             <md-input-container [class.hidden]="selectedId != fac.sfId">
                <input mdInput class="fac-input" [(ngModel)]="fac.name">
@@ -36,6 +39,19 @@
          <md-cell *cdkCellDef="let fac"> {{ fac.affiliate.name }} </md-cell>
       </ng-container>
    
+      <!-- Role Column -->
+      <ng-container cdkColumnDef="role">
+        <md-header-cell *cdkHeaderCellDef md-sort-header> Role </md-header-cell>
+        <md-cell *cdkCellDef="let fac">
+           <span [class.hidden]="selectedId == fac.sfId"> {{ fac.role }} </span> 
+
+          <md-select [class.hidden]="selectedId != fac.sfId" [(ngModel)]="fac.role">
+            <md-option *ngFor="let role of roles" [value]="role"> {{ role }}</md-option>
+          </md-select>
+
+        </md-cell>
+      </ng-container>
+
       <!-- Actions -->
       <ng-container cdkColumnDef="actions">
          <md-header-cell *cdkHeaderCellDef> Actions </md-header-cell>

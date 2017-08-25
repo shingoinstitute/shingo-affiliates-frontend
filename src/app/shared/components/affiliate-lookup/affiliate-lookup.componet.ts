@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { AffiliateService } from '../../../services/affiliate/affiliate.service';
 import { Affiliate } from "../../../affiliates/Affiliate";
 import { FormControl } from "@angular/forms";
@@ -8,11 +8,11 @@ import { FormControl } from "@angular/forms";
   templateUrl: './affiliate-lookup.component.html',
   styleUrls: ['./affiliate-lookup.component.scss']
 })
-export class AffiliateLookupComponent implements AfterViewInit {
+export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
 
   affiliates: Affiliate[] = [];
 
-  @Input() affiliate: Affiliate;
+  @Input('affiliate') affiliate: Affiliate;
 
   @Output('onSelect') onSelectEventEmitter = new EventEmitter<Affiliate>();
 
@@ -44,6 +44,17 @@ export class AffiliateLookupComponent implements AfterViewInit {
     // Set input value if affiliate already exists
     if (this.affiliate) {
       this.formControl.setValue(this.affiliate);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      if (propName === 'affiliate') {
+        let change = changes[propName];
+        let obj = change.currentValue;
+        this.affiliate = new Affiliate(obj);
+        this.formControl.setValue(this.affiliate);
+      }
     }
   }
 

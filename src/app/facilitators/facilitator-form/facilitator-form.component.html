@@ -1,19 +1,19 @@
-<div class="form-container" [class.loading-active]="isLoading" #formContainer>
+<form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer>
 
   <div class="spinner-container">
     <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
   </div>
 
   <div class="form-actions">
-    <ng-container *ngIf="isDialog">
-      <button md-raised-button class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!isValid"> Save </button>
-      <button md-raised-button [md-dialog-close]="false"> Cancel </button>
+     <ng-container *ngIf="isDialog">
+       <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button>
+      <button md-raised-button type="button" [md-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button class="mat-accent" (click)="onClickSave()" [disabled]="!isValid"> Save </button>
-      <button md-raised-button (click)="location.back()"> Cancel </button>
-    </ng-container>
+       <button md-raised-button type="button" class="mat-accent" (click)="onClickSave()" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button> 
+      <button md-raised-button type="button" (click)="location.back()"> Cancel </button>
+    </ng-container> 
   </div>
 
   <div class="form-header">
@@ -22,19 +22,41 @@
 
   <div class="input-item">
     <md-input-container>
-      <input mdInput [(ngModel)]="facilitator.email" placeholder="Email">
+      <input mdInput [(ngModel)]="facilitator.email" placeholder="Email" formControlName="email" required>
     </md-input-container>
   </div>
 
   <div class="input-item">
     <md-input-container>
-      <input mdInput [(ngModel)]="facilitator.firstName" placeholder="First Name">
+      <input type="text" mdInput [formControl]="formControl" [mdAutocomplete]="auto" placeholder="Facilitator" value="facilitator.name">
+    </md-input-container>
+
+    <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
+      <md-option *ngFor="let f of facilitatorsOpts" [value]="f" (onSelectionChange)="onSelectChange(f)">
+        {{ f.name }}
+      </md-option>
+    </md-autocomplete>
+
+    <div class="search-spinner-container">
+      <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
+    </div>
+  </div>
+
+  <div class="input-item">
+    <md-input-container>
+      <input mdInput [(ngModel)]="facilitator.firstName" placeholder="First Name" formControlName="firstName" required>
     </md-input-container>
   </div>
 
   <div class="input-item">
     <md-input-container>
-      <input mdInput [(ngModel)]="facilitator.lastName" placeholder="Last Name">
+      <input mdInput [(ngModel)]="facilitator.lastName" placeholder="Last Name" formControlName="lastName" required>
+    </md-input-container>
+  </div>
+
+  <div class="input-item">
+    <md-input-container>
+      <input mdInput [(ngModel)]="facilitator.title" formControlName="title" placeholder="Title">
     </md-input-container>
   </div>
 
@@ -44,24 +66,31 @@
     </div>
 
     <md-input-container>
-      <input mdInput [(ngModel)]="facilitator.photo" placeholder="Photograph URL">
+      <input mdInput [(ngModel)]="facilitator.photo" formControlName="photo" placeholder="Photograph URL">
     </md-input-container>
   </div>
 
   <div class="input-item">
-    <app-affiliate-lookup (onSelect)="onSelectAffiliate($event)" [affiliate]="facilitator.affiliate"></app-affiliate-lookup>
+     <app-affiliate-lookup (onSelect)="onSelectAffiliate($event)" [affiliate]="facilitator.affiliate"></app-affiliate-lookup> 
   </div>
 
-  <div class="form-actions">
-    <ng-container *ngIf="isDialog">
-      <button md-raised-button class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!isValid"> Save </button>
-      <button md-raised-button [md-dialog-close]="false"> Cancel </button>
+   <div class="input-item">
+    <p class="mat-caption">*Facilitators must be assigned an affiliate to change their role type.</p>
+    <md-select [(ngModel)]="facilitator.role" placeholder="Role" formControlName="role">
+      <md-option *ngFor="let role of roles" [value]="role"> {{ role }}</md-option>
+    </md-select>
+  </div> 
+
+   <div class="form-actions">
+     <ng-container *ngIf="isDialog">
+      <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button>
+      <button md-raised-button type="button" [md-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button class="mat-accent" (click)="onClickSave()" [disabled]="!isValid"> Save </button>
-      <button md-raised-button (click)="location.back()"> Cancel </button>
-    </ng-container>
-  </div>
+      <button md-raised-button type="button" class="mat-accent" (click)="onClickSave()" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button>
+      <button md-raised-button type="button" (click)="location.back()"> Cancel </button>
+    </ng-container> 
+  </div> 
 
-</div>
+</form>
