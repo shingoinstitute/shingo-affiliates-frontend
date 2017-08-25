@@ -62,3 +62,13 @@ app-affiliate-lookup {
 .loading-active {
   color: lightgrey;
 }
+.search-spinner-container {
+  position: relative;
+  display: flex;
+}
+.search-spinner-container md-spinner {
+  position: absolute;
+  height: 24px;
+  right: 0;
+  top: -24px;
+}
