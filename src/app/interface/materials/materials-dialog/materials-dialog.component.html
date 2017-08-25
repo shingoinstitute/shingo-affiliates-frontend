@@ -1,0 +1,10 @@
+<md-toolbar class="mat-primary">
+  <h3>Affiliate Materials</h3>
+  <div fxFlex></div>
+  <button md-button md-dialog-close><md-icon svgIcon="cancel_white"></md-icon></button>
+</md-toolbar>
+<div fxLayout="column" fxLayoutGap="16px">
+  <app-workshop-materials *ngIf="!filter || filter['workshops']"></app-workshop-materials>
+  <app-marketing-materials *ngIf="!filter || filter['marketing']"></app-marketing-materials>
+  <app-forms-evals *ngIf="!filter || filter['forms']"></app-forms-evals>
+</div>
