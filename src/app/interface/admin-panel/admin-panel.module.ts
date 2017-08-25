@@ -14,7 +14,7 @@ import { FacilitatorsModule } from "../../facilitators/facilitators.module";
 import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
-import { ConfirmDeleteAffiliateDialogComponent } from './admin-affiliate-tab/confirm-delete-affiliate-dialog.component';
+import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 
@@ -31,11 +31,11 @@ import { AdminPanelRoutingModule } from './admin-panel-routing.module';
       AdminPanelComponent,
       AdminTabsComponent,
       AdminAffiliateTabComponent,
-      ConfirmDeleteAffiliateDialogComponent,
+      AlertDialogComponent,
       AdminFacilitatorTabComponent
    ],
    entryComponents: [
-      ConfirmDeleteAffiliateDialogComponent
+      AlertDialogComponent
    ]
 })
 export class AdminPanelModule {}

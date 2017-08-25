@@ -3,10 +3,11 @@ import { Affiliate } from "../../../affiliates/Affiliate";
 import { AffiliateService } from "../../../services/affiliate/affiliate.service";
 import { SFSuccessResult } from "../../../services/base-api.abstract.service";
 import { MdSnackBar, MdDialog } from "@angular/material";
-import { ConfirmDeleteAffiliateDialogComponent } from "./confirm-delete-affiliate-dialog.component";
+
 import { AffiliateFormComponent } from "../../../affiliates/affiliate-form/affiliate-form.component";
 import { Router, NavigationExtras } from "@angular/router";
 import { AffiliateDataTableComponent } from '../../../affiliates/affiliate-data-table/affiliate-data-table.component';
+import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
 
 @Component({
   selector: 'app-admin-affiliate-tab',
@@ -52,9 +53,13 @@ export class AdminAffiliateTabComponent {
   }
 
   onClickDeleteHandler(affiliate: Affiliate) {
-    let dialogRef = this.dialog.open(ConfirmDeleteAffiliateDialogComponent, {
-      data: affiliate
+    let dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        sfObject: affiliate,
+        message: `Are you sure you want to delete <strong>${affiliate.name}</strong>? This action cannot be undone.`
+      }
     });
+
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
         this.delete(affiliate);

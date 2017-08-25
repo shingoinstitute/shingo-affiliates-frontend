@@ -11,8 +11,8 @@
     </a>
   </div>
   <!-- Data Table -->
-  <app-facilitator-data-table (onClickDisable)="disable($event)"
-                              (onClickDelete)="delete($event)"
+  <app-facilitator-data-table (onClickDisable)="onClickDisableHandler($event)"
+                              (onClickDelete)="onClickDeleteHandler($event)"
                               (onClickReset)="resetPassword($event)"
                               (onClickSave)="onClickSaveHandler($event)"
                               (onLoadComplete)="isLoading = false">
