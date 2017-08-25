@@ -48,11 +48,12 @@ export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
 
   public refresh() {
     this._dataLoading.next(true);
-    this._s.getAll().subscribe(data => {
+    return this._s.getAll().subscribe(data => {
       this.dataChangeSource.next(data);
       this._dataLoading.next(false);
     }, err => {
-      console.error(err);
+      console.warn('caught http error in data-provider', err);
+      throw err;
     });
   }
 

@@ -10,6 +10,9 @@ import { IconType } from "../../shared/components/icon-legend/icon-legend.compon
 import { AffiliateFormComponent } from "../affiliate-form/affiliate-form.component";
 
 import { Filter } from '../../services/filters/filter.abstract';
+import { RouterService } from '../../services/router/router.service';
+
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-affiliate-data-table',
@@ -42,7 +45,7 @@ export class AffiliateDataTableComponent {
     return item.sfId;
   }
 
-  constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _as: AffiliateService) {
+  constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _as: AffiliateService, private router: RouterService) {
     this.affiliateDataProvider = providerFactory.getAffiliateDataProvider();
     this.affiliateDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
@@ -94,7 +97,16 @@ export class AffiliateDataTableComponent {
   }
 
   refresh() {
-    this.affiliateDataProvider.refresh();
+    try {
+      this.affiliateDataProvider.refresh();
+    } catch (error) {
+      console.log('caught http error in UserResolver', error);
+      if (error.status === 403) {
+        if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
+        else this.router.navigateRoutes(['/login', '/admin']);
+      }
+      else throw error;
+    }
   }
 
 }

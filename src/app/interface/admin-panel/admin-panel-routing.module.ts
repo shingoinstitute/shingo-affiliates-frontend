@@ -1,4 +1,4 @@
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AdminPanelComponent } from './admin-panel.component';
@@ -9,32 +9,32 @@ import { AffiliateFormComponent } from "../../affiliates/affiliate-form/affiliat
 import { FacilitatorFormComponent } from "../../facilitators/facilitators.module";
 
 const adminRoutes: Routes = [
-   {
-      path: '',
-      component: AdminPanelComponent,
-      children: [
-         {
-            path: '',
-            component: AdminTabsComponent,
-            children: [
-               { path: 'affiliates', component: AdminAffiliateTabComponent },
-               { path: 'facilitators', component: AdminFacilitatorTabComponent },
-               { path: 'facilitators/form/:id', component: FacilitatorFormComponent },
-               { path: 'affiliates/form/:id', component: AffiliateFormComponent },
-               { path: '**', redirectTo: 'affiliates'}
-            ]
-         }
-      ]
-   }
-]
+  {
+    path: '',
+    component: AdminPanelComponent,
+    children: [
+      {
+        path: '',
+        component: AdminTabsComponent,
+        children: [
+          { path: 'affiliates', component: AdminAffiliateTabComponent },
+          { path: 'facilitators', component: AdminFacilitatorTabComponent },
+          { path: 'facilitators/form/:id', component: FacilitatorFormComponent },
+          { path: 'affiliates/form/:id', component: AffiliateFormComponent },
+          { path: '**', redirectTo: 'affiliates' }
+        ]
+      }
+    ]
+  }
+];
 
 @NgModule({
-   imports: [
-      RouterModule.forChild(adminRoutes)
-   ],
-   exports: [
-      RouterModule
-   ],
-   providers: []
+  imports: [
+    RouterModule.forChild(adminRoutes)
+  ],
+  exports: [
+    RouterModule
+  ],
+  providers: []
 })
 export class AdminPanelRoutingModule { }
