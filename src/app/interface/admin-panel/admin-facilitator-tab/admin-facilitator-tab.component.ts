@@ -4,6 +4,7 @@ import { FacilitatorService } from "../../../services/facilitator/facilitator.se
 import { MdSnackBar, MdDialog } from "@angular/material";
 import { FacilitatorFormComponent } from "../../../facilitators/facilitators.module";
 import { Router } from "@angular/router";
+import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
 
 @Component({
   selector: 'app-admin-facilitator-tab',
@@ -28,6 +29,29 @@ export class AdminFacilitatorTabComponent {
      } else {
        this.update(facilitator);
      }
+   }
+
+   onClickDeleteHandler(f: Facilitator) {
+    this.presentAlertDialog(f, `Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.`);
+   }
+
+   onClickDisableHandler(f: Facilitator) {
+    this.presentAlertDialog(f, `Are you sure you want to disable <strong>${f.name}'s</strong> account?`);
+   }
+
+   presentAlertDialog(f: Facilitator, msg: string) {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        sfObject: f,
+        message: msg
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.delete(f);
+      }
+    });
    }
 
    resetPassword(fac: Facilitator) {
