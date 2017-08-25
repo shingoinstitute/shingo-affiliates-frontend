@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MarketingMaterialsComponent implements OnInit {
 
+  private folder = { 'Marketing': false };
+
   constructor() { }
 
   ngOnInit() {

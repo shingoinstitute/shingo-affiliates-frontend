@@ -35,9 +35,9 @@
       <a md-list-item routerLink="/workshops" routerLinkActive="active">Workshops</a>
       <a md-list-item routerLink="/admin" routerLinkActive="active">Admin Panel</a>
       <p class="bold-text">Affiliate Materials</p>
-      <a md-list-item nohref>Workshop Materials</a>
-      <a md-list-item nohref>Forms/Evaluations</a>
-      <a md-list-item nohref>Marketing Materials</a>
+      <a md-list-item nohref (click)="openMaterials('workshops')">Workshop Materials</a>
+      <a md-list-item nohref (click)="openMaterials('forms')">Forms/Evaluations</a>
+      <a md-list-item nohref (click)="openMaterials('marketing')">Marketing Materials</a>
     </md-nav-list>
   </md-sidenav>
 
