@@ -27,7 +27,7 @@ export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
     // Listen to changes in auto-complete search field
-    if (this.fields.length) this.fields = this.fields.concat(DEFAULT_AFFILIATE_SEARCH_FIELDS);
+    this.fields = this.fields.concat(DEFAULT_AFFILIATE_SEARCH_FIELDS);
     this.formControl.valueChanges.subscribe((query: string) => {
       if (query && query.length > 2) {
         this.isSearching = true;

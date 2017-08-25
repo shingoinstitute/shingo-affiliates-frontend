@@ -81,7 +81,7 @@ export class AffiliateService extends BaseAPIService {
       }
 
       public map(affiliate: Affiliate): Observable<{ mapped: boolean }> {
-            return this.http.post(`${this.baseUrl}/${affiliate.sfId}/map`, {})
+            return this.http.post(`${this.baseUrl}/${affiliate.sfId}/map`, affiliate)
                   .map(res => { if (res.mapped) return res; else throw { error: 'NOT_MAPPED', status: 500 } })
                   .catch(this.handleError);
       }

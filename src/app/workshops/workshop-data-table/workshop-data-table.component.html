@@ -26,13 +26,13 @@
   <!-- Start Date Column -->
   <ng-container cdkColumnDef="startDate">
     <md-header-cell *cdkHeaderCellDef md-sort-header> Start Date </md-header-cell>
-    <md-cell *cdkCellDef="let workshop"> {{ workshop.startDate }} </md-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.startDateFormatted }} </md-cell>
   </ng-container>
 
   <!-- End Date Column -->
   <ng-container cdkColumnDef="endDate">
     <md-header-cell *cdkHeaderCellDef md-sort-header> End Date </md-header-cell>
-    <md-cell *cdkCellDef="let workshop"> {{ workshop.endDate }} </md-cell>
+    <md-cell *cdkCellDef="let workshop"> {{ workshop.endDateFormatted }} </md-cell>
   </ng-container>
 
   <!-- Days Late Column -->

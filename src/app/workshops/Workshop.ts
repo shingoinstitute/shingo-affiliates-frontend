@@ -152,11 +152,7 @@ export class Workshop extends SFObject {
     private static formatDate(d: string | number | Date) {
         const date: any = d;
         try {
-            if (d instanceof Date)
-                return dateFormat(date, 'dd mmm, yyyy');
-            // return dateFormat(date, 'mmm dS, yyyy');
-            else
-                return dateFormat(new Date(date), "dd mmm, yyyy");
+            return dateFormat(new Date(date), 'dd mmm, yyyy');
         } catch (e) {
             return "";
         }
