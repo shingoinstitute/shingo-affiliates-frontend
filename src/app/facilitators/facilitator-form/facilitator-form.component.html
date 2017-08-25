@@ -1,4 +1,4 @@
-<form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer>
+<form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer id="disable-lastpass-search">
 
   <div class="spinner-container">
     <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
@@ -6,12 +6,12 @@
 
   <div class="form-actions">
      <ng-container *ngIf="isDialog">
-       <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button>
+       <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
       <button md-raised-button type="button" [md-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-       <button md-raised-button type="button" class="mat-accent" (click)="onClickSave()" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button> 
+       <button md-raised-button type="button" class="mat-accent" (click)="onClickSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button> 
       <button md-raised-button type="button" (click)="location.back()"> Cancel </button>
     </ng-container> 
   </div>
@@ -22,25 +22,18 @@
 
   <div class="input-item">
     <md-input-container>
-      <input mdInput [(ngModel)]="facilitator.email" placeholder="Email" formControlName="email" required>
-    </md-input-container>
-  </div>
-
-  <div class="input-item">
-    <md-input-container>
-      <input type="text" mdInput [formControl]="formControl" [mdAutocomplete]="auto" placeholder="Facilitator" value="facilitator.name">
+      <input type="text" mdInput [mdAutocomplete]="auto" placeholder="Email" [(ngModel)]="facilitator.email" formControlName="email" required>
+      <div class="search-spinner-container">
+       <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner> 
+      </div>
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
-      <md-option *ngFor="let f of facilitatorsOpts" [value]="f" (onSelectionChange)="onSelectChange(f)">
-        {{ f.name }}
+      <md-option *ngFor="let f of facilitatorsOpts" [value]="f.email" (onSelectionChange)="onSelectFacilitator(f)">
+        {{ f.email }}
       </md-option>
     </md-autocomplete>
-
-    <div class="search-spinner-container">
-      <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
-    </div>
-  </div>
+  </div> 
 
   <div class="input-item">
     <md-input-container>
@@ -71,7 +64,8 @@
   </div>
 
   <div class="input-item">
-     <app-affiliate-lookup (onSelect)="onSelectAffiliate($event)" [affiliate]="facilitator.affiliate"></app-affiliate-lookup> 
+     <app-affiliate-lookup (onSelect)="onSelectAffiliate($event)" 
+                           [affiliate]="facilitator.affiliate"></app-affiliate-lookup> 
   </div>
 
    <div class="input-item">
@@ -83,12 +77,12 @@
 
    <div class="form-actions">
      <ng-container *ngIf="isDialog">
-      <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button>
+      <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
       <button md-raised-button type="button" [md-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button type="button" class="mat-accent" (click)="onClickSave()" [disabled]="!formGroup.valid && facilitator.affiliate.sfId != ''"> Save </button>
+      <button md-raised-button type="button" class="mat-accent" (click)="onClickSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
       <button md-raised-button type="button" (click)="location.back()"> Cancel </button>
     </ng-container> 
   </div> 

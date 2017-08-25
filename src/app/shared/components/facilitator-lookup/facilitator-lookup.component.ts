@@ -13,10 +13,11 @@ export class FacilitatorLookupComponent {
   facilitators: Facilitator[] = [];
 
   @Input('facilitator') facilitator: Facilitator;
+  @Input('formControl') formControl: FormControl = new FormControl();
 
   @Output('onSelect') onSelectEventEmitter = new EventEmitter<Facilitator>();
 
-  formControl: FormControl = new FormControl();
+  // formControl: FormControl = new FormControl();
 
   isSearching: boolean;
 

@@ -31,7 +31,7 @@ export class FacilitatorDataTableComponent implements OnInit {
       @ViewChild('paginator') paginator: MdPaginator;
       @ViewChild(MdSort) sort: MdSort;
 
-   displayedIcons: IconType[] = ["edit", "delete", "disable", "reset", "form"];
+   displayedIcons: IconType[] = ["edit", "deleteAccount", "disable", "reset", "form"];
 
    constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _fs: FacilitatorService) {
       this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();

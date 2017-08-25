@@ -15,7 +15,7 @@ md-input-container {
 .spinner-container {
   position: relative;
 }
-md-spinner {
+.spinner-container md-spinner {
   position: absolute;
   right: 0;
   bottom: -8px;
