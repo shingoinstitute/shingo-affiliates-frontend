@@ -1,7 +1,8 @@
 import { SFObject } from '../shared/models/SFObject.abstract';
+import { SFObjectInterface } from '../shared/models/SFObject.interface';
 import { Affiliate } from "../affiliates/Affiliate";
 
-export class Facilitator extends SFObject {
+export class Facilitator extends SFObject implements SFObjectInterface {
 
    private Id: string = '';
    private Email: string = '';
