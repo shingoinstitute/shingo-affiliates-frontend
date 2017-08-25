@@ -18,7 +18,7 @@ export class ForbiddenPageComponent implements AfterViewInit {
   ngAfterViewInit() {
     if (this.router.url === '/403') {
       $(this.root.nativeElement).css('position', 'relative');
-      this.fillHeight.setHeight(this.root);
+      this.fillHeight.fillHeightOnElement(this.root);
     }
   }
 

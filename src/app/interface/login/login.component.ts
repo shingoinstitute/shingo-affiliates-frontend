@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         if (this.router.url == "/login") {
             $(this.root.nativeElement).css('position', 'relative');
-            this.fillHeight.setHeight(this.root);
+            this.fillHeight.fillHeightOnElement(this.root);
         }
     }
 

@@ -16,19 +16,22 @@ export class FillViewHeightDirective {
     constructor(private el: ElementRef) { }
 
     ngAfterViewInit() {
-        this.setHeight();
+        this.fillHeightOnElement();
         this.windowResizeListener
             .debounceTime(100)
             .subscribe(() => {
-                this.setHeight();
+                this.fillHeightOnElement();
             });
     }
 
     @HostListener('window:resize', ['$event'])
     onWindowResize() { this.windowResizeListenerSource.next(); }
 
-    public setHeight(el?: ElementRef) {
-        if (!el) { el = this.el; }
+    public fillHeightOnElement(obj?: ElementRef | JQuery<HTMLElement>) {
+        if (obj instanceof HTMLElement) {
+            this.el = new ElementRef(obj);
+        }
+
         let toolbarOffset = 0;
         let marginOffset = 0;
 
@@ -40,14 +43,14 @@ export class FillViewHeightDirective {
         if (isNaN(toolbarOffset))
             toolbarOffset = 0;
 
-        let margin = $(el.nativeElement).css('margin');
+        let margin = $(this.el.nativeElement).css('margin') || '';
         let margins = margin.split(' ').join('').split('px').filter(value => { return value.length > 0; });
         if (margins.length > 1)
             marginOffset += +margins[0] + +margins[2];
         else if (margins.length == 1)
             marginOffset += (+margins[0] * 2);
         const offset = marginOffset + toolbarOffset;
-        $(el.nativeElement).css('min-height', `${window.innerHeight - offset}px`);
+        $(this.el.nativeElement).css('min-height', `${window.innerHeight - offset}px`);
     }
 
 }

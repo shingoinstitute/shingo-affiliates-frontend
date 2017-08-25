@@ -37,7 +37,7 @@ export class PasswordResetComponent implements OnInit {
   ngAfterViewInit() {
     if (this.router.url.match(/.*resetpassword.*/gi)) {
       $(this.root.nativeElement).css('position', 'relative');
-      this.fillHeight.setHeight(this.root);
+      this.fillHeight.fillHeightOnElement(this.root);
     }
   }
 

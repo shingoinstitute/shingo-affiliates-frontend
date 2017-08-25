@@ -84,7 +84,6 @@ export class AdminAffiliateTabComponent {
   delete(a: Affiliate) {
     this._as.delete(a).subscribe(data => {
       this.onHandleCallback(data);
-      this.dataTable.refresh();
       this.snackbar.open('Affiliate Successfully Deleted', 'Okay', { duration: 3000 });
     }, err => { this.onHandleCallback(null, err); });
   }
@@ -92,7 +91,11 @@ export class AdminAffiliateTabComponent {
   onHandleCallback(data?: any, err?: any) {
     delete this.selectedAffiliate;
     this.isLoading = false;
-    if (data) { console.log(data); }
+    if (data) { 
+      this.dataTable.refresh();
+      console.log(data); 
+    }
+    
     if (err) {
       console.error(err);
       this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay');

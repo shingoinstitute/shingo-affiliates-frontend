@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 
@@ -6,13 +6,17 @@ import { Workshop } from '../../../workshops/Workshop';
 import { WorkshopService } from '../../../services/workshop/workshop.service';
 
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile, Ng2FileDropFiles, Ng2FileDropRejections } from 'ng2-file-drop';
+import { FillViewHeightDirective } from "../../../shared/directives/fill-height.directive";
 
 @Component({
   selector: 'app-workshop-detail',
   templateUrl: './workshop-detail.component.html',
-  styleUrls: ['./workshop-detail.component.scss']
+  styleUrls: ['./workshop-detail.component.scss'],
+  providers: [FillViewHeightDirective]
 })
 export class WorkshopDetailComponent implements OnInit {
+
+  @ViewChild('pageRoot') pageRoot: ElementRef;
 
   private workshop: Workshop;
   private attendeeFile: any;
@@ -32,7 +36,7 @@ export class WorkshopDetailComponent implements OnInit {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'assets/imgs/icons/spreadsheet_icon.png'
   }
 
-  constructor(private route: ActivatedRoute, private _ws: WorkshopService) { }
+  constructor(private route: ActivatedRoute, private _ws: WorkshopService, private fillHeight: FillViewHeightDirective) { }
 
   ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop'];
@@ -45,6 +49,15 @@ export class WorkshopDetailComponent implements OnInit {
     };
     this.evaluations = this.workshop.files.filter(file => file.Name.match(/evaluation/))
       .map(file => { return { name: file.Name, type: file.ContentType, size: file.BodyLength } as File });
+  }
+
+  ngAfterViewInit() {
+    // Stop making it ugly, Dustin, geez.
+    let ele = $('app-workshop-detail');
+    if (Array.isArray(ele)) {
+      ele = ele.pop();
+    }
+    ele && this.fillHeight.fillHeightOnElement(ele);
   }
 
   uploadAttendeeList(file: Ng2FileDropAcceptedFile) {

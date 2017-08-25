@@ -33,7 +33,7 @@ export class ForgotPasswordComponent implements OnInit {
   ngAfterViewInit() {
     if (this.router.url === '/forgotpassword') {
       $(this.root.nativeElement).css('position', 'relative');
-      this.fillHeight.setHeight(this.root);
+      this.fillHeight.fillHeightOnElement(this.root);
     }
   }
 
