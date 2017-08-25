@@ -6,8 +6,8 @@
 
   <div class="form-actions">
     <ng-container *ngIf="!isDialog">
-        <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
-        <button md-raised-button (click)="location.back()"> Cancel </button>
+      <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+      <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 
@@ -16,11 +16,10 @@
     <p *ngIf="affiliate.sfId!==''"> Salesforce ID: {{ affiliate.sfId }} </p>
   </div>
 
-   <div class="form-body"> 
+  <div class="form-body">
+
     <div class="input-item">
-      <md-input-container>
-        <input mdInput placeholder="Affiliate Name" [(ngModel)]="affiliate.name">
-      </md-input-container>
+      <app-affiliate-lookup [affiliate]="affiliate" [fields]="extraFields" (onSelect)="selectedAffiliate($event)" (onChange)="affiliate.name = $event"></app-affiliate-lookup>
     </div>
 
     <div class="input-item">
@@ -35,8 +34,8 @@
 
     <div class="input-item">
       <md-input-container>
-          <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
-        </md-input-container>
+        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+      </md-input-container>
     </div>
 
     <div class="input-item">
@@ -44,28 +43,28 @@
       <md-input-container>
         <input mdInput placeholder="Public Contact Name" [(ngModel)]="affiliate.publicContact">
       </md-input-container>
-    <!-- </div> -->
+      <!-- </div> -->
 
-    <!-- <div class="input-item"> -->
+      <!-- <div class="input-item"> -->
       <md-input-container>
         <input mdInput placeholder="Public Contact Email" [(ngModel)]="affiliate.publicContactEmail">
       </md-input-container>
-    <!-- </div> -->
+      <!-- </div> -->
 
-    <!-- <div class="input-item"> -->
+      <!-- <div class="input-item"> -->
       <md-input-container>
         <input mdInput placeholder="Public Contact Phone" [(ngModel)]="affiliate.publicContactPhone">
       </md-input-container>
     </div>
 
-     <div class="input-item">
+    <div class="input-item">
       <md-input-container [floatPlaceholder]="always">
         <input type="text" mdInput [formControl]="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
       </md-input-container>
 
       <md-autocomplete #langSearch="mdAutocomplete">
         <md-option *ngFor="let lang of languageOptions | async" [value]="lang" (onSelectionChange)="onSelectLanguage(lang)">
-            {{ lang }}
+          {{ lang }}
         </md-option>
       </md-autocomplete>
 
@@ -74,17 +73,16 @@
         <div class="language-list-item" *ngFor="let lang of affiliate.languages">
           <button md-icon-button (click)="removeLanguage(lang)">
             <md-icon svgIcon="delete_grey"></md-icon>
-          </button>
-          {{ lang }}
+          </button> {{ lang }}
         </div>
       </div>
-    </div>  
+    </div>
 
-     <div class="input-item">
+    <div class="input-item">
       <p class="mat-body-2">Summary</p>
       <div [froalaEditor] [(froalaModel)]="affiliate.summary"></div>
-    </div> 
-   </div> 
+    </div>
+  </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
@@ -93,9 +91,8 @@
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-        <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
-        <button md-raised-button (click)="location.back()"> Cancel </button>
+      <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+      <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 </div>
-

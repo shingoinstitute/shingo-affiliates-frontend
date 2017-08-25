@@ -1,6 +1,9 @@
 <div class="filter-options-container" fxLayout="column">
-    <div class="filter-options-header">
-        <button md-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<md-icon [svgIcon]="showFilters ? 'expand_less' : 'expand_more'"></md-icon></button>
+    <div fxLayout="row" fxLayoutGap="16px">
+        <a md-raised-button class="mat-primary" routerLink="/workshops/new"> + Add Workshop </a>
+        <div class="filter-options-header">
+            <button md-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<md-icon [svgIcon]="showFilters ? 'expand_less' : 'expand_more'"></md-icon></button>
+        </div>
     </div>
     <div #filterBox class="filter-options-body" fxLayout="column" fxLayoutGap="36px" [style.opacity]="showFilters ? '1' : '0'"
         [style.height]="showFilters ? '275px' : '0'">

@@ -8,18 +8,27 @@ import { AffiliateService } from "./affiliate/affiliate.service";
 import { Affiliate } from "../affiliates/Affiliate";
 import { FacilitatorService } from "./facilitator/facilitator.service";
 import { Facilitator } from "../facilitators/Facilitator";
+import { RouterService } from './router/router.service';
 
 @Injectable()
 export class DataProviderFactory {
-  
-  constructor(private http: HttpService, private _ws: WorkshopService, private _as: AffiliateService, private _fs: FacilitatorService) { }
+
+  constructor(private http: HttpService, private _ws: WorkshopService, private _as: AffiliateService, private _fs: FacilitatorService, private router: RouterService) { }
 
   public getWorkshopDataProvider(): DataProvider<WorkshopService, Workshop> {
     return new DataProvider<WorkshopService, Workshop>(this._ws);
   }
 
   public getAffiliateDataProvider(): DataProvider<AffiliateService, Affiliate> {
-    return new DataProvider<AffiliateService, Affiliate>(this._as);
+    try {
+      return new DataProvider<AffiliateService, Affiliate>(this._as);
+    } catch (error) {
+      console.warn('Caught error in factory method: getAffiliateDataProvider()', error);
+      if (error.status === 403) {
+        if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
+        else this.router.navigateRoutes(['/login', '/admin']);
+      }
+    }
   }
 
   public getFacilitatorDataProvider(): DataProvider<FacilitatorService, Facilitator> {

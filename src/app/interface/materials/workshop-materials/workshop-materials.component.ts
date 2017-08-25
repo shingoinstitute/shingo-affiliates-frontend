@@ -7,6 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorkshopMaterialsComponent implements OnInit {
 
+  private folder = {
+    'Discover': false,
+    'Enable': false,
+    'Improve': false,
+    'Align': false,
+    'Build': false
+  };
+
   constructor() { }
 
   ngOnInit() {

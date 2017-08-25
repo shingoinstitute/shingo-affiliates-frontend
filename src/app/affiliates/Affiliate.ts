@@ -60,7 +60,7 @@ export class Affiliate extends SFObject {
             Public_Contact__c: this.publicContact,
             Public_Contact_Phone__c: this.publicContactPhone,
             Public_Contact_Email__c: this.publicContactEmail
-        }
+        };
         return sfAffiliate;
     }
 }

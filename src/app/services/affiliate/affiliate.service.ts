@@ -17,9 +17,6 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languag
 
 @Injectable()
 export class AffiliateService extends BaseAPIService {
-  
-      public reloadData$ = new Subject<void>();
-      public shouldReloadData$: Observable<void> = this.reloadData$.asObservable();
 
       private route: string = 'affiliates';
       private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
@@ -39,13 +36,13 @@ export class AffiliateService extends BaseAPIService {
       }
 
       public create(obj: Affiliate): Observable<SFSuccessResult> {
-            return this.http.post(`${this.baseUrl}`, obj)
+            return this.http.post(`${this.baseUrl}`, obj.toSFJSON())
                   .map(res => res)
                   .catch(this.handleError);
       }
 
       public update(obj: Affiliate): Observable<SFSuccessResult> {
-            return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+            return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
                   .map(res => res)
                   .catch(this.handleError);
       }
@@ -61,6 +58,7 @@ export class AffiliateService extends BaseAPIService {
             let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
             headers = headers.set('x-search', query);
             headers = headers.set('x-retrieve', fields.join());
+            headers = headers.set('x-force-refresh', 'true');
 
             return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
                   .map(res => res.map(JSONaf => new Affiliate(JSONaf)))
@@ -80,6 +78,12 @@ export class AffiliateService extends BaseAPIService {
 
       public describe(): Observable<any> {
             return super.describe('affiliates', this.http);
+      }
+
+      public map(affiliate: Affiliate): Observable<{ mapped: boolean }> {
+            return this.http.post(`${this.baseUrl}/${affiliate.sfId}/map`, affiliate)
+                  .map(res => { if (res.mapped) return res; else throw { error: 'NOT_MAPPED', status: 500 } })
+                  .catch(this.handleError);
       }
 
 }

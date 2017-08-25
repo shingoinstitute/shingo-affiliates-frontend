@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FormsEvalsComponent implements OnInit {
 
+  private folder = { 'Evaluation': false };
+
   constructor() { }
 
   ngOnInit() {

@@ -11,6 +11,11 @@
             <p> = Delete </p>
          </ng-template>
 
+         <ng-template [ngSwitchCase]="'deleteAccount'">
+            <md-icon svgIcon="delete_grey"></md-icon>
+            <p> = Delete Account </p>
+         </ng-template>
+
          <ng-template [ngSwitchCase]="'disable'">
             <md-icon svgIcon="block_grey"></md-icon>
             <p> = Disable Account </p>

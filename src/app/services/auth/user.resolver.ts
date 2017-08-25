@@ -17,6 +17,7 @@ export class UserResolver implements Resolve<User> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User> {
         return this.auth.getUser().catch(error => {
+            console.log('caught http error in UserResolver', error);
             if (error.status === 403) {
                 if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
                 else this.router.navigateRoutes(['/login', state.url]);

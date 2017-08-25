@@ -1,7 +1,11 @@
 import { SFObject } from '../shared/models/SFObject.abstract';
 import { Affiliate } from "../affiliates/Affiliate";
+  
+export type FacilitatorRoleType = 'Facilitator' | 'Course Manager' | 'Affiliate Manager';
 
 export class Facilitator extends SFObject {
+
+  public static DEFAULT_ROLE_OPTIONS: FacilitatorRoleType[] = ['Facilitator', 'Course Manager', 'Affiliate Manager'];
 
    private Id: string = '';
    private Email: string = '';
@@ -12,6 +16,7 @@ export class Facilitator extends SFObject {
    private Biography__c: string = '';
    private Title: string = '';
    private Account: Affiliate = new Affiliate();
+   private _role: { name: string } = { name: 'Facilitator' }
 
    constructor(facilitator?: any) {
       super();
@@ -30,6 +35,12 @@ export class Facilitator extends SFObject {
    public get biography() { return this.Biography__c; }
    public get title() { return this.Title; }
    public get affiliate() { return this.Account; }
+   public get role() {
+     if (String(this._role.name).includes('Course Manager')) {
+       return 'Course Manager';
+     }
+     return this._role.name as FacilitatorRoleType;
+   }
    public get name() {
       return `${this.FirstName} ${this.LastName}`
          .split(' ')
@@ -48,6 +59,17 @@ export class Facilitator extends SFObject {
     this.Account = a; 
     this.affiliateId = a.sfId;
    }
+  public set role(role: FacilitatorRoleType | { name: string }) {
+    if (role && role['name']) {
+      role = role['name'];
+    }
+
+    if (role === 'Course Manager') {
+      this._role.name = `${role} -- ${this.affiliateId}`;
+    } else {
+      this._role.name = role as string;
+    }
+  }
    public set name(name: string) {
       let names = name.split(' ').filter(n => { return n.length > 0; });
       if (names.length == 0) {
@@ -69,9 +91,9 @@ export class Facilitator extends SFObject {
         LastName: this.lastName,
         AccountId: this.affiliateId,
         Title: this.title,
-        Biography__c: this.biography
+        Biography__c: this.biography,
+        role: this._role
       };
-
       return sfFacilitator;
    }
 

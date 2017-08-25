@@ -45,6 +45,12 @@ export class FacilitatorService extends BaseAPIService {
       .catch(this.handleError);
   }
 
+  public map(obj: Facilitator): Observable<SFSuccessResult> {
+    return this.http.post(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
+      .map(res => res)
+      .catch(this.handleError);
+  }
+
   public update(obj: Facilitator): Observable<SFSuccessResult> {
     return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
       .map(res => res)
@@ -66,11 +72,20 @@ export class FacilitatorService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
+  /**
+   * @description returns a stream of sf Contact objects
+   * @param query {string} - the query string
+   * @param isMapped {boolean} - returns unmapped facilitators when true, and maped facilitators when false
+   */
+  public search(query: string, isMapped: boolean = true, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
     // Set headers (NOTE: Must include token here)
     let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
     headers = headers.set('x-search', query);
     headers = headers.set('x-retrieve', fields.join());
+
+    if (!isMapped) {
+      headers = headers.set('x-is-mapped', 'false');
+    }
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(facJSON => new Facilitator(facJSON)))

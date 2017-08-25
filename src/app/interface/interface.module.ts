@@ -33,6 +33,7 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ChangePasswordDialog } from './profile/change-password-dialog/change-password-dialog.component';
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
+import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.component';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.componen
     PasswordResetComponent,
     ForgotPasswordComponent,
     ChangePasswordDialog,
-    ForbiddenPageComponent
+    ForbiddenPageComponent,
+    MaterialsDialog
   ],
   exports: [
     DashboardComponent,
@@ -86,10 +88,12 @@ import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.componen
     AddWorkshopComponent,
     EditWorkshopComponent,
     WorkshopDashboardComponent,
-    UpcomingWorkshopsComponent
+    UpcomingWorkshopsComponent,
+    MaterialsDialog
   ],
   entryComponents: [
-    ChangePasswordDialog
+    ChangePasswordDialog,
+    MaterialsDialog
   ]
 })
 export class InterfaceModule { }
