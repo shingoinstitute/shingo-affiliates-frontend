@@ -1,5 +1,6 @@
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -37,6 +38,7 @@ import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.c
 
 @NgModule({
   imports: [
+    BrowserModule,
     RouterModule,
     ReactiveFormsModule,
     FormsModule,

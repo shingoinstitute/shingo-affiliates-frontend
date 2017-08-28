@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutGap="24px" class="container" fxFlex>
+<div fxLayout="row" fxLayoutGap="24px" class="container" fxFlex #pageRoot>
   <app-workshop [workshop]="workshop"></app-workshop>
 
   <div fxLayout="column" fxFlex *ngIf="workshop.status === 'Action Pending'">

@@ -1,9 +1,10 @@
 import { SFObject } from '../shared/models/SFObject.abstract';
+import { SFObjectInterface } from '../shared/models/SFObject.interface';
 import { Affiliate } from "../affiliates/Affiliate";
   
 export type FacilitatorRoleType = 'Facilitator' | 'Course Manager' | 'Affiliate Manager';
 
-export class Facilitator extends SFObject {
+export class Facilitator extends SFObject implements SFObjectInterface {
 
   public static DEFAULT_ROLE_OPTIONS: FacilitatorRoleType[] = ['Facilitator', 'Course Manager', 'Affiliate Manager'];
 

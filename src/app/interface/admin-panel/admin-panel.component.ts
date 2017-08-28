@@ -14,7 +14,7 @@ export class AdminPanelComponent {
   constructor(private fillHeight: FillViewHeightDirective, private router: Router) {}
 
   ngAfterViewInit() {
-    this.fillHeight.setHeight(this.pageRoot);
+    this.fillHeight.fillHeightOnElement(this.pageRoot);
   }
 
 }
