@@ -1,13 +1,13 @@
 import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Affiliate } from "../../../affiliates/Affiliate";
-import { AffiliateService } from "../../../services/affiliate/affiliate.service";
-import { SFSuccessResult } from "../../../services/base-api.abstract.service";
-import { MdSnackBar, MdDialog } from "@angular/material";
+import { Affiliate } from '../../../affiliates/Affiliate';
+import { AffiliateService } from '../../../services/affiliate/affiliate.service';
+import { SFSuccessResult } from '../../../services/base-api.abstract.service';
+import { MdSnackBar, MdDialog } from '@angular/material';
 
-import { AffiliateFormComponent } from "../../../affiliates/affiliate-form/affiliate-form.component";
-import { Router, NavigationExtras } from "@angular/router";
+import { AffiliateFormComponent } from '../../../affiliates/affiliate-form/affiliate-form.component';
+import { Router, NavigationExtras } from '@angular/router';
 import { AffiliateDataTableComponent } from '../../../affiliates/affiliate-data-table/affiliate-data-table.component';
-import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-admin-affiliate-tab',
@@ -16,7 +16,7 @@ import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
 })
 export class AdminAffiliateTabComponent {
 
-  displayedColumns = ["logo", "name", "website", "actions"];
+  displayedColumns = ['logo', 'name', 'website', 'actions'];
 
   selectedAffiliate: Affiliate;
 
@@ -91,11 +91,12 @@ export class AdminAffiliateTabComponent {
   onHandleCallback(data?: any, err?: any) {
     delete this.selectedAffiliate;
     this.isLoading = false;
-    if (data) { 
+
+    if (data) {
       this.dataTable.refresh();
-      console.log(data); 
+      console.log(data);
     }
-    
+
     if (err) {
       console.error(err);
       this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay');

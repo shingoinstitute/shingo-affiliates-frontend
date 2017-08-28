@@ -43,7 +43,6 @@ export class ForgotPasswordComponent implements OnInit {
     this.isLoading = true;
     this._fs.resetPassword(this.email)
       .subscribe((data) => {
-        console.log('AFTER RESET:', data);
         this.isLoading = false;
         const dialogRef = this.dialog.open(SimpleMessageDialog, {
           data: `An email has been sent to ${this.email} with a link to reset your password!`

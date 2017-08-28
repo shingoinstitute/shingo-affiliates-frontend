@@ -11,6 +11,7 @@ export class RouterService {
       constructor(private router: Router) { }
 
       nextRoute() {
+            console.log('calling nextRoute() with stack: ', this.routeStack);
             if (this.routeStack.length > 0)
                   this.router.navigateByUrl(this.routeStack.shift());
             else

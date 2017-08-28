@@ -119,7 +119,6 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
 
   create() {
     this._as.create(this.affiliate).subscribe(data => {
-      console.log(data);
       this.snackbar.open('Successfully created new Affiliate', null, { duration: 2000 });
       if (!this.isDialog) {
         this.location.back();
@@ -131,7 +130,6 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
 
   update() {
     this._as.update(this.affiliate).subscribe(data => {
-      console.log(data);
       this.snackbar.open('Update Successful', null, { duration: 2000 });
       if (!this.isDialog) {
         this.location.back();

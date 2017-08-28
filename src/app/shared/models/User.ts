@@ -12,7 +12,6 @@ export class User {
     private role: { id: number, name: string };
 
     constructor(user?) {
-        console.log('creating new user', user);
         if (user) return Object.assign(this, user);
     }
 

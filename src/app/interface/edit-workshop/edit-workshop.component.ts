@@ -19,11 +19,10 @@ export class EditWorkshopComponent implements OnInit {
 
   ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop'];
-    console.log('editing', this.workshop);
   }
 
   save(data) {
-    return this._ws.update(data)
+    return this._ws.update(data);
   }
 
 }

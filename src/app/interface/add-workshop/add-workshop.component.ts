@@ -12,7 +12,7 @@ import { Workshop } from '../../workshops/Workshop';
 })
 export class AddWorkshopComponent {
 
-  constructor(private _ws: WorkshopService) { console.log('_ws in AddWorkshopComponent: ', this._ws); }
+  constructor(private _ws: WorkshopService) { }
 
   add(data: Workshop) {
     return this._ws.create(data);

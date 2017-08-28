@@ -38,9 +38,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
      */
     ngOnInit(): void {
         this.auth.authenticationChange$.subscribe((auth: boolean) => {
-            if (auth) {
-                this.routerService.nextRoute();
-            }
             this.isLoading = false;
             this.didLoad = true;
         }, err => {
@@ -52,10 +49,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        if (this.router.url == "/login") {
-            $(this.root.nativeElement).css('position', 'relative');
-            this.fillHeight.fillHeightOnElement(this.root);
-        }
+        $(this.root.nativeElement).css('position', 'relative');
+        this.fillHeight.setHeight(this.root);
     }
 
     /**
@@ -64,7 +59,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     onSubmit() {
         this.auth.login({ email: this.email, password: this.password })
             .subscribe((data) => {
-                console.log('AFTER LOGIN:', data);
+                this.routerService.nextRoute();
             }, err => {
                 console.error(err);
                 const msg = err.error && err.error.error ? err.error.error : "";
