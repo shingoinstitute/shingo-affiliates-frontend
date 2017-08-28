@@ -32,10 +32,10 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   private routeSubscription;
 
   constructor(
-    @Optional() @Inject(MD_DIALOG_DATA) public data: any, 
-    private snackbar: MdSnackBar, 
+    @Optional() @Inject(MD_DIALOG_DATA) public data: any,
+    private snackbar: MdSnackBar,
     private _fs: FacilitatorService,
-    private location: Location, 
+    private location: Location,
     private route: ActivatedRoute
   ) {
     this.buildForm();
@@ -77,24 +77,23 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
    */
   facilitatorSearch() {
     this.formGroup.get('email').valueChanges
-    .skip(1)
-    .filter(email => {
-      return email && email.length > 2;
-    })
-    .debounceTime(250)
-    .subscribe(email => {
-      this.isSearching = true;
-      this._fs.search(email, false).subscribe((facilitators: Facilitator[]) => {
-        console.log('search results',facilitators);
-        this.facilitatorsOpts = facilitators;
-        this.checkForAffiliate();
-        this.isSearching = false;
-        this.isNewFacilitator = true;
-      }, err => {
-        console.error(err);
-        this.isSearching = false;
+      .skip(1)
+      .filter(email => {
+        return email && email.length > 2;
+      })
+      .debounceTime(250)
+      .subscribe(email => {
+        this.isSearching = true;
+        this._fs.search(email, false).subscribe((facilitators: Facilitator[]) => {
+          this.facilitatorsOpts = facilitators;
+          this.checkForAffiliate();
+          this.isSearching = false;
+          this.isNewFacilitator = true;
+        }, err => {
+          console.error(err);
+          this.isSearching = false;
+        });
       });
-    });
   }
 
   getSFObject(id: string) {
@@ -123,7 +122,7 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
       affiliate: new FormControl(Validators.required)
     });
 
-    this.checkForAffiliate(); 
+    this.checkForAffiliate();
   }
 
   onSelectFacilitator(f: Facilitator) {
@@ -155,7 +154,6 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   update() {
     this.isLoading = true;
     this._fs.update(this.facilitator).subscribe(data => {
-      console.log(data);
       this.isLoading = false;
       this.snackbar.open('Update Successful', null, { duration: 2000 });
       this.location.back();
@@ -167,7 +165,6 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   create() {
     this.isLoading = true;
     this._fs.create(this.facilitator).subscribe(data => {
-      console.log(data);
       this.isLoading = false;
       this.snackbar.open('Successfully Created New Facilitator.', null, { duration: 2000 });
       this.location.back();
@@ -181,7 +178,6 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   map() {
     this.isLoading = true;
     this._fs.map(this.facilitator).subscribe(data => {
-      console.log(data);
       this.isLoading = false;
       this.snackbar.open('Successfully Created New Facilitator.', null, { duration: 2000 });
       this.location.back();
@@ -202,7 +198,7 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
     }
   }
 
-  handleError(err: any){
+  handleError(err: any) {
     console.error('', err);
     this.snackbar.open('An error occured and the requested operation could not be complete.', 'Okay');
   }
@@ -210,7 +206,7 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   private checkForAffiliate() {
     try {
       this.facilitator.affiliate.sfId === '' ? this.disabledRoleField() : this.enableRoleField();
-    } catch(e) {
+    } catch (e) {
       this.disabledRoleField();
     }
   }

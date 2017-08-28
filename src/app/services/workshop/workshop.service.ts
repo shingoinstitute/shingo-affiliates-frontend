@@ -29,7 +29,7 @@ export class WorkshopService extends BaseAPIService {
   private route: string = 'workshops';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  constructor(private http: HttpService) { super(); console.log('creating workshopService with', http); }
+  constructor(private http: HttpService) { super(); }
 
   public getAll(): Observable<Workshop[]> {
     return this.http.get(this.baseUrl)
@@ -38,7 +38,6 @@ export class WorkshopService extends BaseAPIService {
   }
 
   public getById(id: string): Observable<Workshop> {
-    console.log('getting ', id);
     return this.http.get(this.baseUrl + `/${id}`)
       .map(res => new Workshop(res))
       .catch(this.handleError);
@@ -78,7 +77,6 @@ export class WorkshopService extends BaseAPIService {
   }
 
   public uploadAttendeeFile(id: string, file): Observable<any> {
-    console.log('file', file);
 
     const options = this.http._defaultReqOpts;
     let formData: FormData = new FormData();

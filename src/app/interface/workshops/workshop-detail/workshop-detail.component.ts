@@ -52,7 +52,6 @@ export class WorkshopDetailComponent implements OnInit {
   }
 
   uploadEvaluations(files: Ng2FileDropFiles) {
-    console.log('evaluations', files);
     this.errors = [];
     files.accepted.map(file => {
       if (this.evaluations.findIndex(f => f.name === file.file.name) === -1)
@@ -97,7 +96,6 @@ export class WorkshopDetailComponent implements OnInit {
   }
 
   rejectedFile(file) {
-    console.log('rejectedFile', file);
     if (file.reason === Ng2FileDropRejections.FileType) {
       this.errors.push(`.${file.file.name.split('.')[1]} is not an accepted file type`);
     } else if (file.reason === Ng2FileDropRejections.FileSize) {

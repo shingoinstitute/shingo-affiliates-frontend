@@ -46,8 +46,6 @@ export class HttpService {
   }
 
   public request<T>(req: HttpRequest<any>): Observable<any> {
-    console.log('request.serializeBody()', req.serializeBody());
-    console.log('requres.detectContentType', req.detectContentTypeHeader());
     return this.http.request<T>(req);
   }
 

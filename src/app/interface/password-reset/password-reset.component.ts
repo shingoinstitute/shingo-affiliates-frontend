@@ -51,7 +51,6 @@ export class PasswordResetComponent implements OnInit {
     this.isLoading = true;
     this._fs.changePassword(this.route.snapshot.queryParams['token'], this.password)
       .subscribe((data) => {
-        console.log('AFTER RESET:', data);
         this.isLoading = false;
         const dialogRef = this.dialog.open(SimpleMessageDialog, {
           data: `Your password has been reset. Press 'OK' to go to the login page.`

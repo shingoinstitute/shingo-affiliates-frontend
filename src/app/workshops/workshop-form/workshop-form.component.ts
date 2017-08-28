@@ -115,7 +115,6 @@ export class WorkshopFormComponent implements OnInit {
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
     else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
-    console.log('SUBMITTED DATA', this.workshop);
     this.submitFunction(this.workshop)
       .subscribe((result: SFSuccessResult) => {
         this.router.navigateByUrl(`/workshops/${result.id}`);
@@ -159,7 +158,7 @@ export class WorkshopFormComponent implements OnInit {
       .subscribe((data: Affiliate[]) => {
         setTimeout(() => this.loadingAF = false, 150);
         this.affiliates = data;
-      }, err => console.log(err));
+      }, err => console.error(err));
   }
 
 

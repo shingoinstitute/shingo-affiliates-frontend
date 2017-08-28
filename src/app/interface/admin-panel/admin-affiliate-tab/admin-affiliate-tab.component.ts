@@ -92,7 +92,6 @@ export class AdminAffiliateTabComponent {
   onHandleCallback(data?: any, err?: any) {
     delete this.selectedAffiliate;
     this.isLoading = false;
-    if (data) { console.log(data); }
     if (err) {
       console.error(err);
       this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay');

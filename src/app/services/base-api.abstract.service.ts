@@ -35,7 +35,6 @@ export abstract class BaseAPIService extends BaseService {
         return http.get(`${this.APIHost()}/${route}/describe`)
             .map(res => {
                 let data = res;
-                console.log('describe', data);
                 let props = {};
                 data.fields.filter(field => {
                     return field.inlineHelpText || field.label || field.picklistValues;

@@ -89,7 +89,6 @@ export class AffiliateDataTableComponent {
     });
 
     dialogRef.afterClosed().subscribe(affiliate => {
-      console.log(affiliate);
       if (affiliate) {
         this.onClickSaveEventEmitter.emit(affiliate);
       }
@@ -100,7 +99,6 @@ export class AffiliateDataTableComponent {
     try {
       this.affiliateDataProvider.refresh();
     } catch (error) {
-      console.log('caught http error in UserResolver', error);
       if (error.status === 403) {
         if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
         else this.router.navigateRoutes(['/login', '/admin']);

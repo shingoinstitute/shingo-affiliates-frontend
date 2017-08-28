@@ -79,7 +79,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         this.activeRoute = route.url;
 
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        if (!this.activeRoute.match(/.*password.*/gi)) {
+        if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login') {
           this.authenticateOnLoad();
         }
       }
@@ -113,7 +113,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       .distinctUntilChanged()
       .subscribe(isValid => {
         this.isAuthenticated = isValid;
-        if (!this.isAuthenticated) {
+        console.log('authentication changes: activeRoute -- ', this.activeRoute);
+        if (!this.isAuthenticated && this.activeRoute !== '/login') {
           this.routerService.navigateRoutes(['/login', this.activeRoute]);
         }
       }, error => {

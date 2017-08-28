@@ -19,7 +19,7 @@ import 'rxjs/add/observable/from';
 export class AuthService extends BaseService {
 
   private _user: User;
-  private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth` }
+  private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth`; }
 
   protected BaseUrl: string = 'http://129.123.47.34';
   protected BasePort: string = '8080';
@@ -42,7 +42,6 @@ export class AuthService extends BaseService {
   public login(paylod: { email: string, password: string }): Observable<any> {
     const options = this.http._defaultReqOpts;
     options.observe = 'response';
-    console.log('options in login, ', options);
     return this.http.post<{ email: string, password: string }>(`${this.authHost}/login`, paylod, options)
       .map(res => {
         const data = res.body;
@@ -119,7 +118,6 @@ export class AuthService extends BaseService {
     return this.http.get<User>(`${this.authHost}/valid`, options)
       .map(res => {
         const data = res.body;
-        console.log('got login data: ', data);
         this._user = new User(data);
         return this._user;
       });
