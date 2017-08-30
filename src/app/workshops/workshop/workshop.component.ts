@@ -13,11 +13,11 @@ import { Workshop } from '../Workshop';
 })
 export class WorkshopComponent {
 
-  @Input() workshop: Workshop;
+  @Input() public workshop: Workshop;
 
   constructor(private router: Router) { }
 
-  public goToEdit() {
+  private goToEdit() {
     this.router.navigateByUrl(`/workshops/${this.workshop.sfId}/edit`);
   }
 

@@ -1,20 +1,21 @@
-import { Component } from '@angular/core';
-import { Video, SupportService } from "../../services/support/support.service";
+import { Component, OnInit } from '@angular/core';
+import { SupportService } from '../../services/support/support.service';
+import { IVideo } from '../../services/support/video.interface';
 
 @Component({
-    selector: 'app-support',
-    templateUrl: './support.component.html',
-    styleUrls: ['./support.component.scss']
+  selector: 'app-support',
+  templateUrl: './support.component.html',
+  styleUrls: ['./support.component.scss']
 })
-export class SupportComponent {
+export class SupportComponent implements OnInit {
 
-    videos: Video[];
+  private videos: IVideo[];
 
-    constructor(private support: SupportService) { }
+  constructor(private support: SupportService) { }
 
-    ngOnInit() {
-        this.videos = this.support.videos;
-    }
+  public ngOnInit() {
+    this.videos = this.support.videos;
+  }
 
 }
 

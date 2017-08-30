@@ -22,6 +22,7 @@ html, body, .main-content {
 .md-accent { background-color: $accent-color; }
 .md-accent-text { color: $accent-color; }
 .md-warn { background-color: $warn-color; }
+snack-bar-container.md-warn { background-color: $warn-color !important; }
 .md-warn-text { color: $warn-color; }
 .md-success { background-color: $success-color; }
 .md-success-text { color: $success-color; }
@@ -30,6 +31,9 @@ html, body, .main-content {
 .margin-none { margin: 0; }
 
 /* Sidenav */
+.mat-sidenav-content {
+  min-height: calc(100vh - 64px);
+}
 md-sidenav {
    margin-right: 4px;
    box-shadow: 1px 0 3px rgba(0,0,0,.24);

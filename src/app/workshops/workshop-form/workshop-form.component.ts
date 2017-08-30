@@ -10,7 +10,7 @@ import { CountriesService } from '../../services/countries/countries.service';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
 import { WorkshopService } from '../../services/workshop/workshop.service';
-import { SFSuccessResult } from '../../services/base-api.abstract.service';
+import { ISFSuccessResult } from '../../services/base-api.abstract.service';
 import { Workshop, WorkshopType } from '../Workshop';
 import { CourseManager } from '../../shared/models/CourseManager';
 import { Facilitator } from '../../facilitators/Facilitator';
@@ -40,8 +40,8 @@ import { merge } from 'lodash';
 })
 export class WorkshopFormComponent implements OnInit {
 
-  @Input() submitFunction: (Workshop) => Observable<SFSuccessResult>;
-  @Input() workshop: Workshop = new Workshop();
+  @Input() public submitFunction: (workshop: Workshop) => Observable<ISFSuccessResult>;
+  @Input() public workshop: Workshop = new Workshop();
 
   private debounceTime: number = 250;
 
@@ -70,7 +70,16 @@ export class WorkshopFormComponent implements OnInit {
 
   private workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
   private languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
-  private statuses: string[] = ['Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice', 'Proposed', 'Archived', 'Cancelled', 'Active, not ready for app', 'Active Event'];
+  private statuses: string[] = [
+    'Invoiced, Not Paid',
+    'Finished, waiting for attendee list',
+    'Awaiting Invoice',
+    'Proposed',
+    'Archived',
+    'Cancelled',
+    'Active, not ready for app',
+    'Active Event'
+  ];
 
   constructor(public fb: FormBuilder,
     private router: Router,
@@ -116,7 +125,7 @@ export class WorkshopFormComponent implements OnInit {
     else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
     this.submitFunction(this.workshop)
-      .subscribe((result: SFSuccessResult) => {
+      .subscribe((result: ISFSuccessResult) => {
         this.router.navigateByUrl(`/workshops/${result.id}`);
         this.isLoading = false;
       }
@@ -264,7 +273,7 @@ export class WorkshopFormComponent implements OnInit {
      * Listens to value changes of the country FormControl and displays filtered results in the auto-complete.
      */
   private subscribeToCountry() {
-    let countryFC = this.workshopForm.get('country');
+    const countryFC = this.workshopForm.get('country');
     countryFC.valueChanges.subscribe(q =>
       this.countryOptions = q ? this.countries.filter(option => new RegExp(`${q}`, 'gi').test(option)) : this.countries
     );

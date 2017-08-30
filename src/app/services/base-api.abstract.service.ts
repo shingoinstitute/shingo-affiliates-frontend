@@ -9,53 +9,42 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 // RxJS operators
 import 'rxjs/add/observable/throw';
 
-export interface SFSuccessResult {
-    id: string,
-    success: boolean,
-    errors: any[]
+import { pick } from 'lodash';
+
+export interface ISFSuccessResult {
+  id: string;
+  success: boolean;
+  errors: any[];
 }
 
 export abstract class BaseAPIService extends BaseService {
 
-    protected BaseUrl: string = "http://129.123.47.34";
+  protected _baseUrl: string = 'http://129.123.47.34';
 
-    protected BasePort: string = "8080";
+  protected _basePort: string = '8080';
 
-    protected APIHost() { return `${this.BaseUrl}:${this.BasePort}`; }
 
-    // Contract for all APIServices;
-    public abstract getAll(): Observable<any[]>;
-    public abstract getById(id: string): Observable<any>;
-    public abstract create(obj: any): Observable<SFSuccessResult>;
-    public abstract update(obj: any): Observable<SFSuccessResult>;
-    public abstract delete(obj: any): Observable<SFSuccessResult>;
-    public abstract search(query: string): Observable<any[]>;
+  // Contract for all APIServices;
+  public abstract getAll(): Observable<any[]>;
+  public abstract getById(id: string): Observable<any>;
+  public abstract create(obj: any): Observable<ISFSuccessResult>;
+  public abstract update(obj: any): Observable<ISFSuccessResult>;
+  public abstract delete(obj: any): Observable<ISFSuccessResult>;
+  public abstract search(query: string): Observable<any[]>;
 
-    public describe(route: 'workshops' | 'facilitators' | 'affiliates', http: HttpService): Observable<any> {
-        return http.get(`${this.APIHost()}/${route}/describe`)
-            .map(res => {
-                let data = res;
-                let props = {};
-                data.fields.filter(field => {
-                    return field.inlineHelpText || field.label || field.picklistValues;
-                })
-                    .map(field => {
-                        let props = {};
-                        if (field.inlineHelpText)
-                            props['inlineHelpText'] = field.inlineHelpText;
-                        if (field.label)
-                            props['label'] = field.label;
-                        if (field.name)
-                            props['name'] = field.name;
-                        if (field.picklistValues && field.picklistValues.length > 0)
-                            props['picklistValues'] = field.picklistValues;
-                        return props;
-                    })
-                    .forEach(field => {
-                        props[this.toCamelCase(field.name)] = field;
-                    });
-                return props;
-            })
-            .catch(this.handleError);
-    }
+  public describe(route: 'workshops' | 'facilitators' | 'affiliates', http: HttpService): Observable<any> {
+    return http.get(`${this.APIHost()}/${route}/describe`)
+      .map(data => {
+        const props = {};
+
+        data.fields.filter(field => field.inlineHelpText || field.label || field.picklistValues)
+          .map(field => pick(field, ['inlineHelpText', 'label', 'name', 'picklistValues']))
+          .forEach(field => props[this.toCamelCase(field.name)] = field);
+
+        return props;
+      })
+      .catch(this.handleError);
+  }
+
+  protected APIHost() { return `${this._baseUrl}:${this._basePort}`; }
 }

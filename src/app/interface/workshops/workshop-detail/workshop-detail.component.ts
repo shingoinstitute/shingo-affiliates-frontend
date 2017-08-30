@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 
@@ -6,7 +6,7 @@ import { Workshop } from '../../../workshops/Workshop';
 import { WorkshopService } from '../../../services/workshop/workshop.service';
 
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile, Ng2FileDropFiles, Ng2FileDropRejections } from 'ng2-file-drop';
-import { FillViewHeightDirective } from "../../../shared/directives/fill-height.directive";
+import { FillViewHeightDirective } from '../../../shared/directives/fill-height.directive';
 
 @Component({
   selector: 'app-workshop-detail',
@@ -14,9 +14,9 @@ import { FillViewHeightDirective } from "../../../shared/directives/fill-height.
   styleUrls: ['./workshop-detail.component.scss'],
   providers: [FillViewHeightDirective]
 })
-export class WorkshopDetailComponent implements OnInit {
+export class WorkshopDetailComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('pageRoot') pageRoot: ElementRef;
+  @ViewChild('pageRoot') private pageRoot: ElementRef;
 
   private workshop: Workshop;
   private attendeeFile: any;
@@ -34,11 +34,11 @@ export class WorkshopDetailComponent implements OnInit {
     'application/pdf': 'assets/imgs/icons/pdf_icon.png',
     'application/zip': 'assets/imgs/icons/file_icon.png',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'assets/imgs/icons/spreadsheet_icon.png'
-  }
+  };
 
   constructor(private route: ActivatedRoute, private _ws: WorkshopService, private fillHeight: FillViewHeightDirective) { }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop'];
     const attendeeIndex = this.workshop.files.findIndex(file => {
       return file.Name.match(/attendee_list/);
@@ -46,25 +46,33 @@ export class WorkshopDetailComponent implements OnInit {
     if (attendeeIndex !== -1) {
       const file = this.workshop.files[attendeeIndex];
       this.attendeeFile = { name: file.Name, type: file.ContentType, size: file.BodyLength } as File;
-    };
+    }
     this.evaluations = this.workshop.files.filter(file => file.Name.match(/evaluation/))
-      .map(file => { return { name: file.Name, type: file.ContentType, size: file.BodyLength } as File });
+      .map(file => {
+        file = {
+          name: file.Name,
+          type: file.ContentType,
+          size: file.BodyLength
+        };
+        return file;
+      });
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     // Stop making it ugly, Dustin, geez.
     let ele = $('app-workshop-detail');
     if (Array.isArray(ele)) {
       ele = ele.pop();
     }
+    // tslint:disable-next-line:no-unused-expression
     ele && this.fillHeight.fillHeightOnElement(ele);
   }
 
-  uploadAttendeeList(file: Ng2FileDropAcceptedFile) {
+  private uploadAttendeeList(file: Ng2FileDropAcceptedFile) {
     this.attendeeFile = file.file;
   }
 
-  uploadEvaluations(files: Ng2FileDropFiles) {
+  private uploadEvaluations(files: Ng2FileDropFiles) {
     this.errors = [];
     files.accepted.map(file => {
       if (this.evaluations.findIndex(f => f.name === file.file.name) === -1)
@@ -73,17 +81,15 @@ export class WorkshopDetailComponent implements OnInit {
     for (const file of files.rejected) this.rejectedFile(file);
   }
 
-  upload() {
-    if (this.attendeeFile && this.attendeeFile.lastModifiedDate) {
+  private upload() {
+    if (this.attendeeFile && this.attendeeFile.lastModifiedDate)
       this.uploadAttendeeListFile();
-    }
 
-    if (this.evaluations.length) {
+    if (this.evaluations.length)
       this.uploadEvaluationsFiles();
-    }
   }
 
-  uploadAttendeeListFile() {
+  private uploadAttendeeListFile() {
     this.uploadAttendeeProgress = 0;
     this._ws.uploadAttendeeFile(this.workshop.sfId, this.attendeeFile).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
@@ -95,7 +101,7 @@ export class WorkshopDetailComponent implements OnInit {
     });
   }
 
-  uploadEvaluationsFiles() {
+  private uploadEvaluationsFiles() {
     const files = this.evaluations.filter(f => f.lastModifiedDate);
     this.uploadEvalutationsProgress = 0;
     this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
@@ -105,26 +111,24 @@ export class WorkshopDetailComponent implements OnInit {
       } else if (event instanceof HttpResponse) {
         this.uploadEvalutationsProgress = 0;
       }
-    })
+    });
   }
 
-  rejectedFile(file) {
-    if (file.reason === Ng2FileDropRejections.FileType) {
+  private rejectedFile(file) {
+    if (file.reason === Ng2FileDropRejections.FileType)
       this.errors.push(`.${file.file.name.split('.')[1]} is not an accepted file type`);
-    } else if (file.reason === Ng2FileDropRejections.FileSize) {
-      this.errors.push(`Your file '${file.file.name}' exceeds the maximum size (${this.fileSize(file.file.size)} > 25 MB)`)
-    }
+    else if (file.reason === Ng2FileDropRejections.FileSize)
+      this.errors.push(`Your file '${file.file.name}' exceeds the maximum size (${this.fileSize(file.file.size)} > 25 MB)`);
   }
 
   private fileSize(size: number): string {
     const ratio = size / 1000;
-    if (ratio > 1000) {
+    if (ratio > 1000)
       return `${ratio / 1000} MB`;
-    } else if (ratio > 1) {
+    else if (ratio > 1)
       return `${ratio} KB`;
-    } else {
+    else
       return `${ratio} Bytes`;
-    }
   }
 
 }

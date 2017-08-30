@@ -11,15 +11,13 @@ import { FillViewHeightDirective } from '../../shared/directives/fill-height.dir
 })
 export class ForbiddenPageComponent implements AfterViewInit {
 
-  @ViewChild('forbiddenRoot') root: ElementRef;
+  @ViewChild('forbiddenRoot') private root: ElementRef;
 
   constructor(private router: Router, private fillHeight: FillViewHeightDirective) { }
 
-  ngAfterViewInit() {
-    if (this.router.url === '/403') {
-      $(this.root.nativeElement).css('position', 'relative');
-      this.fillHeight.fillHeightOnElement(this.root);
-    }
+  public ngAfterViewInit() {
+    $(this.root.nativeElement).css('position', 'relative');
+    this.fillHeight.fillHeightOnElement(this.root);
   }
 
 }

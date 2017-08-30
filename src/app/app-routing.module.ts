@@ -3,17 +3,17 @@ import { RouterModule, Routes } from '@angular/router';
 
 /** Interface Components */
 import { DashboardComponent } from './interface/dashboard/dashboard.component';
-import { AddWorkshopComponent } from './interface/add-workshop/add-workshop.component';
-import { EditWorkshopComponent } from './interface/edit-workshop/edit-workshop.component';
-import { WorkshopDashboardComponent } from './interface/workshop-dashboard/workshop-dashboard.component';
-import { ProfileComponent } from './interface/profile/profile.component';
-import { LoginComponent } from './interface/login/login.component';
+import { AddWorkshopComponent } from './interface/workshops/add-workshop/add-workshop.component';
+import { EditWorkshopComponent } from './interface/workshops/edit-workshop/edit-workshop.component';
+import { WorkshopDashboardComponent } from './interface/workshops/workshop-dashboard/workshop-dashboard.component';
+import { ProfileComponent } from './interface/user-auth/profile/profile.component';
+import { LoginComponent } from './interface/user-auth/login/login.component';
 import { SupportComponent } from './interface/support/support.component';
 import { SupportTrainingComponent } from './interface/support/support-training/support-training.component';
 import { AdminPanelComponent } from './interface/admin-panel/admin-panel.component';
 import { WorkshopDetailComponent } from './interface/workshops/workshop-detail/workshop-detail.component';
-import { PasswordResetComponent } from './interface/password-reset/password-reset.component';
-import { ForgotPasswordComponent } from './interface/forgot-password/forgot-password.component';
+import { PasswordResetComponent } from './interface/user-auth/password-reset/password-reset.component';
+import { ForgotPasswordComponent } from './interface/user-auth/forgot-password/forgot-password.component';
 import { ForbiddenPageComponent } from './interface/forbidden-page/forbidden-page.component';
 
 /** Shared Module Components */
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes)
   ],
   exports: [
     RouterModule

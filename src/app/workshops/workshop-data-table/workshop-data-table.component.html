@@ -72,7 +72,7 @@
       <button class="refresh-button" md-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
     </md-header-cell>
     <md-cell *cdkCellDef="let workshop">
-      <button (click)="onEditClick(workshop.sfId)" md-raised-button> Edit &ensp;<md-icon svgIcon="edit_grey"></md-icon></button>
+      <button (click)="onEdit(workshop.sfId)" md-raised-button> Edit &ensp;<md-icon svgIcon="edit_grey"></md-icon></button>
     </md-cell>
   </ng-container>
 

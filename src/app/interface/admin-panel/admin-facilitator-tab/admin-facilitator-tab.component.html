@@ -6,16 +6,13 @@
 
   <div class="actions">
     <a md-raised-button class="mat-primary" routerLink="/admin/facilitators/form/create">
-        <md-icon svgIcon="edit_white"></md-icon>
-        <span> Create </span>
+      <md-icon svgIcon="edit_white"></md-icon>
+      <span> Create </span>
     </a>
   </div>
   <!-- Data Table -->
-  <app-facilitator-data-table (onClickDisable)="onClickDisableHandler($event)"
-                              (onClickDelete)="onClickDeleteHandler($event)"
-                              (onClickReset)="resetPassword($event)"
-                              (onClickSave)="onClickSaveHandler($event)"
-                              (onLoadComplete)="isLoading = false">
+  <app-facilitator-data-table (onDisable)="onDisable($event)" (onDelete)="onDelete($event)" (onReset)="resetPassword($event)"
+    (onSave)="onSave($event)" (onLoadComplete)="isLoading = false">
   </app-facilitator-data-table>
 
   <div class="spinner-container">

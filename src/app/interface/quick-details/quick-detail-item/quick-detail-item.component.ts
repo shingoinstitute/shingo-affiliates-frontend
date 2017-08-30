@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Announcement } from '../../../services/announcement/announcement.service';
 
 @Component({
@@ -6,13 +6,8 @@ import { Announcement } from '../../../services/announcement/announcement.servic
   templateUrl: './quick-detail-item.component.html',
   styleUrls: ['./quick-detail-item.component.scss']
 })
-export class QuickDetailItemComponent implements OnInit {
+export class QuickDetailItemComponent {
 
-  @Input('announcement') announcement: Announcement;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+  @Input('announcement') public announcement: Announcement;
 
 }

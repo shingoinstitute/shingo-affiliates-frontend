@@ -1,15 +1,15 @@
 // Angular Modules
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { RequestOptionsArgs, Headers } from '@angular/http'
+import { RequestOptionsArgs, Headers } from '@angular/http';
 
 // App Modules
 import { HttpService } from '../http/http.service';
-import { BaseAPIService, SFSuccessResult } from '../base-api.abstract.service';
+import { BaseAPIService, ISFSuccessResult } from '../base-api.abstract.service';
 import { Facilitator } from '../../facilitators/Facilitator';
 
 // RxJS Modules
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 // RxJS operators
 import 'rxjs/add/operator/catch';
@@ -20,10 +20,10 @@ export const DEFAULT_FACILITATOR_SEARCH_FIELDS: string[] = ['Id', 'FirstName', '
 @Injectable()
 export class FacilitatorService extends BaseAPIService {
 
+  public reloadData$ = new EventEmitter<void>();
+
   private route: string = 'facilitators';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
-
-  public reloadData$ = new EventEmitter<void>();
 
   constructor(private http: HttpService) { super(); }
 
@@ -39,25 +39,25 @@ export class FacilitatorService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public create(obj: Facilitator): Observable<SFSuccessResult> {
-    return this.http.post(`${this.baseUrl}`, obj.toSFJSON())
+  public create(obj: Facilitator): Observable<ISFSuccessResult> {
+    return this.http.post(`${this.baseUrl}`, obj)
       .map(res => res)
       .catch(this.handleError);
   }
 
-  public map(obj: Facilitator): Observable<SFSuccessResult> {
-    return this.http.post(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
+  public map(obj: Facilitator): Observable<ISFSuccessResult> {
+    return this.http.post(`${this.baseUrl}/${obj.sfId}`, obj)
       .map(res => res)
       .catch(this.handleError);
   }
 
-  public update(obj: Facilitator): Observable<SFSuccessResult> {
-    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj.toSFJSON())
+  public update(obj: Facilitator): Observable<ISFSuccessResult> {
+    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
       .map(res => res)
       .catch(this.handleError);
   }
 
-  public delete(obj: Facilitator): Observable<SFSuccessResult> {
+  public delete(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
       .map(res => res)
       .catch(this.handleError);
@@ -66,7 +66,7 @@ export class FacilitatorService extends BaseAPIService {
   /**
   * @description Removes service from a facilitator
   */
-  public disable(obj: Facilitator): Observable<SFSuccessResult> {
+  public disable(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.delete(`${this.baseUrl}/${obj.sfId}/unmap`)
       .map(res => res)
       .catch(this.handleError);

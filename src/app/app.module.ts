@@ -33,26 +33,26 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-   declarations: [
-      AppComponent
-   ],
-   imports: [
-      BrowserModule,
-      BrowserAnimationsModule,
-      MaterialModule,
-      HttpModule,
-      HttpClientModule,
-      ServicesModule.forRoot(),
-      CookieModule.forRoot(),
-      SharedModule.forRoot(),
-      AppRoutingModule,
-      FlexLayoutModule,
-      InterfaceModule,
-      WorkshopsModule,
-      FacilitatorsModule,
-      AffiliatesModule
-   ],
-   providers: [],
-   bootstrap: [AppComponent]
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    HttpModule,
+    HttpClientModule,
+    ServicesModule.forRoot(),
+    CookieModule.forRoot(),
+    SharedModule.forRoot(),
+    AppRoutingModule,
+    FlexLayoutModule,
+    InterfaceModule,
+    WorkshopsModule,
+    FacilitatorsModule,
+    AffiliatesModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

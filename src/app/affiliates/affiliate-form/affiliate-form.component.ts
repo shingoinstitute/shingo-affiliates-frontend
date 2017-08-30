@@ -1,10 +1,14 @@
 import { Component, OnInit, Input, Inject, Optional, ElementRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Affiliate } from '../Affiliate';
-import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
-import { AffiliateService } from '../../services/affiliate/affiliate.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
+
+import { Affiliate } from '../Affiliate';
+import { AffiliateService } from '../../services/affiliate/affiliate.service';
+import { AffiliateFormState, State } from './affiliate-form-state.class';
+
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-affiliate-form',
@@ -13,20 +17,19 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input('affiliate') affiliate: Affiliate;
+  @Input('affiliate') public affiliate: Affiliate;
 
-  @ViewChild('formContainer') formContainer: ElementRef;
+  @ViewChild('formContainer') private formContainer: ElementRef;
 
   private extraFields: string[] = ['Public_Contact__c', 'Public_Contact_Email__c', 'Public_Contact_Phone__c', 'Summary__c'];
 
   private state: AffiliateFormState;
-  langControl: FormControl;
-  languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
-  languageOptions: any;
-  isLoading: boolean;
-
+  private langControl: FormControl;
+  private languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
+  private languageOptions: any;
+  private isLoading: boolean;
   private isDialog: boolean;
-  private routeSubscription;
+  private routeSubscription: Subscription;
 
   constructor(
     @Optional() @Inject(MD_DIALOG_DATA) public data: any,
@@ -39,43 +42,43 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     this.languageOptions = this.langControl.valueChanges.map(val => this.filterLanguages(val));
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     if (this.data) {
       this.isDialog = this.data.isDialog;
       this.affiliate = this.data.affiliate;
     }
 
     if (!this.affiliate) {
-      this.state = new AffiliateFormState(State.Creating);
       this.affiliate = new Affiliate();
       this.routeSubscription = this.route.params.subscribe((route) => {
         const id = route['id'];
         if (typeof id === 'string' && id !== 'create') {
           this.getSFObject(id);
+          this.state = new AffiliateFormState(State.Updating);
+        } else {
+          this.state = new AffiliateFormState(State.Creating);
         }
       });
-    } else {
-      this.state = new AffiliateFormState(State.Updating);
     }
   }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     // center element if it's not a dialog box
     if (!this.isDialog) {
       $(this.formContainer.nativeElement).css('margin', '0 auto');
     }
   }
 
-  selectedAffiliate(affiliate: Affiliate) {
+  public ngOnDestroy() {
+    if (this.routeSubscription) this.routeSubscription.unsubscribe();
+  }
+
+  private selectedAffiliate(affiliate: Affiliate) {
     this.affiliate = affiliate;
     this.state.next();
   }
 
-  ngOnDestroy() {
-    this.routeSubscription && this.routeSubscription.unsubscribe();
-  }
-
-  getSFObject(id: string) {
+  private getSFObject(id: string) {
     this.isLoading = true;
     this._as.getById(id).subscribe((affiliate: Affiliate) => {
       this.affiliate = affiliate ? affiliate : new Affiliate();
@@ -86,20 +89,20 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  filterLanguages(val: string) {
+  private filterLanguages(val: string) {
     return val ? this.languages.filter(s => s.toLowerCase().indexOf(val.toLowerCase()) === 0) : this.languages;
   }
 
-  onSelectLanguage(lang: string) {
+  private onSelectLanguage(lang: string) {
     this.affiliate.addLanguage(lang);
     this.langControl.setValue(null);
   }
 
-  removeLanguage(lang: string) {
+  private removeLanguage(lang: string) {
     this.affiliate.removeLangauge(lang);
   }
 
-  onClickSave() {
+  private onSave() {
     this.snackbar.open('Saving Changes...');
     switch (this.state.state) {
       case State.Creating: this.create(); break;
@@ -108,7 +111,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  map() {
+  private map() {
     this._as.map(this.affiliate).subscribe(data => {
       this.snackbar.open('Successfully mapped a new Affiliate', null, { duration: 2000 });
       if (!this.isDialog) { this.location.back(); }
@@ -117,7 +120,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  create() {
+  private create() {
     this._as.create(this.affiliate).subscribe(data => {
       this.snackbar.open('Successfully created new Affiliate', null, { duration: 2000 });
       if (!this.isDialog) {
@@ -128,7 +131,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  update() {
+  private update() {
     this._as.update(this.affiliate).subscribe(data => {
       this.snackbar.open('Update Successful', null, { duration: 2000 });
       if (!this.isDialog) {
@@ -139,26 +142,9 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  handleError(err: any) {
+  private handleError(err: any) {
     console.error(err);
     this.snackbar.open('An error occurred and the requested operation could not be completed.', 'Okay');
   }
 
-}
-
-
-enum State { Creating = 1, Mapping = 2, Updating = 3 }
-class AffiliateFormState {
-  private _state: State;
-
-  public get state(): State { return this._state; }
-
-  constructor(state: State.Creating | State.Updating) { this._state = state; }
-
-  next() {
-    switch (this._state) {
-      case State.Creating: this._state = State.Mapping; break;
-      default: break;
-    }
-  }
 }

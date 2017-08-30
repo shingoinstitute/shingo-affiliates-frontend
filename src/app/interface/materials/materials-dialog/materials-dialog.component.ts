@@ -6,6 +6,7 @@ import { MD_DIALOG_DATA } from '@angular/material';
   templateUrl: './materials-dialog.component.html',
   styleUrls: ['./materials-dialog.component.scss']
 })
+// tslint:disable-next-line:component-class-suffix
 export class MaterialsDialog {
 
   constructor( @Inject(MD_DIALOG_DATA) private filter: { workshops: boolean, marketing: boolean, forms: boolean }) { }

@@ -1,4 +1,3 @@
-/* tslint:disable */
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
@@ -10,17 +9,17 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class WorkshopResolver implements Resolve<Workshop> {
-    constructor(private _ws: WorkshopService, private router: RouterService) { }
+  constructor(private _ws: WorkshopService, private router: RouterService) { }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Workshop> {
-        return this._ws.getById(route.params.id)
-            .catch(error => {
-                if (error.status === 403) {
-                    if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
-                    else this.router.navigateRoutes(['/login', state.url]);
-                    return Observable.empty();
-                }
-                return Observable.throw(error);
-            });
-    }
+  public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Workshop> {
+    return this._ws.getById(route.params.id)
+      .catch(error => {
+        if (error.status === 403) {
+          if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
+          else this.router.navigateRoutes(['/login', state.url]);
+          return Observable.empty();
+        }
+        return Observable.throw(error);
+      });
+  }
 }

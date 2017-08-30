@@ -5,11 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+export class DashboardComponent { }

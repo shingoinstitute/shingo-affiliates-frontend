@@ -5,10 +5,10 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from '@angular/material';
 
 /** Affiliate Components */
-import { AffiliatesModule } from "../../affiliates/affiliates.module";
+import { AffiliatesModule } from '../../affiliates/affiliates.module';
 
 /** Faciliatator Components */
-import { FacilitatorsModule } from "../../facilitators/facilitators.module";
+import { FacilitatorsModule } from '../../facilitators/facilitators.module';
 
 /** Admin Panel Components */
 import { AdminPanelComponent } from './admin-panel.component';
@@ -19,23 +19,23 @@ import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-faci
 import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 
 @NgModule({
-   imports: [
-      CommonModule,
-      AdminPanelRoutingModule,
-      FlexLayoutModule,
-      MaterialModule,
-      FacilitatorsModule,
-      AffiliatesModule
-   ],
-   declarations: [
-      AdminPanelComponent,
-      AdminTabsComponent,
-      AdminAffiliateTabComponent,
-      AlertDialogComponent,
-      AdminFacilitatorTabComponent
-   ],
-   entryComponents: [
-      AlertDialogComponent
-   ]
+  imports: [
+    CommonModule,
+    AdminPanelRoutingModule,
+    FlexLayoutModule,
+    MaterialModule,
+    FacilitatorsModule,
+    AffiliatesModule
+  ],
+  declarations: [
+    AdminPanelComponent,
+    AdminTabsComponent,
+    AdminAffiliateTabComponent,
+    AlertDialogComponent,
+    AdminFacilitatorTabComponent
+  ],
+  entryComponents: [
+    AlertDialogComponent
+  ]
 })
-export class AdminPanelModule {}
+export class AdminPanelModule { }

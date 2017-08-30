@@ -8,7 +8,7 @@ import { CdkTableModule } from '@angular/cdk';
 import { FacilitatorComponent } from './facilitator/facilitator.component';
 import { FacilitatorDataTableComponent } from './facilitator-data-table/facilitator-data-table.component';
 import { FacilitatorFormComponent } from './facilitator-form/facilitator-form.component';
-import { SharedModule } from "../shared/shared.module";
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -41,6 +41,6 @@ export {
   FacilitatorComponent,
   FacilitatorDataTableComponent,
   FacilitatorFormComponent
-}
+};
 
 export * from './Facilitator';

@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-workshop-materials',
   templateUrl: './workshop-materials.component.html',
   styleUrls: ['./workshop-materials.component.scss']
 })
-export class WorkshopMaterialsComponent implements OnInit {
+export class WorkshopMaterialsComponent {
 
   private folder = {
     'Discover': false,
@@ -14,10 +14,5 @@ export class WorkshopMaterialsComponent implements OnInit {
     'Align': false,
     'Build': false
   };
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }

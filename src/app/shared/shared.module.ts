@@ -10,36 +10,36 @@ import { SimpleMessageDialog } from './components/simple-message-dialog/simple-m
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 
 @NgModule({
-   declarations: [
-      IconLegendComponent,
-      SimpleMessageDialog,
-      AffiliateLookupComponent,
-      FacilitatorLookupComponent
-   ],
-   imports: [ 
-      CommonModule,
-      FormsModule,
-      ReactiveFormsModule,
-      MaterialModule,
-      MdDialogModule,
-      FroalaEditorModule.forRoot(),
-      FroalaViewModule.forRoot()
-   ],
-   exports: [
-      IconLegendComponent,
-      SimpleMessageDialog,
-      AffiliateLookupComponent,
-      FacilitatorLookupComponent,
-      MdDialogModule,
-      FroalaEditorModule,
-      FroalaViewModule
-   ],
-   entryComponents: [
+  declarations: [
+    IconLegendComponent,
+    SimpleMessageDialog,
+    AffiliateLookupComponent,
+    FacilitatorLookupComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MaterialModule,
+    MdDialogModule,
+    FroalaEditorModule.forRoot(),
+    FroalaViewModule.forRoot()
+  ],
+  exports: [
+    IconLegendComponent,
+    SimpleMessageDialog,
+    AffiliateLookupComponent,
+    FacilitatorLookupComponent,
+    MdDialogModule,
+    FroalaEditorModule,
+    FroalaViewModule
+  ],
+  entryComponents: [
     SimpleMessageDialog
   ]
 })
 export class SharedModule {
-  static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
       providers: [FillViewHeightDirective]

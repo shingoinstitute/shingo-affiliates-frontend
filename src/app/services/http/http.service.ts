@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpRequest, HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -49,7 +47,7 @@ export class HttpService {
     return this.http.request<T>(req);
   }
 
-  removeToken() {
+  public removeToken() {
     this._cs.remove('x-jwt');
   }
 

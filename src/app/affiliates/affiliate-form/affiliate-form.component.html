@@ -6,7 +6,7 @@
 
   <div class="form-actions">
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+      <button md-raised-button class="mat-accent" (click)="onSave()"> Save </button>
       <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
@@ -91,7 +91,7 @@
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+      <button md-raised-button class="mat-accent" (click)="onSave()"> Save </button>
       <button md-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>

@@ -1,29 +1,28 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { FormControl } from "@angular/forms";
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
-import { Facilitator } from "../../../facilitators/Facilitator";
-import { FacilitatorService } from "../../../services/facilitator/facilitator.service";
+import { Facilitator } from '../../../facilitators/Facilitator';
+import { FacilitatorService } from '../../../services/facilitator/facilitator.service';
 
 @Component({
   selector: 'app-facilitator-lookup',
   templateUrl: './facilitator-lookup.component.html',
   styleUrls: ['../sf-lookup.component.scss']
 })
-export class FacilitatorLookupComponent {
-  facilitators: Facilitator[] = [];
+export class FacilitatorLookupComponent implements AfterViewInit, OnChanges {
 
-  @Input('facilitator') facilitator: Facilitator;
-  @Input('formControl') formControl: FormControl = new FormControl();
+  @Input() public facilitator: Facilitator;
+  @Input() public formControl: FormControl = new FormControl();
 
-  @Output('onSelect') onSelectEventEmitter = new EventEmitter<Facilitator>();
+  @Output() public onSelect = new EventEmitter<Facilitator>();
 
+  private facilitators: Facilitator[] = [];
+  private isSearching: boolean;
   // formControl: FormControl = new FormControl();
-
-  isSearching: boolean;
 
   constructor(private _fs: FacilitatorService) { }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     // Listen to changes in auto-complete search field
     this.formControl.valueChanges.subscribe((query: string) => {
       if (query && query.length > 2) {
@@ -48,23 +47,23 @@ export class FacilitatorLookupComponent {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (let propName in changes) {
+  public ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
       if (propName === 'affiliate') {
-        let change = changes[propName];
-        let obj = change.currentValue;
+        const change = changes[propName];
+        const obj = change.currentValue;
         this.facilitator = new Facilitator(obj);
         this.formControl.setValue(this.facilitator);
       }
     }
   }
 
-  onSelectChange(facilitator: Facilitator) {
+  private onSelectChange(facilitator: Facilitator) {
     this.facilitator = facilitator;
-    this.onSelectEventEmitter.emit(facilitator);
+    this.onSelect.emit(facilitator);
   }
 
-  displayFn(facilitator: Facilitator): string {
+  private displayFn(facilitator: Facilitator): string {
     return facilitator ? facilitator.name : '';
   }
 }

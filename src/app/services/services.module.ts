@@ -7,7 +7,7 @@ import { FacilitatorService } from './facilitator/facilitator.service';
 import { HttpService } from './http/http.service';
 import { RouterService } from './router/router.service';
 import { SidenavService } from './sidenav/sidenav.service';
-import { SupportService, Video } from './support/support.service';
+import { SupportService } from './support/support.service';
 import { WorkshopService } from './workshop/workshop.service';
 import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-factory.service';
 import { Workshop } from '../workshops/Workshop';
@@ -17,7 +17,7 @@ import { UserResolver } from './auth/user.resolver';
 
 @NgModule()
 export class ServicesModule {
-  static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders {
     return {
       ngModule: ServicesModule,
       providers: [
@@ -36,6 +36,6 @@ export class ServicesModule {
         IsValidResolver,
         UserResolver
       ]
-    }
+    };
   }
 }

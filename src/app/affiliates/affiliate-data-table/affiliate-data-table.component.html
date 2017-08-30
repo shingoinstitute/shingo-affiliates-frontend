@@ -61,7 +61,7 @@
                 <md-icon svgIcon="edit_mode_grey"></md-icon>
               </button>
 
-          <button md-icon-button (click)="onClickDelete(aff)">
+          <button md-icon-button (click)="delete(aff)">
                 <md-icon svgIcon="delete_grey"></md-icon>
               </button>
 
@@ -76,7 +76,7 @@
                 <span> Cancel </span>
               </button>
 
-          <button md-button (click)="onClickSaveEventEmitter.emit(aff)">
+          <button md-button (click)="onSave.emit(aff)">
                 <md-icon svgIcon="save_grey"></md-icon>
                 <span> Save </span>
               </button>

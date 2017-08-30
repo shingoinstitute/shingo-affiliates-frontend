@@ -8,10 +8,10 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class IsValidResolver implements CanActivate {
-    constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-        return this.auth.authenticationChange$.asObservable();
-    }
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
+    return this.auth.authenticationChange$.asObservable();
+  }
 
 }

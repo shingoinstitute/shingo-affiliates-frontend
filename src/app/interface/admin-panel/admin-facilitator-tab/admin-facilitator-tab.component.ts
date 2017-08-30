@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Facilitator } from "../../../facilitators/Facilitator";
-import { FacilitatorService } from "../../../services/facilitator/facilitator.service";
-import { MdSnackBar, MdDialog } from "@angular/material";
-import { FacilitatorFormComponent } from "../../../facilitators/facilitators.module";
-import { Router } from "@angular/router";
-import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
+import { Facilitator } from '../../../facilitators/Facilitator';
+import { FacilitatorService } from '../../../services/facilitator/facilitator.service';
+import { MdSnackBar, MdDialog } from '@angular/material';
+import { FacilitatorFormComponent } from '../../../facilitators/facilitators.module';
+import { Router } from '@angular/router';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-admin-facilitator-tab',
@@ -13,33 +13,31 @@ import { AlertDialogComponent } from "../alert-dialog/alert-dialog.component";
 })
 export class AdminFacilitatorTabComponent {
 
-  isLoading: boolean = true;
-
-  displayedColumns = ["name"];
-
-  newFacilitator: Facilitator;
+  private isLoading: boolean = true;
+  private displayedColumns: string[] = ['name'];
+  private newFacilitator: Facilitator;
 
   constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar, private dialog: MdDialog, private router: Router) { }
 
-  onClickSaveHandler(facilitator: Facilitator) {
+  private onSave(facilitator: Facilitator) {
     this.isLoading = true;
     this.snackbar.open('Saving Changes...');
-    if (facilitator.sfId == '') {
+    if (facilitator.sfId === '') {
       this.create(facilitator);
     } else {
       this.update(facilitator);
     }
   }
 
-  onClickDeleteHandler(f: Facilitator) {
+  private onDelete(f: Facilitator) {
     this.presentAlertDialog(f, `Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.`);
   }
 
-  onClickDisableHandler(f: Facilitator) {
+  private onDisable(f: Facilitator) {
     this.presentAlertDialog(f, `Are you sure you want to disable <strong>${f.name}'s</strong> account?`);
   }
 
-  presentAlertDialog(f: Facilitator, msg: string) {
+  private presentAlertDialog(f: Facilitator, msg: string) {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
         sfObject: f,
@@ -54,7 +52,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  resetPassword(fac: Facilitator) {
+  private resetPassword(fac: Facilitator) {
     this.isLoading = true;
     this.snackbar.open(`Sending password reset email to ${fac.email}...`);
     this._fs.resetPassword(fac.email).subscribe(data => {
@@ -65,7 +63,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  update(fac: Facilitator) {
+  private update(fac: Facilitator) {
     this._fs.update(fac).subscribe(data => {
       this.apiCallbackHandler(data);
       this.snackbar.open('Facilitator Successfully Updated', null, { duration: 2000 });
@@ -74,7 +72,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  create(facilitator: Facilitator) {
+  private create(facilitator: Facilitator) {
     this._fs.create(facilitator).subscribe(data => {
       this.apiCallbackHandler(data);
       this.snackbar.open('Facilitator Succesfully Created', null, { duration: 2000 });
@@ -83,7 +81,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  delete(fac: Facilitator) {
+  private delete(fac: Facilitator) {
     this.isLoading = true;
     this.snackbar.open(`Deleting ${fac.name}'s Account...`);
     this._fs.delete(fac).subscribe(data => {
@@ -94,7 +92,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  disable(fac: Facilitator) {
+  private disable(fac: Facilitator) {
     this.isLoading = true;
     this.snackbar.open(`Disabling ${fac.name}'s Account...`);
     this._fs.disable(fac).subscribe(data => {
@@ -105,8 +103,8 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  onClickCreate() {
-    let dialogRef = this.dialog.open(FacilitatorFormComponent, {
+  private onCreate() {
+    const dialogRef = this.dialog.open(FacilitatorFormComponent, {
       data: {
         isDialog: true,
         facilitator: new Facilitator()
@@ -115,12 +113,12 @@ export class AdminFacilitatorTabComponent {
 
     dialogRef.afterClosed().subscribe(facilitator => {
       if (facilitator) {
-        this.onClickSaveHandler(facilitator);
+        this.onSave(facilitator);
       }
     });
   }
 
-  apiCallbackHandler(data?: any, err?: any) {
+  private apiCallbackHandler(data?: any, err?: any) {
     this.isLoading = false;
     this._fs.reloadData$.emit();
     if (err) {

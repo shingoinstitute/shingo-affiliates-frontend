@@ -1,8 +1,7 @@
-/* tslint:disable */
 import { Component, AfterViewInit, EventEmitter, Output, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { AffiliateService, DEFAULT_AFFILIATE_SEARCH_FIELDS } from '../../../services/affiliate/affiliate.service';
-import { Affiliate } from "../../../affiliates/Affiliate";
-import { FormControl } from "@angular/forms";
+import { Affiliate } from '../../../affiliates/Affiliate';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-affiliate-lookup',
@@ -11,21 +10,20 @@ import { FormControl } from "@angular/forms";
 })
 export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
 
-  affiliates: Affiliate[] = [];
 
-  @Input('affiliate') affiliate: Affiliate;
-  @Input() fields: string[] = [];
+  @Input('affiliate') public affiliate: Affiliate;
+  @Input() public fields: string[] = [];
 
-  @Output('onSelect') onSelectEventEmitter = new EventEmitter<Affiliate>();
-  @Output() onChange = new EventEmitter<string>();
+  @Output() public onSelect = new EventEmitter<Affiliate>();
+  @Output() public onChange = new EventEmitter<string>();
 
-  formControl: FormControl = new FormControl();
-
-  isSearching: boolean;
+  private affiliates: Affiliate[] = [];
+  private formControl: FormControl = new FormControl();
+  private isSearching: boolean;
 
   constructor(private _as: AffiliateService) { }
 
-  ngAfterViewInit() {
+  public ngAfterViewInit() {
     // Listen to changes in auto-complete search field
     this.fields = this.fields.concat(DEFAULT_AFFILIATE_SEARCH_FIELDS);
     this.formControl.valueChanges.subscribe((query: string) => {
@@ -52,23 +50,23 @@ export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (let propName in changes) {
+  public ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
       if (propName === 'affiliate') {
-        let change = changes[propName];
-        let obj = change.currentValue;
+        const change = changes[propName];
+        const obj = change.currentValue;
         this.affiliate = new Affiliate(obj);
         this.formControl.setValue(this.affiliate);
       }
     }
   }
 
-  onSelectChange(affiliate: Affiliate) {
+  private onSelectChange(affiliate: Affiliate) {
     this.affiliate = affiliate;
-    this.onSelectEventEmitter.emit(affiliate);
+    this.onSelect.emit(affiliate);
   }
 
-  displayFn(affiliate: Affiliate): string {
+  private displayFn(affiliate: Affiliate): string {
     return affiliate ? affiliate.name : '';
   }
 

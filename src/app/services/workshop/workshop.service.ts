@@ -4,7 +4,7 @@ import { HttpHeaders, HttpRequest } from '@angular/common/http';
 
 // App Modules
 import { HttpService } from '../http/http.service';
-import { BaseAPIService, SFSuccessResult } from '../base-api.abstract.service';
+import { BaseAPIService, ISFSuccessResult } from '../base-api.abstract.service';
 import { Workshop } from '../../workshops/Workshop';
 
 // RxJS Modules
@@ -17,17 +17,31 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/take';
 
-export { SFSuccessResult, Workshop }
+export { ISFSuccessResult, Workshop };
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affiliate__c'];
 
-export type WorkshopProperties = 'actionType' | 'workshopType' | 'dueDate' | 'instructors' | 'location' | 'verified' | 'startDate' | 'endDate' | 'hostCity' | 'hostCountry' | 'daysLate' | 'status' | 'edit' | undefined;
+export type WorkshopProperties = 'actionType'
+  | 'workshopType'
+  | 'dueDate'
+  | 'instructors'
+  | 'location'
+  | 'verified'
+  | 'startDate'
+  | 'endDate'
+  | 'hostCity'
+  | 'hostCountry'
+  | 'daysLate'
+  | 'status'
+  | 'edit'
+  | undefined;
 export type WorkshopTrackByStrategy = 'id' | 'reference' | 'index';
 
 @Injectable()
 export class WorkshopService extends BaseAPIService {
 
-  private route: string = 'workshops';
   private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
+
+  private route: string = 'workshops';
 
   constructor(private http: HttpService) { super(); }
 
@@ -43,21 +57,21 @@ export class WorkshopService extends BaseAPIService {
       .catch(this.handleError);
   }
 
-  public create(obj: Workshop): Observable<SFSuccessResult> {
-    return this.http.post(this.baseUrl, obj.toSFJSON())
-      .map(res => res as SFSuccessResult)
+  public create(obj: Workshop): Observable<ISFSuccessResult> {
+    return this.http.post(this.baseUrl, obj)
+      .map(res => res as ISFSuccessResult)
       .catch(this.handleError);
   }
 
-  public update(obj: Workshop): Observable<SFSuccessResult> {
-    return this.http.put(this.baseUrl + `/${obj.sfId}`, obj.toSFJSON())
-      .map(res => res as SFSuccessResult)
+  public update(obj: Workshop): Observable<ISFSuccessResult> {
+    return this.http.put(this.baseUrl + `/${obj.sfId}`, obj)
+      .map(res => res as ISFSuccessResult)
       .catch(this.handleError);
   }
 
-  public delete(obj: Workshop): Observable<SFSuccessResult> {
+  public delete(obj: Workshop): Observable<ISFSuccessResult> {
     return this.http.delete(this.baseUrl + `/${obj.sfId}`)
-      .map(res => res as SFSuccessResult)
+      .map(res => res as ISFSuccessResult)
       .catch(this.handleError);
   }
 
@@ -79,7 +93,7 @@ export class WorkshopService extends BaseAPIService {
   public uploadAttendeeFile(id: string, file): Observable<any> {
 
     const options = this.http._defaultReqOpts;
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     formData.append('attendeeList', file, file.name);
     const req = new HttpRequest('POST', `${this.baseUrl}/${id}/attendee_file`, formData, { reportProgress: true, ...options });
     return this.http.request(req);
@@ -87,7 +101,7 @@ export class WorkshopService extends BaseAPIService {
 
   public uploadEvaluations(id: string, files: File[]): Observable<any> {
     const options = this.http._defaultReqOpts;
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     for (const file of files) {
       formData.append('evaluationFiles', file, file.name);
     }

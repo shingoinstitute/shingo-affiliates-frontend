@@ -8,7 +8,7 @@ import { CdkTableModule } from '@angular/cdk';
 import { AffiliateComponent } from './affiliate/affiliate.component';
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
-import { SharedModule } from "../shared/shared.module";
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -36,5 +36,3 @@ import { SharedModule } from "../shared/shared.module";
   ]
 })
 export class AffiliatesModule { }
-
-export * from './Affiliate';

@@ -7,9 +7,9 @@ import { BaseService } from '../base.abstract.service';
 import { User } from '../../shared/models/User';
 
 // RxJS Modules
-import { Observable } from "rxjs/Observable";
-import { Subject } from "rxjs/Subject";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 // RxJS operators
 import 'rxjs/add/observable/throw';
@@ -18,14 +18,14 @@ import 'rxjs/add/observable/from';
 @Injectable()
 export class AuthService extends BaseService {
 
-  private _user: User;
-  private get authHost(): string { return `${this.BaseUrl}:${this.BasePort}/auth`; }
-
-  protected BaseUrl: string = 'http://129.123.47.34';
-  protected BasePort: string = '8080';
-
   public authenticationChange$: BehaviorSubject<boolean>;
   public get user() { return this._user; }
+
+  protected _baseUrl: string = 'http://129.123.47.34';
+  protected _basePort: string = '8080';
+
+  private _user: User;
+  private get authHost(): string { return `${this._baseUrl}:${this._basePort}/auth`; }
 
   constructor(private http: HttpService) {
     super();
@@ -64,8 +64,7 @@ export class AuthService extends BaseService {
     options.observe = 'response';
 
     return this.http.get(`${this.authHost}/logout`, options)
-      .map((res: Response) => {
-        let data = res;
+      .map((data: Response) => {
         this._user = null;
         this.http.removeToken();
         this.authenticationChange$.next(false);
@@ -130,13 +129,4 @@ export class AuthService extends BaseService {
     });
   }
 
-  /**
-   * @description Sends request to server to send password reset link to specified email address
-   * @todo Implement actual API route for sending password reset email
-   */
-  // sendPasswordReset(email: string): Observable<any> {
-  //   return this.http.get(`${this.authHost}/resetpassword`)
-  //     .map(res => res)
-  //     .catch(err => { return Observable.throw(err); });
-  // }
 }

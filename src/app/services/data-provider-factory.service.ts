@@ -4,10 +4,10 @@ import { DataProvider } from './data-provider.service';
 import { HttpService } from './http/http.service';
 import { WorkshopService } from './workshop/workshop.service';
 import { Workshop } from '../workshops/Workshop';
-import { AffiliateService } from "./affiliate/affiliate.service";
-import { Affiliate } from "../affiliates/Affiliate";
-import { FacilitatorService } from "./facilitator/facilitator.service";
-import { Facilitator } from "../facilitators/Facilitator";
+import { AffiliateService } from './affiliate/affiliate.service';
+import { Affiliate } from '../affiliates/Affiliate';
+import { FacilitatorService } from './facilitator/facilitator.service';
+import { Facilitator } from '../facilitators/Facilitator';
 import { RouterService } from './router/router.service';
 
 @Injectable()
