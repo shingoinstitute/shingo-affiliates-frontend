@@ -9,7 +9,7 @@ import { AlertDialogComponent } from '../../ui-components/alert-dialog/alert-dia
 @Component({
   selector: 'app-admin-facilitator-tab',
   templateUrl: './admin-facilitator-tab.component.html',
-  styleUrls: ['./admin-facilitator-tab.component.scss', '../admin-panel.component.scss']
+  styleUrls: ['./admin-facilitator-tab.component.scss']
 })
 export class AdminFacilitatorTabComponent {
 

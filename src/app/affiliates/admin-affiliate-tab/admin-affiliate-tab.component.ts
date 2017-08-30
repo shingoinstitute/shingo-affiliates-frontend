@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Affiliate } from '../../affiliates/affiliate.model';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
-import { ISFSuccessResult } from '../../services/base-api/base-api.abstract.service';
+import { ISFSuccessResult } from '../../services/api/base-api.abstract.service';
 import { MdSnackBar, MdDialog } from '@angular/material';
 
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component';
@@ -12,7 +12,7 @@ import { AlertDialogComponent } from '../../ui-components/alert-dialog/alert-dia
 @Component({
   selector: 'app-admin-affiliate-tab',
   templateUrl: './admin-affiliate-tab.component.html',
-  styleUrls: ['./admin-affiliate-tab.component.scss', '../admin-panel.component.scss']
+  styleUrls: ['./admin-affiliate-tab.component.scss']
 })
 export class AdminAffiliateTabComponent {
 

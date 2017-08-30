@@ -3,10 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
-import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
-import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
+
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component';
 import { FacilitatorFormComponent } from '../../facilitators/facilitators.module';
+import { AdminAffiliateTabComponent, AdminFacilitatorTabComponent } from '../../affiliates/affiliates.module';
 
 const adminRoutes: Routes = [
   {

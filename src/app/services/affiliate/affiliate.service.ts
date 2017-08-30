@@ -5,8 +5,8 @@ import { RequestOptionsArgs, Headers } from '@angular/http';
 
 // App Modules
 import { HttpService } from '../http/http.service';
-import { BaseAPIService, ISFSuccessResult } from '../base-api.abstract.service';
-import { CourseManager } from '../../shared/models/CourseManager';
+import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
+import { CourseManager } from '../../workshops/course-manager.model';
 import { Affiliate } from '../../affiliates/affiliate.model';
 
 // RxJS Modules

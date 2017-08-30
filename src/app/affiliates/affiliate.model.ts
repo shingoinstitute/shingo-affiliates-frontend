@@ -1,4 +1,4 @@
-import { SFObject } from '../shared/models/SFObject.abstract';
+import { SFObject } from '../shared/models/sf-object.abstract.model';
 
 export class Affiliate extends SFObject {
 

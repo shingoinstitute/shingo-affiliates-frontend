@@ -5,7 +5,6 @@ import { FillViewHeightDirective } from '../../shared/directives/fill-height.dir
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
-  styleUrls: ['./admin-panel.component.scss'],
   providers: [FillViewHeightDirective]
 })
 export class AdminPanelComponent implements AfterViewInit {
