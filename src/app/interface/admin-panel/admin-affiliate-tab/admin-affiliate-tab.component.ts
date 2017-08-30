@@ -67,8 +67,8 @@ export class AdminAffiliateTabComponent {
 
   private update(a: Affiliate) {
     this._as.update(a).subscribe((data: ISFSuccessResult) => {
-      this.handleCallback(data, true);
-      // this.snackbar.open('Affiliate Successfully Updated.', null, { duration: 1500 });
+      this.handleCallback(data);
+      this.snackbar.open('Affiliate Successfully Updated.', null, { duration: 1500 });
     }, err => { this.handleCallback(null, err); });
   }
 
