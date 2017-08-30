@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 // App Modules
 import { WorkshopService } from '../../services/workshop/workshop.service';
-import { Workshop } from '../Workshop';
+import { Workshop } from '../workshop.model';
 
 @Component({
   selector: 'app-workshop',

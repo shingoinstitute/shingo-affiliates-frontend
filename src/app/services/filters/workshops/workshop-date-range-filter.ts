@@ -1,6 +1,6 @@
 import { Filter } from '../filter.abstract';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Workshop } from '../../../workshops/Workshop';
+import { Workshop } from '../../../workshops/workshop.model';
 
 export class WorkshopDateRangeFilter extends Filter {
 

@@ -3,9 +3,9 @@ import { MdPaginator, MdSort } from '@angular/material';
 
 // App Modules
 import { FacilitatorService } from './facilitator.service';
-import { DataProvider } from '../data-provider.service';
-import { APIDataSource } from '../api-data-source.abstract.service';
-import { Facilitator } from '../../facilitators/Facilitator';
+import { DataProvider } from '../data-provider/data-provider.service';
+import { APIDataSource } from '../api/api-data-source.abstract.service';
+import { Facilitator } from '../../facilitators/facilitator.model';
 
 
 export class FacilitatorDataSource extends APIDataSource<FacilitatorService, Facilitator> {

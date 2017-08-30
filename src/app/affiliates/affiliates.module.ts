@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk';
-import { AffiliateComponent } from './affiliate/affiliate.component';
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
 import { SharedModule } from '../shared/shared.module';
@@ -22,12 +21,10 @@ import { SharedModule } from '../shared/shared.module';
     SharedModule.forRoot()
   ],
   declarations: [
-    AffiliateComponent,
     AffiliateDataTableComponent,
     AffiliateFormComponent
   ],
   exports: [
-    AffiliateComponent,
     AffiliateDataTableComponent,
     AffiliateFormComponent
   ],
@@ -36,3 +33,10 @@ import { SharedModule } from '../shared/shared.module';
   ]
 })
 export class AffiliatesModule { }
+
+export {
+  AffiliateDataTableComponent,
+  AffiliateFormComponent
+};
+
+export * from './affiliate.model';

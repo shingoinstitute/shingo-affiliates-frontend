@@ -10,8 +10,8 @@ import { SidenavService } from './sidenav/sidenav.service';
 import { SupportService } from './support/support.service';
 import { WorkshopService } from './workshop/workshop.service';
 import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-factory.service';
-import { Workshop } from '../workshops/Workshop';
-import { DataProviderFactory } from './data-provider-factory.service';
+import { Workshop } from '../workshops/workshop.model';
+import { DataProviderFactory } from './data-provider/data-provider-factory.service';
 import { IsValidResolver } from './auth/is-valid.resolver';
 import { UserResolver } from './auth/user.resolver';
 

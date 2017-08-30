@@ -10,11 +10,11 @@ import { CountriesService } from '../../services/countries/countries.service';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
 import { WorkshopService } from '../../services/workshop/workshop.service';
-import { ISFSuccessResult } from '../../services/base-api.abstract.service';
-import { Workshop, WorkshopType } from '../Workshop';
-import { CourseManager } from '../../shared/models/CourseManager';
-import { Facilitator } from '../../facilitators/Facilitator';
-import { Affiliate } from '../../affiliates/Affiliate';
+import { ISFSuccessResult } from '../../services/api/base-api.abstract.service';
+import { Workshop, WorkshopType } from '../workshop.model';
+import { CourseManager } from '../course-manager.model';
+import { Facilitator } from '../../facilitators/facilitator.model';
+import { Affiliate } from '../../affiliates/affiliate.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';

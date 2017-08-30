@@ -7,7 +7,7 @@ import { RequestOptionsArgs, Headers } from '@angular/http';
 import { HttpService } from '../http/http.service';
 import { BaseAPIService, ISFSuccessResult } from '../base-api.abstract.service';
 import { CourseManager } from '../../shared/models/CourseManager';
-import { Affiliate } from '../../affiliates/Affiliate';
+import { Affiliate } from '../../affiliates/affiliate.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';

@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MdDialog, MdPaginator, MdSort } from '@angular/material';
 
-import { DataProvider } from '../../services/data-provider.service';
+
+import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
-import { Facilitator, FacilitatorRoleType } from '../Facilitator';
+import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
 import { FacilitatorDataSource } from '../../services/facilitator/facilitator-data-source.service';
-import { DataProviderFactory } from '../../services/data-provider-factory.service';
-import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
+import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
+import { IconType } from '../../ui-components/icon-legend/icon-legend.component';
 import { FacilitatorFormComponent } from '../facilitators.module';
 
 @Component({

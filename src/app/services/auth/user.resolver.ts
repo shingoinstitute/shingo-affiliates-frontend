@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { AuthService } from './auth.service';
-import { User } from '../../shared/models/User';
+import { User } from '../../shared/models/user.model';
 import { RouterService } from '../../services/router/router.service';
 
 import { Observable } from 'rxjs/Rx';

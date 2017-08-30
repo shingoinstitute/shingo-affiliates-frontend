@@ -3,7 +3,7 @@ import { FilterFactory } from '../filter-factory.abstract.service';
 import { PropertyFilter } from '../property-filter';
 import { TextFilter } from '../text-filter';
 import { WorkshopDateRangeFilter } from './workshop-date-range-filter';
-import { Workshop } from '../../../workshops/Workshop';
+import { Workshop } from '../../../workshops/workshop.model';
 
 @Injectable()
 export class WorkshopFilterFactory extends FilterFactory {

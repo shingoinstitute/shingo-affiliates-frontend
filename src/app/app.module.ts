@@ -23,8 +23,8 @@ import { FacilitatorsModule } from './facilitators/facilitators.module';
 import { AffiliatesModule } from './affiliates/affiliates.module';
 
 /** Interface Components */
-import { WorkshopDetailComponent } from './interface/workshops/workshop-detail/workshop-detail.component';
-import { InterfaceModule } from './interface/interface.module';
+import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component';
+import { InterfaceModule } from './ui-components/interface.module';
 
 // App Routing Module
 import { AppRoutingModule } from './app-routing.module';
