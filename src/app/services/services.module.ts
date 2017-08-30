@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core';
 import { AffiliateService } from './affiliate/affiliate.service';
-import { AnnouncementService, Announcement } from './announcement/announcement.service';
+import { AnnouncementService } from './announcement/announcement.service';
+import { Announcement } from './announcement/announcement.model';
 import { AuthService } from './auth/auth.service';
 import { CountriesService } from './countries/countries.service';
 import { FacilitatorService } from './facilitator/facilitator.service';

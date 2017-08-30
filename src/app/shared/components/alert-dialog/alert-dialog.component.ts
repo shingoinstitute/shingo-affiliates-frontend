@@ -1,8 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MD_DIALOG_DATA } from '@angular/material';
-import { Affiliate } from '../../affiliates/affiliate.model';
-import { SFObject } from '../../shared/models/sf-object.abstract.model';
-
+import { SFObject } from '../../models/sf-object.abstract.model';
 
 @Component({
   selector: 'app-alert-dialog',

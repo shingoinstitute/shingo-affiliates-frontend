@@ -9,6 +9,7 @@ export type IconType = 'edit' | 'delete' | 'disable' | 'cancel' | 'save' | 'rese
 })
 export class IconLegendComponent {
 
-  @Input('displayedIcons') public displayedIcons: IconType[] = ['edit', 'delete', 'save'];
+  @Input('displayedIcons') 
+  public displayedIcons: IconType[] = ['edit', 'delete', 'save'];
 
 }

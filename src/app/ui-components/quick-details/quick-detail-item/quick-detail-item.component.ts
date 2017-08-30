@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Announcement } from '../../../services/announcement/announcement.service';
+import { Announcement } from '../../../services/announcement/announcement.model';
 
 @Component({
   selector: 'app-quick-detail-item',

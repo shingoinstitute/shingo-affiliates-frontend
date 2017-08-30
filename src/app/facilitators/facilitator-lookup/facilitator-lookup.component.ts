@@ -6,8 +6,7 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 
 @Component({
   selector: 'app-facilitator-lookup',
-  templateUrl: './facilitator-lookup.component.html',
-  styleUrls: ['../sf-lookup.component.scss']
+  templateUrl: './facilitator-lookup.component.html'
 })
 export class FacilitatorLookupComponent implements AfterViewInit, OnChanges {
 

@@ -5,8 +5,12 @@ import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
 
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component';
-import { FacilitatorFormComponent } from '../../facilitators/facilitators.module';
-import { AdminAffiliateTabComponent, AdminFacilitatorTabComponent } from '../../affiliates/affiliates.module';
+import { AdminAffiliateTabComponent } from '../../affiliates/admin-affiliate-tab/admin-affiliate-tab.component';
+import { AdminFacilitatorTabComponent } from '../../facilitators/admin-facilitator-tab/admin-facilitator-tab.component';
+import { FacilitatorFormComponent } from '../../facilitators/facilitator-form/facilitator-form.component';
+// import { FacilitatorFormComponent } from '../../facilitators/facilitators.module';
+// import { AdminAffiliateTabComponent } from '../../affiliates/affiliates.module';
+// import { AdminFacilitatorTabComponent } from '../../facilitators/facilitators.module';
 
 const adminRoutes: Routes = [
   {

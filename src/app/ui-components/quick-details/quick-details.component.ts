@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
-import { AnnouncementService, Announcement } from '../../services/announcement/announcement.service';
+import { AnnouncementService } from '../../services/announcement/announcement.service';
+import { Announcement } from '../../services/announcement/announcement.model';
 import { MaterialsDialog } from '../materials/materials-dialog/materials-dialog.component';
 
 @Component({
