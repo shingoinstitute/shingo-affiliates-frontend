@@ -1,0 +1,9 @@
+<div class="card">
+    <div class="card-header">
+        <span [style.margin-right]="'8px'">Upcoming Workshops</span>
+        <a md-raised-button class="mat-primary" routerLink="/workshops/new"> + Add Workshop </a>
+    </div>
+    <div class="card-content">
+        <app-workshop-data-table [filters]="filters" [displayedColumns]="displayedColumns"></app-workshop-data-table>
+    </div>
+</div>

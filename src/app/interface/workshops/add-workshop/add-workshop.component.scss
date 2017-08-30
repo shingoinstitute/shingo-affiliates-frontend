@@ -1,0 +1,117 @@
+@import '../../../../assets/sass/_globals';
+
+.add-workshop-container {
+   min-height: 100vh;
+   margin: $defaultMargin * 2;
+}
+.add-workshop-header {
+   margin: $defaultMargin;
+}
+@media only screen and (max-width: $mediumBreak) {
+   .add-workshop-container {
+      margin: 0 0 $defaultMargin 0;
+   }
+}
+.form-group-container {
+   max-width: 75%;
+   padding: 16px;
+}
+form > * {
+   margin-bottom: 8px;
+   margin-top: 8px;
+}
+.form-group {
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+}
+.form-group>* {
+   padding: 12px;
+}
+#cm-input-container {
+   position: relative;
+   display: flex;
+   display: -webkit-flex;
+   -webkit-flex-direction: row;
+   flex-direction: row;
+   align-items: center;
+}
+.cm-autocomplete,
+.cm-spinner {
+   padding: 0 !important;
+}
+.cm-spinner {
+   position: absolute;
+   height: 20px;
+   width: 20px;
+   right: 12px;
+}
+.inst-table {
+   flex: 1 0;
+   padding: 4px !important;
+   display: block;
+   justify-content: left;
+}
+.inst-header-cell {
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row;
+   flex-direction: row;
+   align-items: center;
+   -webkit-align-items: center;
+   flex: 1 0 auto;
+   font-weight: 300;
+}
+.inst-header-row,
+.inst-row {
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row;
+   flex-direction: row;
+   -webkit-align-items: center;
+   align-items: center;
+   -webkit-justify-content: left;
+   justify-content: left;
+   padding: 0 24px;
+}
+.inst-header-row:last-child {
+   border-top: 1px solid lightgrey;
+}
+.inst-header-row {
+   height: 40px;
+}
+.inst-row {
+   border-bottom: 1px solid lightgrey;
+   display: flex;
+   height: 48px;
+}
+.inst-cell,
+.inst-header-cell {
+   padding-right: 24px;
+}
+.inst-cell:first-child {
+   flex: 1 0;
+}
+.inst-cell:last-child {
+   flex: 0 1;
+   padding: 0;
+}
+button.inst-del-btn {
+   background-color: transparent;
+   border: none;
+   outline: none;
+   margin: 0;
+   padding: 4px;
+   cursor: pointer;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   /* height: 24px;
+   width: 24px; */
+}
+button.inst-del-btn * {
+   margin: 0;
+}
+button.inst-del-btn:hover {
+   background-color: #e3e3e3;
+}
