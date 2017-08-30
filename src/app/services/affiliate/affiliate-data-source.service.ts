@@ -3,9 +3,9 @@ import { MdPaginator, MdSort } from '@angular/material';
 
 // App Modules
 import { AffiliateService } from './affiliate.service';
-import { DataProvider } from '../data-provider.service';
-import { APIDataSource } from '../api-data-source.abstract.service';
-import { Affiliate } from '../../affiliates/Affiliate';
+import { DataProvider } from '../data-provider/data-provider.service';
+import { APIDataSource } from '../api/api-data-source.abstract.service';
+import { Affiliate } from '../../affiliates/affiliate.model';
 
 
 export class AffiliateDataSource extends APIDataSource<AffiliateService, Affiliate> {

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 // App Modules
-import { BaseService } from '../base.abstract.service';
+import { BaseService } from '../api/base.abstract.service';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';

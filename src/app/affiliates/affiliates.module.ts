@@ -2,13 +2,18 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+
 import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk';
-import { AffiliateComponent } from './affiliate/affiliate.component';
+
+import { SharedModule } from '../shared/shared.module';
+// import { UIComponentsModule } from '../ui-components/ui-components.module';
+
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
-import { SharedModule } from '../shared/shared.module';
+import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
+import { AffiliateLookupComponent } from './affiliate-lookup/affiliate-lookup.component';
 
 @NgModule({
   imports: [
@@ -20,19 +25,31 @@ import { SharedModule } from '../shared/shared.module';
     FlexLayoutModule,
     CdkTableModule,
     SharedModule.forRoot()
+    // UIComponentsModule
   ],
   declarations: [
-    AffiliateComponent,
+    AdminAffiliateTabComponent,
     AffiliateDataTableComponent,
-    AffiliateFormComponent
+    AffiliateFormComponent,
+    AffiliateLookupComponent
   ],
   exports: [
-    AffiliateComponent,
     AffiliateDataTableComponent,
-    AffiliateFormComponent
+    AffiliateFormComponent,
+    AdminAffiliateTabComponent,
+    AffiliateLookupComponent
   ],
   entryComponents: [
     AffiliateFormComponent
   ]
 })
-export class AffiliatesModule { }
+export default class AffiliatesModule { }
+
+export {
+  AffiliatesModule,
+  AffiliateDataTableComponent,
+  AffiliateFormComponent,
+  AdminAffiliateTabComponent
+};
+
+// export * from './affiliate.model';

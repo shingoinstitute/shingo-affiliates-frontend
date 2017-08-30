@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 
-import { Affiliate } from '../Affiliate';
+import { Affiliate } from '../affiliate.model';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
 import { AffiliateFormState, State } from './affiliate-form-state.class';
 

@@ -177,3 +177,30 @@ md-row { height: 56px; }
 .--flex-center {
    align-items: center;
 }
+
+/* Lookups */
+.lookup-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 8px;
+}
+.input-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0 auto;
+}
+md-input-container {
+  flex: 1 0 auto;
+}
+.spinner-container {
+  position: relative;
+}
+.spinner-container md-spinner {
+  position: absolute;
+  right: 0;
+  bottom: -8px;
+  height: 24px;
+  width: 24px;
+  margin: 0 8px;
+}

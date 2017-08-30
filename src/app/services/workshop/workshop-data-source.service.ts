@@ -3,9 +3,9 @@ import { MdPaginator, MdSort } from '@angular/material';
 
 // App Modules
 import { WorkshopService } from './workshop.service';
-import { DataProvider } from '../data-provider.service';
-import { APIDataSource } from '../api-data-source.abstract.service';
-import { Workshop } from '../../workshops/Workshop';
+import { DataProvider } from '../data-provider/data-provider.service';
+import { APIDataSource } from '../api/api-data-source.abstract.service';
+import { Workshop } from '../../workshops/workshop.model';
 
 export class WorkshopDataSource extends APIDataSource<WorkshopService, Workshop> {
 

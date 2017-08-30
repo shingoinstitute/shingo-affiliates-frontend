@@ -1,12 +1,12 @@
 import { Component, ViewChild, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { MdPaginator, MdSort, MdDialog, MdDialogRef } from '@angular/material';
 
-import { DataProvider } from '../../services/data-provider.service';
+import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
-import { Affiliate } from '../Affiliate';
-import { DataProviderFactory } from '../../services/data-provider-factory.service';
+import { Affiliate } from '../affiliate.model';
+import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { AffiliateDataSource } from '../../services/affiliate/affiliate-data-source.service';
-import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
+import { IconType } from '../../ui-components/icon-legend/icon-legend.component';
 import { AffiliateFormComponent } from '../affiliate-form/affiliate-form.component';
 import { Filter } from '../../services/filters/filter.abstract';
 import { RouterService } from '../../services/router/router.service';

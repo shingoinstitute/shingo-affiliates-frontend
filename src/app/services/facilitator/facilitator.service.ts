@@ -5,8 +5,8 @@ import { RequestOptionsArgs, Headers } from '@angular/http';
 
 // App Modules
 import { HttpService } from '../http/http.service';
-import { BaseAPIService, ISFSuccessResult } from '../base-api.abstract.service';
-import { Facilitator } from '../../facilitators/Facilitator';
+import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
+import { Facilitator } from '../../facilitators/facilitator.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';

@@ -1,21 +1,14 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AffiliateLookupComponent } from './components/affiliate-lookup/affiliate-lookup.componet';
-import { FacilitatorLookupComponent } from './components/facilitator-lookup/facilitator-lookup.component';
 import { MaterialModule, MdDialogModule } from '@angular/material';
 import { FillViewHeightDirective } from './directives/fill-height.directive';
-import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
-import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
+import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 
 @NgModule({
-  declarations: [
-    IconLegendComponent,
-    SimpleMessageDialog,
-    AffiliateLookupComponent,
-    FacilitatorLookupComponent
-  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -25,24 +18,28 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
     FroalaEditorModule.forRoot(),
     FroalaViewModule.forRoot()
   ],
-  exports: [
+  declarations: [
+    AlertDialogComponent,
     IconLegendComponent,
-    SimpleMessageDialog,
-    AffiliateLookupComponent,
-    FacilitatorLookupComponent,
+    SimpleMessageDialog
+  ],
+  exports: [
     MdDialogModule,
     FroalaEditorModule,
-    FroalaViewModule
+    FroalaViewModule,
+    AlertDialogComponent,
+    IconLegendComponent,
+    SimpleMessageDialog
   ],
   entryComponents: [
+    AlertDialogComponent,
     SimpleMessageDialog
   ]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {
     return {
-      ngModule: SharedModule,
-      providers: [FillViewHeightDirective]
+      ngModule: SharedModule
     };
   }
 }

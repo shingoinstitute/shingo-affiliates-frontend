@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
 
-import { Facilitator, FacilitatorRoleType } from '../Facilitator';
+import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
-import { Affiliate } from '../../affiliates/Affiliate';
+import { Affiliate } from '../../affiliates/affiliate.model';
 import { Observable } from 'rxjs/Observable';
 
 @Component({

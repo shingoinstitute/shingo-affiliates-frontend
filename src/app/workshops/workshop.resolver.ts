@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
 import { WorkshopService } from '../services/workshop/workshop.service';
-import { Workshop } from './Workshop';
+import { Workshop } from './workshop.model';
 import { RouterService } from '../services/router/router.service';
 
 import { Observable } from 'rxjs/Rx';

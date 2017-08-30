@@ -9,7 +9,7 @@ import { AuthService } from './services/auth/auth.service';
 import { WorkshopService } from './services/workshop/workshop.service';
 import { SidenavService } from './services/sidenav/sidenav.service';
 import { RouterService } from './services/router/router.service';
-import { MaterialsDialog } from './interface/materials/materials-dialog/materials-dialog.component';
+import { MaterialsDialog } from './ui-components/materials/materials-dialog/materials-dialog.component';
 
 // RxJS Modules
 import { Subject } from 'rxjs/Subject';

@@ -4,8 +4,8 @@ import { HttpHeaders, HttpRequest } from '@angular/common/http';
 
 // App Modules
 import { HttpService } from '../http/http.service';
-import { BaseAPIService, ISFSuccessResult } from '../base-api.abstract.service';
-import { Workshop } from '../../workshops/Workshop';
+import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
+import { Workshop } from '../../workshops/workshop.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';

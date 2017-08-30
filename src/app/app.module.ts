@@ -12,19 +12,17 @@ import 'hammerjs';
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
 
-/** Workshops  */
-import { WorkshopsModule } from './workshops/workshops.module';
-import { WorkshopResolver } from './workshops/workshop.resolver';
-
 /** Facilitators */
 import { FacilitatorsModule } from './facilitators/facilitators.module';
 
 /** Affiliates */
 import { AffiliatesModule } from './affiliates/affiliates.module';
 
+/** Workshops */
+import { WorkshopsModule } from './workshops/workshops.module';
+
 /** Interface Components */
-import { WorkshopDetailComponent } from './interface/workshops/workshop-detail/workshop-detail.component';
-import { InterfaceModule } from './interface/interface.module';
+import { UIComponentsModule } from './ui-components/ui-components.module';
 
 // App Routing Module
 import { AppRoutingModule } from './app-routing.module';
@@ -44,13 +42,13 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     ServicesModule.forRoot(),
     CookieModule.forRoot(),
+    FlexLayoutModule,
     SharedModule.forRoot(),
     AppRoutingModule,
-    FlexLayoutModule,
-    InterfaceModule,
-    WorkshopsModule,
+    AffiliatesModule,
     FacilitatorsModule,
-    AffiliatesModule
+    WorkshopsModule,
+    UIComponentsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

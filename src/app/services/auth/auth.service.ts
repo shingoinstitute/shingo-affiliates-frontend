@@ -3,8 +3,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 // App Modules
 import { HttpService } from '../http/http.service';
-import { BaseService } from '../base.abstract.service';
-import { User } from '../../shared/models/User';
+import { BaseService } from '../api/base.abstract.service';
+import { User } from '../../shared/models/user.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';

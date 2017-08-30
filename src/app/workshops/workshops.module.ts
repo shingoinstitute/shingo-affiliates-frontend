@@ -1,14 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+
+import { CdkTableModule } from '@angular/cdk';
+import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { Ng2FileDropModule } from 'ng2-file-drop';
+
+/** Workshop Module Components */
 import { WorkshopComponent } from './workshop/workshop.component';
 import { WorkshopDataTableComponent } from './workshop-data-table/workshop-data-table.component';
 import { WorkshopFormComponent } from './workshop-form/workshop-form.component';
 import { WorkshopResolver } from './workshop.resolver';
+import { ActionPendingComponent } from './action-pending/action-pending.component';
+import { AddWorkshopComponent } from './add-workshop/add-workshop.component';
+import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component';
+import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-workshops.component';
+import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
+import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.component';
 
 @NgModule({
   imports: [
@@ -17,17 +27,30 @@ import { WorkshopResolver } from './workshop.resolver';
     FormsModule,
     MaterialModule,
     FlexLayoutModule,
-    CdkTableModule
+    CdkTableModule,
+    Ng2FileDropModule
   ],
   declarations: [
     WorkshopComponent,
     WorkshopDataTableComponent,
-    WorkshopFormComponent
+    WorkshopFormComponent,
+    ActionPendingComponent,
+    AddWorkshopComponent,
+    EditWorkshopComponent,
+    UpcomingWorkshopsComponent,
+    WorkshopDashboardComponent,
+    WorkshopDetailComponent
   ],
   exports: [
     WorkshopComponent,
     WorkshopDataTableComponent,
-    WorkshopFormComponent
+    WorkshopFormComponent,
+    ActionPendingComponent,
+    AddWorkshopComponent,
+    EditWorkshopComponent,
+    UpcomingWorkshopsComponent,
+    WorkshopDashboardComponent,
+    WorkshopDetailComponent
   ],
   providers: [WorkshopResolver]
 })

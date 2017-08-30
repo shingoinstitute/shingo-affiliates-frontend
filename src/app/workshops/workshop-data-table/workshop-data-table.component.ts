@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angu
 import { Router } from '@angular/router';
 
 import { WorkshopDataSource } from '../../services/workshop/workshop-data-source.service';
-import { DataProvider } from '../../services/data-provider.service';
-import { DataProviderFactory } from '../../services/data-provider-factory.service';
+import { DataProvider } from '../../services/data-provider/data-provider.service';
+import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { WorkshopService, WorkshopProperties, WorkshopTrackByStrategy } from '../../services/workshop/workshop.service';
 import { MdSort, MdPaginator, MdButton } from '@angular/material';
-import { Workshop, WorkshopStatusType } from '../Workshop';
+import { Workshop, WorkshopStatusType } from '../workshop.model';
 import { Filter } from '../../services/filters/filter.abstract';
 
 @Component({
