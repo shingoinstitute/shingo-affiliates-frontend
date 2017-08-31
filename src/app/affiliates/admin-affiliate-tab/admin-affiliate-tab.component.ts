@@ -7,7 +7,7 @@ import { MdSnackBar, MdDialog } from '@angular/material';
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component';
 import { Router, NavigationExtras } from '@angular/router';
 import { AffiliateDataTableComponent } from '../../affiliates/affiliate-data-table/affiliate-data-table.component';
-import { AlertDialogComponent } from '../../ui-components/alert-dialog/alert-dialog.component';
+import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-admin-affiliate-tab',

@@ -1,5 +1,5 @@
 // Angular Modules
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 // App Modules
@@ -13,9 +13,7 @@ import { FillViewHeightDirective } from '../../../shared/directives/fill-height.
   styleUrls: ['./login.component.scss'],
   providers: [FillViewHeightDirective]
 })
-export class LoginComponent implements OnInit, AfterViewInit {
-
-  @ViewChild('loginRoot') private root: ElementRef;
+export class LoginComponent implements OnInit {
 
   private email: string;
   private password: string;
@@ -46,11 +44,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.didLoad = true;
     });
     // this.auth.userIsValid();
-  }
-
-  public ngAfterViewInit() {
-    $(this.root.nativeElement).css('position', 'relative');
-    this.fillHeight.fillHeightOnElement(this.root);
   }
 
   /**

@@ -4,7 +4,7 @@ import { MdDialog } from '@angular/material';
 
 import { User } from '../../../shared/models/user.model';
 import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog.component';
-import { SimpleMessageDialog } from '../../../ui-components/simple-message-dialog/simple-message-dialog.component';
+import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component';
 
 @Component({
   selector: 'app-profile',

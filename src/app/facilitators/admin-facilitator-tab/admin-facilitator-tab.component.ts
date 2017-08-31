@@ -4,7 +4,7 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { MdSnackBar, MdDialog } from '@angular/material';
 import { FacilitatorFormComponent } from '../../facilitators/facilitators.module';
 import { Router } from '@angular/router';
-import { AlertDialogComponent } from '../../ui-components/alert-dialog/alert-dialog.component';
+import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-admin-facilitator-tab',

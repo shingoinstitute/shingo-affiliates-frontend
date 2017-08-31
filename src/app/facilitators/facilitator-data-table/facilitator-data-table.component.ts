@@ -7,7 +7,7 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
 import { FacilitatorDataSource } from '../../services/facilitator/facilitator-data-source.service';
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
-import { IconType } from '../../ui-components/icon-legend/icon-legend.component';
+import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
 import { FacilitatorFormComponent } from '../facilitators.module';
 
 @Component({

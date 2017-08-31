@@ -8,7 +8,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk';
 
 import { SharedModule } from '../shared/shared.module';
-// import { UIComponentsModule } from '../ui-components/ui-components.module';
 import { AffiliatesModule } from '../affiliates/affiliates.module';
 
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
@@ -25,7 +24,6 @@ import { FacilitatorLookupComponent } from './facilitator-lookup/facilitator-loo
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    // UIComponentsModule,
     SharedModule.forRoot(),
     AffiliatesModule
   ],
