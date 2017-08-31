@@ -34,7 +34,7 @@ export class AffiliateDataTableComponent implements OnInit {
   private affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
   private isLoading: boolean = true;
   private selectedId: string = '';
-  private displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form'];
+  private displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form', 'refresh'];
 
 
   constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _as: AffiliateService, private router: RouterService) {

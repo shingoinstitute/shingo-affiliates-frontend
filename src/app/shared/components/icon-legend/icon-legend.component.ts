@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-export type IconType = 'edit' | 'delete' | 'disable' | 'cancel' | 'save' | 'reset' | 'search' | 'accept' | 'deleteForever' | 'deleteAccount' | 'form';
+export type IconType = 'edit' | 'delete' | 'disable' | 'cancel' | 'save' | 'reset' | 'refresh' | 'search' | 'accept' | 'deleteForever' | 'deleteAccount' | 'form';
 
 @Component({
   selector: 'app-icon-legend',

@@ -165,7 +165,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.iconRegistry.addSvgIcon('save_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_save_white_18px.svg'));
     this.iconRegistry.addSvgIcon('save_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_save_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('x_red', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_x_red_18px.svg'));
-    this.iconRegistry.addSvgIcon('account_box_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_account_box_white_24px.svg'));
+    this.iconRegistry.addSvgIcon('account_circle_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_account_circle_white_24px.svg'));
     this.iconRegistry.addSvgIcon('support_black', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_help_black_24px.svg'));
     this.iconRegistry.addSvgIcon('logout_black', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_exit_to_app_black_24px.svg'));
     this.iconRegistry.addSvgIcon('person_black', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_person_outline_black_24px.svg'));

@@ -5,13 +5,11 @@ import { Router } from '@angular/router';
 // App Modules
 import { AuthService } from '../../../services/auth/auth.service';
 import { RouterService } from '../../../services/router/router.service';
-import { FillViewHeightDirective } from '../../../shared/directives/fill-height.directive';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  providers: [FillViewHeightDirective]
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
 
@@ -24,10 +22,11 @@ export class LoginComponent implements OnInit {
   private errBody: string;
   private errMsg: string;
 
-  constructor(private auth: AuthService,
+  constructor(
+    private auth: AuthService,
     private router: Router,
-    private fillHeight: FillViewHeightDirective,
-    private routerService: RouterService) { }
+    private routerService: RouterService
+  ) { }
 
   /**
    * @description Dimisses loading indicator after seeing if a user is authenticated.
