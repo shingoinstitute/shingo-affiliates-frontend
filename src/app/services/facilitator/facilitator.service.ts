@@ -77,7 +77,7 @@ export class FacilitatorService extends BaseAPIService {
    * @param query {string} - the query string
    * @param isMapped {boolean} - returns unmapped facilitators when true, and maped facilitators when false
    */
-  public search(query: string, isMapped: boolean = true, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS): Observable<Facilitator[]> {
+  public search(query: string, fields: string[] = DEFAULT_FACILITATOR_SEARCH_FIELDS, isMapped: boolean = true): Observable<Facilitator[]> {
     // Set headers (NOTE: Must include token here)
     let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
     headers = headers.set('x-search', query);

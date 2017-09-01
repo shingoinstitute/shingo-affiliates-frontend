@@ -78,13 +78,11 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   private facilitatorSearch() {
     this.formGroup.get('email').valueChanges
       .skip(1)
-      .filter(email => {
-        return email && email.length > 2;
-      })
+      .filter(email => email && email.length > 2)
       .debounceTime(250)
       .subscribe(email => {
         this.isSearching = true;
-        this._fs.search(email, false).subscribe((facilitators: Facilitator[]) => {
+        this._fs.search(email, undefined, false).subscribe((facilitators: Facilitator[]) => {
           this.facilitatorsOpts = facilitators;
           this.checkForAffiliate();
           this.isSearching = false;

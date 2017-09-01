@@ -5,12 +5,13 @@ import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpModule } from '@angular/http';
 import { CookieModule } from 'ngx-cookie';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import 'hammerjs';
 
 /** Shared Modules */
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
+import { LoggerInterceptor } from './services/http/logger.interceptor';
 
 /** Facilitators */
 import { FacilitatorsModule } from './facilitators/facilitators.module';
@@ -50,7 +51,7 @@ import { AppComponent } from './app.component';
     WorkshopsModule,
     UIComponentsModule
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoggerInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

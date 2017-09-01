@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { MdDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { SimpleMessageDialog } from '../../../ui-components/simple-message-dialog/simple-message-dialog.component';
+import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component';
 import { FacilitatorService } from '../../../services/facilitator/facilitator.service';
 import { FillViewHeightDirective } from '../../../shared/directives/fill-height.directive';
 

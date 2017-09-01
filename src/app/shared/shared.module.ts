@@ -7,6 +7,7 @@ import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.com
   declarations: [
     AlertDialogComponent,
     IconLegendComponent,
-    SimpleMessageDialog
+    SimpleMessageDialog,
+    SfLookupComponent
   ],
   exports: [
     MdDialogModule,
@@ -29,7 +31,8 @@ import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.com
     FroalaViewModule,
     AlertDialogComponent,
     IconLegendComponent,
-    SimpleMessageDialog
+    SimpleMessageDialog,
+    SfLookupComponent
   ],
   entryComponents: [
     AlertDialogComponent,
