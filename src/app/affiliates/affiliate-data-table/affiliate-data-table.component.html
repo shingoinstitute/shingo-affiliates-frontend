@@ -53,7 +53,7 @@
     <!-- Actions -->
     <ng-container cdkColumnDef="actions">
       <md-header-cell *cdkHeaderCellDef> Actions &emsp;&emsp;&emsp;&emsp;
-        <button class="refresh-button" md-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
+        <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
       </md-header-cell>
       <md-cell *cdkCellDef="let aff" fxLayout>
         <ng-container *ngIf="selectedId != aff.sfId">

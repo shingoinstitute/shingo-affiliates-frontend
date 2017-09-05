@@ -3,8 +3,8 @@
   <img [style.height]="'150px'" src="http://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
   <span fxFlex></span>
 
-  <button md-button [mdMenuTriggerFor]="menu" *ngIf="isAuthenticated">
-      <md-icon svgIcon="account_box_white"></md-icon>
+  <button md-icon-button [mdMenuTriggerFor]="menu" *ngIf="isAuthenticated">
+      <md-icon svgIcon="account_circle_white"></md-icon>
    </button>
 
   <md-menu #menu="mdMenu">

@@ -2,7 +2,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule, MdDialogModule } from '@angular/material';
-import { FillViewHeightDirective } from './directives/fill-height.directive';
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component';

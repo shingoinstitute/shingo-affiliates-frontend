@@ -1,20 +1,16 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component';
 import { FacilitatorService } from '../../../services/facilitator/facilitator.service';
-import { FillViewHeightDirective } from '../../../shared/directives/fill-height.directive';
 
 @Component({
   selector: 'app-password-reset',
   templateUrl: './password-reset.component.html',
-  styleUrls: ['./password-reset.component.scss'],
-  providers: [FillViewHeightDirective]
+  styleUrls: ['./password-reset.component.scss']
 })
-export class PasswordResetComponent implements OnInit, AfterViewInit {
-
-  @ViewChild('resetRoot') private root: ElementRef;
+export class PasswordResetComponent implements OnInit {
 
   private password: string;
   private passwordConfirm: string;
@@ -25,17 +21,11 @@ export class PasswordResetComponent implements OnInit, AfterViewInit {
   constructor(private _fs: FacilitatorService,
     private dialog: MdDialog,
     private route: ActivatedRoute,
-    private router: Router,
-    private fillHeight: FillViewHeightDirective) { }
+    private router: Router) { }
 
   public ngOnInit() {
     this.password = '';
     this.passwordConfirm = '';
-  }
-
-  public ngAfterViewInit() {
-    $(this.root.nativeElement).css('position', 'relative');
-    this.fillHeight.fillHeightOnElement(this.root);
   }
 
   private onSubmit() {

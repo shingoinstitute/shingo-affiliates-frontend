@@ -1,38 +1,30 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MdDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
 import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component';
 import { FacilitatorService } from '../../../services/facilitator/facilitator.service';
-import { FillViewHeightDirective } from '../../../shared/directives/fill-height.directive';
 
 @Component({
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.component.html',
-  styleUrls: ['./forgot-password.component.scss'],
-  providers: [FillViewHeightDirective]
+  styleUrls: ['./forgot-password.component.scss']
 })
-export class ForgotPasswordComponent implements OnInit, AfterViewInit {
-
-  @ViewChild('forgotRoot') private root: ElementRef;
+export class ForgotPasswordComponent implements OnInit {
 
   private email: string;
   private errMsg: string;
   private errBody: string;
   private isLoading = false;
 
-  constructor(private _fs: FacilitatorService,
+  constructor(
+    private _fs: FacilitatorService,
     private dialog: MdDialog,
-    private router: Router,
-    private fillHeight: FillViewHeightDirective) { }
+    private router: Router
+  ) { }
 
   public ngOnInit() {
     this.email = '';
-  }
-
-  public ngAfterViewInit() {
-    $(this.root.nativeElement).css('position', 'relative');
-    this.fillHeight.fillHeightOnElement(this.root);
   }
 
   private onSubmit() {

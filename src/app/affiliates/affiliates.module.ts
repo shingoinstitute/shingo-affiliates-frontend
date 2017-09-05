@@ -8,7 +8,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CdkTableModule } from '@angular/cdk';
 
 import { SharedModule } from '../shared/shared.module';
-// import { UIComponentsModule } from '../ui-components/ui-components.module';
 
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
@@ -25,7 +24,6 @@ import { AffiliateLookupComponent } from './affiliate-lookup/affiliate-lookup.co
     FlexLayoutModule,
     CdkTableModule,
     SharedModule.forRoot()
-    // UIComponentsModule
   ],
   declarations: [
     AdminAffiliateTabComponent,
