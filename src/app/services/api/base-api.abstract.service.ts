@@ -46,5 +46,9 @@ export abstract class BaseAPIService extends BaseService {
       .catch(this.handleError);
   }
 
+  public sfObjectFactory<T>(type: { new(...args: any[]): T; }, ...args: any[]): T {
+    return new type(args);
+  }
+
   protected APIHost() { return `${this._baseUrl}:${this._basePort}`; }
 }

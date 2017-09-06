@@ -2,11 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { CustomFormsModule } from 'ng2-validation';
 
 import { CdkTableModule } from '@angular/cdk';
 import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Ng2FileDropModule } from 'ng2-file-drop';
+
+import { SharedModule } from '../shared/shared.module';
 
 /** Workshop Module Components */
 import { WorkshopComponent } from './workshop/workshop.component';
@@ -25,10 +28,12 @@ import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.compo
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    CustomFormsModule,
     MaterialModule,
     FlexLayoutModule,
     CdkTableModule,
-    Ng2FileDropModule
+    Ng2FileDropModule,
+    SharedModule.forRoot()
   ],
   declarations: [
     WorkshopComponent,

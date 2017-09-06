@@ -21,7 +21,9 @@
   </div>
 
   <div class="input-item">
-    <md-input-container>
+    <app-sf-lookup placeholder="Email" [sfObject]="facilitator" formControlName="email" [displayFn]="displayFn.bind(this)" [extraArgs]="false"
+      (onSelect)="onSelectFacilitator($event)"></app-sf-lookup>
+    <!-- <md-input-container>
       <input type="text" mdInput [mdAutocomplete]="auto" placeholder="Email" [(ngModel)]="facilitator.email" formControlName="email"
         required>
       <div class="search-spinner-container">
@@ -33,7 +35,7 @@
       <md-option *ngFor="let f of facilitatorsOpts" [value]="f.email" (onSelectionChange)="onSelectFacilitator(f)">
         {{ f.email }}
       </md-option>
-    </md-autocomplete>
+    </md-autocomplete> -->
   </div>
 
   <div class="input-item">
@@ -65,7 +67,8 @@
   </div>
 
   <div class="input-item">
-    <app-affiliate-lookup (onSelect)="onSelectAffiliate($event)" [affiliate]="facilitator.affiliate"></app-affiliate-lookup>
+    <app-sf-lookup formControlName="affiliate" (onSelect)="onSelectAffiliate($event)" [sfObject]="facilitator.affiliate" [displayFn]="displayFn.bind(this)"
+      placeholder="Affiliate"></app-sf-lookup>
   </div>
 
   <div class="input-item">

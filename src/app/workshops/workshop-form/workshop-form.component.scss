@@ -58,3 +58,7 @@ form div.form-actions md-spinner {
     max-height: 36px;
     max-width: 25px;
 }
+
+form md-input-container md-hint.error {
+  color: #ff0000;
+}

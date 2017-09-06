@@ -26,7 +26,7 @@ export class FacilitatorLookupComponent implements AfterViewInit, OnChanges {
     this.formControl.valueChanges.subscribe((query: string) => {
       if (query && query.length > 2) {
         this.isSearching = true;
-        this._fs.search(query, false)
+        this._fs.search(query, undefined, false)
           .debounceTime(250)
           .subscribe(data => {
             this.isSearching = false;

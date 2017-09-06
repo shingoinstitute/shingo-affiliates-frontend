@@ -33,6 +33,8 @@ import 'rxjs/add/observable/throw';
 // Lodash functions
 import { merge } from 'lodash';
 
+import { CustomValidators } from 'ng2-validation';
+
 @Component({
   selector: 'app-workshop-form',
   templateUrl: './workshop-form.component.html',
@@ -42,20 +44,6 @@ export class WorkshopFormComponent implements OnInit {
 
   @Input() public submitFunction: (workshop: Workshop) => Observable<ISFSuccessResult>;
   @Input() public workshop: Workshop = new Workshop();
-
-  private debounceTime: number = 250;
-
-  private loadingAF: boolean = false;
-  private queryChangeAF$: Subject<string> = new Subject<string>();
-  private changeAF$: BehaviorSubject<Affiliate[]> = new BehaviorSubject<Affiliate[]>([]);
-
-  private loadingInstructors: boolean = false;
-  private facilitatorQueryChange$: Subject<string> = new Subject<string>();
-  private facilitatorChange$: BehaviorSubject<Facilitator[]> = new BehaviorSubject<Facilitator[]>([]);
-
-  private loadingCms: boolean = false;
-  private courseManagerQuery$: Subject<string> = new Subject<string>();
-  private courseManagersChange$: BehaviorSubject<CourseManager[]> = new BehaviorSubject<CourseManager[]>([]);
 
   private isLoading: boolean = false;
 
@@ -91,9 +79,6 @@ export class WorkshopFormComponent implements OnInit {
 
   public ngOnInit() {
     this.createForm();
-    this.subscribeToQueryAF();
-    this.subscribeToFacilitatorQuery();
-    this.subscribeToCourseManagerQuery();
     this.subscribeToCountry();
     this.subscribeToIsPublic();
     this.getWorkshopDescription();
@@ -112,7 +97,7 @@ export class WorkshopFormComponent implements OnInit {
       courseManager: [this.workshop.courseManager, Validators.required],
       startDate: [this.workshop.startDate || new Date(), Validators.required],
       endDate: [this.workshop.endDate || new Date(Date.now() + (1000 * 60 * 60 * 24)), Validators.required],
-      website: [this.workshop.website],
+      website: [this.workshop.website, CustomValidators.url],
       billing: [this.workshop.billing, [Validators.required, Validators.email]],
       facilitator: ['']
     });
@@ -123,6 +108,8 @@ export class WorkshopFormComponent implements OnInit {
     this.workshop = merge(this.workshop, this.workshopForm.value);
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
     else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
+
+    this.workshop.courseManager = this.workshopForm.controls.courseManager.value;
 
     this.submitFunction(this.workshop)
       .subscribe((result: ISFSuccessResult) => {
@@ -141,131 +128,15 @@ export class WorkshopFormComponent implements OnInit {
     this.workshopForm.controls.facilitator.setValue('');
   }
 
-  private checkValidCM(): void {
-    const cmControl = this.workshopForm.controls.courseManager;
-    if (!cmControl.value.sfId) {
-      cmControl.setValue(undefined);
+  private checkValidSFObject(control): void {
+    if (control.value && !control.value.sfId) {
+      control.setValue(undefined);
     }
   }
 
-  private checkValidAutoComplete(event): void {
-    console.log(event);
-  }
-
-  private subscribeToQueryAF() {
-    const affiliate = this.workshopForm.controls.affiliate;
-    affiliate.valueChanges
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (value && value.length > 2) {
-          this.loadingAF = true;
-          this.queryChangeAF$.next(`${value}*`);
-        }
-      });
-
-    this.valueChangesAF()
-      .subscribe((data: Affiliate[]) => {
-        setTimeout(() => this.loadingAF = false, 150);
-        this.affiliates = data;
-      }, err => console.error(err));
-  }
-
-
-  private valueChangesAF(): BehaviorSubject<Affiliate[]> {
-    this.queryChangeAF$.distinctUntilChanged()
-      .debounceTime(this.debounceTime)
-      .subscribe((query: string) => {
-        this._as.search(query)
-          .subscribe((affiliates: Affiliate[]) => this.changeAF$.next(affiliates),
-          err => {
-            console.error(err);
-            return this.changeAF$.next([]);
-          });
-      });
-
-    return this.changeAF$;
-  }
-  /**
-     * @description Retrieves a list of instructors from the api then listens to value changes
-     * on the instructors FormControl and displays filtered results in the auto-complete.
-     */
-  private subscribeToFacilitatorQuery() {
-    const facilitator = this.workshopForm.controls.facilitator;
-    facilitator.valueChanges
-      .distinctUntilChanged()
-      .subscribe(value => {
-        if (value && value.length > 2) {
-          this.loadingInstructors = true;
-          this.facilitatorQueryChange$.next(`${value}*`);
-        }
-      });
-
-    this.facilitatorValueChanges()
-      .subscribe((data: Facilitator[]) => {
-        setTimeout(() => this.loadingInstructors = false, 150);
-        this.facilitatorOpts = data;
-      }, err => console.error(err));
-  }
-
-
-  /**
-   * @description Returns a stream of facilitators returned from queries emitted from `this.facilitatorQueryChange$`.
-   */
-  private facilitatorValueChanges(): BehaviorSubject<Facilitator[]> {
-    this.facilitatorQueryChange$.distinctUntilChanged()
-      .debounceTime(this.debounceTime)
-      .subscribe((query: string) => {
-        this._fs.search(query)
-          .subscribe((facilitators: Facilitator[]) => {
-            return this.facilitatorChange$.next(facilitators);
-          }, err => {
-            console.error(err);
-            return this.facilitatorChange$.next([]);
-          });
-      });
-
-    return this.facilitatorChange$;
-  }
-
-  /**
-     * @description Retrieves a list of course managers from the api then listens to value changes
-     * on the courseManager FormControl and displays filtered results in the auto-complete.
-     */
-  private subscribeToCourseManagerQuery() {
-    this.workshopForm.get('courseManager')
-      .valueChanges
-      .distinctUntilChanged()
-      .subscribe((query: string) => {
-        if (query && query.length > 1) {
-          this.loadingCms = true;
-          this.courseManagerQuery$.next(`${query}*`);
-        }
-      });
-
-    this.courseManagerValueChanges()
-      .subscribe((cms: CourseManager[]) => {
-        setTimeout(() => this.loadingCms = false, 150);
-        this.courseManagers = cms;
-      });
-  }
-
-  /**
-   * @description Returns a stream of course managers returned from queries emitted from `this.courseManagerQuery$`.
-   */
-  private courseManagerValueChanges(): BehaviorSubject<CourseManager[]> {
-    const id = this.workshopForm.controls && this.workshopForm.controls.affiliate.value.sfId || this.auth.user.affiliate;
-    this.courseManagerQuery$.distinctUntilChanged()
-      .debounceTime(this.debounceTime)
-      .subscribe((query: string) => {
-        this._as.searchCMS(query, id)
-          .subscribe((cms: CourseManager[]) => {
-            return this.courseManagersChange$.next(cms);
-          }, err => {
-            console.error(err);
-            return this.courseManagersChange$.next([]);
-          });
-      });
-    return this.courseManagersChange$;
+  private getAffiliate(): string {
+    if (this.workshopForm.value.affiliate.sfId) return this.workshopForm.value.affiliate.sfId;
+    else return this.auth.user.affiliate;
   }
 
   /**
@@ -286,11 +157,29 @@ export class WorkshopFormComponent implements OnInit {
     publicChanges$.subscribe(isPublic => {
       const websiteControl = this.workshopForm.controls.website;
 
-      if (isPublic) websiteControl.setValidators(Validators.required);
-      else websiteControl.clearValidators();
+      if (isPublic)
+        websiteControl.setValidators([Validators.required, CustomValidators.url]);
+      else {
+        websiteControl.clearValidators();
+        websiteControl.setValidators(CustomValidators.url);
+      }
 
+      websiteControl.setValue('https://');
       websiteControl.updateValueAndValidity();
     });
+  }
+
+  private prefixWebsite() {
+    const websiteControl = this.workshopForm.controls.website;
+    let value: string = websiteControl.value;
+    if (value.match(/https:\/\/.*/)) return;
+
+    value = value.replace(/http(s{0,1}):.{0,2}/, '');
+    value = 'https://' + value;
+
+    websiteControl.setValue(value);
+
+    websiteControl.updateValueAndValidity();
   }
 
   /**
