@@ -107,9 +107,9 @@ export class WorkshopFormComponent implements OnInit {
     this.isLoading = true;
     this.workshop = merge(this.workshop, this.workshopForm.value);
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
-    else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfObject.sfId;
+    else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
 
-    this.workshop.courseManager = this.workshopForm.value.courseManager.sfObject;
+    this.workshop.courseManager = this.workshopForm.controls.courseManager.value;
 
     this.submitFunction(this.workshop)
       .subscribe((result: ISFSuccessResult) => {

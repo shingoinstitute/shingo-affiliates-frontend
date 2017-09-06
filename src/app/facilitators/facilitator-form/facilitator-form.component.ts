@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, Input, Optional, ElementRef, ViewChild, OnDe
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
-import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, FormBuilder } from '@angular/forms';
 
 import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
@@ -36,7 +36,8 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
     private snackbar: MdSnackBar,
     private _fs: FacilitatorService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private fb: FormBuilder
   ) {
     this.buildForm();
 
@@ -62,36 +63,10 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
       $(this.formContainer.nativeElement).css('margin', '0 auto');
       $(this.formContainer.nativeElement).css('margin-bottom', '48px');
     }
-
-    this.facilitatorSearch();
   }
 
   public ngOnDestroy() {
     if (this.routeSubscription) this.routeSubscription.unsubscribe();
-  }
-
-  /**
-   * @desc listens to changes on email formControl to populate values in `this.facilitatorOpts`
-   *
-   * NOTE: facilitatorSearch only returns unmapped facilitators
-   */
-  private facilitatorSearch() {
-    this.formGroup.get('email').valueChanges
-      .skip(1)
-      .filter(email => email && email.length > 2)
-      .debounceTime(250)
-      .subscribe(email => {
-        this.isSearching = true;
-        this._fs.search(email, undefined, false).subscribe((facilitators: Facilitator[]) => {
-          this.facilitatorsOpts = facilitators;
-          this.checkForAffiliate();
-          this.isSearching = false;
-          this.isNewFacilitator = true;
-        }, err => {
-          console.error(err);
-          this.isSearching = false;
-        });
-      });
   }
 
   private getSFObject(id: string) {
@@ -100,6 +75,10 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
       this.isLoading = false;
       if (facilitator) {
         this.facilitator = facilitator;
+        this.formGroup.patchValue(this.facilitator);
+        this.formGroup.controls.email.patchValue({ 'sfObject': this.facilitator });
+        this.formGroup.controls.affiliate.patchValue({ 'sfObject': this.facilitator.affiliate });
+        this.formGroup.updateValueAndValidity();
         this.checkForAffiliate();
       }
     }, err => {
@@ -110,15 +89,16 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private buildForm() {
-    this.formGroup = new FormGroup({
-      email: new FormControl(Validators.required),
-      firstName: new FormControl(Validators.required),
-      lastName: new FormControl(Validators.required),
-      title: new FormControl(),
-      photo: new FormControl(),
-      role: new FormControl(Validators.required),
-      affiliate: new FormControl(Validators.required)
+    this.formGroup = this.fb.group({
+      email: ['', [Validators.required]],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      title: [''],
+      photo: [''],
+      role: ['', Validators.required],
+      affiliate: [new Affiliate(), Validators.required]
     });
+
 
     this.checkForAffiliate();
   }
@@ -126,10 +106,15 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   private onSelectFacilitator(f: Facilitator) {
     if (f && f instanceof Facilitator) {
       this.facilitator = f;
+      this.formGroup.controls.affiliate.patchValue({ 'sfObject': f.affiliate });
+      this.formGroup.controls.affiliate.updateValueAndValidity();
+      this.isNewFacilitator = true;
+      this.checkForAffiliate();
     }
   }
 
   private onSelectAffiliate(affiliate: Affiliate) {
+    console.log('selecting affiliate ', affiliate);
     if (affiliate) {
       this.facilitator.affiliate = affiliate;
       this.checkForAffiliate();
@@ -186,8 +171,11 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
     });
   }
 
-  private displayFn(facilitator: Facilitator | string): string {
-    return facilitator instanceof Facilitator ? facilitator.email : facilitator;
+  private displayFn(obj: Facilitator | Affiliate | string): string {
+    if (obj instanceof Facilitator) return obj.email;
+    else if (obj instanceof Affiliate) return obj.name;
+    else if (typeof obj === 'string') return obj;
+    else return '';
   }
 
   private handleError(err: any) {

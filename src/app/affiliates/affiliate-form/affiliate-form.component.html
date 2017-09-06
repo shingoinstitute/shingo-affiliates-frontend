@@ -1,4 +1,4 @@
-<div class="form-container" [class.loading-active]="isLoading" #formContainer>
+<div class="form-container" [formGroup]="affForm" [class.loading-active]="isLoading" #formContainer>
 
   <div class="spinner-container">
     <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
@@ -19,7 +19,8 @@
   <div class="form-body">
 
     <div class="input-item">
-      <app-affiliate-lookup [affiliate]="affiliate" [fields]="extraFields" (onSelect)="selectedAffiliate($event)" (onChange)="affiliate.name = $event"></app-affiliate-lookup>
+      <app-sf-lookup #afLookup formControlName="affiliate" [sfObject]="affiliate" [fields]="extraFields" [displayFn]="displayFn.bind(this)"
+        placeholder="Name" (onSelect)="selectedAffiliate($event)" (onChange)="affiliate.name = $event"></app-sf-lookup>
     </div>
 
     <div class="input-item">
@@ -28,38 +29,38 @@
       </div>
 
       <md-input-container>
-        <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
+        <input mdInput placeholder="Logo URL" formControlName="logo">
       </md-input-container>
     </div>
 
     <div class="input-item">
       <md-input-container>
-        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
+        <input mdInput placeholder="Website" formControlName="website">
       </md-input-container>
     </div>
 
     <div class="input-item">
       <p class="mat-body-2">Contact Information</p>
       <md-input-container>
-        <input mdInput placeholder="Public Contact Name" [(ngModel)]="affiliate.publicContact">
+        <input mdInput placeholder="Public Contact Name" formControlName="publicContact">
       </md-input-container>
       <!-- </div> -->
 
       <!-- <div class="input-item"> -->
       <md-input-container>
-        <input mdInput placeholder="Public Contact Email" [(ngModel)]="affiliate.publicContactEmail">
+        <input mdInput placeholder="Public Contact Email" formControlName="publicContactEmail">
       </md-input-container>
       <!-- </div> -->
 
       <!-- <div class="input-item"> -->
       <md-input-container>
-        <input mdInput placeholder="Public Contact Phone" [(ngModel)]="affiliate.publicContactPhone">
+        <input mdInput placeholder="Public Contact Phone" formControlName="publicContactPhone">
       </md-input-container>
     </div>
 
     <div class="input-item">
       <md-input-container [floatPlaceholder]="always">
-        <input type="text" mdInput [formControl]="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
+        <input type="text" mdInput formControlName="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
       </md-input-container>
 
       <md-autocomplete #langSearch="mdAutocomplete">
@@ -80,13 +81,13 @@
 
     <div class="input-item">
       <p class="mat-body-2">Summary</p>
-      <div [froalaEditor] [(froalaModel)]="affiliate.summary"></div>
+      <div [froalaEditor] formControlName="summary"></div>
     </div>
   </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button md-raised-button class="mat-accent" [md-dialog-close]="affiliate"> Save </button>
+      <button md-raised-button class="mat-accent" [md-dialog-close]="affiliate" [disabled]="!affForm.valid"> Save </button>
       <button md-raised-button [md-dialog-close]="false"> Cancel </button>
     </ng-container>
 
