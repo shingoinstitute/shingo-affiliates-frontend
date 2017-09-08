@@ -194,13 +194,14 @@ md-input-container {
   flex: 1 0 auto;
 }
 .spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
 }
 .spinner-container md-spinner {
   position: absolute;
-  right: 0;
-  bottom: -8px;
+  top: 16px;
   height: 24px;
   width: 24px;
-  margin: 0 8px;
 }

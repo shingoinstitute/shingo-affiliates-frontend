@@ -14,9 +14,4 @@
   <app-facilitator-data-table (onDisable)="onDisable($event)" (onDelete)="onDelete($event)" (onReset)="resetPassword($event)"
     (onSave)="onSave($event)" (onLoadComplete)="isLoading = false">
   </app-facilitator-data-table>
-
-  <div class="spinner-container">
-    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
-  </div>
-
 </div>
