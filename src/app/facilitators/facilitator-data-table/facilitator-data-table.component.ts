@@ -9,6 +9,7 @@ import { FacilitatorDataSource } from '../../services/facilitator/facilitator-da
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
 import { FacilitatorFormComponent } from '../facilitators.module';
+import { RouterService } from '../../services/router/router.service';
 
 @Component({
   selector: 'app-facilitator-data-table',
@@ -23,18 +24,24 @@ export class FacilitatorDataTableComponent implements OnInit {
   @Output() public onReset = new EventEmitter<Facilitator>();
   @Output() public onSave = new EventEmitter<Facilitator>();
 
-  @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'actions'];
+  @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'actions', 'refresh'];
   @Input('dataSource') public dataSource: FacilitatorDataSource | null;
-
+  
   @ViewChild(MdPaginator) private paginator: MdPaginator;
   @ViewChild(MdSort) private sort: MdSort;
-
+  
   private facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
   private selectedId: string = '';
   private roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS;
   private displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form'];
+  private isLoading: boolean;
 
-  constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _fs: FacilitatorService) {
+  constructor(
+    public dialog: MdDialog, 
+    private router: RouterService,
+    private providerFactory: DataProviderFactory, 
+    private _fs: FacilitatorService
+  ) {
     this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();
   }
 
@@ -57,6 +64,21 @@ export class FacilitatorDataTableComponent implements OnInit {
         this.onLoadComplete.emit();
       }
     });
+
+    // Listen to data provider for further loading events
+    this.facilitatorDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
+  }
+
+  public refresh() {
+    try {
+      this.facilitatorDataProvider.refresh();
+    } catch (error) {
+      if (error.status === 403) {
+        if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
+        else this.router.navigateRoutes(['/login', '/admin']);
+      } else
+        throw error;
+    }
   }
 
   private onClickForm(facilitator: Facilitator) {
@@ -68,9 +90,8 @@ export class FacilitatorDataTableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((f: Facilitator) => {
-      if (f) {
+      if (f)
         this.onSave.emit(f);
-      }
     });
   }
 

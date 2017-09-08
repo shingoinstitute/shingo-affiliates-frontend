@@ -54,7 +54,11 @@
 
       <!-- Actions -->
       <ng-container cdkColumnDef="actions">
-         <md-header-cell *cdkHeaderCellDef> Actions </md-header-cell>
+         <md-header-cell *cdkHeaderCellDef [style.align-items]="'center'">
+            <span> Actions </span>
+            <span fxFlex></span>
+            <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
+         </md-header-cell>
          <md-cell *cdkCellDef="let fac" fxLayout>
            <!-- Action Buttons -->
             <ng-container *ngIf="selectedId != fac.sfId">
@@ -62,15 +66,15 @@
                   <md-icon class="icon-sm" svgIcon="edit_mode_grey"></md-icon>
                </button>
 
-               <button md-icon-button (click)="onClickDeleteEvent.emit(fac)">
+               <button md-icon-button (click)="onDelete.emit(fac)">
                   <md-icon class="icon-sm" svgIcon="delete_grey"></md-icon>
                </button>
       
-               <button md-icon-button (click)="onClickDisableEvent.emit(fac)">
+               <button md-icon-button (click)="onDisable.emit(fac)">
                   <md-icon class="icon-sm" svgIcon="block_grey"></md-icon>
                </button>
    
-               <button md-icon-button (click)="onClickResetEvent.emit(fac)">
+               <button md-icon-button (click)="onReset.emit(fac)">
                   <md-icon class="icon-sm" svgIcon="renew_grey"></md-icon>
                </button>
 
@@ -86,7 +90,7 @@
                  <span>Cancel</span>
               </button>
 
-              <button md-button (click)="onClickSaveEvent.emit(fac)">
+              <button md-button (click)="onSave.emit(fac)">
                  <md-icon svgIcon="save_grey"></md-icon>
                  <span>Save</span>
               </button>
@@ -98,5 +102,9 @@
       <md-row *cdkRowDef="let fac; columns: displayedColumns;"></md-row>
    </md-table>
    
+    <div class="spinner-container" *ngIf="isLoading">
+      <md-spinner class="mat-accent"></md-spinner>
+    </div>
+
    <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
 </div>

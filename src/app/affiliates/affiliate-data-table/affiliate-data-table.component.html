@@ -52,7 +52,9 @@
 
     <!-- Actions -->
     <ng-container cdkColumnDef="actions">
-      <md-header-cell *cdkHeaderCellDef> Actions &emsp;&emsp;&emsp;&emsp;
+      <md-header-cell *cdkHeaderCellDef [style.align-items]="'center'">
+        <span> Actions </span>
+        <span fxFlex></span>
         <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
       </md-header-cell>
       <md-cell *cdkCellDef="let aff" fxLayout>
@@ -90,7 +92,7 @@
   </md-table>
 
   <div class="spinner-container" *ngIf="isLoading">
-    <md-spinner></md-spinner>
+    <md-spinner class="mat-accent"></md-spinner>
   </div>
 
   <md-paginator #paginator [length]="affiliateDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]">
