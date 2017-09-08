@@ -9,12 +9,12 @@ if (environment.production) {
 }
 
 // Add withoutTime function to Date prototype
-declare global {
+// declare global {
   // tslint:disable-next-line:interface-name
-  interface Date {
-    withoutTime(): Date;
-  }
-}
+  // interface Date {
+  //   withoutTime(): Date;
+  // }
+// }
 
 (function () {
   Date.prototype.withoutTime = function () {

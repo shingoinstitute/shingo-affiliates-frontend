@@ -9,7 +9,7 @@ describe('WorkshopDataSourceService', () => {
     });
   });
 
-  it('should be created', inject([WorkshopDataSource], (service: WorkshopDataSource) => {
-    expect(service).toBeTruthy();
-  }));
+  // it('should be created', inject([WorkshopDataSource], (service: WorkshopDataSource) => {
+  //   expect(service).toBeTruthy();
+  // }));
 });
