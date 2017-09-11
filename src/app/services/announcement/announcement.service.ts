@@ -6,9 +6,6 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
-// Mics Modules
-import { CookieService } from 'ngx-cookie';
-
 import { Announcement } from './announcement.model';
 
 @Injectable()
