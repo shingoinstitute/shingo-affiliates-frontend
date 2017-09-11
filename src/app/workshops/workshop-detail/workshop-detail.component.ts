@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 
-import { Workshop } from '../../workshops/workshop.model';
+import { Workshop, WorkshopStatusType } from '../../workshops/workshop.model';
 import { WorkshopService } from '../../services/workshop/workshop.service';
 
 import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile, Ng2FileDropFiles, Ng2FileDropRejections } from 'ng2-file-drop';
@@ -31,6 +31,10 @@ export class WorkshopDetailComponent implements OnInit {
     'application/zip': 'assets/imgs/icons/file_icon.png',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'assets/imgs/icons/spreadsheet_icon.png'
   };
+
+  public get showFileUpload(): boolean {
+    return this.workshop.type === ('Action Pending' as WorkshopStatusType);
+  }
 
   constructor(public route: ActivatedRoute, public _ws: WorkshopService) { }
 
