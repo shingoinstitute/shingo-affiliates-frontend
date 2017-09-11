@@ -21,11 +21,11 @@ export class AuthService extends BaseService {
   public authenticationChange$: BehaviorSubject<boolean>;
   public get user() { return this._user; }
 
-  protected _baseUrl: string = 'http://129.123.47.34';
+  protected _baseUrl: string = 'https://api.shingo.org/v2/affiliates';
   protected _basePort: string = '8080';
 
   private _user: User;
-  private get authHost(): string { return `${this._baseUrl}:${this._basePort}/auth`; }
+  private get authHost(): string { return `${this._baseUrl}/auth`; }
 
   constructor(private http: HttpService) {
     super();

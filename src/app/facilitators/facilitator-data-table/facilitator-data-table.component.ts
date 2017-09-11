@@ -24,22 +24,22 @@ export class FacilitatorDataTableComponent implements OnInit {
   @Output() public onReset = new EventEmitter<Facilitator>();
   @Output() public onSave = new EventEmitter<Facilitator>();
 
-  @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'actions', 'refresh'];
+  @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'actions'];
   @Input('dataSource') public dataSource: FacilitatorDataSource | null;
-  
+
   @ViewChild(MdPaginator) private paginator: MdPaginator;
   @ViewChild(MdSort) private sort: MdSort;
-  
+
   private facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
   private selectedId: string = '';
   private roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS;
-  private displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form'];
+  private displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form', 'reset'];
   private isLoading: boolean;
 
   constructor(
-    public dialog: MdDialog, 
+    public dialog: MdDialog,
     private router: RouterService,
-    private providerFactory: DataProviderFactory, 
+    private providerFactory: DataProviderFactory,
     private _fs: FacilitatorService
   ) {
     this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();
