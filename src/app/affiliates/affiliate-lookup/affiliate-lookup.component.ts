@@ -17,11 +17,11 @@ export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
   @Output() public onSelect = new EventEmitter<Affiliate>();
   @Output() public onChange = new EventEmitter<string>();
 
-  private affiliates: Affiliate[] = [];
-  private formControl: FormControl = new FormControl();
-  private isSearching: boolean;
+  public affiliates: Affiliate[] = [];
+  public formControl: FormControl = new FormControl();
+  public isSearching: boolean;
 
-  constructor(private _as: AffiliateService) { }
+  constructor(public _as: AffiliateService) { }
 
   public ngAfterViewInit() {
     // Listen to changes in auto-complete search field
@@ -61,12 +61,12 @@ export class AffiliateLookupComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private onSelectChange(affiliate: Affiliate) {
+  public onSelectChange(affiliate: Affiliate) {
     this.affiliate = affiliate;
     this.onSelect.emit(affiliate);
   }
 
-  private displayFn(affiliate: Affiliate): string {
+  public displayFn(affiliate: Affiliate): string {
     return affiliate ? affiliate.name : '';
   }
 

@@ -39,11 +39,11 @@ export type WorkshopTrackByStrategy = 'id' | 'reference' | 'index';
 @Injectable()
 export class WorkshopService extends BaseAPIService {
 
-  private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
+  public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  private route: string = 'workshops';
+  public route: string = 'workshops';
 
-  constructor(private http: HttpService) { super(); }
+  constructor(public http: HttpService) { super(); }
 
   public getAll(): Observable<Workshop[]> {
     return this.http.get(this.baseUrl)

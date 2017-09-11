@@ -25,7 +25,7 @@ export class HttpService {
     } as any;
   }
 
-  constructor(public http: HttpClient, public _cs: CookieService, private router: Router) { }
+  constructor(public http: HttpClient, public _cs: CookieService, public router: Router) { }
 
   public get<T>(url: string, options = this._defaultReqOpts): Observable<any> {
     return this.http.get<T>(url, options);

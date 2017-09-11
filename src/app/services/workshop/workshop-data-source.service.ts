@@ -10,7 +10,7 @@ import { Workshop } from '../../workshops/workshop.model';
 export class WorkshopDataSource extends APIDataSource<WorkshopService, Workshop> {
 
   constructor(
-    private _wdp: DataProvider<WorkshopService, Workshop>,
+    public _wdp: DataProvider<WorkshopService, Workshop>,
     public paginator?: MdPaginator,
     public sort?: MdSort
   ) { super(_wdp, paginator, sort); }

@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export class FormsEvalsComponent {
 
-  private folder = { 'Evaluation': false };
+  public folder = { 'Evaluation': false };
 
 }

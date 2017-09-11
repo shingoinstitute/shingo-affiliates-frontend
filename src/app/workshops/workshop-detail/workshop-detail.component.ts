@@ -14,25 +14,25 @@ import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile, Ng2FileDropFiles, Ng2
 })
 export class WorkshopDetailComponent implements OnInit {
 
-  private workshop: Workshop;
-  private attendeeFile: any;
-  private evaluations: File[] = [];
-  private errors: string[] = [];
+  public workshop: Workshop;
+  public attendeeFile: any;
+  public evaluations: File[] = [];
+  public errors: string[] = [];
 
-  private uploadAttendeeProgress: number = 0;
-  private uploadEvalutationsProgress: number = 0;
+  public uploadAttendeeProgress: number = 0;
+  public uploadEvalutationsProgress: number = 0;
 
 
-  private supportedFileTypes: string[] = ['text/csv', 'application/pdf', 'application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
-  private maximumFileSizeInBytes: number = 1000 * 1000 * 25;
-  private fileIcon = {
+  public supportedFileTypes: string[] = ['text/csv', 'application/pdf', 'application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+  public maximumFileSizeInBytes: number = 1000 * 1000 * 25;
+  public fileIcon = {
     'text/csv': 'assets/imgs/icons/spreadsheet_icon.png',
     'application/pdf': 'assets/imgs/icons/pdf_icon.png',
     'application/zip': 'assets/imgs/icons/file_icon.png',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'assets/imgs/icons/spreadsheet_icon.png'
   };
 
-  constructor(private route: ActivatedRoute, private _ws: WorkshopService) { }
+  constructor(public route: ActivatedRoute, public _ws: WorkshopService) { }
 
   public ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop'];
@@ -54,11 +54,11 @@ export class WorkshopDetailComponent implements OnInit {
       });
   }
 
-  private uploadAttendeeList(file: Ng2FileDropAcceptedFile) {
+  public uploadAttendeeList(file: Ng2FileDropAcceptedFile) {
     this.attendeeFile = file.file;
   }
 
-  private uploadEvaluations(files: Ng2FileDropFiles) {
+  public uploadEvaluations(files: Ng2FileDropFiles) {
     this.errors = [];
     files.accepted.map(file => {
       if (this.evaluations.findIndex(f => f.name === file.file.name) === -1)
@@ -67,7 +67,7 @@ export class WorkshopDetailComponent implements OnInit {
     for (const file of files.rejected) this.rejectedFile(file);
   }
 
-  private upload() {
+  public upload() {
     if (this.attendeeFile && this.attendeeFile.lastModifiedDate)
       this.uploadAttendeeListFile();
 
@@ -75,7 +75,7 @@ export class WorkshopDetailComponent implements OnInit {
       this.uploadEvaluationsFiles();
   }
 
-  private uploadAttendeeListFile() {
+  public uploadAttendeeListFile() {
     this.uploadAttendeeProgress = 0;
     this._ws.uploadAttendeeFile(this.workshop.sfId, this.attendeeFile).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
@@ -87,7 +87,7 @@ export class WorkshopDetailComponent implements OnInit {
     });
   }
 
-  private uploadEvaluationsFiles() {
+  public uploadEvaluationsFiles() {
     const files = this.evaluations.filter(f => f.lastModifiedDate);
     this.uploadEvalutationsProgress = 0;
     this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
@@ -100,14 +100,14 @@ export class WorkshopDetailComponent implements OnInit {
     });
   }
 
-  private rejectedFile(file) {
+  public rejectedFile(file) {
     if (file.reason === Ng2FileDropRejections.FileType)
       this.errors.push(`.${file.file.name.split('.')[1]} is not an accepted file type`);
     else if (file.reason === Ng2FileDropRejections.FileSize)
       this.errors.push(`Your file '${file.file.name}' exceeds the maximum size (${this.fileSize(file.file.size)} > 25 MB)`);
   }
 
-  private fileSize(size: number): string {
+  public fileSize(size: number): string {
     const ratio = size / 1000;
     if (ratio > 1000)
       return `${ratio / 1000} MB`;

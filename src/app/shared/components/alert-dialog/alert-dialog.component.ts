@@ -8,8 +8,8 @@ import { SFObject } from '../../models/sf-object.abstract.model';
 })
 export class AlertDialogComponent {
 
-  private sfObj: SFObject;
-  private message: string;
+  public sfObj: SFObject;
+  public message: string;
 
   constructor( @Inject(MD_DIALOG_DATA) public data: { sfObject: any, message: string }) {
     this.sfObj = data.sfObject as SFObject;

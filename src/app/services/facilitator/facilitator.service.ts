@@ -22,10 +22,10 @@ export class FacilitatorService extends BaseAPIService {
 
   public reloadData$ = new EventEmitter<void>();
 
-  private route: string = 'facilitators';
-  private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
+  public route: string = 'facilitators';
+  public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  constructor(private http: HttpService) { super(); }
+  constructor(public http: HttpService) { super(); }
 
   public getAll(): Observable<Facilitator[]> {
     return this.http.get(this.baseUrl)

@@ -11,10 +11,10 @@ import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop
 })
 export class ActionPendingComponent {
 
-  private displayedColumns: WorkshopProperties[] = [];
-  private filters: Filter[];
+  public displayedColumns: WorkshopProperties[] = [];
+  public filters: Filter[];
 
-  constructor(private filterFactory: WorkshopFilterFactory) {
+  constructor(public filterFactory: WorkshopFilterFactory) {
     this.displayedColumns = ['actionType', 'workshopType', 'dueDate', 'daysLate', 'instructors'];
     const propFilter = filterFactory.createPropertyFilter();
     propFilter.dataChange.next({ key: 'status', value: ['Action Pending', 'Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice'] });

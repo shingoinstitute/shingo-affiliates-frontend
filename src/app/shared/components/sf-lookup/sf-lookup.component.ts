@@ -36,10 +36,10 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
 
   public lookup: FormGroup;
 
-  private objects: SFObject[] = [];
-  private isSearching: boolean = false;
+  public objects: SFObject[] = [];
+  public isSearching: boolean = false;
 
-  constructor(private _as: AffiliateService, private _fs: FacilitatorService, private _ws: WorkshopService, private fb: FormBuilder) { }
+  constructor(public _as: AffiliateService, public _fs: FacilitatorService, public _ws: WorkshopService, public fb: FormBuilder) { }
 
   public writeValue(value: any): void {
     if (value) this.lookup.patchValue(value);
@@ -90,7 +90,7 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
       .subscribe(query => this.handleQuery(query));
   }
 
-  private handleQuery(query: string) {
+  public handleQuery(query: string) {
     if (query && query.length > 2) {
       this.isSearching = true;
       this.onChange.emit(query);
@@ -123,12 +123,12 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
     }
   }
 
-  private onSelectChange(sfObject: SFObject) {
+  public onSelectChange(sfObject: SFObject) {
     this.sfObject = sfObject;
     this.onSelect.emit(sfObject);
   }
 
-  private reduceErrors() {
+  public reduceErrors() {
     return Object.keys(this.lookup.controls).reduce((errors: any, name: string) => {
       errors[name] = this.lookup.get(name).errors;
       return errors;

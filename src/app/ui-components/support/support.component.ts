@@ -9,9 +9,9 @@ import { IVideo } from '../../services/support/video.interface';
 })
 export class SupportComponent implements OnInit {
 
-  private videos: IVideo[];
+  public videos: IVideo[];
 
-  constructor(private support: SupportService) { }
+  constructor(public support: SupportService) { }
 
   public ngOnInit() {
     this.videos = this.support.videos;

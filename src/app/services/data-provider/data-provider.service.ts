@@ -12,16 +12,16 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
 
-  private dataChangeSource: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
-  private _dataLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  private _filters: Filter[] = [];
+  public dataChangeSource: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
+  public _dataLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public _filters: Filter[] = [];
 
   public get dataChange(): Observable<T[]> { return this.dataChangeSource.asObservable(); }
   public get dataLoading(): Observable<boolean> { return this._dataLoading.asObservable(); }
   public get filters(): Filter[] { return this._filters; }
 
 
-  constructor(private _s: S) {
+  constructor(public _s: S) {
     this.dataChangeSource.next([]);
     this.refresh();
   }

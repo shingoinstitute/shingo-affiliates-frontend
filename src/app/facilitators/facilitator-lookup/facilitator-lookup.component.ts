@@ -15,11 +15,11 @@ export class FacilitatorLookupComponent implements AfterViewInit, OnChanges {
 
   @Output() public onSelect = new EventEmitter<Facilitator>();
 
-  private facilitators: Facilitator[] = [];
-  private isSearching: boolean;
+  public facilitators: Facilitator[] = [];
+  public isSearching: boolean;
   // formControl: FormControl = new FormControl();
 
-  constructor(private _fs: FacilitatorService) { }
+  constructor(public _fs: FacilitatorService) { }
 
   public ngAfterViewInit() {
     // Listen to changes in auto-complete search field
@@ -57,12 +57,12 @@ export class FacilitatorLookupComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private onSelectChange(facilitator: Facilitator) {
+  public onSelectChange(facilitator: Facilitator) {
     this.facilitator = facilitator;
     this.onSelect.emit(facilitator);
   }
 
-  private displayFn(facilitator: Facilitator): string {
+  public displayFn(facilitator: Facilitator): string {
     return facilitator ? facilitator.name : '';
   }
 }

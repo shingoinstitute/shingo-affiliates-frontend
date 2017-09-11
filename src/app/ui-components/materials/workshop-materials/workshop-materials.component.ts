@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class WorkshopMaterialsComponent {
 
-  private folder = {
+  public folder = {
     'Discover': false,
     'Enable': false,
     'Improve': false,

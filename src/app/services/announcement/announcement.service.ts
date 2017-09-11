@@ -14,7 +14,7 @@ import { Announcement } from './announcement.model';
 @Injectable()
 export class AnnouncementService {
 
-  constructor(private http: Http) { }
+  constructor(public http: Http) { }
 
   public getAnnouncements(): Observable<Announcement[]> {
     /** TODO: Remove after actual API route is implemented */
@@ -22,7 +22,7 @@ export class AnnouncementService {
       observer.next([
         {
           'title': 'Registration URL Update',
-          'message': 'We have updated the system to not require a registration URL if the workshop is private.',
+          'message': 'We have updated the system to not require a registration URL if the workshop is public.',
           'priority': 0
         },
         {
