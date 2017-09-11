@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Facilitator } from '../../facilitators/facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { MdSnackBar, MdDialog } from '@angular/material';
-import { FacilitatorFormComponent } from '../../facilitators/facilitators.module';
+import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component';
 import { Router } from '@angular/router';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
 

@@ -8,7 +8,7 @@ import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
 import { FacilitatorDataSource } from '../../services/facilitator/facilitator-data-source.service';
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
-import { FacilitatorFormComponent } from '../facilitators.module';
+import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component';
 import { RouterService } from '../../services/router/router.service';
 
 @Component({
