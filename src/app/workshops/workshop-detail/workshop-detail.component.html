@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutGap="24px" class="container" fxFlex #pageRoot>
   <app-workshop [workshop]="workshop"></app-workshop>
 
-  <div fxLayout="column" fxFlex *ngIf="workshop.status === 'Action Pending'">
+  <div fxLayout="column" fxFlex *ngIf="workshop.status == 'Action Pending'">
 
     <div class="errors" fxLayout="column">
       <div class="error" *ngFor="let error of errors">{{error}}</div>

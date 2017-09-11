@@ -1,8 +1,7 @@
 <div class="lookup-container" [formGroup]="lookup">
   <div class="input-container">
     <md-input-container>
-      <input type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder" [value]="value"
-        required>
+      <input type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder" required>
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
