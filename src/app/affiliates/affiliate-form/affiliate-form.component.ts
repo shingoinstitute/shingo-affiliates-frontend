@@ -92,6 +92,8 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public selectedAffiliate(affiliate: Affiliate) {
     this.affiliate = affiliate;
+    console.log('selected affiliate: ', this.affiliate);
+    console.log('form now is: ', this.affForm);
     this.state.next();
   }
 
