@@ -1,6 +1,5 @@
 // Angular Modules
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';
@@ -10,8 +9,6 @@ import { Announcement } from './announcement.model';
 
 @Injectable()
 export class AnnouncementService {
-
-  constructor(private http: Http) { }
 
   public getAnnouncements(): Observable<Announcement[]> {
     /** TODO: Remove after actual API route is implemented */
@@ -30,17 +27,6 @@ export class AnnouncementService {
         }
       ]);
     });
-  }
-
-  public handleError(error: Response | any): ErrorObservable {
-    let err: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      err = body.error || JSON.stringify(body);
-    } else {
-      err = error.message ? error.message : error.toString();
-    }
-    return Observable.throw(err);
   }
 
 }

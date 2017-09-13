@@ -10,43 +10,21 @@ import 'rxjs/add/observable/of';
 import { Affiliate } from '../../affiliates/affiliate.model';
 import { HttpEvent } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
-// TODO: Move MockHttpService to http folder
-// TODO: Override other functions
-// Extend the HttpService so that it can be
-// injected into classes that depend on it.
-// NOTE: The mocked interface needs to match
-// the mockees interface
-class HttpServiceMock extends HttpService {
-
-  private mockAffiliates = [
-    { Id: 'some sf id' },
-    { Id: 'some other sf id' }
-  ];
-
-  constructor() { super(null, null); }
-
-  // As get is used to get arrays of and single 
-  // instances of Affiliates, return the right one
-  public get<T>(url: string): Observable<any> {
-    if (url.includes('some sf id')) return Observable.of(this.mockAffiliates[0]);
-    return Observable.of(this.mockAffiliates);
-  }
-
-  // Post always returns an SFSuccessResponse for Affiliates
-  public post<T>(url: string, body: any): Observable<any> {
-    return Observable.of({ success: true, id: 'some sf id', errors: [] });
-  }
-}
+import { HttpServiceMock } from '../http/http-service-mock';
 
 describe('AffiliateService', () => {
+
+  let mockAffiliates = [
+    { Id: 'some sf id' },
+    { Id: 'some sf id' }
+  ];
 
   // No need to use the Angular TestBed
   // as we simply can inject the mock 
   // ourselves (we don't care about it Singletonness)
   let service: AffiliateService;
   beforeEach(() => {
-    service = new AffiliateService(new HttpServiceMock());
+    service = new AffiliateService(new HttpServiceMock(mockAffiliates));
   });
 
   it('should be created', () => {
@@ -68,13 +46,13 @@ describe('AffiliateService', () => {
       expect(res.length).toBe(2);
       expect(res[0]).not.toBeUndefined();
       expect(res[0].sfId).toBe('some sf id');
-      expect(res[1].sfId).toBe('some other sf id');
+      expect(res[1].sfId).toBe('some sf id');
     });
   });
 
   // We should get back the first "mock" affiliate
   it('should get an affiliate by id', () => {
-    service.getById('some sf id').subscribe(res => {
+    service.getById('some sf id').subscribe((res: Affiliate) => {
       expect(res).not.toBeUndefined();
       expect(res.sfId).toBe('some sf id');
     });
@@ -85,7 +63,6 @@ describe('AffiliateService', () => {
     const test = new Affiliate({ Name: 'test aff' });
     service.create(test).subscribe(res => {
       expect(res).not.toBeUndefined();
-      expect(res.id).toBe('some sf id');
     });
   });
 

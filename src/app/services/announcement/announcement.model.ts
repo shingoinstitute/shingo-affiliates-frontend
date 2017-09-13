@@ -1,4 +1,4 @@
-export class Announcement {
+export class Announcement implements AnnouncementInterface {
   public title: string;
   public message: string;
   public priority: number;
@@ -12,4 +12,11 @@ export class Announcement {
   public static create(obj) {
     return new Announcement(obj.title || '', obj.message || '', obj.priority || -1);
   }
+}
+
+// tslint:disable-next-line:interface-name
+interface AnnouncementInterface {
+  title: string;
+  message: string;
+  priority: number;
 }
