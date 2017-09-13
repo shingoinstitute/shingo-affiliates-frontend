@@ -23,7 +23,7 @@ export type WorkshopStatusType = 'Invoiced, Not Paid' |
  * @class Workshop
  */
 export class Workshop extends SFObject {
-  public get name(): string { throw new Error('Method not implemented.'); }
+  public get name(): string { return `${this.type} @ ${this.startDateFormatted} - ${this.endDateFormatted} by ${this.affiliate.name}`; }
 
   public get sfId(): string { return this.Id; }
 

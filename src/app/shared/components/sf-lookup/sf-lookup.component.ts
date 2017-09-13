@@ -13,6 +13,7 @@ import { WorkshopService } from '../../../services/workshop/workshop.service';
 import { CourseManager } from '../../../workshops/course-manager.model';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'app-sf-lookup',
