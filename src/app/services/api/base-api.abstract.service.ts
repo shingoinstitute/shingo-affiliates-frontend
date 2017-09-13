@@ -19,9 +19,9 @@ export interface ISFSuccessResult {
 
 export abstract class BaseAPIService extends BaseService {
 
-  protected _baseUrl: string = 'http://129.123.47.34';
+  protected _baseUrl: string = 'https://api.shingo.org/v2/affiliates';
 
-  protected _basePort: string = '8080';
+  protected _basePort: string = '';
 
 
   // Contract for all APIServices;
@@ -50,5 +50,5 @@ export abstract class BaseAPIService extends BaseService {
     return new type(args);
   }
 
-  protected APIHost() { return `${this._baseUrl}:${this._basePort}`; }
+  protected APIHost() { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}`; }
 }

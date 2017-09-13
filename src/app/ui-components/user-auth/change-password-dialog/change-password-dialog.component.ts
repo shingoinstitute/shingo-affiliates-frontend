@@ -11,14 +11,14 @@ import { AuthService } from '../../../services/auth/auth.service';
 // tslint:disable-next-line:component-class-suffix
 export class ChangePasswordDialog {
 
-  private password: string;
-  private newPassword: string;
-  private confirmPassword: string;
-  private isLoading: boolean = false;
+  public password: string;
+  public newPassword: string;
+  public confirmPassword: string;
+  public isLoading: boolean = false;
 
-  constructor(private dialogRef: MdDialogRef<ChangePasswordDialog>, private auth: AuthService) { }
+  constructor(public dialogRef: MdDialogRef<ChangePasswordDialog>, public auth: AuthService) { }
 
-  private onSubmit() {
+  public onSubmit() {
     if (this.newPassword !== this.confirmPassword) return;
     this.isLoading = true;
     this.auth.login({ email: this.auth.user.email, password: this.password })

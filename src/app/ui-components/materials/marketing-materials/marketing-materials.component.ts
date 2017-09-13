@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export class MarketingMaterialsComponent {
 
-  private folder = { 'Marketing': false };
+  public folder = { 'Marketing': false };
 
 }

@@ -11,7 +11,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class UserResolver implements Resolve<User> {
 
-  constructor(private auth: AuthService, private router: RouterService) { }
+  constructor(public auth: AuthService, public router: RouterService) { }
 
   public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User> {
     return this.auth.getUser().catch(error => {

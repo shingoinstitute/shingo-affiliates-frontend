@@ -18,7 +18,7 @@ export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject
   public get size(): number { return this._dp.data.length; }
 
   constructor(
-    private _dp: DataProvider<S, T>,
+    public _dp: DataProvider<S, T>,
     public paginator?: MdPaginator,
     public sort?: MdSort
   ) { super(); }

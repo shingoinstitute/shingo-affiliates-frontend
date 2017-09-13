@@ -16,15 +16,15 @@ import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert
 })
 export class AdminAffiliateTabComponent {
 
-  @ViewChild(AffiliateDataTableComponent) private dataTable: AffiliateDataTableComponent;
+  @ViewChild(AffiliateDataTableComponent) public dataTable: AffiliateDataTableComponent;
 
-  private displayedColumns = ['logo', 'name', 'website', 'actions'];
-  private selectedAffiliate: Affiliate;
-  private isLoading: boolean = true;
+  public displayedColumns = ['logo', 'name', 'website', 'actions'];
+  public selectedAffiliate: Affiliate;
+  public isLoading: boolean = true;
 
-  constructor(public dialog: MdDialog, private _as: AffiliateService, private snackbar: MdSnackBar, private router: Router) { }
+  constructor(public dialog: MdDialog, public _as: AffiliateService, public snackbar: MdSnackBar, public router: Router) { }
 
-  private onSave(affiliate?: Affiliate) {
+  public onSave(affiliate?: Affiliate) {
     this.isLoading = true;
     this.snackbar.open('Saving Changes...');
 
@@ -36,7 +36,7 @@ export class AdminAffiliateTabComponent {
       this.update(this.selectedAffiliate);
   }
 
-  private onCreate() {
+  public onCreate() {
     const dialogRef = this.dialog.open(AffiliateFormComponent, {
       data: {
         isDialog: true,
@@ -47,7 +47,7 @@ export class AdminAffiliateTabComponent {
     dialogRef.afterClosed().subscribe(affiliate => affiliate && this.create(affiliate));
   }
 
-  private onDelete(affiliate: Affiliate) {
+  public onDelete(affiliate: Affiliate) {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
         sfObject: affiliate,
@@ -58,28 +58,28 @@ export class AdminAffiliateTabComponent {
     dialogRef.afterClosed().subscribe(result => result === true && this.delete(affiliate));
   }
 
-  private create(a: Affiliate) {
+  public create(a: Affiliate) {
     this._as.create(a).subscribe((data: ISFSuccessResult) => {
       this.handleCallback(data);
       this.snackbar.open('Affiliate Successfully Created.', null, { duration: 1500 });
     }, err => { this.handleCallback(null, err); });
   }
 
-  private update(a: Affiliate) {
+  public update(a: Affiliate) {
     this._as.update(a).subscribe((data: ISFSuccessResult) => {
       this.handleCallback(data);
       this.snackbar.open('Affiliate Successfully Updated.', null, { duration: 1500 });
     }, err => { this.handleCallback(null, err); });
   }
 
-  private delete(a: Affiliate) {
+  public delete(a: Affiliate) {
     this._as.delete(a).subscribe(data => {
       this.handleCallback(data);
       this.snackbar.open('Affiliate Successfully Deleted', 'Okay', { duration: 3000 });
     }, err => { this.handleCallback(null, err); });
   }
 
-  private handleCallback(data?: any, err?: any) {
+  public handleCallback(data?: any, err?: any) {
     delete this.selectedAffiliate;
     this.isLoading = false;
 
@@ -91,7 +91,7 @@ export class AdminAffiliateTabComponent {
     }
   }
 
-  private openForm(affiliate: Affiliate) {
+  public openForm(affiliate: Affiliate) {
     this.router.navigateByUrl(`/admin/affiliate/form/${affiliate.sfId}`);
   }
 

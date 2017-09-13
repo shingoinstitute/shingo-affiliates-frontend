@@ -45,20 +45,20 @@ export class WorkshopFormComponent implements OnInit {
   @Input() public submitFunction: (workshop: Workshop) => Observable<ISFSuccessResult>;
   @Input() public workshop: Workshop = new Workshop();
 
-  private isLoading: boolean = false;
+  public isLoading: boolean = false;
 
-  private countries: string[] = [];
-  private countryOptions: string[] = [];
-  private workshopForm: FormGroup;
-  private courseManagers: CourseManager[] = [];
-  private facilitatorOpts: Facilitator[] = [];
-  private affiliates: Affiliate[] = [];
-  private describe: any = {};
+  public countries: string[] = [];
+  public countryOptions: string[] = [];
+  public workshopForm: FormGroup;
+  public courseManagers: CourseManager[] = [];
+  public facilitatorOpts: Facilitator[] = [];
+  public affiliates: Affiliate[] = [];
+  public describe: any = {};
 
 
-  private workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
-  private languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
-  private statuses: string[] = [
+  public workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
+  public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
+  public statuses: string[] = [
     'Invoiced, Not Paid',
     'Finished, waiting for attendee list',
     'Awaiting Invoice',
@@ -70,12 +70,12 @@ export class WorkshopFormComponent implements OnInit {
   ];
 
   constructor(public fb: FormBuilder,
-    private router: Router,
-    private auth: AuthService,
-    private _cs: CountriesService,
-    private _fs: FacilitatorService,
-    private _as: AffiliateService,
-    private _ws: WorkshopService) { }
+    public router: Router,
+    public auth: AuthService,
+    public _cs: CountriesService,
+    public _fs: FacilitatorService,
+    public _as: AffiliateService,
+    public _ws: WorkshopService) { }
 
   public ngOnInit() {
     this.createForm();
@@ -84,7 +84,7 @@ export class WorkshopFormComponent implements OnInit {
     this.getWorkshopDescription();
   }
 
-  private createForm() {
+  public createForm() {
     this.workshopForm = this.fb.group({
       affiliate: [this.workshop.affiliate || new Affiliate(), Validators.required],
       type: [this.workshop.type, Validators.required],
@@ -103,7 +103,7 @@ export class WorkshopFormComponent implements OnInit {
     });
   }
 
-  private onSubmit() {
+  public onSubmit() {
     this.isLoading = true;
     this.workshop = merge(this.workshop, this.workshopForm.value);
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
@@ -119,22 +119,22 @@ export class WorkshopFormComponent implements OnInit {
       , err => console.error('error submitting workshop', err));
   }
 
-  private contactDisplayWith(value) {
+  public contactDisplayWith(value) {
     return value ? value.name : '';
   }
 
-  private onFacilitatorSelected(facilitator: Facilitator) {
+  public onFacilitatorSelected(facilitator: Facilitator) {
     this.workshop.addInstructor(facilitator);
     this.workshopForm.controls.facilitator.setValue('');
   }
 
-  private checkValidSFObject(control): void {
+  public checkValidSFObject(control): void {
     if (control.value && !control.value.sfId) {
       control.setValue(undefined);
     }
   }
 
-  private getAffiliate(): string {
+  public getAffiliate(): string {
     if (this.workshopForm.value.affiliate.sfId) return this.workshopForm.value.affiliate.sfId;
     else return this.auth.user.affiliate;
   }
@@ -143,7 +143,7 @@ export class WorkshopFormComponent implements OnInit {
      * @description Retrieves a list of countries from {@link CountriesService} to pick from for the eventCountry FormControl.
      * Listens to value changes of the country FormControl and displays filtered results in the auto-complete.
      */
-  private subscribeToCountry() {
+  public subscribeToCountry() {
     const countryFC = this.workshopForm.get('country');
     countryFC.valueChanges.subscribe(q =>
       this.countryOptions = q ? this.countries.filter(option => new RegExp(`${q}`, 'gi').test(option)) : this.countries
@@ -152,7 +152,7 @@ export class WorkshopFormComponent implements OnInit {
     this._cs.get().subscribe(countries => this.countries = countries, err => console.error(err));
   }
 
-  private subscribeToIsPublic() {
+  public subscribeToIsPublic() {
     const publicChanges$ = this.workshopForm.controls.isPublic.valueChanges;
     publicChanges$.subscribe(isPublic => {
       const websiteControl = this.workshopForm.controls.website;
@@ -169,7 +169,7 @@ export class WorkshopFormComponent implements OnInit {
     });
   }
 
-  private prefixWebsite() {
+  public prefixWebsite() {
     const websiteControl = this.workshopForm.controls.website;
     let value: string = websiteControl.value;
     if (value.match(/https:\/\/.*/)) return;
@@ -185,7 +185,7 @@ export class WorkshopFormComponent implements OnInit {
   /**
      * @description Gets an object (`this.describe`) from the api that is used to set helper text, labels, and picklist values
      */
-  private getWorkshopDescription() {
+  public getWorkshopDescription() {
     this._ws.describe().subscribe(data => {
       this.describe = data;
       this.getWorkshopTypes();
@@ -198,7 +198,7 @@ export class WorkshopFormComponent implements OnInit {
   /**
    * @description Sets value for `this.workshopTypes` from `this.describe`, or sets a default value if `this.describe` is null.
    */
-  private getWorkshopTypes() {
+  public getWorkshopTypes() {
     try {
       this.workshopTypes = this.describe.workshopType.picklistValues.map(option => option.label);
     } catch (e) {
@@ -206,7 +206,7 @@ export class WorkshopFormComponent implements OnInit {
     }
   }
 
-  private getWorkshopStatuses() {
+  public getWorkshopStatuses() {
     try {
       this.statuses = this.describe.status.picklistValues.map(option => option.label);
     } catch (e) {

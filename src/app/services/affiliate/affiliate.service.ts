@@ -18,10 +18,10 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languag
 @Injectable()
 export class AffiliateService extends BaseAPIService {
 
-  private route: string = 'affiliates';
-  private get baseUrl() { return `${this.APIHost()}/${this.route}`; }
+  public route: string = 'affiliates';
+  public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  constructor(private http: HttpService) { super(); }
+  constructor(public http: HttpService) { super(); }
 
   public getAll(): Observable<Affiliate[]> {
     return this.http.get(`${this.baseUrl}`)

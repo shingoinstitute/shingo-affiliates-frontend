@@ -30,36 +30,36 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public get showStatusFilter(): boolean { return this._showStatusFilter; }
   public get showTextFilter(): boolean { return this._showTextFilter; }
 
-  @ViewChildren(MdCheckbox) private checkboxen: MdCheckbox[];
+  @ViewChildren(MdCheckbox) public checkboxen: MdCheckbox[];
 
-  @ViewChild('startDateFilterPicker') private startDFPicker: MdDatepicker<Date>;
-  @ViewChild('endDateFilterPicker') private endDFPicker: MdDatepicker<Date>;
+  @ViewChild('startDateFilterPicker') public startDFPicker: MdDatepicker<Date>;
+  @ViewChild('endDateFilterPicker') public endDFPicker: MdDatepicker<Date>;
 
-  @ViewChild('startDFInput') private startDFInput: ElementRef;
-  @ViewChild('endDFInput') private endDFInput: ElementRef;
+  @ViewChild('startDFInput') public startDFInput: ElementRef;
+  @ViewChild('endDFInput') public endDFInput: ElementRef;
 
-  @ViewChild(MdSelect) private statusSelect: MdSelect;
-  @ViewChild('textSearchInput') private textSearchInput: ElementRef;
+  @ViewChild(MdSelect) public statusSelect: MdSelect;
+  @ViewChild('textSearchInput') public textSearchInput: ElementRef;
 
-  @ViewChild(WorkshopDataTableComponent) private workshopTable: WorkshopDataTableComponent;
+  @ViewChild(WorkshopDataTableComponent) public workshopTable: WorkshopDataTableComponent;
 
-  private _showDateRange: boolean = false;
-  private _showFilters: boolean = false;
-  private _showStatusFilter: boolean = false;
-  private _showTextFilter: boolean = false;
-  private dateRange: DateRange = [null, null];
-  private deactivated: string[] = [];
-  private displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'status', 'verified', 'edit'];
-  private filterOption: string;
-  private filterOptions: string[] = [];
-  private filters: Filter[];
-  private selectedStatuses: any[] = [];
-  private statuses: string[] = [];
-  private textSearch: string = '';
+  public _showDateRange: boolean = false;
+  public _showFilters: boolean = false;
+  public _showStatusFilter: boolean = false;
+  public _showTextFilter: boolean = false;
+  public dateRange: DateRange = [null, null];
+  public deactivated: string[] = [];
+  public displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'status', 'verified', 'edit'];
+  public filterOption: string;
+  public filterOptions: string[] = [];
+  public filters: Filter[];
+  public selectedStatuses: any[] = [];
+  public statuses: string[] = [];
+  public textSearch: string = '';
 
-  private get user(): User { return this.route.snapshot.data['user']; }
+  public get user(): User { return this.route.snapshot.data['user']; }
 
-  constructor(private filterFactory: WorkshopFilterFactory, private _ws: WorkshopService, private router: Router, private route: ActivatedRoute) {
+  constructor(public filterFactory: WorkshopFilterFactory, public _ws: WorkshopService, public router: Router, public route: ActivatedRoute) {
     this.setStatuses();
   }
 
@@ -91,7 +91,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       .subscribe((event) => this.filter(event));
   }
 
-  private initFilters() {
+  public initFilters() {
     this.filterOptions = ['by Upcoming Workshops'];
     this.filters = [this.filterFactory.createDateRangeFilter('by Upcoming Workshops') /* Upcoming */];
 
@@ -113,16 +113,16 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     ]);
   }
 
-  private goToWorkshopEdit(sfId: string) {
+  public goToWorkshopEdit(sfId: string) {
     this.router.navigateByUrl(`/workshops/${sfId}/edit`);
   }
 
-  private selectedStatusChanged(event: MdSelectChange) {
+  public selectedStatusChanged(event: MdSelectChange) {
     const index = this.filters.findIndex(f => f.name === 'by Status');
     this.filters[index].dataChange.next({ key: 'status', value: this.selectedStatuses });
   }
 
-  private removeDeactivated(items: string[]) {
+  public removeDeactivated(items: string[]) {
     for (const item of items) {
       const index = this.deactivated.findIndex(d => d === item);
       this.deactivated.splice(index, 1);
@@ -133,7 +133,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
    * @desc Hack to get component to fill full height of view
    * @todo Put this into a directive named something like [fill-viewport]
    */
-  private fillViewPortHeight() {
+  public fillViewPortHeight() {
     const compView = $('.filter-options-container')[0];
     if (compView) {
       const toolbarHeight = window.innerWidth > 600 ? 64 : 56;
@@ -141,7 +141,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private filter(cbc: MdCheckboxChange) {
+  public filter(cbc: MdCheckboxChange) {
     const value = cbc.source.value;
     let payload: { data: any, deactivate: number[] };
     const indices = {
@@ -190,12 +190,12 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.deactivateCheckboxes();
   }
 
-  private applyFilter(index: number, { data, deactivate }) {
+  public applyFilter(index: number, { data, deactivate }) {
     this.filters[index].dataChange.next(data);
     this.deactivated = this.deactivated.concat(at(this.filterOptions, deactivate));
   }
 
-  private deactivateCheckboxes() {
+  public deactivateCheckboxes() {
     const values = new Set(this.deactivated);
     this.checkboxen.map(cb => {
       if (values.has(cb.value)) cb.disabled = true;
@@ -203,7 +203,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private clearFilters() {
+  public clearFilters() {
     this.dateRange = [null, null];
     this.textSearch = '';
     this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null;
@@ -216,7 +216,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.deactivateCheckboxes();
   }
 
-  private clearDateFilter() {
+  public clearDateFilter() {
     this.dateRange = [null, null];
     this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null;
     this.startDFPicker._selected = this.endDFPicker._selected = null;
@@ -224,13 +224,13 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.filters[index].dataChange.next(undefined);
   }
 
-  private toggleFilters() { this._showFilters = !this._showFilters; }
+  public toggleFilters() { this._showFilters = !this._showFilters; }
 
-  private setStatuses() {
+  public setStatuses() {
     this._ws.describe().subscribe(describe => this.getWorkshopStatuses(describe));
   }
 
-  private getWorkshopStatuses(describe) {
+  public getWorkshopStatuses(describe) {
     try {
       this.statuses = describe.status.picklistValues.map(option => option.label);
     } catch (e) {

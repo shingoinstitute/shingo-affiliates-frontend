@@ -9,8 +9,8 @@ export class SidenavService {
   public get canToggle() { return this._canToggle; }
   public set canToggle(value: boolean) { this._canToggle = value; }
 
-  private _sidenav: MdSidenav;
-  private _canToggle: boolean = true;
+  public _sidenav: MdSidenav;
+  public _canToggle: boolean = true;
 
   public toggleSidenav() {
     if (this.sidenav && this.canToggle)

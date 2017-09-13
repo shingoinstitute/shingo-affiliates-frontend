@@ -8,6 +8,6 @@ import { Router } from '@angular/router';
 })
 export class ForbiddenPageComponent {
 
-  constructor(private router: Router) { }
+  constructor(public router: Router) { }
 
 }

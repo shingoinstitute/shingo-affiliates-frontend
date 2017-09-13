@@ -10,10 +10,10 @@ import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop
 })
 export class UpcomingWorkshopsComponent {
 
-  private displayedColumns: WorkshopProperties[];
-  private filters: Filter[];
+  public displayedColumns: WorkshopProperties[];
+  public filters: Filter[];
 
-  constructor(private filterFactory: WorkshopFilterFactory) {
+  constructor(public filterFactory: WorkshopFilterFactory) {
     this.displayedColumns = [
       'workshopType',
       'startDate',

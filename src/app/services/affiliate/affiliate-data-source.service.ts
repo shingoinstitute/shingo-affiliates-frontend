@@ -11,7 +11,7 @@ import { Affiliate } from '../../affiliates/affiliate.model';
 export class AffiliateDataSource extends APIDataSource<AffiliateService, Affiliate> {
 
   constructor(
-    private _adp: DataProvider<AffiliateService, Affiliate>,
+    public _adp: DataProvider<AffiliateService, Affiliate>,
     public paginator?: MdPaginator,
     public sort?: MdSort
   ) { super(_adp, paginator, sort); }

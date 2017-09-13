@@ -5,7 +5,7 @@ export class PropertyFilter<T> extends Filter {
 
   protected dataChangeSource: BehaviorSubject<{ key: string, value: any }>;
 
-  private _filter: { key: string, value: any };
+  public _filter: { key: string, value: any };
 
   constructor(name: string) {
     super(name);

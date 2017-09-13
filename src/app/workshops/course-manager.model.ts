@@ -3,9 +3,9 @@ import { SFObject } from '../shared/models/sf-object.abstract.model';
 export class CourseManager extends SFObject {
 
   /* tslint:disable:variable-name */
-  private Id: string;
-  private Name: string;
-  private Email: string;
+  public Id: string;
+  public Name: string;
+  public Email: string;
   /* tslint:enable:variable-name */
 
   constructor(courseManager?) {

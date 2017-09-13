@@ -15,11 +15,11 @@ export class SupportTrainingComponent implements OnInit {
 
   @Input() public video: IVideo;
 
-  private nextVideo: IVideo;
-  private prevVideo: IVideo;
-  private id: number;
+  public nextVideo: IVideo;
+  public prevVideo: IVideo;
+  public id: number;
 
-  constructor(private route: ActivatedRoute, private support: SupportService) { }
+  constructor(public route: ActivatedRoute, public support: SupportService) { }
 
   public ngOnInit() {
     this.route.params.subscribe(params => {
