@@ -12,23 +12,23 @@ import { FacilitatorService } from '../../../services/facilitator/facilitator.se
 })
 export class PasswordResetComponent implements OnInit {
 
-  private password: string;
-  private passwordConfirm: string;
-  private errMsg: string;
-  private errBody: string;
-  private isLoading: boolean = false;
+  public password: string;
+  public passwordConfirm: string;
+  public errMsg: string;
+  public errBody: string;
+  public isLoading: boolean = false;
 
-  constructor(private _fs: FacilitatorService,
-    private dialog: MdDialog,
-    private route: ActivatedRoute,
-    private router: Router) { }
+  constructor(public _fs: FacilitatorService,
+    public dialog: MdDialog,
+    public route: ActivatedRoute,
+    public router: Router) { }
 
   public ngOnInit() {
     this.password = '';
     this.passwordConfirm = '';
   }
 
-  private onSubmit() {
+  public onSubmit() {
     if (this.password !== this.passwordConfirm) {
       this.errMsg = 'Passwords don\'t match';
       return;

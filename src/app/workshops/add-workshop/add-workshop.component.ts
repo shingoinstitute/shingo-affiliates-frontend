@@ -13,9 +13,9 @@ import { Workshop } from '../workshop.model';
 })
 export class AddWorkshopComponent {
 
-  constructor(private _ws: WorkshopService) { }
+  constructor(public _ws: WorkshopService) { }
 
-  private add(data: Workshop) {
+  public add(data: Workshop) {
     return this._ws.create(data);
   }
 

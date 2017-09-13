@@ -5,7 +5,7 @@ export class TextFilter<T> extends Filter {
 
   protected dataChangeSource: BehaviorSubject<string>;
 
-  private _filter: string;
+  public _filter: string;
 
   constructor(name: string) {
     super(name);

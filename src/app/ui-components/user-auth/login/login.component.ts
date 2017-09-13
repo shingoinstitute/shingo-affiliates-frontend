@@ -13,19 +13,19 @@ import { RouterService } from '../../../services/router/router.service';
 })
 export class LoginComponent implements OnInit {
 
-  private email: string;
-  private password: string;
+  public email: string;
+  public password: string;
 
-  private isLoading: boolean = true;
-  private didLoad: boolean = false;
+  public isLoading: boolean = true;
+  public didLoad: boolean = false;
 
-  private errBody: string;
-  private errMsg: string;
+  public errBody: string;
+  public errMsg: string;
 
   constructor(
-    private auth: AuthService,
-    private router: Router,
-    private routerService: RouterService
+    public auth: AuthService,
+    public router: Router,
+    public routerService: RouterService
   ) { }
 
   /**
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
   /**
    * @description Handler for submitting login credentials.
    */
-  private onSubmit() {
+  public onSubmit() {
     this.auth.login({ email: this.email, password: this.password })
       .subscribe((data) => {
         this.routerService.nextRoute();

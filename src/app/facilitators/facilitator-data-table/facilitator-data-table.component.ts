@@ -26,21 +26,21 @@ export class FacilitatorDataTableComponent implements OnInit {
 
   @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'actions'];
   @Input('dataSource') public dataSource: FacilitatorDataSource | null;
-  
-  @ViewChild(MdPaginator) private paginator: MdPaginator;
-  @ViewChild(MdSort) private sort: MdSort;
-  
-  private facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
-  private selectedId: string = '';
-  private roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS;
-  private displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form', 'refresh'];
-  private isLoading: boolean;
+
+  @ViewChild(MdPaginator) public paginator: MdPaginator;
+  @ViewChild(MdSort) public sort: MdSort;
+
+  public facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
+  public selectedId: string = '';
+  public roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS;
+  public displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form', 'refresh'];
+  public isLoading: boolean;
 
   constructor(
-    public dialog: MdDialog, 
-    private router: RouterService,
-    private providerFactory: DataProviderFactory, 
-    private _fs: FacilitatorService
+    public dialog: MdDialog,
+    public router: RouterService,
+    public providerFactory: DataProviderFactory,
+    public _fs: FacilitatorService
   ) {
     this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();
   }
@@ -81,7 +81,7 @@ export class FacilitatorDataTableComponent implements OnInit {
     }
   }
 
-  private onClickForm(facilitator: Facilitator) {
+  public onClickForm(facilitator: Facilitator) {
     const dialogRef = this.dialog.open(FacilitatorFormComponent, {
       data: {
         isDialog: true,

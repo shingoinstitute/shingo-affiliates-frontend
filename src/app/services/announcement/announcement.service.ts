@@ -16,7 +16,7 @@ export class AnnouncementService {
       observer.next([
         {
           'title': 'Registration URL Update',
-          'message': 'We have updated the system to not require a registration URL if the workshop is private.',
+          'message': 'We have updated the system to not require a registration URL if the workshop is public.',
           'priority': 0
         },
         {

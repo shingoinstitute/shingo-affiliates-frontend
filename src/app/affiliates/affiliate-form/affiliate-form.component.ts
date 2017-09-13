@@ -23,25 +23,25 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
 
   @Input('affiliate') public affiliate: Affiliate = new Affiliate();
 
-  @ViewChild('formContainer') private formContainer: ElementRef;
+  @ViewChild('formContainer') public formContainer: ElementRef;
 
-  private extraFields: string[] = ['Public_Contact__c', 'Public_Contact_Email__c', 'Public_Contact_Phone__c', 'Summary__c'];
+  public extraFields: string[] = ['Public_Contact__c', 'Public_Contact_Email__c', 'Public_Contact_Phone__c', 'Summary__c'];
 
-  private state: AffiliateFormState;
-  private languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
-  private languageOptions: any;
-  private isLoading: boolean;
-  private isDialog: boolean;
-  private routeSubscription: Subscription;
-  private affForm: FormGroup;
+  public state: AffiliateFormState;
+  public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
+  public languageOptions: any;
+  public isLoading: boolean;
+  public isDialog: boolean;
+  public routeSubscription: Subscription;
+  public affForm: FormGroup;
 
   constructor(
     @Optional() @Inject(MD_DIALOG_DATA) public data: any,
-    private _as: AffiliateService,
-    private snackbar: MdSnackBar,
-    private location: Location,
-    private route: ActivatedRoute,
-    private fb: FormBuilder
+    public _as: AffiliateService,
+    public snackbar: MdSnackBar,
+    public location: Location,
+    public route: ActivatedRoute,
+    public fb: FormBuilder
   ) {
 
     this.buildForm();
@@ -80,7 +80,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
 
-  private buildForm() {
+  public buildForm() {
     this.affForm = this.fb.group({
       affiliate: [this.affiliate || new Affiliate(), Validators.required],
       logo: [this.affiliate.logo],
@@ -93,12 +93,20 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  private selectedAffiliate(affiliate: Affiliate) {
+  public selectedAffiliate(affiliate: Affiliate) {
     this.affiliate = affiliate;
+    this.affForm.patchValue({
+      logo: this.affiliate.logo,
+      website: this.affiliate.website,
+      publicContact: this.affiliate.publicContact,
+      publicContactEmail: this.affiliate.publicContactEmail,
+      publicContactPhone: this.affiliate.publicContactPhone,
+      summary: this.affiliate.summary
+    });
     this.state.next();
   }
 
-  private getSFObject(id: string) {
+  public getSFObject(id: string) {
     this.isLoading = true;
     this._as.getById(id).subscribe((affiliate: Affiliate) => {
       this.affiliate = affiliate ? affiliate : new Affiliate();
@@ -119,20 +127,20 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  private filterLanguages(val: string) {
+  public filterLanguages(val: string) {
     return val ? this.languages.filter(s => s.toLowerCase().indexOf(val.toLowerCase()) === 0) : this.languages;
   }
 
-  private onSelectLanguage(lang: string) {
+  public onSelectLanguage(lang: string) {
     this.affiliate.addLanguage(lang);
     this.affForm.controls.langControl.setValue(null);
   }
 
-  private removeLanguage(lang: string) {
+  public removeLanguage(lang: string) {
     this.affiliate.removeLangauge(lang);
   }
 
-  private onSave() {
+  public onSave() {
     this.snackbar.open('Saving Changes...');
     switch (this.state.state) {
       case State.Creating: this.create(); break;
@@ -141,7 +149,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-  private map() {
+  public map() {
     this._as.map(this.affiliate).subscribe(data => {
       this.snackbar.open('Successfully mapped a new Affiliate', null, { duration: 2000 });
       if (!this.isDialog) { this.location.back(); }
@@ -150,7 +158,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  private create() {
+  public create() {
     this._as.create(this.affiliate).subscribe(data => {
       this.snackbar.open('Successfully created new Affiliate', null, { duration: 2000 });
       if (!this.isDialog) {
@@ -161,7 +169,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  private update() {
+  public update() {
     this._as.update(this.affiliate).subscribe(data => {
       this.snackbar.open('Update Successful', null, { duration: 2000 });
       if (!this.isDialog) {
@@ -172,12 +180,12 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  private handleError(err: any) {
+  public handleError(err: any) {
     console.error(err);
     this.snackbar.open('An error occurred and the requested operation could not be completed.', 'Okay');
   }
 
-  private displayFn(affilate: Affiliate) {
+  public displayFn(affilate: Affiliate) {
     return affilate ? affilate.name : '';
   }
 

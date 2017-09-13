@@ -3,7 +3,7 @@ export class AffiliateFormState {
 
   public get state(): State { return this._state; }
 
-  private _state: State;
+  public _state: State;
 
   constructor(state: State.Creating | State.Updating) { this._state = state; }
 

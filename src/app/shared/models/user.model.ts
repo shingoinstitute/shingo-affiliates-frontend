@@ -13,18 +13,18 @@ export class User {
 
   // SF Properties
   /* tslint:disable:variable-name */
-  private Id: string;
-  private Name: string;
-  private Email: string;
-  private AccountId: string;
-  private Title: string;
-  private Photograph__c: string;
-  private Biography__c: string;
+  public Id: string;
+  public Name: string;
+  public Email: string;
+  public AccountId: string;
+  public Title: string;
+  public Photograph__c: string;
+  public Biography__c: string;
   /* tslint:enable:variable-name */
 
   // Auth Properties
-  private id: number;
-  private role: { id: number, name: string };
+  public id: number;
+  public role: { id: number, name: string };
 
   constructor(user?) {
     if (user) return Object.assign(this, user);

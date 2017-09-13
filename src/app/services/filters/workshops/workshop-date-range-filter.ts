@@ -6,7 +6,7 @@ export class WorkshopDateRangeFilter extends Filter {
 
   protected dataChangeSource: BehaviorSubject<DateRange>;
 
-  private _range: DateRange;
+  public _range: DateRange;
 
   constructor(name: string) {
     super(name);
@@ -30,13 +30,13 @@ export class WorkshopDateRangeFilter extends Filter {
     }
   }
 
-  private greaterThanWithoutTime(a: Date, b: Date): boolean {
+  public greaterThanWithoutTime(a: Date, b: Date): boolean {
     a.setHours(0, 0, 0, 0);
     b.setHours(0, 0, 0, 0);
     return a >= b;
   }
 
-  private lessThanWithoutTime(a: Date, b: Date): boolean {
+  public lessThanWithoutTime(a: Date, b: Date): boolean {
     a.setHours(0, 0, 0, 0);
     b.setHours(0, 0, 0, 0);
     return a <= b;

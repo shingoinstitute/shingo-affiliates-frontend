@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class WorkshopResolver implements Resolve<Workshop> {
-  constructor(private _ws: WorkshopService, private router: RouterService) { }
+  constructor(public _ws: WorkshopService, public router: RouterService) { }
 
   public resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Workshop> {
     return this._ws.getById(route.params.id)

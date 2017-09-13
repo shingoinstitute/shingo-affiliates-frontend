@@ -21,13 +21,13 @@ export class WorkshopDataTableComponent implements OnInit {
   @Input() public filters: Filter[] = [];
   @Output() public editClick: EventEmitter<string> = new EventEmitter<string>();
 
-  @ViewChild(MdSort) private sort: MdSort;
-  @ViewChild(MdPaginator) private paginator: MdPaginator;
+  @ViewChild(MdSort) public sort: MdSort;
+  @ViewChild(MdPaginator) public paginator: MdPaginator;
 
-  private isLoading: boolean = true;
-  private _workshopDataProvider: DataProvider<WorkshopService, Workshop>;
-  private trackByStrategy: WorkshopTrackByStrategy = 'reference';
-  private pendingTypes = {
+  public isLoading: boolean = true;
+  public _workshopDataProvider: DataProvider<WorkshopService, Workshop>;
+  public trackByStrategy: WorkshopTrackByStrategy = 'reference';
+  public pendingTypes = {
     'Active, not ready for app': 'Published to Website Only',
     'Cancelled': 'Cancelled',
     'Archived': 'Archived',
@@ -39,7 +39,7 @@ export class WorkshopDataTableComponent implements OnInit {
     'Invoiced, Not Paid': 'Awaiting Payment'
   };
 
-  constructor(private providerFactory: DataProviderFactory, private _ws: WorkshopService, private router: Router) {
+  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router) {
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider();
     this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
@@ -59,7 +59,7 @@ export class WorkshopDataTableComponent implements OnInit {
 
   public refresh() { this._workshopDataProvider.refresh(); }
 
-  private workshopTrackBy = (index: number, item: Workshop) => {
+  public workshopTrackBy = (index: number, item: Workshop) => {
     switch (this.trackByStrategy) {
       case 'id': return item.sfId;
       case 'reference': return item;
@@ -67,7 +67,7 @@ export class WorkshopDataTableComponent implements OnInit {
     }
   }
 
-  private onEdit(workshopId: string) { this.editClick.emit(workshopId); }
+  public onEdit(workshopId: string) { this.editClick.emit(workshopId); }
 
   /**
     * @description Returns true if a pending action is due, where
@@ -77,7 +77,7 @@ export class WorkshopDataTableComponent implements OnInit {
     * Workshops that fall in this category but are not "past due"
     * are considered to be within their grace period.
     */
-  private isDue(w: Workshop): boolean {
+  public isDue(w: Workshop): boolean {
     const daysLate = this.getDaysLate(w);
     return daysLate > 0 && daysLate <= 7;
   }
@@ -87,13 +87,13 @@ export class WorkshopDataTableComponent implements OnInit {
    * where 'past due' is defined as being 7 or more days after
    * the workshop's end date.
    */
-  private isPastDue(w: Workshop): boolean { return this.getDaysLate(w) > 7; }
+  public isPastDue(w: Workshop): boolean { return this.getDaysLate(w) > 7; }
 
   /**
    * @description Returns a string describing how far a pending
    * action is past it's due date.
    */
-  private formatDaysLate(w: Workshop): string {
+  public formatDaysLate(w: Workshop): string {
     const daysLate = this.getDaysLate(w);
     if (daysLate < 1)
       return `in ${Math.abs(daysLate)} days`;
@@ -116,14 +116,14 @@ export class WorkshopDataTableComponent implements OnInit {
    * @description Returns the number of days a pending action
    * is past it's due date.
    */
-  private getDaysLate(w: Workshop): number {
+  public getDaysLate(w: Workshop): number {
     const _1day = 1000 * 60 * 60 * 24;
     const now = Date.now();
     const dueAt = new Date(w.endDate).valueOf() + _1day * 7;
     return Math.floor((now - dueAt) / _1day);
   }
 
-  private onSelectRow(workshop) {
+  public onSelectRow(workshop) {
     this.router.navigateByUrl(`/workshops/${workshop.sfId}`);
   }
 

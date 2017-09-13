@@ -8,7 +8,7 @@ import { Workshop } from '../../../workshops/workshop.model';
 @Injectable()
 export class WorkshopFilterFactory extends FilterFactory {
 
-  private static id: number = 0;
+  public static id: number = 0;
 
   constructor() { super(); }
 

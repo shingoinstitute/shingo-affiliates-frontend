@@ -11,7 +11,7 @@ import { Facilitator } from '../../facilitators/facilitator.model';
 export class FacilitatorDataSource extends APIDataSource<FacilitatorService, Facilitator> {
 
   constructor(
-    private _fdp: DataProvider<FacilitatorService, Facilitator>,
+    public _fdp: DataProvider<FacilitatorService, Facilitator>,
     public paginator?: MdPaginator,
     public sort?: MdSort
   ) { super(_fdp, paginator, sort); }

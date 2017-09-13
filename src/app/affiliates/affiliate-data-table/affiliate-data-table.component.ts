@@ -28,16 +28,16 @@ export class AffiliateDataTableComponent implements OnInit {
   @Output() public onDelete = new EventEmitter<Affiliate>();
   @Output() public onForm = new EventEmitter<Affiliate>();
 
-  @ViewChild(MdPaginator) private paginator: MdPaginator;
-  @ViewChild(MdSort) private sort: MdSort;
+  @ViewChild(MdPaginator) public paginator: MdPaginator;
+  @ViewChild(MdSort) public sort: MdSort;
 
-  private affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
-  private isLoading: boolean = true;
-  private selectedId: string = '';
-  private displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form', 'refresh'];
+  public affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
+  public isLoading: boolean = true;
+  public selectedId: string = '';
+  public displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form', 'refresh'];
 
 
-  constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _as: AffiliateService, private router: RouterService) {
+  constructor(public dialog: MdDialog, public providerFactory: DataProviderFactory, public _as: AffiliateService, public router: RouterService) {
     this.affiliateDataProvider = providerFactory.getAffiliateDataProvider();
     this.affiliateDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
@@ -70,15 +70,15 @@ export class AffiliateDataTableComponent implements OnInit {
     }
   }
 
-  private trackByIndex(index, item) { return item.sfId; }
+  public trackByIndex(index, item) { return item.sfId; }
 
-  private delete(affiliate: Affiliate) { this.onDelete.emit(affiliate); }
+  public delete(affiliate: Affiliate) { this.onDelete.emit(affiliate); }
 
   /**
    * @deprecated keeping this function around just in case, but we're most 
    * likely moving away from using dialogs to open edit-detail-forms completely.
    */
-  private openFormDialog(affiliate: Affiliate) {
+  public openFormDialog(affiliate: Affiliate) {
     // determine height and width value of dialog
     const height = window.innerWidth < 960 ? '100vh' : '90vh';
     const width = window.innerWidth < 960 ? String(window.innerWidth) : null;

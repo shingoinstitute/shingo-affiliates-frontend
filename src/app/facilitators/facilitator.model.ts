@@ -72,20 +72,20 @@ export class Facilitator extends SFObject {
 
   // SF Properties
   /* tslint:disable:variable-name */
-  private Id: string = '';
-  private Email: string = '';
-  private FirstName: string = '';
-  private LastName: string = '';
-  private AccountId: string = '';
-  private Photograph__c: string = 'http://res.cloudinary.com/shingo/image/upload/c_thumb,e_trim:10,g_center,h_100,w_100/v1414874243/silhouette_vzugec.png';
-  private Biography__c: string = '';
-  private Title: string = '';
-  private Account: Affiliate = new Affiliate();
+  public Id: string = '';
+  public Email: string = '';
+  public FirstName: string = '';
+  public LastName: string = '';
+  public AccountId: string = '';
+  public Photograph__c: string = 'http://res.cloudinary.com/shingo/image/upload/c_thumb,e_trim:10,g_center,h_100,w_100/v1414874243/silhouette_vzugec.png';
+  public Biography__c: string = '';
+  public Title: string = '';
+  public Account: Affiliate = new Affiliate();
   /* tslint:enable:variable-name */
 
   // Auth Properties
-  private _id: number;
-  private _role: { name: string } = { name: 'Facilitator' };
+  public _id: number;
+  public _role: { name: string } = { name: 'Facilitator' };
 
   constructor(facilitator?: any) {
     super();
