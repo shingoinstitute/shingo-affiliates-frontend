@@ -8,10 +8,10 @@ import { RouterModule } from '@angular/router';
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppComponent ],
-      imports: [ 
-        MaterialModule, 
-        RouterModule 
+      declarations: [AppComponent],
+      imports: [
+        MaterialModule,
+        RouterModule
       ]
     }).compileComponents();
   }));
