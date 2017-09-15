@@ -34,6 +34,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
   public isDialog: boolean;
   public routeSubscription: Subscription;
   public affForm: FormGroup;
+  public affiliateSummary: string;
 
   constructor(
     @Optional() @Inject(MD_DIALOG_DATA) public data: any,
