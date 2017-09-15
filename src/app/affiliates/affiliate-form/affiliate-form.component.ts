@@ -100,8 +100,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
       website: this.affiliate.website,
       publicContact: this.affiliate.publicContact,
       publicContactEmail: this.affiliate.publicContactEmail,
-      publicContactPhone: this.affiliate.publicContactPhone,
-      summary: this.affiliate.summary
+      publicContactPhone: this.affiliate.publicContactPhone
     });
     this.state.next();
   }
@@ -115,8 +114,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
         website: this.affiliate.website,
         publicContact: this.affiliate.publicContact,
         publicContactEmail: this.affiliate.publicContactEmail,
-        publicContactPhone: this.affiliate.publicContactPhone,
-        summary: this.affiliate.summary
+        publicContactPhone: this.affiliate.publicContactPhone
       });
       this.affForm.controls.affiliate.patchValue({ 'sfObject': this.affiliate });
       this.isLoading = false;
