@@ -88,8 +88,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
       publicContact: [this.affiliate.publicContact],
       publicContactEmail: [this.affiliate.publicContactEmail, Validators.email],
       publicContactPhone: [this.affiliate.publicContactPhone],
-      langControl: [''],
-      summary: [this.affiliate.summary]
+      langControl: ['']
     });
   }
 
