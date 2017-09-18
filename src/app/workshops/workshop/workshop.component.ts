@@ -15,13 +15,13 @@ export class WorkshopComponent {
 
   @Input() public workshop: Workshop;
 
-  constructor(private router: Router) { }
+  constructor(public router: Router) { }
 
-  private goToEdit() {
+  public goToEdit() {
     this.router.navigateByUrl(`/workshops/${this.workshop.sfId}/edit`);
   }
 
-  private largeImage() {
+  public largeImage() {
     const split = this.workshop.image.split('.png');
     return `${split[0]}Large.png`;
   }

@@ -12,22 +12,22 @@ import { FacilitatorService } from '../../../services/facilitator/facilitator.se
 })
 export class ForgotPasswordComponent implements OnInit {
 
-  private email: string;
-  private errMsg: string;
-  private errBody: string;
-  private isLoading = false;
+  public email: string;
+  public errMsg: string;
+  public errBody: string;
+  public isLoading = false;
 
   constructor(
-    private _fs: FacilitatorService,
-    private dialog: MdDialog,
-    private router: Router
+    public _fs: FacilitatorService,
+    public dialog: MdDialog,
+    public router: Router
   ) { }
 
   public ngOnInit() {
     this.email = '';
   }
 
-  private onSubmit() {
+  public onSubmit() {
     this.errBody = '';
     this.errMsg = '';
     this.isLoading = true;

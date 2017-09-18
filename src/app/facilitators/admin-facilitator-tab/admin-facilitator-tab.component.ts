@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Facilitator } from '../../facilitators/facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { MdSnackBar, MdDialog } from '@angular/material';
-import { FacilitatorFormComponent } from '../../facilitators/facilitators.module';
+import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component';
 import { Router } from '@angular/router';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
 
@@ -13,13 +13,13 @@ import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert
 })
 export class AdminFacilitatorTabComponent {
 
-  private isLoading: boolean = true;
-  private displayedColumns: string[] = ['name'];
-  private newFacilitator: Facilitator;
+  public isLoading: boolean = true;
+  public displayedColumns: string[] = ['name'];
+  public newFacilitator: Facilitator;
 
-  constructor(private _fs: FacilitatorService, private snackbar: MdSnackBar, private dialog: MdDialog, private router: Router) { }
+  constructor(public _fs: FacilitatorService, public snackbar: MdSnackBar, public dialog: MdDialog, public router: Router) { }
 
-  private onSave(facilitator: Facilitator) {
+  public onSave(facilitator: Facilitator) {
     this.isLoading = true;
     this.snackbar.open('Saving Changes...');
     if (facilitator.sfId === '') {
@@ -29,15 +29,15 @@ export class AdminFacilitatorTabComponent {
     }
   }
 
-  private onDelete(f: Facilitator) {
+  public onDelete(f: Facilitator) {
     this.presentAlertDialog(f, `Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.`);
   }
 
-  private onDisable(f: Facilitator) {
+  public onDisable(f: Facilitator) {
     this.presentAlertDialog(f, `Are you sure you want to disable <strong>${f.name}'s</strong> account?`);
   }
 
-  private presentAlertDialog(f: Facilitator, msg: string) {
+  public presentAlertDialog(f: Facilitator, msg: string) {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
         sfObject: f,
@@ -52,7 +52,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private resetPassword(fac: Facilitator) {
+  public resetPassword(fac: Facilitator) {
     this.isLoading = true;
     this.snackbar.open(`Sending password reset email to ${fac.email}...`);
     this._fs.resetPassword(fac.email).subscribe(data => {
@@ -63,7 +63,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private update(fac: Facilitator) {
+  public update(fac: Facilitator) {
     this._fs.update(fac).subscribe(data => {
       this.apiCallbackHandler(data);
       this.snackbar.open('Facilitator Successfully Updated', null, { duration: 2000 });
@@ -72,7 +72,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private create(facilitator: Facilitator) {
+  public create(facilitator: Facilitator) {
     this._fs.create(facilitator).subscribe(data => {
       this.apiCallbackHandler(data);
       this.snackbar.open('Facilitator Succesfully Created', null, { duration: 2000 });
@@ -81,7 +81,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private delete(fac: Facilitator) {
+  public delete(fac: Facilitator) {
     this.isLoading = true;
     this.snackbar.open(`Deleting ${fac.name}'s Account...`);
     this._fs.delete(fac).subscribe(data => {
@@ -92,7 +92,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private disable(fac: Facilitator) {
+  public disable(fac: Facilitator) {
     this.isLoading = true;
     this.snackbar.open(`Disabling ${fac.name}'s Account...`);
     this._fs.disable(fac).subscribe(data => {
@@ -103,7 +103,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private onCreate() {
+  public onCreate() {
     const dialogRef = this.dialog.open(FacilitatorFormComponent, {
       data: {
         isDialog: true,
@@ -118,7 +118,7 @@ export class AdminFacilitatorTabComponent {
     });
   }
 
-  private apiCallbackHandler(data?: any, err?: any) {
+  public apiCallbackHandler(data?: any, err?: any) {
     this.isLoading = false;
     this._fs.reloadData$.emit();
     if (err) {

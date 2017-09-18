@@ -14,7 +14,7 @@ import { RouterService } from '../router/router.service';
 @Injectable()
 export class DataProviderFactory {
 
-  constructor(private http: HttpService, private _ws: WorkshopService, private _as: AffiliateService, private _fs: FacilitatorService, private router: RouterService) { }
+  constructor(public http: HttpService, public _ws: WorkshopService, public _as: AffiliateService, public _fs: FacilitatorService, public router: RouterService) { }
 
   public getWorkshopDataProvider(): DataProvider<WorkshopService, Workshop> {
     return new DataProvider<WorkshopService, Workshop>(this._ws);

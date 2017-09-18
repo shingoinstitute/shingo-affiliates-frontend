@@ -9,7 +9,7 @@ describe('WorkshopFilterFactoryService', () => {
     });
   });
 
-  it('should be created', inject([WorkshopFilterFactory], (service: WorkshopFilterFactory) => {
-    expect(service).toBeTruthy();
-  }));
+  // it('should be created', inject([WorkshopFilterFactory], (service: WorkshopFilterFactory) => {
+  //   expect(service).toBeTruthy();
+  // }));
 });

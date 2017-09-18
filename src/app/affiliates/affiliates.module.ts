@@ -12,7 +12,6 @@ import { SharedModule } from '../shared/shared.module';
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
-import { AffiliateLookupComponent } from './affiliate-lookup/affiliate-lookup.component';
 
 @NgModule({
   imports: [
@@ -28,14 +27,12 @@ import { AffiliateLookupComponent } from './affiliate-lookup/affiliate-lookup.co
   declarations: [
     AdminAffiliateTabComponent,
     AffiliateDataTableComponent,
-    AffiliateFormComponent,
-    AffiliateLookupComponent
+    AffiliateFormComponent
   ],
   exports: [
     AffiliateDataTableComponent,
     AffiliateFormComponent,
-    AdminAffiliateTabComponent,
-    AffiliateLookupComponent
+    AdminAffiliateTabComponent
   ],
   entryComponents: [
     AffiliateFormComponent

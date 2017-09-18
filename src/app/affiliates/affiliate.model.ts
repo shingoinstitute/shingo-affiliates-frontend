@@ -47,16 +47,16 @@ export class Affiliate extends SFObject {
   public set publicContactEmail(email: string) { this.Public_Contact_Email__c = email; }
 
   /* tslint:disable:variable-name */
-  private Id: string = '';
-  private Name: string = '';
-  private Summary__c: string = '';
-  private Logo__c: string = '';
-  private Page_Path__c: string = '/affiliates';
-  private Website: string = '';
-  private Languages__c: string = '';
-  private Public_Contact__c: string = '';
-  private Public_Contact_Phone__c: string = '';
-  private Public_Contact_Email__c: string = '';
+  public Id: string = '';
+  public Name: string = '';
+  public Summary__c: string = '';
+  public Logo__c: string = '';
+  public Page_Path__c: string = '/affiliates';
+  public Website: string = '';
+  public Languages__c: string = '';
+  public Public_Contact__c: string = '';
+  public Public_Contact_Phone__c: string = '';
+  public Public_Contact_Email__c: string = '';
   /* tslint:enable:variable-name */
 
   constructor(affiliate?: any) {

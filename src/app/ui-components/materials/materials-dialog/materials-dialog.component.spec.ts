@@ -1,25 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MaterialsDialogComponent } from './materials-dialog.component';
+import { MaterialsDialog } from './materials-dialog.component';
 
 describe('MaterialsDialogComponent', () => {
-  let component: MaterialsDialogComponent;
-  let fixture: ComponentFixture<MaterialsDialogComponent>;
+  let component: MaterialsDialog;
+  let fixture: ComponentFixture<MaterialsDialog>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MaterialsDialogComponent ]
+      declarations: [ MaterialsDialog ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MaterialsDialogComponent);
+    fixture = TestBed.createComponent(MaterialsDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should be created', () => {
-    expect(component).toBeTruthy();
   });
 });

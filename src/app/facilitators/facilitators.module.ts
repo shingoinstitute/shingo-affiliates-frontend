@@ -13,7 +13,6 @@ import { AffiliatesModule } from '../affiliates/affiliates.module';
 import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
 import { FacilitatorDataTableComponent } from './facilitator-data-table/facilitator-data-table.component';
 import { FacilitatorFormComponent } from './facilitator-form/facilitator-form.component';
-import { FacilitatorLookupComponent } from './facilitator-lookup/facilitator-lookup.component';
 
 @NgModule({
   imports: [
@@ -30,14 +29,12 @@ import { FacilitatorLookupComponent } from './facilitator-lookup/facilitator-loo
   declarations: [
     AdminFacilitatorTabComponent,
     FacilitatorDataTableComponent,
-    FacilitatorFormComponent,
-    FacilitatorLookupComponent
+    FacilitatorFormComponent
   ],
   exports: [
     AdminFacilitatorTabComponent,
     FacilitatorDataTableComponent,
-    FacilitatorFormComponent,
-    FacilitatorLookupComponent
+    FacilitatorFormComponent
   ],
   entryComponents: [
     FacilitatorFormComponent

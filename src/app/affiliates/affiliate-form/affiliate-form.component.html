@@ -59,7 +59,7 @@
     </div>
 
     <div class="input-item">
-      <md-input-container [floatPlaceholder]="always">
+      <md-input-container [floatPlaceholder]="'always'">
         <input type="text" mdInput formControlName="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
       </md-input-container>
 
@@ -81,7 +81,7 @@
 
     <div class="input-item">
       <p class="mat-body-2">Summary</p>
-      <div [froalaEditor] formControlName="summary"></div>
+      <ckeditor [(ngModel)]="affiliateSummary" debounce="500" [ngModelOptions]="{standalone: true}"></ckeditor>
     </div>
   </div>
 

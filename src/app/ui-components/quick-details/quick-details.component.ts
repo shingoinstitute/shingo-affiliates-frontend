@@ -14,7 +14,7 @@ export class QuickDetailsComponent implements OnInit {
 
   public announcements: Announcement[];
 
-  constructor(private announcement: AnnouncementService, private dialog: MdDialog) { }
+  constructor(public announcement: AnnouncementService, public dialog: MdDialog) { }
 
   public ngOnInit() {
     this.announcement.getAnnouncements().subscribe(data => {
@@ -24,7 +24,7 @@ export class QuickDetailsComponent implements OnInit {
     });
   }
 
-  private displayAfMaterials() {
+  public displayAfMaterials() {
     this.dialog.open(MaterialsDialog, { width: '80%', height: '100%' });
   }
 

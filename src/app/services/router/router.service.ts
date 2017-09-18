@@ -7,7 +7,7 @@ export class RouterService {
   public routeStack: string[] = [];
   public defaultRoute: string = '/dashboard';
 
-  constructor(private router: Router) { }
+  constructor(public router: Router) { }
 
   public nextRoute() {
     console.log('calling nextRoute() with stack: ', this.routeStack);

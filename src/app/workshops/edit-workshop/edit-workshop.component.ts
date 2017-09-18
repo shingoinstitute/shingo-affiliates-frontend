@@ -15,13 +15,13 @@ export class EditWorkshopComponent implements OnInit {
 
   @Input() public workshop: Workshop = new Workshop();
 
-  constructor(private route: ActivatedRoute, private _ws: WorkshopService) { }
+  constructor(public route: ActivatedRoute, public _ws: WorkshopService) { }
 
   public ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop'];
   }
 
-  private save(data) {
+  public save(data) {
     return this._ws.update(data);
   }
 

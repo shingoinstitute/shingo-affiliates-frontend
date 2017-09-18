@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpRequest, HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Http, Headers, RequestOptionsArgs } from '@angular/http';
 
@@ -25,7 +24,7 @@ export class HttpService {
     } as any;
   }
 
-  constructor(public http: HttpClient, public _cs: CookieService, private router: Router) { }
+  constructor(public http: HttpClient, public _cs: CookieService) { }
 
   public get<T>(url: string, options = this._defaultReqOpts): Observable<any> {
     return this.http.get<T>(url, options);

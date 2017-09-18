@@ -2,7 +2,9 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule, MdDialogModule } from '@angular/material';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+
+import { CKEditorModule } from 'ng2-ckeditor';
+
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
@@ -15,8 +17,7 @@ import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
     ReactiveFormsModule,
     MaterialModule,
     MdDialogModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    CKEditorModule
   ],
   declarations: [
     AlertDialogComponent,
@@ -26,8 +27,7 @@ import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
   ],
   exports: [
     MdDialogModule,
-    FroalaEditorModule,
-    FroalaViewModule,
+    CKEditorModule,
     AlertDialogComponent,
     IconLegendComponent,
     SimpleMessageDialog,

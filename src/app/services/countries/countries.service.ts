@@ -1,6 +1,7 @@
 // Angular Modules
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+
 
 // App Modules
 import { BaseService } from '../api/base.abstract.service';
@@ -17,7 +18,7 @@ export class CountriesService extends BaseService {
   protected _baseUrl: string = 'https://restcountries.eu/rest/v2/region';
   protected _basePort: string = '80';
 
-  constructor(public http: Http) { super(); }
+  constructor(public http: HttpClient) { super(); }
 
   public get(): Observable<string[]> {
     const countryRequestsByRegion = ['africa', 'americas', 'asia', 'europe', 'oceania'].map(region => {
@@ -26,8 +27,7 @@ export class CountriesService extends BaseService {
 
     const filterNames = ['United Kingdom of Great Britain and Northern Ireland', 'United States of America', 'United Kingdom', 'United States'];
     return Observable.merge(...countryRequestsByRegion)
-      .map(res => {
-        const data = res.json();
+      .map((data: any) => {
         let countryNames = data.map(value => value.name).sort();
         countryNames = without(countryNames, filterNames);
         countryNames = ['United States', 'United Kingdom'].concat(countryNames);

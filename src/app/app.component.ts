@@ -27,23 +27,23 @@ import 'rxjs/add/operator/distinctUntilChanged';
 })
 export class AppComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild('sidenav') private sidenav: MdSidenav;
+  @ViewChild('sidenav') public sidenav: MdSidenav;
 
-  private windowWidthChangeSource = new Subject<number>();
-  private windowWidthChange = this.windowWidthChangeSource.asObservable();
-  private isLoading: boolean = true;
-  private isAuthenticated: boolean = false;
-  private activeRoute: string;
-  private routeToLoginSubscription: Subscription;
+  public windowWidthChangeSource = new Subject<number>();
+  public windowWidthChange = this.windowWidthChangeSource.asObservable();
+  public isLoading: boolean = true;
+  public isAuthenticated: boolean = false;
+  public activeRoute: string;
+  public routeToLoginSubscription: Subscription;
 
-  constructor(private iconRegistry: MdIconRegistry,
-    private sanitizer: DomSanitizer,
-    private router: Router,
-    private auth: AuthService,
-    private ws: WorkshopService,
+  constructor(public iconRegistry: MdIconRegistry,
+    public sanitizer: DomSanitizer,
+    public router: Router,
+    public auth: AuthService,
+    public ws: WorkshopService,
     public sidenavService: SidenavService,
     public routerService: RouterService,
-    private dialog: MdDialog) {
+    public dialog: MdDialog) {
 
     this.initIconRegistry();
 
@@ -92,7 +92,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    * The event stream subscription continues listening to changes that may be
    * emitted by other parts of the app.
    */
-  private authenticateOnLoad() {
+  public authenticateOnLoad() {
     // Subscribe to event stream of authentication change events
     this.auth.authenticationChange$
       .distinctUntilChanged()
@@ -114,7 +114,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   /**
    * Handles logging out... yeah.
    */
-  private logoutHandler() {
+  public logoutHandler() {
     this.auth.logout().subscribe(() => {
       this.auth.authenticationChange$.next(false);
     }, err => {
@@ -128,7 +128,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    * and opens or closes the sidenav depending on the screen size. Also closes
    * the sidenav if the user is not logged in.
    */
-  private winResizeHandler() {
+  public winResizeHandler() {
     this.windowWidthChange
       .debounceTime(100)
       .subscribe((width: number) => {
@@ -145,13 +145,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  private openMaterials(folder: string) {
+  public openMaterials(folder: string) {
     const folders = { workshops: false, marketing: false, forms: false };
     folders[folder] = true;
     this.dialog.open(MaterialsDialog, { width: '80%', height: '100%', data: folders });
   }
 
-  private initIconRegistry() {
+  public initIconRegistry() {
     this.iconRegistry.addSvgIcon('search_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_search_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('edit_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('edit_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_edit_white_18px.svg'));

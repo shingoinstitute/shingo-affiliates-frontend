@@ -8,14 +8,6 @@ if (environment.production) {
   enableProdMode();
 }
 
-// Add withoutTime function to Date prototype
-declare global {
-  // tslint:disable-next-line:interface-name
-  interface Date {
-    withoutTime(): Date;
-  }
-}
-
 (function () {
   Date.prototype.withoutTime = function () {
     const d: Date = new Date(this);

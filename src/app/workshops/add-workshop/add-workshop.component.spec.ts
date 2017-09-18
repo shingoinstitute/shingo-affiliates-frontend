@@ -18,8 +18,4 @@ describe('AddWorkshopComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
-  it('should be created', () => {
-    expect(component).toBeTruthy();
-  });
 });

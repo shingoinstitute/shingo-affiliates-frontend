@@ -1,25 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SimpleMessageDialogComponent } from './simple-message-dialog.component';
+import { SimpleMessageDialog } from './simple-message-dialog.component';
 
 describe('SimpleMessageDialogComponent', () => {
-  let component: SimpleMessageDialogComponent;
-  let fixture: ComponentFixture<SimpleMessageDialogComponent>;
+  let component: SimpleMessageDialog;
+  let fixture: ComponentFixture<SimpleMessageDialog>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SimpleMessageDialogComponent ]
+      declarations: [ SimpleMessageDialog ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SimpleMessageDialogComponent);
+    fixture = TestBed.createComponent(SimpleMessageDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  it('should be created', () => {
-    expect(component).toBeTruthy();
   });
 });

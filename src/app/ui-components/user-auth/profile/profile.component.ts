@@ -13,15 +13,15 @@ import { SimpleMessageDialog } from '../../../shared/components/simple-message-d
 })
 export class ProfileComponent implements OnInit {
 
-  private user: User;
+  public user: User;
 
-  constructor(private route: ActivatedRoute, private dialog: MdDialog) { }
+  constructor(public route: ActivatedRoute, public dialog: MdDialog) { }
 
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];
   }
 
-  private changePassword() {
+  public changePassword() {
     const dialogRef = this.dialog.open(ChangePasswordDialog);
     dialogRef.afterClosed().subscribe(message => this.dialog.open(SimpleMessageDialog, { data: message }));
   }

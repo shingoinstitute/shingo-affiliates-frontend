@@ -23,7 +23,7 @@ export type WorkshopStatusType = 'Invoiced, Not Paid' |
  * @class Workshop
  */
 export class Workshop extends SFObject {
-  public get name(): string { throw new Error('Method not implemented.'); }
+  public get name(): string { return `${this.type} @ ${this.startDateFormatted} - ${this.endDateFormatted} by ${this.affiliate.name}`; }
 
   public get sfId(): string { return this.Id; }
 
@@ -105,25 +105,25 @@ export class Workshop extends SFObject {
   }
   public files: any[] = [];
 
-  // Private members
+  // public members
   /* tslint:disable:variable-name */
-  private Id: string = '';
-  private Start_Date__c: Date = new Date();
-  private End_Date__c: Date = new Date(Date.now() + (1000 * 60 * 60 * 24));
-  private Course_Manager__r: CourseManager = new CourseManager();
-  private Course_Manager__c: string = '';
-  private facilitators: Facilitator[] = [];
-  private Event_City__c: string = '';
-  private Event_Country__c: string = '';
-  private Host_Site__c: string = '';
-  private Organizing_Affiliate__c: string = '';
-  private Organizing_Affiliate__r: Affiliate = new Affiliate();
-  private Public__c: boolean = false;
-  private Registration_Website__c: string = '';
-  private Status__c: WorkshopStatusType = 'Proposed';
-  private Workshop_Type__c: WorkshopType = 'Discover';
-  private Billing_Contact__c: string = '';
-  private Language__c: string = 'English';
+  public Id: string = '';
+  public Start_Date__c: Date = new Date();
+  public End_Date__c: Date = new Date(Date.now() + (1000 * 60 * 60 * 24));
+  public Course_Manager__r: CourseManager = new CourseManager();
+  public Course_Manager__c: string = '';
+  public facilitators: Facilitator[] = [];
+  public Event_City__c: string = '';
+  public Event_Country__c: string = '';
+  public Host_Site__c: string = '';
+  public Organizing_Affiliate__c: string = '';
+  public Organizing_Affiliate__r: Affiliate = new Affiliate();
+  public Public__c: boolean = false;
+  public Registration_Website__c: string = '';
+  public Status__c: WorkshopStatusType = 'Proposed';
+  public Workshop_Type__c: WorkshopType = 'Discover';
+  public Billing_Contact__c: string = '';
+  public Language__c: string = 'English';
   /* tslint:enable:variable-name */
 
   // Be careful because Object.assign will assign variables dynamically: eg
@@ -139,7 +139,7 @@ export class Workshop extends SFObject {
     }
   }
 
-  private static formatDate(d: string | number | Date) {
+  public static formatDate(d: string | number | Date) {
     const date: any = d;
     try {
       return dateFormat(new Date(date), 'dd mmm, yyyy');
