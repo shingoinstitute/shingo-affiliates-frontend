@@ -97,7 +97,7 @@ export class WorkshopFormComponent implements OnInit {
       courseManager: [this.workshop.courseManager || new CourseManager(), Validators.required],
       startDate: [this.workshop.startDate || new Date(), Validators.required],
       endDate: [this.workshop.endDate || new Date(Date.now() + (1000 * 60 * 60 * 24)), Validators.required],
-      website: [this.workshop.website, CustomValidators.url],
+      website: [this.workshop.website],
       billing: [this.workshop.billing, [Validators.required, Validators.email]],
       facilitator: ['']
     });
