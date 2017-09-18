@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CustomFormsModule } from 'ng2-validation';
+import { RouterModule } from '@angular/router';
 
 import { CdkTableModule } from '@angular/cdk';
 import { MaterialModule } from '@angular/material';
@@ -33,7 +34,8 @@ import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.compo
     FlexLayoutModule,
     CdkTableModule,
     Ng2FileDropModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    RouterModule
   ],
   declarations: [
     WorkshopComponent,
