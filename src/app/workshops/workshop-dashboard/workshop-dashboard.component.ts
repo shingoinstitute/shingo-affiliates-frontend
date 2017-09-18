@@ -15,9 +15,6 @@ import 'rxjs/add/observable/fromEvent';
 
 import { at } from 'lodash';
 
-// tslint:disable-next-line:prefer-const
-let $: any;
-
 @Component({
   selector: 'app-workshop-dashboard',
   templateUrl: './workshop-dashboard.component.html',
