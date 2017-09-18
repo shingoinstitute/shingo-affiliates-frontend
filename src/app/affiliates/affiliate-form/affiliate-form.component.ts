@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs/Rx';
 import { CustomValidators } from 'ng2-validation';
 
 // tslint:disable-next-line:prefer-const
-let $: any;
 
 @Component({
   selector: 'app-affiliate-form',

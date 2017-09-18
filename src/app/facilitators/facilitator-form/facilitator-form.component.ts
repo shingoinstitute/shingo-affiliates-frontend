@@ -9,9 +9,6 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { Affiliate } from '../../affiliates/affiliate.model';
 import { Observable } from 'rxjs/Observable';
 
-// tslint:disable-next-line:prefer-const
-let $: any;
-
 @Component({
   selector: 'app-facilitator-form',
   templateUrl: './facilitator-form.component.html',
