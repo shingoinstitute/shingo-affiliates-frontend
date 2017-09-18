@@ -22,10 +22,13 @@ export class AuthService extends BaseService {
   public get user() { return this._user; }
 
   protected _baseUrl: string = 'https://api.shingo.org/v2/affiliates';
-  protected _basePort: string = '8080';
+  protected _basePort: string = '';
+
+  // protected _baseUrl: string = 'http://129.123.47.34';
+  // protected _basePort: string = '8080';
 
   public _user: User;
-  public get authHost(): string { return `${this._baseUrl}/auth`; }
+  public get authHost(): string { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}/auth`; }
 
   constructor(public http: HttpService) {
     super();

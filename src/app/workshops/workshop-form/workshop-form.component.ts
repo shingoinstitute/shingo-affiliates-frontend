@@ -94,7 +94,7 @@ export class WorkshopFormComponent implements OnInit {
       city: [this.workshop.city, Validators.required],
       country: [this.workshop.country, Validators.required],
       hostSite: [this.workshop.hostSite, Validators.required],
-      courseManager: [this.workshop.courseManager, Validators.required],
+      courseManager: [this.workshop.courseManager || new CourseManager(), Validators.required],
       startDate: [this.workshop.startDate || new Date(), Validators.required],
       endDate: [this.workshop.endDate || new Date(Date.now() + (1000 * 60 * 60 * 24)), Validators.required],
       website: [this.workshop.website, CustomValidators.url],
@@ -107,9 +107,6 @@ export class WorkshopFormComponent implements OnInit {
     this.isLoading = true;
     this.workshop = merge(this.workshop, this.workshopForm.value);
     if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
-    else this.workshop.affiliateId = this.workshopForm.controls.affiliate.value.sfId;
-
-    this.workshop.courseManager = this.workshopForm.controls.courseManager.value;
 
     this.submitFunction(this.workshop)
       .subscribe((result: ISFSuccessResult) => {
@@ -126,6 +123,14 @@ export class WorkshopFormComponent implements OnInit {
   public onFacilitatorSelected(facilitator: Facilitator) {
     this.workshop.addInstructor(facilitator);
     this.workshopForm.controls.facilitator.setValue('');
+  }
+
+  public onSelectAffiliate(affiliate: Affiliate) {
+    this.workshop.affiliate = affiliate;
+  }
+
+  public onSelectCourseManager(courseManager: CourseManager) {
+    this.workshop.courseManager = courseManager;
   }
 
   public checkValidSFObject(control): void {
@@ -161,7 +166,6 @@ export class WorkshopFormComponent implements OnInit {
         websiteControl.setValidators([Validators.required, CustomValidators.url]);
       else {
         websiteControl.clearValidators();
-        websiteControl.setValidators(CustomValidators.url);
       }
 
       websiteControl.setValue('https://');

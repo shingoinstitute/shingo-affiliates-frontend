@@ -3,7 +3,7 @@
     <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
       <p class="mat-caption"> {{ describe.organizingAffiliate && describe.organizingAffiliate.inlineHelpText }} </p>
       <app-sf-lookup #afLookup formControlName="affiliate" (focusout)="checkValidSFObject(afLookup.lookup.controls.sfObject)" [sfObject]="workshop.affiliate"
-        [displayFn]="contactDisplayWith.bind(this)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affiliate'}}"></app-sf-lookup>
+        [displayFn]="contactDisplayWith.bind(this)" (onSelect)="onSelectAffiliate($event)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affiliate'}}"></app-sf-lookup>
     </div>
     <div class="input-item">
       <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
@@ -94,7 +94,7 @@
       <p class="mat-caption"> {{ describe.courseManager && describe.courseManager.inlineHelpText }} </p>
       <app-sf-lookup #cmLookup formControlName="courseManager" (focusout)="checkValidSFObject(cmLookup.lookup.controls.sfObject)"
         [sfObject]="workshop.courseManager" [displayFn]="contactDisplayWith.bind(this)" placeholder="Course Manager (e.g. John Doe)"
-        [extraArgs]="getAffiliate()"></app-sf-lookup>
+        [extraArgs]="getAffiliate()" (onSelect)="onSelectCourseManager($event)"></app-sf-lookup>
     </div>
 
     <div class="input-item" [style.display]="workshopForm.value.isPublic ? 'flex' : 'none'">

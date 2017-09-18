@@ -1,0 +1,10 @@
+md-input-container md-spinner {
+  height: 25px;
+  width: 25px;
+  float: right;
+  opacity: 0.75;
+}
+
+md-input-container input.autoComplete {
+  width: fit-content;
+}
