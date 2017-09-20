@@ -1,3 +1,6 @@
+// Angular Modules
+import { isDevMode } from '@angular/core';
+
 // App Modules
 import { HttpService } from '../http/http.service';
 import { BaseService } from './base.abstract.service';
@@ -19,11 +22,8 @@ export interface ISFSuccessResult {
 
 export abstract class BaseAPIService extends BaseService {
 
-  protected _baseUrl: string = 'https://api.shingo.org/v2/affiliates';
-  protected _basePort: string = '';
-
-  // protected _baseUrl: string = 'http://129.123.47.34';
-  // protected _basePort: string = '8080';
+  protected _baseUrl: string = (isDevMode() ? 'http://129.123.47.34' : 'https://api.shingo.org/v2/affiliates');
+  protected _basePort: string = (isDevMode() ? '8080' : '');
 
 
   // Contract for all APIServices;
