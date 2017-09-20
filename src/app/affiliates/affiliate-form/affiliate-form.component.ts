@@ -11,7 +11,7 @@ import { AffiliateFormState, State } from './affiliate-form-state.class';
 import { Subscription } from 'rxjs/Rx';
 import { CustomValidators } from 'ng2-validation';
 
-// tslint:disable-next-line:prefer-const
+declare var $: any;
 
 @Component({
   selector: 'app-affiliate-form',

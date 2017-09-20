@@ -15,6 +15,8 @@ import 'rxjs/add/observable/fromEvent';
 
 import { at } from 'lodash';
 
+declare var $: any;
+
 @Component({
   selector: 'app-workshop-dashboard',
   templateUrl: './workshop-dashboard.component.html',

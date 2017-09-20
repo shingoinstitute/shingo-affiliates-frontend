@@ -9,6 +9,8 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { Affiliate } from '../../affiliates/affiliate.model';
 import { Observable } from 'rxjs/Observable';
 
+declare var $: any;
+
 @Component({
   selector: 'app-facilitator-form',
   templateUrl: './facilitator-form.component.html',

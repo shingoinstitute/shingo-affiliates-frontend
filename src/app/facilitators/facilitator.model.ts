@@ -77,7 +77,7 @@ export class Facilitator extends SFObject {
   public FirstName: string = '';
   public LastName: string = '';
   public AccountId: string = '';
-  public Photograph__c: string = 'http://res.cloudinary.com/shingo/image/upload/c_thumb,e_trim:10,g_center,h_100,w_100/v1414874243/silhouette_vzugec.png';
+  public Photograph__c: string = 'https://res.cloudinary.com/shingo/image/upload/c_thumb,e_trim:10,g_center,h_100,w_100/v1414874243/silhouette_vzugec.png';
   public Biography__c: string = '';
   public Title: string = '';
   public Account: Affiliate = new Affiliate();
