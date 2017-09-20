@@ -4,9 +4,9 @@ import { Workshop } from '../../../workshops/workshop.model';
 
 export class WorkshopDateRangeFilter extends Filter {
 
-  protected dataChangeSource: BehaviorSubject<DateRange>;
-
   public _range: DateRange;
+  
+  protected dataChangeSource: BehaviorSubject<DateRange>;
 
   constructor(name: string) {
     super(name);

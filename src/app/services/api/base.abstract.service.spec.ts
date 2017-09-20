@@ -20,7 +20,7 @@ describe('BaseService', () => {
     expect(service.toCamelCase).not.toBeUndefined();
   });
 
-  it(`expects 'toCamelCase' to camel-case an underscore seperated token (e.g. 'Foo_Bar_Baz__c')`, () => {
+  it(`expect #toCamelCase to camel-case an underscore seperated token (e.g. 'Foo_Bar_Baz__c')`, () => {
     const expected = 'fooBarBaz';
     const token = 'Foo_Bar_Baz';
     expect(service.toCamelCase(token)).toEqual(expected, `expected ${expected}, got ${service.toCamelCase(token)} instead.`);

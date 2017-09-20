@@ -104,6 +104,4 @@ describe('FacilitatorService', () => {
       expect(data).not.toBeUndefined();
     });
   });
-
-
 });

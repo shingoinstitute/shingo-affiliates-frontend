@@ -22,9 +22,9 @@ describe('CountriesService', () => {
     service = new CountriesService(new HttpMock());
   });
 
-  it('should get countries', () => {
+  it('expects an array of countries', () => {
     service.get().subscribe(data => {
-      expect(data).not.toBeUndefined();
+      expect(data).toBeDefined();
     });
   });
 
