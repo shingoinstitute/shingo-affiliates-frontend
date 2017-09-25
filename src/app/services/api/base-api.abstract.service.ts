@@ -25,7 +25,6 @@ export abstract class BaseAPIService extends BaseService {
   protected _baseUrl: string = (isDevMode() ? 'http://129.123.47.34' : 'https://api.shingo.org/v2/affiliates');
   protected _basePort: string = (isDevMode() ? '8080' : '');
 
-
   // Contract for all APIServices;
   public abstract getAll(): Observable<any[]>;
   public abstract getById(id: string): Observable<any>;

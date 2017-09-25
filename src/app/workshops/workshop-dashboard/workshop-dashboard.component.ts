@@ -15,7 +15,6 @@ import 'rxjs/add/observable/fromEvent';
 
 import { at } from 'lodash';
 
-
 declare var $: any;
 
 @Component({

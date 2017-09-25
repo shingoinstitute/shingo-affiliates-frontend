@@ -21,6 +21,7 @@ export class AuthService extends BaseService {
   public authenticationChange$: BehaviorSubject<boolean>;
   public get user() { return this._user; }
   public _user: User;
+
   public get authHost(): string { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}/auth`; }
 
   protected _baseUrl: string = (isDevMode() ? 'http://129.123.47.34' : 'https://api.shingo.org/v2/affiliates');

@@ -13,8 +13,6 @@ import { CustomValidators } from 'ng2-validation';
 
 declare var $: any;
 
-// tslint:disable-next-line:prefer-const
-
 @Component({
   selector: 'app-affiliate-form',
   templateUrl: './affiliate-form.component.html',
