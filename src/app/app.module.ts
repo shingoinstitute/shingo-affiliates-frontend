@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';
@@ -51,7 +51,16 @@ import { AppComponent } from './app.component';
     WorkshopsModule,
     UIComponentsModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoggerInterceptor, multi: true }],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useFactory() {
+      if (isDevMode()) { return new LoggerInterceptor(); }
+      return {
+        intercept: (req, next) => next.handle(req)
+      };
+    },
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
