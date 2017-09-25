@@ -32,6 +32,12 @@ describe('HttpService', () => {
 
   it('should be created', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
     expect(http).toBeTruthy();
+    expect(http.get).toBeDefined();
+    expect(http.post).toBeDefined();
+    expect(http.put).toBeDefined();
+    expect(http.delete).toBeDefined();
+    expect(http.request).toBeDefined();
+    expect(http.removeToken).toBeDefined();
   }));
 
   it('expects a GET request', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {

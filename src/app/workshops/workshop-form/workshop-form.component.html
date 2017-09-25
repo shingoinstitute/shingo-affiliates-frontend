@@ -101,7 +101,7 @@
       <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
       <md-input-container>
         <input mdInput placeholder="{{ describe.registrationWebsite && describe.registrationWebsite.label || 'Registration URL' }}"
-          formControlName="website" required (keyup)="prefixWebsite()">
+          formControlName="website" (keyup)="prefixWebsite()">
         <md-hint align="start" *ngIf="workshopForm.controls.website.errors?.required" class="error">A registration website is required if the workshop is public</md-hint>
         <md-hint align="start" *ngIf="workshopForm.controls.website.errors?.url" class="error">'{{workshopForm.controls.website.value}}' is not a valid URL</md-hint>
       </md-input-container>

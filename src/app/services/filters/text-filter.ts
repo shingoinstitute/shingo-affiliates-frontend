@@ -3,9 +3,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class TextFilter<T> extends Filter {
 
-  protected dataChangeSource: BehaviorSubject<string>;
-
   public _filter: string;
+
+  protected dataChangeSource: BehaviorSubject<string>;
 
   constructor(name: string) {
     super(name);

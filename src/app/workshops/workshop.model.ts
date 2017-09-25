@@ -5,16 +5,7 @@ import { SFObject } from '../shared/models/sf-object.abstract.model';
 import * as dateFormat from 'dateformat';
 
 export type WorkshopType = 'Discover' | 'Enable' | 'Improve' | 'Align' | 'Build' | '' | undefined;
-export type WorkshopStatusType = 'Invoiced, Not Paid' |
-  'Finished, waiting for attendee list' |
-  'Awaiting Invoice' |
-  'Proposed' |
-  'Archived' |
-  'Cancelled' |
-  'Active, not ready for app' |
-  'Active Event' |
-  '' |
-  undefined;
+export type WorkshopStatusType = 'Proposed' | 'Verified' | 'Action Pending' | 'Ready To Be Invoiced' | 'Invoiced, Not Paid' | 'Archived' | 'Cancelled' | '' | undefined;
 
 /**
  * @desc Defines the interface to work with Workshops. Also provides a 'Facade' of the Salesforce API Naming conventions.
@@ -27,12 +18,12 @@ export class Workshop extends SFObject {
 
   public get sfId(): string { return this.Id; }
 
-  public get startDate(): Date { return this.Start_Date__c; }
+  public get startDate(): Date { return this.Start_Date__c instanceof Date ? this.Start_Date__c : new Date(this.Start_Date__c); }
   public set startDate(date: Date) { this.Start_Date__c = date; }
 
   public get startDateFormatted(): string { return Workshop.formatDate(this.startDate); }
 
-  public get endDate(): Date { return this.End_Date__c; }
+  public get endDate(): Date { return this.End_Date__c instanceof Date ? this.End_Date__c : new Date(this.End_Date__c); }
   public set endDate(date: Date) { this.End_Date__c = date; }
 
   public get endDateFormatted(): string { return Workshop.formatDate(this.endDate); }
