@@ -1,7 +1,9 @@
 <div class="lookup-container" [formGroup]="lookup">
   <div class="input-container">
     <md-input-container>
-      <input type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder" required>
+      <input class="autoComplete" type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder"
+        required>
+      <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
@@ -9,9 +11,5 @@
         {{ o.name }}
       </md-option>
     </md-autocomplete>
-  </div>
-
-  <div class="spinner-container">
-    <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
   </div>
 </div>

@@ -1,5 +1,5 @@
 // Angular Modules
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, isDevMode } from '@angular/core';
 
 // App Modules
 import { HttpService } from '../http/http.service';
@@ -22,11 +22,10 @@ export class AuthService extends BaseService {
   public get user() { return this._user; }
   public _user: User;
 
-  // protected _baseUrl: string = 'https://api.shingo.org/v2/affiliates';
-  protected _baseUrl: string = 'http://129.123.47.34';
-  protected _basePort: string = ':8080';
+  public get authHost(): string { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}/auth`; }
 
-  public get authHost(): string { return `${this._baseUrl}${this._basePort}/auth`; }
+  protected _baseUrl: string = (isDevMode() ? 'http://129.123.47.34' : 'https://api.shingo.org/v2/affiliates');
+  protected _basePort: string = (isDevMode() ? '8080' : '');
 
   constructor(public http: HttpService) {
     super();

@@ -33,6 +33,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
   public isDialog: boolean;
   public routeSubscription: Subscription;
   public affForm: FormGroup;
+  public affiliateSummary: string;
 
   constructor(
     @Optional() @Inject(MD_DIALOG_DATA) public data: any,
@@ -87,8 +88,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
       publicContact: [this.affiliate.publicContact],
       publicContactEmail: [this.affiliate.publicContactEmail, Validators.email],
       publicContactPhone: [this.affiliate.publicContactPhone],
-      langControl: [''],
-      summary: [this.affiliate.summary]
+      langControl: ['']
     });
   }
 
@@ -99,8 +99,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
       website: this.affiliate.website,
       publicContact: this.affiliate.publicContact,
       publicContactEmail: this.affiliate.publicContactEmail,
-      publicContactPhone: this.affiliate.publicContactPhone,
-      summary: this.affiliate.summary
+      publicContactPhone: this.affiliate.publicContactPhone
     });
     this.state.next();
   }
@@ -114,8 +113,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
         website: this.affiliate.website,
         publicContact: this.affiliate.publicContact,
         publicContactEmail: this.affiliate.publicContactEmail,
-        publicContactPhone: this.affiliate.publicContactPhone,
-        summary: this.affiliate.summary
+        publicContactPhone: this.affiliate.publicContactPhone
       });
       this.affForm.controls.affiliate.patchValue({ 'sfObject': this.affiliate });
       this.isLoading = false;

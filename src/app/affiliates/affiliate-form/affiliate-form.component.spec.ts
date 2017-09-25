@@ -8,9 +8,9 @@ describe('AffiliateFormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AffiliateFormComponent ]
+      declarations: [AffiliateFormComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

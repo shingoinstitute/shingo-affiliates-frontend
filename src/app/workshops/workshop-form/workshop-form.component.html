@@ -3,7 +3,7 @@
     <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
       <p class="mat-caption"> {{ describe.organizingAffiliate && describe.organizingAffiliate.inlineHelpText }} </p>
       <app-sf-lookup #afLookup formControlName="affiliate" (focusout)="checkValidSFObject(afLookup.lookup.controls.sfObject)" [sfObject]="workshop.affiliate"
-        [displayFn]="contactDisplayWith.bind(this)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affiliate'}}"></app-sf-lookup>
+        [displayFn]="contactDisplayWith.bind(this)" (onSelect)="onSelectAffiliate($event)" placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affiliate'}}"></app-sf-lookup>
     </div>
     <div class="input-item">
       <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
@@ -76,7 +76,7 @@
             formControlName="startDate">
           <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
         </md-input-container>
-        <md-datepicker #startDatePicker [startAt]="'today'"></md-datepicker>
+        <md-datepicker #startDatePicker [startAt]="today"></md-datepicker>
       </div>
 
       <div fxLayout="column">
@@ -86,7 +86,7 @@
             formControlName="endDate">
           <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
         </md-input-container>
-        <md-datepicker #endDatePicker [startAt]="'today'"></md-datepicker>
+        <md-datepicker #endDatePicker [startAt]="today"></md-datepicker>
       </div>
     </div>
 
@@ -94,14 +94,14 @@
       <p class="mat-caption"> {{ describe.courseManager && describe.courseManager.inlineHelpText }} </p>
       <app-sf-lookup #cmLookup formControlName="courseManager" (focusout)="checkValidSFObject(cmLookup.lookup.controls.sfObject)"
         [sfObject]="workshop.courseManager" [displayFn]="contactDisplayWith.bind(this)" placeholder="Course Manager (e.g. John Doe)"
-        [extraArgs]="getAffiliate()"></app-sf-lookup>
+        [extraArgs]="getAffiliate()" (onSelect)="onSelectCourseManager($event)"></app-sf-lookup>
     </div>
 
     <div class="input-item" [style.display]="workshopForm.value.isPublic ? 'flex' : 'none'">
       <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
       <md-input-container>
         <input mdInput placeholder="{{ describe.registrationWebsite && describe.registrationWebsite.label || 'Registration URL' }}"
-          formControlName="website" required (keyup)="prefixWebsite()">
+          formControlName="website" (keyup)="prefixWebsite()">
         <md-hint align="start" *ngIf="workshopForm.controls.website.errors?.required" class="error">A registration website is required if the workshop is public</md-hint>
         <md-hint align="start" *ngIf="workshopForm.controls.website.errors?.url" class="error">'{{workshopForm.controls.website.value}}' is not a valid URL</md-hint>
       </md-input-container>

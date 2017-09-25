@@ -32,8 +32,16 @@ export class WorkshopDetailComponent implements OnInit {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'assets/imgs/icons/spreadsheet_icon.png'
   };
 
-  public get showFileUpload(): boolean {
-    return this.workshop.type === ('Action Pending' as WorkshopStatusType);
+  public get showFiles(): boolean {
+    return this.workshop.status !== 'Proposed' || this.workshop.status !== ('Verified' as WorkshopStatusType);
+  }
+
+  public get showAttendeeUpload(): boolean {
+    return this.workshop.status === ('Action Pending' as WorkshopStatusType);
+  }
+
+  public get showEvalUpload(): boolean {
+    return this.showAttendeeUpload || this.workshop.status === 'Ready To Be Invoiced';
   }
 
   constructor(public route: ActivatedRoute, public _ws: WorkshopService) { }

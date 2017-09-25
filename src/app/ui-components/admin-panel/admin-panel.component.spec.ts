@@ -1,6 +1,13 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { Router, RouterModule } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MaterialModule } from '@angular/material';
 
 import { AdminPanelComponent } from './admin-panel.component';
+
+class RouterStub { }
 
 describe('AdminPanelComponent', () => {
   let component: AdminPanelComponent;
@@ -8,9 +15,17 @@ describe('AdminPanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AdminPanelComponent ]
+      imports: [
+        RouterTestingModule,
+        MaterialModule,
+        FlexLayoutModule
+      ],
+      declarations: [AdminPanelComponent],
+      providers: [
+        { provide: Router, useClass: RouterStub }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -18,4 +33,14 @@ describe('AdminPanelComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+  it('should exist', inject([Router], (router: Router) => {
+    expect(component).toBeDefined();
+  }));
+
+  it('should have a router', inject([Router], (router: Router) => {
+    expect(component.router).toBeDefined();
+    expect(component.router instanceof RouterStub).toBeTruthy();
+  }));
+
 });
