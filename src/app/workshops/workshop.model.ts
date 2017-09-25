@@ -5,16 +5,7 @@ import { SFObject } from '../shared/models/sf-object.abstract.model';
 import * as dateFormat from 'dateformat';
 
 export type WorkshopType = 'Discover' | 'Enable' | 'Improve' | 'Align' | 'Build' | '' | undefined;
-export type WorkshopStatusType = 'Invoiced, Not Paid' |
-  'Finished, waiting for attendee list' |
-  'Awaiting Invoice' |
-  'Proposed' |
-  'Archived' |
-  'Cancelled' |
-  'Active, not ready for app' |
-  'Active Event' |
-  '' |
-  undefined;
+export type WorkshopStatusType = 'Proposed' | 'Verified' | 'Action Pending' | 'Ready To Be Invoiced' | 'Invoiced, Not Paid' | 'Archived' | 'Cancelled' | '' | undefined;
 
 /**
  * @desc Defines the interface to work with Workshops. Also provides a 'Facade' of the Salesforce API Naming conventions.

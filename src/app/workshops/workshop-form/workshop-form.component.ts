@@ -2,7 +2,7 @@
 import { Component, ViewChild, ElementRef, QueryList, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
-import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange } from '@angular/material';
+import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange, MdSnackBar } from '@angular/material';
 
 // App Modules
 import { AuthService } from '../../services/auth/auth.service';
@@ -76,7 +76,8 @@ export class WorkshopFormComponent implements OnInit {
     public _cs: CountriesService,
     public _fs: FacilitatorService,
     public _as: AffiliateService,
-    public _ws: WorkshopService) { }
+    public _ws: WorkshopService,
+    public snackbar: MdSnackBar) { }
 
   public ngOnInit() {
     this.createForm();
@@ -114,7 +115,11 @@ export class WorkshopFormComponent implements OnInit {
         this.router.navigateByUrl(`/workshops/${result.id}`);
         this.isLoading = false;
       }
-      , err => console.error('error submitting workshop', err));
+      , err => {
+        console.error('error submitting workshop', err);
+        this.isLoading = false;
+        this.snackbar.open('An error occurred and the requested operation could not be completed.', 'Okay', { extraClasses: ['md-warn'] });
+      });
   }
 
   public contactDisplayWith(value) {
