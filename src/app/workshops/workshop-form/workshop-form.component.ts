@@ -54,6 +54,7 @@ export class WorkshopFormComponent implements OnInit {
   public facilitatorOpts: Facilitator[] = [];
   public affiliates: Affiliate[] = [];
   public describe: any = {};
+  public today: Date = new Date();
 
 
   public workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];

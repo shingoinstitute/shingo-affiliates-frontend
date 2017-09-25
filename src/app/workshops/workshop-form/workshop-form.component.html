@@ -76,7 +76,7 @@
             formControlName="startDate">
           <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
         </md-input-container>
-        <md-datepicker #startDatePicker [startAt]="'today'"></md-datepicker>
+        <md-datepicker #startDatePicker [startAt]="today"></md-datepicker>
       </div>
 
       <div fxLayout="column">
@@ -86,7 +86,7 @@
             formControlName="endDate">
           <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
         </md-input-container>
-        <md-datepicker #endDatePicker [startAt]="'today'"></md-datepicker>
+        <md-datepicker #endDatePicker [startAt]="today"></md-datepicker>
       </div>
     </div>
 
