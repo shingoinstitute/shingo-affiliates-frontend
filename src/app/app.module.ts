@@ -11,8 +11,6 @@ import 'hammerjs';
 /** Shared Modules */
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
-import { LoggerInterceptor } from './services/http/logger.interceptor';
-import { NoopInterceptor } from './services/http/noop.interceptor';
 
 /** Facilitators */
 import { FacilitatorsModule } from './facilitators/facilitators.module';
@@ -31,6 +29,9 @@ import { AppRoutingModule } from './app-routing.module';
 
 // App Components
 import { AppComponent } from './app.component';
+
+// Providers
+import { LoggerInterceptorProvider } from './interceptor.provider';
 
 @NgModule({
   declarations: [
@@ -54,10 +55,7 @@ import { AppComponent } from './app.component';
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
-    useFactory() {
-      if (isDevMode()) { return new LoggerInterceptor(); }
-      return new NoopInterceptor();
-    },
+    useFactory: LoggerInterceptorProvider,
     multi: true
   }],
   bootstrap: [AppComponent]
