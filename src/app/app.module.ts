@@ -12,6 +12,7 @@ import 'hammerjs';
 import { SharedModule } from './shared/shared.module';
 import { ServicesModule } from './services/services.module';
 import { LoggerInterceptor } from './services/http/logger.interceptor';
+import { NoopInterceptor } from './services/http/noop.interceptor';
 
 /** Facilitators */
 import { FacilitatorsModule } from './facilitators/facilitators.module';
@@ -55,9 +56,7 @@ import { AppComponent } from './app.component';
     provide: HTTP_INTERCEPTORS,
     useFactory() {
       if (isDevMode()) { return new LoggerInterceptor(); }
-      return {
-        intercept: (req, next) => next.handle(req)
-      };
+      return new NoopInterceptor();
     },
     multi: true
   }],
