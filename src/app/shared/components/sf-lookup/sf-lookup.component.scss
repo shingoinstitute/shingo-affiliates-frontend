@@ -1,10 +1,21 @@
 md-input-container md-spinner {
-  height: 25px;
-  width: 25px;
+  height: 24px;
+  width: 24px;
   float: right;
   opacity: 0.75;
 }
 
+div.search-spinner-wrapper {
+  display: block;
+}
+
+div.search-spinner-wrapper > md-spinner {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 md-input-container input.autoComplete {
   width: fit-content;
+  min-width: 280px;
 }

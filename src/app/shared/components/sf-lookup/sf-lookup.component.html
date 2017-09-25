@@ -3,12 +3,14 @@
     <md-input-container>
       <input class="autoComplete" type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder"
         required>
-      <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
+      <div class="search-spinner-wrapper">
+        <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
+      </div>
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
       <md-option *ngFor="let o of objects" [value]="o" (onSelectionChange)="onSelectChange(o)">
-        {{ o.name }}
+        {{ displayObjFn(o) }}
       </md-option>
     </md-autocomplete>
   </div>

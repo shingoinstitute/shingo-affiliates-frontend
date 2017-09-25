@@ -14,6 +14,7 @@ import { CourseManager } from '../../../workshops/course-manager.model';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-sf-lookup',
@@ -39,6 +40,9 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
 
   public objects: SFObject[] = [];
   public isSearching: boolean = false;
+
+  public queryHandlerSource = new Subject<string>();
+  public queryHandler: Observable<string> = this.queryHandlerSource.asObservable();
 
   constructor(public _as: AffiliateService, public _fs: FacilitatorService, public _ws: WorkshopService, public fb: FormBuilder) { }
 
@@ -88,7 +92,14 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   public ngAfterViewInit() {
     this.lookup.controls.sfObject.valueChanges
       .filter(query => query && query.length > 2)
-      .subscribe(query => this.handleQuery(query));
+      .subscribe(query => this.queryHandlerSource.next(query));
+
+    this.queryHandler
+      .debounceTime(250)
+      .distinctUntilChanged()
+      .subscribe(query => {
+        this.handleQuery(query);
+      });
   }
 
   public handleQuery(query: string) {
@@ -110,9 +121,7 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
         throw new Error(`Cannot determine a search function for ${typeof this.sfObject}`);
       }
 
-      searchFn
-        .debounceTime(250)
-        .subscribe((data: SFObject[]) => {
+      searchFn.subscribe((data: SFObject[]) => {
           this.isSearching = false;
           this.objects = data.map(o => o).sort((a: SFObject, b: SFObject) => {
             return a.name > b.name ? 1 : -1;
@@ -134,6 +143,16 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
       errors[name] = this.lookup.get(name).errors;
       return errors;
     }, {});
+  }
+
+  public displayObjFn(obj: any): string {
+    if (obj instanceof Facilitator) return obj.email;
+    else if (obj instanceof Affiliate) return obj.name;
+    else if (obj instanceof CourseManager) return obj.name;
+    else if (typeof obj.name !== 'undefined') return obj.name;
+    else if (typeof obj.email !== 'undefined') return obj.name;
+    else if (typeof obj === 'string') return obj;
+    else return `Parsing Error!`;
   }
 
 }
