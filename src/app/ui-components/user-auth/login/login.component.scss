@@ -50,24 +50,19 @@
 .login-actions > a {
    text-decoration-line: none;
 }
+.message-container {
+  min-height: 19px;
+  margin-top: $defaultMargin * 2;
+  margin-bottom: $defaultMargin * 2;
+}
 .md-spinner-container {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   justify-content: center;
-   color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 42px;
+  margin-bottom: -42px;
 }
 .md-spinner-container > md-spinner {
-   height: 42px;
-}
-.md-spinner-container h1,
-.md-spinner-container md-spinner {
-   position: relative;
-   bottom: 48px;
-   margin: $defaultMargin;
-}
-.message-container {
-   min-height: 19px;
-   margin-top: $defaultMargin * 2;
-   margin-bottom: $defaultMargin * 2;
+  height: 42px;
 }
