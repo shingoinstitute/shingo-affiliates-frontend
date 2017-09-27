@@ -25,12 +25,14 @@ import 'rxjs/add/operator/distinctUntilChanged';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements OnDestroy {
 
-  @ViewChild('sidenav') public sidenav: MdSidenav;
+  public _sidenav: MdSidenav;
+  @ViewChild('sidenav') public set sidenav(s: MdSidenav) {
+    this._sidenav = this.sidenavService.sidenav = s;
+    this.getInitialWindowWidth();
+  }
 
-  public windowWidthChangeSource = new Subject<number>();
-  public windowWidthChange = this.windowWidthChangeSource.asObservable();
   public isLoading: boolean = true;
   public isAuthenticated: boolean = false;
   public activeRoute: string;
@@ -62,15 +64,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     });
 
     this.router.events.subscribe(route => {
-      if (route instanceof NavigationStart) this.isLoading = true;
-      else if (route instanceof NavigationEnd) this.isLoading = false;
+      if (route instanceof NavigationStart) {
+        this.isLoading = true;
+      } else if (route instanceof NavigationEnd) {
+        this.isLoading = false;
+      }
     });
-  }
-
-  public ngAfterViewInit() {
-    this.sidenavService.sidenav = this.sidenav;
-    this.winResizeHandler();
-    this.windowWidthChangeSource.next(window.innerWidth);
   }
 
   public ngOnDestroy() {
@@ -83,7 +82,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
    */
   @HostListener('window:resize', ['$event'])
   public onResize(event) {
-    this.windowWidthChangeSource.next(event.target.innerWidth);
+    this.sidenavService.onResize(event.target.innerWidth);
+  }
+
+  public getInitialWindowWidth() {
+    setTimeout(() => {
+      if (window && window.innerWidth)
+        this.sidenavService.onResize(window.innerWidth);
+      else
+        this.getInitialWindowWidth();
+    }, 100);
   }
 
   /**
@@ -123,28 +131,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Creates a subscription that listens to events emitted by `this.onResize()`
-   * and opens or closes the sidenav depending on the screen size. Also closes
-   * the sidenav if the user is not logged in.
-   */
-  public winResizeHandler() {
-    this.windowWidthChange
-      .debounceTime(100)
-      .subscribe((width: number) => {
-        if (!this.sidenavService.sidenav) {
-          return setTimeout(() => {
-            this.sidenavService.sidenav = this.sidenav;
-            this.windowWidthChangeSource.next(width);
-          });
-        } else if (width < 960 && this.sidenavService.canToggle) {
-          this.sidenavService.close();
-        } else if (this.sidenavService.canToggle) {
-          this.sidenavService.open();
-        }
-      });
-  }
-
   public openMaterials(folder: string) {
     const folders = { workshops: false, marketing: false, forms: false };
     folders[folder] = true;
@@ -182,5 +168,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.iconRegistry.addSvgIcon('folder', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_folder_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('link', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_link_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('insert_drive_file', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_insert_drive_file_grey_18px.svg'));
+    this.iconRegistry.addSvgIcon('menu_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_menu_white_18px.svg'));
   }
 }
