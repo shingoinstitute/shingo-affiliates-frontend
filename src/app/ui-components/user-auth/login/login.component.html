@@ -7,9 +7,13 @@
       <h1 class="md-accent-text mat-title">Shingo Affiliate Portal</h1>
     </div>
 
+    <div class="md-spinner-container">
+      <md-spinner *ngIf="isLoading"></md-spinner>
+    </div>
+
     <div class="message-container">
-      <p class="md-warn-text" *ngIf="errMsg"> {{ errMsg }} </p>
-      <p class="md-warn-text" *ngIf="errBody">{{ errBody }} </p>
+      <p class="md-warn-text" *ngIf="errMsg" [innerHTML]="errMsg"></p>
+      <code class="md-warn-text" *ngIf="errBody" [innerHTML]="errBody"></code>
     </div>
 
     <form class="login-form">
@@ -23,14 +27,11 @@
     </form>
 
     <div class="login-actions">
-      <button md-raised-button class="mat-primary" type="button" (click)="onSubmit()">Login</button>
+      <button md-raised-button class="mat-primary" type="button" (click)="onSubmit()" [disabled]="isLoading">Login</button>
       <a routerLink="/forgotpassword">Forgot Password?</a>
       <a href="#">Help?</a>
     </div>
-  </div>
 
-  <div class="md-spinner-container" *ngIf="isLoading">
-    <md-spinner></md-spinner>
   </div>
 
 </div>

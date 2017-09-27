@@ -42,19 +42,21 @@ export class LoginComponent implements OnInit {
       this.isLoading = false;
       this.didLoad = true;
     });
-    // this.auth.userIsValid();
   }
 
   /**
    * @description Handler for submitting login credentials.
    */
   public onSubmit() {
+    this.isLoading = true;
     this.auth.login({ email: this.email, password: this.password })
       .subscribe((data) => {
+        this.isLoading = false;
         this.routerService.nextRoute();
       }, err => {
         console.error(err);
-        const msg = err.error && err.error.error ? err.error.error : '';
+        this.isLoading = false;
+        const msg = this.findErrorMsg(err);
         if (msg === 'INVALID_PASSWORD')
           this.errMsg = 'Invalid password.';
         else if (msg === 'EMAIL_NOT_FOUND')
@@ -69,4 +71,13 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  public findErrorMsg(obj: object, key: string = 'error'): string {
+    if (obj && typeof obj[key] === 'object') {
+      return this.findErrorMsg(obj[key]);
+    } else if (typeof obj[key] === 'string') {
+      return obj[key];
+    } else {
+      return '';
+    }
+  }
 }
