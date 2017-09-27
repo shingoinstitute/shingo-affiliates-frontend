@@ -4,8 +4,12 @@
   <span fxFlex></span>
 
   <button md-icon-button [mdMenuTriggerFor]="menu" *ngIf="isAuthenticated">
-      <md-icon svgIcon="account_circle_white"></md-icon>
-   </button>
+    <md-icon svgIcon="account_circle_white"></md-icon>
+  </button>
+
+  <button md-icon-button *ngIf="sidenavService.canToggle" (click)="sidenavService.toggleSidenav()">
+    <md-icon svgIcon="menu_white"></md-icon>
+  </button>
 
   <md-menu #menu="mdMenu">
     <div class="menu-btn-container">
@@ -31,13 +35,13 @@
   <md-sidenav #sidenav mode="side" [opened]="isAuthenticated">
     <md-nav-list>
       <p class="bold-text">Main</p>
-      <a md-list-item routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-      <a md-list-item routerLink="/workshops" routerLinkActive="active">Workshops</a>
-      <a *ngIf="auth.user && auth.user.isAdmin" md-list-item routerLink="/admin" routerLinkActive="active">Admin Panel</a>
+      <a md-list-item routerLink="/dashboard" routerLinkActive="active" (click)="sidenavService.close()">Dashboard</a>
+      <a md-list-item routerLink="/workshops" routerLinkActive="active" (click)="sidenavService.close()">Workshops</a>
+      <a *ngIf="auth.user && auth.user.isAdmin" md-list-item routerLink="/admin" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
       <p class="bold-text">Affiliate Materials</p>
-      <a md-list-item nohref (click)="openMaterials('workshops')">Workshop Materials</a>
-      <a md-list-item nohref (click)="openMaterials('forms')">Forms/Evaluations</a>
-      <a md-list-item nohref (click)="openMaterials('marketing')">Marketing Materials</a>
+      <a md-list-item nohref (click)="openMaterials('workshops')" (click)="sidenavService.close()">Workshop Materials</a>
+      <a md-list-item nohref (click)="openMaterials('forms')" (click)="sidenavService.close()">Forms/Evaluations</a>
+      <a md-list-item nohref (click)="openMaterials('marketing')" (click)="sidenavService.close()">Marketing Materials</a>
     </md-nav-list>
   </md-sidenav>
 

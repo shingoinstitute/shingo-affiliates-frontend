@@ -25,8 +25,10 @@ export class SidenavService {
     if (!this.sidenav) return;
     if (mobile) {
       this.sidenav.close();
+      this.sidenav.mode = 'over';
     } else if (this.isAuth) {
       this.sidenav.open();
+      this.sidenav.mode = 'side';
     }
   }
 
@@ -40,6 +42,8 @@ export class SidenavService {
     }
   }
 
+  public get canToggle() { return this.sidenav && this.isAuth && this.isMobile; }
+
   constructor(public _as: AuthService) {
     this._as.authenticationChange$.subscribe((isAuth: boolean) => {
       this._isAuth = isAuth;
@@ -47,11 +51,12 @@ export class SidenavService {
   }
 
   public onResize(windowWidth: number) {
+    console.log('resized');
     this.isMobile = windowWidth < 960 ? true : false;
   }
 
   public toggleSidenav() {
-    if (this.sidenav && this.isAuth) {
+    if (this.canToggle) {
       return this.sidenav.toggle();
     }
   }

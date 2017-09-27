@@ -25,12 +25,12 @@ import 'rxjs/add/operator/distinctUntilChanged';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements OnDestroy {
 
   public _sidenav: MdSidenav;
   @ViewChild('sidenav') public set sidenav(s: MdSidenav) {
     this._sidenav = this.sidenavService.sidenav = s;
-    this.patientlyGetWindowWidth();
+    this.getInitialWindowWidth();
   }
 
   public isLoading: boolean = true;
@@ -72,13 +72,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  public ngAfterViewInit() {
-    // this.getInitialWindowWidth();
-    // setTimeout(() => {
-    //   this.sidenavService.sidenav = this.sidenav;
-    // }, 0);
-  }
-
   public ngOnDestroy() {
     // tslint:disable-next-line:no-unused-expression
     this.routeToLoginSubscription && this.routeToLoginSubscription.unsubscribe();
@@ -92,13 +85,12 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.sidenavService.onResize(event.target.innerWidth);
   }
 
-  public patientlyGetWindowWidth() {
-    setInterval(() => {
-      if (this.sidenavService.sidenav && window && typeof window.innerWidth === 'number') {
+  public getInitialWindowWidth() {
+    setTimeout(() => {
+      if (window && window.innerWidth)
         this.sidenavService.onResize(window.innerWidth);
-      } else {
-        this.patientlyGetWindowWidth();
-      }
+      else
+        this.getInitialWindowWidth();
     }, 100);
   }
 
@@ -176,5 +168,6 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     this.iconRegistry.addSvgIcon('folder', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_folder_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('link', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_link_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('insert_drive_file', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_insert_drive_file_grey_18px.svg'));
+    this.iconRegistry.addSvgIcon('menu_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_menu_white_18px.svg'));
   }
 }
