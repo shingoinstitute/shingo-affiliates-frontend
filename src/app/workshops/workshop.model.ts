@@ -18,13 +18,25 @@ export class Workshop extends SFObject {
 
   public get sfId(): string { return this.Id; }
 
-  public get startDate(): Date { return this.Start_Date__c instanceof Date ? this.Start_Date__c : new Date(this.Start_Date__c); }
-  public set startDate(date: Date) { this.Start_Date__c = date; }
+  public get startDate(): Date {
+    const date = this.Start_Date__c instanceof Date ? this.Start_Date__c : new Date(this.Start_Date__c);
+    return new Date(date.valueOf() + (1000 * 60 * 60 * 7)); // offset by 7 hours
+  }
+  public set startDate(date: Date) {
+    date.setUTCHours(7, 0, 0, 0); // offset by 7 hours
+    this.Start_Date__c = date;
+  }
 
   public get startDateFormatted(): string { return Workshop.formatDate(this.startDate); }
 
-  public get endDate(): Date { return this.End_Date__c instanceof Date ? this.End_Date__c : new Date(this.End_Date__c); }
-  public set endDate(date: Date) { this.End_Date__c = date; }
+  public get endDate(): Date {
+    const date = this.End_Date__c instanceof Date ? this.End_Date__c : new Date(this.End_Date__c);
+    return new Date(date.valueOf() + (1000 * 60 * 60 * 7)); // offset by 7 hours
+  }
+  public set endDate(date: Date) {
+    date.setUTCHours(7, 0, 0, 0); // offset by 7 hours
+    this.End_Date__c = date;
+  }
 
   public get endDateFormatted(): string { return Workshop.formatDate(this.endDate); }
 

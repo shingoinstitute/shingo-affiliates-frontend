@@ -51,7 +51,6 @@ export class SidenavService {
   }
 
   public onResize(windowWidth: number) {
-    console.log('resized');
     this.isMobile = windowWidth < 960 ? true : false;
   }
 
@@ -61,12 +60,15 @@ export class SidenavService {
     }
   }
 
+  // Allow sidenav to close when the viewport width is small (i.e., mobile device or a monitor for ants)
   public close() {
     if (this.sidenav && this.isMobile) {
       return this.sidenav.close();
     }
   }
 
+  // Allow sidenav to open when the viewport width < 960px AND if the user is authenticated
+  // The sidenav should remain open if the user is authenticated and the viewport width is <= 960px
   public open() {
     if (this.sidenav && this.isAuth && this.isMobile) {
       return this.sidenav.open();

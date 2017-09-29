@@ -1,7 +1,7 @@
 // Angular Modules
 import { Component, ViewChild, ElementRef, QueryList, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange, MdSnackBar } from '@angular/material';
 
 // App Modules
@@ -47,6 +47,8 @@ export class WorkshopFormComponent implements OnInit {
 
   public isLoading: boolean = false;
 
+  public get dateFormGroup(): FormGroup { return this.workshopForm.get('dates') as FormGroup; }
+
   public countries: string[] = [];
   public countryOptions: string[] = [];
   public workshopForm: FormGroup;
@@ -55,6 +57,7 @@ export class WorkshopFormComponent implements OnInit {
   public affiliates: Affiliate[] = [];
   public describe: any = {};
   public today: Date = new Date();
+  public tomorrow: Date = new Date(this.today.valueOf() + (1000 * 60 * 60 * 24));
 
 
   public workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
@@ -87,6 +90,11 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   public createForm() {
+    const dateFormGroup = this.fb.group({
+      startDate: [this.workshop.startDate],
+      endDate: [this.workshop.endDate]
+    });
+
     this.workshopForm = this.fb.group({
       affiliate: [this.workshop.affiliate || new Affiliate(), Validators.required],
       type: [this.workshop.type, Validators.required],
@@ -97,18 +105,28 @@ export class WorkshopFormComponent implements OnInit {
       country: [this.workshop.country, Validators.required],
       hostSite: [this.workshop.hostSite, Validators.required],
       courseManager: [this.workshop.courseManager || new CourseManager(), Validators.required],
-      startDate: [this.workshop.startDate || new Date(), Validators.required],
-      endDate: [this.workshop.endDate || new Date(Date.now() + (1000 * 60 * 60 * 24)), Validators.required],
+      dates: this.fb.group({
+        startDate: [this.workshop.startDate || new Date(), Validators.required],
+        endDate: [this.workshop.endDate || new Date(Date.now()), Validators.required]
+      }),
       website: [this.workshop.website],
       billing: [this.workshop.billing, [Validators.required, Validators.email]],
       facilitator: ['']
     });
+
+    const dateRangeValidator = (c: AbstractControl): ValidationErrors => {
+      const start = c.get('startDate').value;
+      const end = c.get('endDate').value;
+      return start.valueOf() < end.valueOf() ? null : { 'invalid date': 'ending date must be after the starting date.' } as ValidationErrors;
+    };
+
+    this.dateFormGroup.setValidators(dateRangeValidator);
   }
 
   public onSubmit() {
     this.isLoading = true;
-    this.workshop = merge(this.workshop, this.workshopForm.value);
-    if (!this.auth.user.isAdmin) this.workshop.affiliateId = this.auth.user.affiliate;
+    this.workshop = this.mergeWorkshopData();
+    if (!this.auth.user.isAdmin) { this.workshop.affiliateId = this.auth.user.affiliate; }
 
     this.submitFunction(this.workshop)
       .subscribe((result: ISFSuccessResult) => {
@@ -120,6 +138,14 @@ export class WorkshopFormComponent implements OnInit {
         this.isLoading = false;
         this.snackbar.open('An error occurred and the requested operation could not be completed.', 'Okay', { extraClasses: ['md-warn'] });
       });
+  }
+
+  public mergeWorkshopData(): Workshop {
+    const form = this.workshopForm.value;
+    form.startDate = form.dates.startDate;
+    form.endDate = form.dates.endDate;
+    delete form.dates;
+    return merge(this.workshop, form);
   }
 
   public contactDisplayWith(value) {
@@ -221,7 +247,6 @@ export class WorkshopFormComponent implements OnInit {
       this.statuses = this.describe.status.picklistValues.map(option => option.label);
     } catch (e) {
       console.warn('Failed to get workshop statuses from `this.describe.status.picklistValues`. Using default values.', this.describe);
-
     }
   }
 

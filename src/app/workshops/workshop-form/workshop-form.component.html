@@ -68,25 +68,28 @@
       </md-input-container>
     </div>
 
-    <div class="input-item" [style.flex-direction]="'row'" fxLayoutGap="16px">
-      <div fxLayout="column">
-        <p class="mat-caption"> {{ describe.startDate && describe.startDate.inlineHelpText }} </p>
-        <md-input-container>
-          <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
-            formControlName="startDate">
-          <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
-        </md-input-container>
-        <md-datepicker #startDatePicker [startAt]="today"></md-datepicker>
-      </div>
-
-      <div fxLayout="column">
-        <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
-        <md-input-container>
-          <input required mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
-            formControlName="endDate">
-          <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
-        </md-input-container>
-        <md-datepicker #endDatePicker [startAt]="today"></md-datepicker>
+    <div class="input-item" fxLayoutGap="16px" [formGroup]="dateFormGroup">
+      <p class="md-warn-text" *ngIf="dateFormGroup.errors && dateFormGroup.errors['invalid date']"> &#42;{{ dateFormGroup.errors['invalid date'] }} </p>
+      <div fxLayout="row">
+        <div fxLayout="column">
+          <p class="mat-caption"> {{ describe.startDate && describe.startDate.inlineHelpText }} </p>
+          <md-input-container>
+            <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
+              formControlName="startDate">
+            <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
+          </md-input-container>
+          <md-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate').value"></md-datepicker>
+        </div>
+  
+        <div fxLayout="column">
+          <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
+          <md-input-container>
+            <input required mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
+              formControlName="endDate">
+            <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
+          </md-input-container>
+          <md-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate').value"></md-datepicker>
+        </div>
       </div>
     </div>
 

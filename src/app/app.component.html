@@ -1,4 +1,3 @@
-<!-- <md-toolbar class="mat-primary" *ngIf="isAuthenticated">   -->
 <md-toolbar class="mat-primary">
   <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
   <span fxFlex></span>
@@ -30,7 +29,6 @@
 
 </md-toolbar>
 
-<!-- <md-sidenav-container *ngIf="isAuthenticated"> -->
 <md-sidenav-container>
   <md-sidenav #sidenav mode="side" [opened]="isAuthenticated">
     <md-nav-list>
@@ -51,6 +49,3 @@
 <div class="spinner-container" *ngIf="isLoading">
   <md-spinner></md-spinner>
 </div>
-
-<!-- Show when user is *not* logged in -->
-<!-- <app-login *ngIf="!isAuthenticated"></app-login> -->
