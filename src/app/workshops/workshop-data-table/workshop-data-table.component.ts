@@ -5,9 +5,10 @@ import { WorkshopDataSource } from '../../services/workshop/workshop-data-source
 import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { WorkshopService, WorkshopProperties, WorkshopTrackByStrategy } from '../../services/workshop/workshop.service';
-import { MdSort, MdPaginator, MdButton } from '@angular/material';
+import { MdSort, MdPaginator, MdButton, MdDialog } from '@angular/material';
 import { Workshop, WorkshopStatusType } from '../workshop.model';
 import { Filter } from '../../services/filters/filter.abstract';
+import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-workshop-data-table',
@@ -16,13 +17,17 @@ import { Filter } from '../../services/filters/filter.abstract';
 })
 export class WorkshopDataTableComponent implements OnInit {
 
-  @Input() public displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'instructors', 'verified'];
+  @Input() public displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'instructors', 'verified', 'actions'];
   @Input() public dataSource: WorkshopDataSource | null;
   @Input() public filters: Filter[] = [];
   @Output() public editClick: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild(MdSort) public sort: MdSort;
   @ViewChild(MdPaginator) public paginator: MdPaginator;
+
+  public selectedWorkshop: Workshop;
+  public get selectedSfId() { return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''; }
+  public get workshopStatuses(): WorkshopStatusType[] { return ['Proposed', 'Verified', 'Action Pending', 'Ready To Be Invoiced', 'Invoiced, Not Paid', 'Archived', 'Cancelled']; }
 
   public isLoading: boolean = true;
   public _workshopDataProvider: DataProvider<WorkshopService, Workshop>;
@@ -39,7 +44,7 @@ export class WorkshopDataTableComponent implements OnInit {
     'Invoiced, Not Paid': 'Awaiting Payment'
   };
 
-  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router) {
+  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router, public dialog: MdDialog) {
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider();
     this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
@@ -125,6 +130,31 @@ export class WorkshopDataTableComponent implements OnInit {
 
   public onSelectRow(workshop) {
     this.router.navigateByUrl(`/workshops/${workshop.sfId}`);
+  }
+
+  public save(ws: Workshop) {
+    this._ws.update(ws).subscribe(res => {
+      console.log(res);
+    });
+  }
+
+  public delete(ws: Workshop) {
+    const dialogRef = this.dialog.open(AlertDialogComponent, {
+      data: {
+        sfObject: ws,
+        message: `This will permanently delete the selected workshop. Proceed?`
+      }
+    });
+
+    dialogRef.afterClosed()
+    .subscribe(result => {
+      if (result) {
+        // this._ws.delete(ws)
+        //   .subscribe(res => {
+        //     console.log(res);
+        //   });
+      }
+    });
   }
 
 }

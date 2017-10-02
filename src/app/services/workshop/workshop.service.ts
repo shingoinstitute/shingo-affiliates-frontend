@@ -33,6 +33,7 @@ export type WorkshopProperties = 'actionType'
   | 'daysLate'
   | 'status'
   | 'edit'
+  | 'actions'
   | undefined;
 export type WorkshopTrackByStrategy = 'id' | 'reference' | 'index';
 

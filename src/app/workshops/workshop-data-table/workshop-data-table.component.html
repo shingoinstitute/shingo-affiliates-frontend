@@ -54,7 +54,18 @@
   <!-- Status Column -->
   <ng-container cdkColumnDef="status">
     <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
-    <md-cell *cdkCellDef="let workshop"> {{ workshop.status }} </md-cell>
+
+    <md-cell *cdkCellDef="let workshop">
+      <ng-container *ngIf="selectedSfId != workshop.sfId">
+        {{ workshop.status }}
+      </ng-container>
+
+      <ng-container *ngIf="selectedSfId == workshop.sfId">
+        <md-select floatPlaceholder="never" [(ngModel)]="workshop.status">
+          <md-option *ngFor="let status of workshopStatuses" [value]="status">{{ status }}</md-option>
+        </md-select>
+      </ng-container>
+    </md-cell>
   </ng-container>
 
   <!-- Verified Column -->
@@ -82,8 +93,38 @@
     <md-cell *cdkCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </md-cell>
   </ng-container>
 
+  <!-- Actions Column -->
+  <ng-container cdkColumnDef="actions">
+    <md-header-cell *cdkHeaderCellDef md-sort-header> Actions </md-header-cell>
+    <md-cell *cdkCellDef="let workshop">
+
+      <!-- Non Editing Mode -->
+      <ng-container *ngIf="selectedSfId != workshop.sfId">
+        <button md-icon-button (click)="selectedWorkshop = workshop">
+          <md-icon svgIcon="edit_mode_grey"></md-icon>
+        </button>
+        
+        <button md-icon-button (click)="delete(workshop)">
+          <md-icon svgIcon="delete_grey"></md-icon>
+        </button>
+      </ng-container>
+
+      <!-- Edit Mode -->
+      <ng-container *ngIf="selectedSfId == workshop.sfId">
+        <button md-icon-button>
+          <md-icon svgIcon="cancel_grey" (click)="selectedWorkshop = null"></md-icon>
+        </button>
+
+        <button md-icon-button>
+          <md-icon svgIcon="save_grey" (click)="save(workshop); this.selectedWorkshop = null;"></md-icon>
+        </button>
+      </ng-container>
+
+    </md-cell>
+  </ng-container>
+
   <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" (click)="onSelectRow(workshop)" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></md-row>
+  <md-row [id]="workshop.sfId" *cdkRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></md-row>
 </md-table>
 
 <div class="spinner-container" *ngIf="isLoading">
