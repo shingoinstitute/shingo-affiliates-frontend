@@ -1,12 +1,12 @@
-<div class="lookup-container" [formGroup]="lookup">
+<!-- <div class="lookup-container" [formGroup]="lookup">
   <div class="input-container">
-    <md-input-container>
+    <md-form-field>
       <input class="autoComplete" type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder"
         required>
       <div class="search-spinner-wrapper">
         <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
       </div>
-    </md-input-container>
+    </md-form-field>
 
     <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
       <md-option *ngFor="let o of objects" [value]="o" (onSelectionChange)="onSelectChange(o)">
@@ -14,4 +14,4 @@
       </md-option>
     </md-autocomplete>
   </div>
-</div>
+</div> -->

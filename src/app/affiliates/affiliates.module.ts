@@ -3,9 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CdkTableModule } from '@angular/cdk';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -13,15 +11,38 @@ import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-da
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
 
+// import { CdkTableModule } from '@angular/cdk';
+// import { MaterialModule } from '@angular/material';
+import { 
+  MdIconModule, 
+  MdTableModule, 
+  MdPaginatorModule, 
+  MdSortModule, 
+  MdFormFieldModule, 
+  MdAutocompleteModule, 
+  MdDialogModule, 
+  MdOptionModule
+} from '@angular/material';
+
 @NgModule({
   imports: [
     FormsModule,
     RouterModule,
     ReactiveFormsModule,
     CommonModule,
-    MaterialModule,
+
+    // MaterialModule,
+    MdIconModule,
+    MdTableModule,
+    MdPaginatorModule,
+    MdSortModule,
+    MdFormFieldModule,
+    MdAutocompleteModule,
+    MdDialogModule,
+    MdOptionModule,
+
     FlexLayoutModule,
-    CdkTableModule,
+    // CdkTableModule,
     SharedModule.forRoot()
   ],
   declarations: [

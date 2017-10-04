@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule } from '@angular/material';
+// import { MaterialModule } from '@angular/material';
 
 import { AdminPanelComponent } from './admin-panel.component';
 import { AdminTabsComponent } from './admin-tabs/admin-tabs.component';
@@ -15,7 +15,7 @@ import { FacilitatorsModule } from '../../facilitators/facilitators.module';
     CommonModule,
     AdminPanelRoutingModule,
     FlexLayoutModule,
-    MaterialModule,
+    // MaterialModule,
     AffiliatesModule,
     FacilitatorsModule
   ],

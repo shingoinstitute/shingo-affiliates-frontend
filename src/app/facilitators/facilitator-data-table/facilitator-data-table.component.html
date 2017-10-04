@@ -1,48 +1,48 @@
 <div class="card">
    <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
-   <md-table #table [dataSource]="dataSource" [mdSortDisableClear]="true" mdSort>
-   
+   <!-- <md-table #table [dataSource]="dataSource" [disableClear]="true" mdSort> -->
+    <md-table #table [dataSource]="dataSource" mdSort>
       <!-- Name Column -->
-      <ng-container cdkColumnDef="name">
-         <md-header-cell *cdkHeaderCellDef md-sort-header> Facilitator </md-header-cell>
-         <md-cell *cdkCellDef="let fac">
+      <ng-container mdColumnDef="name">
+         <md-header-cell *mdHeaderCellDef md-sort-header="facilitator"> Facilitator </md-header-cell>
+         <md-cell *mdCellDef="let fac">
    
             <span [class.hidden]="selectedId == fac.sfId"> 
               <p class="margin-none"> {{ fac.name }}  </p>
               <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
             </span>
    
-            <md-input-container [class.hidden]="selectedId != fac.sfId">
+            <md-form-field [class.hidden]="selectedId != fac.sfId">
                <input mdInput class="fac-input" [(ngModel)]="fac.name">
-            </md-input-container>
+            </md-form-field>
    
          </md-cell>
       </ng-container>
    
       <!-- Email Column -->
-      <ng-container cdkColumnDef="email">
-         <md-header-cell *cdkHeaderCellDef md-sort-header> Email </md-header-cell>
-         <md-cell *cdkCellDef="let fac">
+      <ng-container mdColumnDef="email">
+         <md-header-cell *mdHeaderCellDef md-sort-header="email"> Email </md-header-cell>
+         <md-cell *mdCellDef="let fac">
    
             <span [class.hidden]="selectedId == fac.sfId">{{ fac.email }}</span>
    
-            <md-input-container [class.hidden]="selectedId != fac.sfId">
+            <md-form-field [class.hidden]="selectedId != fac.sfId">
                <input mdInput class="fac-input" [(ngModel)]="fac.email">
-            </md-input-container>
+            </md-form-field>
    
          </md-cell>
       </ng-container>
    
       <!-- Affiliate Column -->
-      <ng-container cdkColumnDef="organization">
-         <md-header-cell *cdkHeaderCellDef md-sort-header> Affiliate </md-header-cell>
-         <md-cell *cdkCellDef="let fac"> {{ fac.affiliate.name }} </md-cell>
+      <ng-container mdColumnDef="organization">
+         <md-header-cell *mdHeaderCellDef md-sort-header="affiliate"> Affiliate </md-header-cell>
+         <md-cell *mdCellDef="let fac"> {{ fac.affiliate.name }} </md-cell>
       </ng-container>
    
       <!-- Role Column -->
-      <ng-container cdkColumnDef="role">
-        <md-header-cell *cdkHeaderCellDef md-sort-header> Role </md-header-cell>
-        <md-cell *cdkCellDef="let fac">
+      <ng-container mdColumnDef="role">
+        <md-header-cell *mdHeaderCellDef md-sort-header="role"> Role </md-header-cell>
+        <md-cell *mdCellDef="let fac">
            <span [class.hidden]="selectedId == fac.sfId"> {{ fac.role }} </span> 
 
           <md-select [class.hidden]="selectedId != fac.sfId" [(ngModel)]="fac.role">
@@ -53,13 +53,13 @@
       </ng-container>
 
       <!-- Actions -->
-      <ng-container cdkColumnDef="actions">
-         <md-header-cell *cdkHeaderCellDef [style.align-items]="'center'">
+      <ng-container mdColumnDef="actions">
+         <md-header-cell *mdHeaderCellDef [style.align-items]="'center'">
             <span> Actions </span>
             <span fxFlex></span>
             <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
          </md-header-cell>
-         <md-cell *cdkCellDef="let fac" fxLayout>
+         <md-cell *mdCellDef="let fac" fxLayout>
            <!-- Action Buttons -->
             <ng-container *ngIf="selectedId != fac.sfId">
                <button md-icon-button (click)="selectedId = fac.sfId">
@@ -98,8 +98,8 @@
          </md-cell>
       </ng-container>
    
-      <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-      <md-row *cdkRowDef="let fac; columns: displayedColumns;"></md-row>
+      <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+      <md-row *mdRowDef="let fac; columns: displayedColumns;"></md-row>
    </md-table>
    
     <div class="spinner-container" *ngIf="isLoading">

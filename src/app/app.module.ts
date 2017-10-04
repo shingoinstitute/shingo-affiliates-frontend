@@ -1,7 +1,7 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
+// import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpModule } from '@angular/http';
 import { CookieModule } from 'ngx-cookie';
@@ -40,7 +40,7 @@ import { LoggerInterceptorProvider } from './interceptor.provider';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
+    // MaterialModule,
     HttpModule,
     HttpClientModule,
     ServicesModule.forRoot(),

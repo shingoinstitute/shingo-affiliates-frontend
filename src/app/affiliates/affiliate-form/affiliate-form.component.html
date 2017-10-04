@@ -28,46 +28,47 @@
         <img src="{{ affiliate.logo }}" alt="logo image">
       </div>
 
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="Logo URL" formControlName="logo">
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item">
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="Website" formControlName="website">
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item">
       <p class="mat-body-2">Contact Information</p>
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="Public Contact Name" formControlName="publicContact">
-      </md-input-container>
+      </md-form-field>
       <!-- </div> -->
 
       <!-- <div class="input-item"> -->
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="Public Contact Email" formControlName="publicContactEmail">
-      </md-input-container>
+      </md-form-field>
       <!-- </div> -->
 
       <!-- <div class="input-item"> -->
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="Public Contact Phone" formControlName="publicContactPhone">
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item">
-      <md-input-container [floatPlaceholder]="'always'">
+      <md-form-field [floatPlaceholder]="always">
         <input type="text" mdInput formControlName="langControl" [mdAutocomplete]="langSearch" placeholder="Languages">
-      </md-input-container>
 
-      <md-autocomplete #langSearch="mdAutocomplete">
-        <md-option *ngFor="let lang of languageOptions | async" [value]="lang" (onSelectionChange)="onSelectLanguage(lang)">
-          {{ lang }}
-        </md-option>
-      </md-autocomplete>
+        <md-autocomplete #langSearch="mdAutocomplete">
+          <md-option *ngFor="let lang of languageOptions | async" [value]="lang" (onSelectionChange)="onSelectLanguage(lang)">
+            {{ lang }}
+          </md-option>
+        </md-autocomplete>
+      </md-form-field>
+
 
       <div class="language-list">
         <p class="mat-body-2"> Languages </p>
