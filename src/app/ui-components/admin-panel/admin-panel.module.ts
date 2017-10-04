@@ -10,12 +10,23 @@ import { AdminPanelRoutingModule } from './admin-panel-routing.module';
 import { AffiliatesModule } from '../../affiliates/affiliates.module';
 import { FacilitatorsModule } from '../../facilitators/facilitators.module';
 
+import {
+  MdButtonModule,
+  MdTabsModule,
+  MdIconModule
+} from '@angular/material';
+
 @NgModule({
   imports: [
     CommonModule,
     AdminPanelRoutingModule,
     FlexLayoutModule,
+
     // MaterialModule,
+    MdButtonModule,
+    MdTabsModule,
+    MdIconModule,
+
     AffiliatesModule,
     FacilitatorsModule
   ],

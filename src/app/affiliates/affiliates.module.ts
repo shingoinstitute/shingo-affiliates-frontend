@@ -11,8 +11,7 @@ import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-da
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
 
-// import { CdkTableModule } from '@angular/cdk';
-// import { MaterialModule } from '@angular/material';
+// Material Design imports
 import { 
   MdIconModule, 
   MdTableModule, 
@@ -21,7 +20,11 @@ import {
   MdFormFieldModule, 
   MdAutocompleteModule, 
   MdDialogModule, 
-  MdOptionModule
+  MdOptionModule,
+  MdSnackBarModule,
+  MdButtonModule,
+  MdInputModule,
+  MdProgressSpinnerModule
 } from '@angular/material';
 
 @NgModule({
@@ -31,7 +34,6 @@ import {
     ReactiveFormsModule,
     CommonModule,
 
-    // MaterialModule,
     MdIconModule,
     MdTableModule,
     MdPaginatorModule,
@@ -40,9 +42,12 @@ import {
     MdAutocompleteModule,
     MdDialogModule,
     MdOptionModule,
+    MdSnackBarModule,
+    MdButtonModule,
+    MdInputModule,
+    MdProgressSpinnerModule,
 
     FlexLayoutModule,
-    // CdkTableModule,
     SharedModule.forRoot()
   ],
   declarations: [

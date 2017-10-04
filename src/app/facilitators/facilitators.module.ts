@@ -3,9 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-// import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-// import { CdkTableModule } from '@angular/cdk';
 
 import { SharedModule } from '../shared/shared.module';
 import { AffiliatesModule } from '../affiliates/affiliates.module';
@@ -14,6 +12,7 @@ import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-faci
 import { FacilitatorDataTableComponent } from './facilitator-data-table/facilitator-data-table.component';
 import { FacilitatorFormComponent } from './facilitator-form/facilitator-form.component';
 
+// Material Design imports
 import { 
   MdIconModule, 
   MdTableModule, 
@@ -22,15 +21,17 @@ import {
   MdFormFieldModule, 
   MdOptionModule, 
   MdDialogModule,
-  MdSelectModule
+  MdSelectModule,
+  MdSnackBarModule,
+  MdButtonModule,
+  MdInputModule,
+  MdProgressSpinnerModule
 } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    // CdkTableModule,
-
-    // MaterialModule,
+    
     MdIconModule,
     MdTableModule,
     MdPaginatorModule,
@@ -39,6 +40,10 @@ import {
     MdOptionModule,
     MdDialogModule,
     MdSelectModule,
+    MdSnackBarModule,
+    MdButtonModule,
+    MdInputModule,
+    MdProgressSpinnerModule,
 
     FlexLayoutModule,
     FormsModule,

@@ -24,12 +24,14 @@ import { ChangePasswordDialog } from './user-auth/change-password-dialog/change-
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.component';
 
-// import { CdkTableModule } from '@angular/cdk';
-// import { MaterialModule } from '@angular/material';
+// Material Design imports
 import { 
   MdNativeDateModule, 
   MdDatepickerModule,
-  MdProgressSpinnerModule
+  MdProgressSpinnerModule,
+  MdButtonModule,
+  MdIconModule,
+  MdTabsModule
 } from '@angular/material';
 
 @NgModule({
@@ -39,12 +41,13 @@ import {
     ReactiveFormsModule,
     FormsModule,
 
-    // MaterialModule,
-    // CdkTableModule,
+    MdNativeDateModule,
     MdDatepickerModule,
     MdProgressSpinnerModule,
+    MdButtonModule,
+    MdIconModule,
+    MdTabsModule,
 
-    MdNativeDateModule,
     FlexLayoutModule,
     WorkshopsModule,
     AdminPanelModule

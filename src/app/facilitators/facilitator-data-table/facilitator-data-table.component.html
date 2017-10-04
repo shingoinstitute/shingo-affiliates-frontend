@@ -1,10 +1,10 @@
 <div class="card">
    <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
    <!-- <md-table #table [dataSource]="dataSource" [disableClear]="true" mdSort> -->
-    <md-table #table [dataSource]="dataSource" mdSort>
+    <md-table #table [dataSource]="dataSource" mdSort [mdSortDisableClear]="true">
       <!-- Name Column -->
       <ng-container mdColumnDef="name">
-         <md-header-cell *mdHeaderCellDef md-sort-header="facilitator"> Facilitator </md-header-cell>
+         <md-header-cell *mdHeaderCellDef md-sort-header> Facilitator </md-header-cell>
          <md-cell *mdCellDef="let fac">
    
             <span [class.hidden]="selectedId == fac.sfId"> 
@@ -21,7 +21,7 @@
    
       <!-- Email Column -->
       <ng-container mdColumnDef="email">
-         <md-header-cell *mdHeaderCellDef md-sort-header="email"> Email </md-header-cell>
+         <md-header-cell *mdHeaderCellDef md-sort-header> Email </md-header-cell>
          <md-cell *mdCellDef="let fac">
    
             <span [class.hidden]="selectedId == fac.sfId">{{ fac.email }}</span>
@@ -35,13 +35,13 @@
    
       <!-- Affiliate Column -->
       <ng-container mdColumnDef="organization">
-         <md-header-cell *mdHeaderCellDef md-sort-header="affiliate"> Affiliate </md-header-cell>
+         <md-header-cell *mdHeaderCellDef md-sort-header> Affiliate </md-header-cell>
          <md-cell *mdCellDef="let fac"> {{ fac.affiliate.name }} </md-cell>
       </ng-container>
    
       <!-- Role Column -->
       <ng-container mdColumnDef="role">
-        <md-header-cell *mdHeaderCellDef md-sort-header="role"> Role </md-header-cell>
+        <md-header-cell *mdHeaderCellDef md-sort-header> Role </md-header-cell>
         <md-cell *mdCellDef="let fac">
            <span [class.hidden]="selectedId == fac.sfId"> {{ fac.role }} </span> 
 

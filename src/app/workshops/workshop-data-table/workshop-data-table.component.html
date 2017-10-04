@@ -1,9 +1,9 @@
 <!-- <md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [disableClear]="true"> -->
-<md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy">
+<md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [mdSortDisableClear]="true">
 
   <!-- Workshop Type Column -->
   <ng-container mdColumnDef="workshopType">
-    <md-header-cell *mdHeaderCellDef md-sort-header="courseType"> Course Type </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header> Course Type </md-header-cell>
     <md-cell *mdCellDef="let workshop" class="course-type">
       <img src="{{ workshop.image }}">
     </md-cell>
@@ -11,13 +11,13 @@
 
   <!-- Action Type Column -->
   <ng-container mdColumnDef="actionType">
-    <md-header-cell *mdHeaderCellDef md-sort-header="actionType" class="action-type-header-cell"> Action Type </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header class="action-type-header-cell"> Action Type </md-header-cell>
     <md-cell *mdCellDef="let workshop" class="action-type-cell"> {{ workshop.status }} </md-cell>
   </ng-container>
 
   <!-- Location Column -->
   <ng-container mdColumnDef="location">
-    <md-header-cell *mdHeaderCellDef md-sort-header="location"> Location </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header> Location </md-header-cell>
     <md-cell *mdCellDef="let workshop">
       <p>{{ workshop.city }}</p>
       <p *ngIf="workshop.country !== ''" [style.font-size]="'12px'">{{ workshop.country }}</p>
@@ -26,13 +26,13 @@
 
   <!-- Start Date Column -->
   <ng-container mdColumnDef="startDate">
-    <md-header-cell *mdHeaderCellDef md-sort-header="startDate"> Start Date </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header> Start Date </md-header-cell>
     <md-cell *mdCellDef="let workshop"> {{ workshop.startDateFormatted }} </md-cell>
   </ng-container>
 
   <!-- End Date Column -->
   <ng-container mdColumnDef="endDate">
-    <md-header-cell *mdHeaderCellDef md-sort-header="endDate"> End Date </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header> End Date </md-header-cell>
     <md-cell *mdCellDef="let workshop"> {{ workshop.endDateFormatted }} </md-cell>
   </ng-container>
 
@@ -54,13 +54,13 @@
 
   <!-- Status Column -->
   <ng-container mdColumnDef="status">
-    <md-header-cell *mdHeaderCellDef md-sort-header="status"> Status </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header> Status </md-header-cell>
     <md-cell *mdCellDef="let workshop"> {{ workshop.status }} </md-cell>
   </ng-container>
 
   <!-- Verified Column -->
   <ng-container mdColumnDef="verified">
-    <md-header-cell *mdHeaderCellDef md-sort-header="verified" arrowPosition="center"> Verified? </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header arrowPosition="center"> Verified? </md-header-cell>
     <md-cell *mdCellDef="let workshop">
       <md-icon svgIcon="checkmark_green" *ngIf="workshop.isVerified"></md-icon>
       <md-icon svgIcon="cancel_red" *ngIf="!workshop.isVerified"></md-icon>
@@ -79,7 +79,7 @@
 
   <!-- Due Date Column -->
   <ng-container mdColumnDef="dueDate">
-    <md-header-cell *mdHeaderCellDef md-sort-header="dueDate" class="due-date-header-cell"> Due Date </md-header-cell>
+    <md-header-cell *mdHeaderCellDef md-sort-header class="due-date-header-cell"> Due Date </md-header-cell>
     <md-cell *mdCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </md-cell>
   </ng-container>
 

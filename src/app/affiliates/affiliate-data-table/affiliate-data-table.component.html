@@ -3,7 +3,7 @@
   <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
 
   <!-- <md-table #table [dataSource]="dataSource" mdSort [disableClear]="true"> -->
-  <md-table #table [dataSource]="dataSource" mdSort>
+  <md-table #table [dataSource]="dataSource" mdSort [mdSortDisableClear]="true">
 
     <!-- Logo Column -->
     <ng-container mdColumnDef="logo">
@@ -21,7 +21,7 @@
 
     <!-- Name Column -->
     <ng-container mdColumnDef="name">
-      <md-header-cell *mdHeaderCellDef md-sort-header="affiliate"> Affiliate </md-header-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header> Affiliate </md-header-cell>
       <md-cell *mdCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
           {{ aff.name }}
@@ -37,7 +37,7 @@
 
     <!-- Website Column -->
     <ng-container mdColumnDef="website">
-      <md-header-cell *mdHeaderCellDef md-sort-header="website"> Website </md-header-cell>
+      <md-header-cell *mdHeaderCellDef md-sort-header> Website </md-header-cell>
       <md-cell *mdCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
           <a href="{{aff.website}}" target="_blank">{{aff.website}}</a>

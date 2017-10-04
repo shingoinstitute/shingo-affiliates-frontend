@@ -22,13 +22,13 @@ import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-worksh
 import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
 import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.component';
 
-// import { CdkTableModule } from '@angular/cdk';
-// import { MaterialModule } from '@angular/material';
+// Material Design imports
 import { 
   MdTableModule, 
   MdPaginatorModule, 
   MdSortModule, 
   MdFormFieldModule, 
+  MdInputModule,
   MdAutocompleteModule,
   MdSelectModule,
   MdDatepickerModule,
@@ -36,7 +36,8 @@ import {
   MdProgressSpinnerModule,
   MdIconModule,
   MdCheckboxModule,
-  MdProgressBarModule
+  MdProgressBarModule,
+  MdSnackBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -46,12 +47,11 @@ import {
     FormsModule,
     CustomFormsModule,
     
-    // CdkTableModule,
-    // MaterialModule,
     MdTableModule,
     MdPaginatorModule,
     MdSortModule,
     MdFormFieldModule,
+    MdInputModule,
     MdAutocompleteModule,
     MdSelectModule,
     MdDatepickerModule,
@@ -60,6 +60,7 @@ import {
     MdIconModule,
     MdCheckboxModule,
     MdProgressBarModule,
+    MdSnackBarModule,
 
     FlexLayoutModule,
     Ng2FileDropModule,
