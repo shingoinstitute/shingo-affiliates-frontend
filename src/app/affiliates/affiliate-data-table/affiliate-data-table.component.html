@@ -2,62 +2,63 @@
 
   <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
 
-  <md-table #table [dataSource]="dataSource" [mdSortDisableClear]="true" mdSort>
+  <!-- <md-table #table [dataSource]="dataSource" mdSort [disableClear]="true"> -->
+  <md-table #table [dataSource]="dataSource" mdSort [mdSortDisableClear]="true">
 
     <!-- Logo Column -->
-    <ng-container cdkColumnDef="logo">
-      <md-header-cell *cdkHeaderCellDef> Logo </md-header-cell>
-      <md-cell *cdkCellDef="let aff" class="logo-cell">
+    <ng-container mdColumnDef="logo">
+      <md-header-cell *mdHeaderCellDef> Logo </md-header-cell>
+      <md-cell *mdCellDef="let aff" class="logo-cell">
         <img src="{{ aff.logo }}">
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <md-input-container [style.margin-left]="'8px'">
+          <md-form-field [style.margin-left]="'8px'">
             <input mdInput [(ngModel)]="aff.logo">
-          </md-input-container>
+          </md-form-field>
         </ng-container>
       </md-cell>
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container cdkColumnDef="name">
-      <md-header-cell *cdkHeaderCellDef md-sort-header> Affiliate </md-header-cell>
-      <md-cell *cdkCellDef="let aff">
+    <ng-container mdColumnDef="name">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Affiliate </md-header-cell>
+      <md-cell *mdCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
           {{ aff.name }}
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <md-input-container>
+          <md-form-field>
             <input mdInput [(ngModel)]="aff.name">
-          </md-input-container>
+          </md-form-field>
         </ng-container>
       </md-cell>
     </ng-container>
 
     <!-- Website Column -->
-    <ng-container cdkColumnDef="website">
-      <md-header-cell *cdkHeaderCellDef md-sort-header> Website </md-header-cell>
-      <md-cell *cdkCellDef="let aff">
+    <ng-container mdColumnDef="website">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Website </md-header-cell>
+      <md-cell *mdCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
           <a href="{{aff.website}}" target="_blank">{{aff.website}}</a>
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <md-input-container>
+          <md-form-field>
             <input mdInput [(ngModel)]="aff.website">
-          </md-input-container>
+          </md-form-field>
         </ng-container>
       </md-cell>
     </ng-container>
 
     <!-- Actions -->
-    <ng-container cdkColumnDef="actions">
-      <md-header-cell *cdkHeaderCellDef [style.align-items]="'center'">
+    <ng-container mdColumnDef="actions">
+      <md-header-cell *mdHeaderCellDef [style.align-items]="'center'">
         <span> Actions </span>
         <span fxFlex></span>
         <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
       </md-header-cell>
-      <md-cell *cdkCellDef="let aff" fxLayout>
+      <md-cell *mdCellDef="let aff" fxLayout>
         <ng-container *ngIf="selectedId != aff.sfId">
           <button md-icon-button (click)="selectedId = aff.sfId">
                 <md-icon svgIcon="edit_mode_grey"></md-icon>
@@ -87,8 +88,8 @@
       </md-cell>
     </ng-container>
 
-    <md-header-row *cdkHeaderRowDef="displayedColumns"></md-header-row>
-    <md-row *cdkRowDef="let aff; columns: displayedColumns;"></md-row>
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let aff; columns: displayedColumns;"></md-row>
   </md-table>
 
   <div class="spinner-container" *ngIf="isLoading">

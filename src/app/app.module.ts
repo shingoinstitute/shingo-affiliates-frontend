@@ -1,7 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpModule } from '@angular/http';
 import { CookieModule } from 'ngx-cookie';
@@ -33,6 +32,17 @@ import { AppComponent } from './app.component';
 // Providers
 import { LoggerInterceptorProvider } from './interceptor.provider';
 
+// Material Design imports
+import { 
+  MdMenuModule, 
+  MdButtonModule,
+  MdSidenavModule,
+  MdToolbarModule,
+  MdListModule,
+  MdIconModule,
+  MdProgressSpinnerModule
+} from '@angular/material';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -40,7 +50,15 @@ import { LoggerInterceptorProvider } from './interceptor.provider';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MaterialModule,
+
+    MdMenuModule,
+    MdButtonModule,
+    MdSidenavModule,
+    MdToolbarModule,
+    MdListModule,
+    MdIconModule,
+    MdProgressSpinnerModule,
+
     HttpModule,
     HttpClientModule,
     ServicesModule.forRoot(),

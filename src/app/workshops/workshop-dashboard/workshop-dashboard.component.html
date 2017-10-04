@@ -30,10 +30,10 @@
                 </div>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showTextFilter ? 'flex' : 'none'">
-                    <md-input-container>
+                    <md-form-field>
                         <input mdInput #textSearchInput placeholder="filter..." [(ngModel)]="textSearch">
                         <md-icon mdSuffix svgIcon="search_grey"></md-icon>
-                    </md-input-container>
+                    </md-form-field>
                 </div>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showDateRange ? 'flex' : 'none'">
@@ -41,17 +41,17 @@
                         <div fxLayout fxLayoutGap="8px">
                             <p class="text-md" [style.color]="'#757575'">Date</p>
 
-                            <md-input-container floatPlaceholder="always">
+                            <md-form-field floatPlaceholder="always">
                                 <input mdInput [mdDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
-                                <button mdSuffix [mdDatepickerToggle]="startDateFilterPicker"></button>
-                            </md-input-container>
-                            <md-datepicker #startDateFilterPicker></md-datepicker>
+                                <md-datepicker-toggle mdSuffix [for]="startDateFilterPicker"></md-datepicker-toggle>
+                                <md-datepicker #startDateFilterPicker></md-datepicker>
+                            </md-form-field>
 
-                            <md-input-container floatPlaceholder="always">
+                            <md-form-field floatPlaceholder="always">
                                 <input mdInput [mdDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
-                                <button mdSuffix [mdDatepickerToggle]="endDateFilterPicker"></button>
-                            </md-input-container>
-                            <md-datepicker #endDateFilterPicker></md-datepicker>
+                                <md-datepicker-toggle mdSuffix [for]="endDateFilterPicker"></md-datepicker-toggle>
+                                <md-datepicker #endDateFilterPicker></md-datepicker>
+                            </md-form-field>
                             <button md-button type="button" (click)="clearDateFilter()">
                                 <md-icon svgIcon="x_red"></md-icon>
                             </button>
