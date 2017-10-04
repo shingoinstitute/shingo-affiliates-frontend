@@ -5,8 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { CustomFormsModule } from 'ng2-validation';
 import { RouterModule } from '@angular/router';
 
-import { CdkTableModule } from '@angular/cdk';
-import { MaterialModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { Ng2FileDropModule } from 'ng2-file-drop';
 
@@ -24,15 +22,47 @@ import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-worksh
 import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component';
 import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.component';
 
+// Material Design imports
+import { 
+  MdTableModule, 
+  MdPaginatorModule, 
+  MdSortModule, 
+  MdFormFieldModule, 
+  MdInputModule,
+  MdAutocompleteModule,
+  MdSelectModule,
+  MdDatepickerModule,
+  MdButtonModule,
+  MdProgressSpinnerModule,
+  MdIconModule,
+  MdCheckboxModule,
+  MdProgressBarModule,
+  MdSnackBarModule
+} from '@angular/material';
+
 @NgModule({
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     CustomFormsModule,
-    MaterialModule,
+    
+    MdTableModule,
+    MdPaginatorModule,
+    MdSortModule,
+    MdFormFieldModule,
+    MdInputModule,
+    MdAutocompleteModule,
+    MdSelectModule,
+    MdDatepickerModule,
+    MdButtonModule,
+    MdProgressSpinnerModule,
+    MdIconModule,
+    MdCheckboxModule,
+    MdProgressBarModule,
+    MdSnackBarModule,
+
     FlexLayoutModule,
-    CdkTableModule,
     Ng2FileDropModule,
     SharedModule.forRoot(),
     RouterModule

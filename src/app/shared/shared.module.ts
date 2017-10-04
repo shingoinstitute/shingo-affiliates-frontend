@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MaterialModule, MdDialogModule } from '@angular/material';
 
 import { CKEditorModule } from 'ng2-ckeditor';
 
@@ -10,13 +9,30 @@ import { IconLegendComponent } from './components/icon-legend/icon-legend.compon
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
 
+// Material Design imports
+import { 
+  MdDialogModule, 
+  MdAutocompleteModule, 
+  MdOptionModule ,
+  MdProgressSpinnerModule,
+  MdButtonModule,
+  MdIconModule
+} from '@angular/material';
+
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
+
     MdDialogModule,
+    MdAutocompleteModule,
+    MdOptionModule,
+    MdProgressSpinnerModule,
+    MdButtonModule,
+    MdIconModule,
+
     CKEditorModule
   ],
   declarations: [
@@ -26,7 +42,7 @@ import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
     SfLookupComponent
   ],
   exports: [
-    MdDialogModule,
+    // MdDialogModule,
     CKEditorModule,
     AlertDialogComponent,
     IconLegendComponent,

@@ -36,17 +36,17 @@
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.eventCity && describe.eventCity.inlineHelpText }} </p>
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{ describe.eventCity && describe.eventCity.label || 'City' }}" required formControlName="city">
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.eventCountry && describe.eventCountry.inlineHelpText }} </p>
 
-      <md-input-container>
+      <md-form-field>
         <input mdInput [mdAutocomplete]="autoEventCountry" placeholder="Event Country" formControlName="country" required>
-      </md-input-container>
+      </md-form-field>
 
       <md-autocomplete #autoEventCountry="mdAutocomplete">
         <md-option *ngFor="let country of countryOptions" [value]="country"> {{ country }} </md-option>
@@ -55,17 +55,17 @@
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.hostSite && describe.hostSite.inlineHelpText }} </p>
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{ describe.hostSite && describe.hostSite.label || 'Host Site' }}" required formControlName="hostSite">
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.billingContact && describe.billingContact.inlineHelpText }} </p>
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{ describe.billingContact && describe.billingContact.label || 'Billing Contact' }}" required
           formControlName="billing">
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item" fxLayoutGap="16px" [formGroup]="dateFormGroup">
@@ -73,22 +73,22 @@
       <div fxLayout="row">
         <div fxLayout="column">
           <p class="mat-caption"> {{ describe.startDate && describe.startDate.inlineHelpText }} </p>
-          <md-input-container>
+          <md-form-field>
             <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
               formControlName="startDate">
-            <button mdSuffix [mdDatepickerToggle]="startDatePicker"></button>
-          </md-input-container>
-          <md-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate').value"></md-datepicker>
+            <md-datepicker-toggle mdSuffix [for]="startDatePicker"></md-datepicker-toggle>
+            <md-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate').value"></md-datepicker>
+          </md-form-field>
         </div>
   
         <div fxLayout="column">
           <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
-          <md-input-container>
+          <md-form-field>
             <input required mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
               formControlName="endDate">
-            <button mdSuffix [mdDatepickerToggle]="endDatePicker"></button>
-          </md-input-container>
-          <md-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate').value"></md-datepicker>
+            <md-datepicker-toggle mdSuffix [for]="endDatePicker"></md-datepicker-toggle>
+            <md-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate').value"></md-datepicker>
+          </md-form-field>
         </div>
       </div>
     </div>
@@ -102,12 +102,12 @@
 
     <div class="input-item" [style.display]="workshopForm.value.isPublic ? 'flex' : 'none'">
       <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
-      <md-input-container>
+      <md-form-field>
         <input mdInput placeholder="{{ describe.registrationWebsite && describe.registrationWebsite.label || 'Registration URL' }}"
           formControlName="website" (keyup)="prefixWebsite()">
         <md-hint align="start" *ngIf="workshopForm.controls.website.errors?.required" class="error">A registration website is required if the workshop is public</md-hint>
         <md-hint align="start" *ngIf="workshopForm.controls.website.errors?.url" class="error">'{{workshopForm.controls.website.value}}' is not a valid URL</md-hint>
-      </md-input-container>
+      </md-form-field>
     </div>
 
     <div class="input-item">

@@ -26,21 +26,21 @@
   </div>
 
   <div class="input-item">
-    <md-input-container>
+    <md-form-field>
       <input mdInput [(ngModel)]="facilitator.firstName" placeholder="First Name" formControlName="firstName" required>
-    </md-input-container>
+    </md-form-field>
   </div>
 
   <div class="input-item">
-    <md-input-container>
+    <md-form-field>
       <input mdInput [(ngModel)]="facilitator.lastName" placeholder="Last Name" formControlName="lastName" required>
-    </md-input-container>
+    </md-form-field>
   </div>
 
   <div class="input-item">
-    <md-input-container>
+    <md-form-field>
       <input mdInput [(ngModel)]="facilitator.title" formControlName="title" placeholder="Title">
-    </md-input-container>
+    </md-form-field>
   </div>
 
   <div class="input-item">
@@ -48,9 +48,9 @@
       <img src="{{ facilitator.photo }}">
     </div>
 
-    <md-input-container>
+    <md-form-field>
       <input mdInput [(ngModel)]="facilitator.photo" formControlName="photo" placeholder="Photograph URL">
-    </md-input-container>
+    </md-form-field>
   </div>
 
   <div class="input-item">

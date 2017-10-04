@@ -3,9 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
-import { MdNativeDateModule, MdDatepickerModule } from '@angular/material';
-import { CdkTableModule } from '@angular/cdk';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { WorkshopsModule } from '../workshops/workshops.module';
@@ -27,16 +24,30 @@ import { ChangePasswordDialog } from './user-auth/change-password-dialog/change-
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.component';
 
+// Material Design imports
+import { 
+  MdNativeDateModule, 
+  MdDatepickerModule,
+  MdProgressSpinnerModule,
+  MdButtonModule,
+  MdIconModule,
+  MdTabsModule
+} from '@angular/material';
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
-    MaterialModule,
-    CdkTableModule,
-    MdDatepickerModule,
+
     MdNativeDateModule,
+    MdDatepickerModule,
+    MdProgressSpinnerModule,
+    MdButtonModule,
+    MdIconModule,
+    MdTabsModule,
+
     FlexLayoutModule,
     WorkshopsModule,
     AdminPanelModule

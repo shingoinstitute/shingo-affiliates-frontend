@@ -1,4 +1,4 @@
-import { DataSource } from '@angular/cdk';
+import { DataSource } from '@angular/cdk/table';
 import { MdPaginator, MdSort } from '@angular/material';
 
 import { BaseAPIService } from './base-api.abstract.service';
@@ -31,7 +31,7 @@ export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject
       } else if (change instanceof MdPaginator) {
         return change.page;
       } else if (change instanceof MdSort) {
-        return change.mdSortChange;
+        return change.sortChange;
       }
     });
 
