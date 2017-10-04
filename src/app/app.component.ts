@@ -116,7 +116,7 @@ export class AppComponent implements OnDestroy {
       });
 
     // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
-    this.auth.userIsValid();
+    this.auth.updateUserAuthStatus();
   }
 
   /**
