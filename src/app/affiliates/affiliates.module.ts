@@ -13,18 +13,18 @@ import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliat
 
 // Material Design imports
 import { 
-  MdIconModule, 
-  MdTableModule, 
-  MdPaginatorModule, 
-  MdSortModule, 
-  MdFormFieldModule, 
-  MdAutocompleteModule, 
-  MdDialogModule, 
-  MdOptionModule,
-  MdSnackBarModule,
-  MdButtonModule,
-  MdInputModule,
-  MdProgressSpinnerModule
+  MatIconModule, 
+  MatTableModule, 
+  MatPaginatorModule, 
+  MatSortModule, 
+  MatFormFieldModule, 
+  MatAutocompleteModule, 
+  MatDialogModule, 
+  MatOptionModule,
+  MatSnackBarModule,
+  MatButtonModule,
+  MatInputModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 @NgModule({
@@ -34,18 +34,18 @@ import {
     ReactiveFormsModule,
     CommonModule,
 
-    MdIconModule,
-    MdTableModule,
-    MdPaginatorModule,
-    MdSortModule,
-    MdFormFieldModule,
-    MdAutocompleteModule,
-    MdDialogModule,
-    MdOptionModule,
-    MdSnackBarModule,
-    MdButtonModule,
-    MdInputModule,
-    MdProgressSpinnerModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatDialogModule,
+    MatOptionModule,
+    MatSnackBarModule,
+    MatButtonModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
 
     FlexLayoutModule,
     SharedModule.forRoot()

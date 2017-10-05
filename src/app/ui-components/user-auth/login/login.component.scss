@@ -22,7 +22,7 @@ $login-form-width: 400px;
 .login-form-container {
   background: white;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-  padding: $defaultMargin * 2;
+  padding: $default-margin * 2;
   width: $login-form-width;
 }
 @media only screen and (max-width: #{$break-small}) {
@@ -41,13 +41,13 @@ $login-form-width: 400px;
   align-items: center;
 
   img, h1 {
-    margin: $defaultMargin;
+    margin: $default-margin;
   }
 }
 .message-container {
   min-height: 19px;
-  margin-top: $defaultMargin * 2;
-  margin-bottom: $defaultMargin * 2;
+  margin-top: $default-margin * 2;
+  margin-bottom: $default-margin * 2;
 }
 .md-spinner-container {
   position: relative;
@@ -75,7 +75,7 @@ form.login-form {
    align-items: center;
 
    * {
-     margin: $defaultMargin;
+     margin: $default-margin;
    }
 
    a {

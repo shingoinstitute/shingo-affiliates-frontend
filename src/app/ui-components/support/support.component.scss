@@ -1,8 +1,8 @@
 @import '../../../assets/sass/_globals';
 
 a {
-   padding: $defaultMargin;
-   margin: $defaultMargin;
+   padding: $default-margin;
+   margin: $default-margin;
    text-decoration: none;
    background-color: transparent;
    -o-transition: 0.5s;
@@ -22,8 +22,8 @@ p.mat-caption {
    color: #434343;
 }
 .video-list-item {
-   margin-left: $defaultMargin * 2;
-   margin-bottom: $defaultMargin * 2;
+   margin-left: $default-margin * 2;
+   margin-bottom: $default-margin * 2;
 }
 .video-header {
    display: flex;
@@ -34,12 +34,12 @@ p.mat-caption {
    font-weight: 400;
 }
 .video-body {
-   padding-left: $defaultMargin * 2;
+   padding-left: $default-margin * 2;
 }
 .support-title {
    font-size: 32px;
    font-weight: 300;
-   margin: $defaultMargin;
-   padding: $defaultMargin;
+   margin: $default-margin;
+   padding: $default-margin;
    color: #333;
 }

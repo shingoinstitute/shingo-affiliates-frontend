@@ -11,13 +11,13 @@ import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
 
 // Material Design imports
 import { 
-  MdDialogModule, 
-  MdAutocompleteModule, 
-  MdOptionModule ,
-  MdProgressSpinnerModule,
-  MdButtonModule,
-  MdIconModule,
-  MdInputModule
+  MatDialogModule, 
+  MatAutocompleteModule, 
+  MatOptionModule ,
+  MatProgressSpinnerModule,
+  MatButtonModule,
+  MatIconModule,
+  MatInputModule
 } from '@angular/material';
 
 
@@ -27,13 +27,13 @@ import {
     FormsModule,
     ReactiveFormsModule,
 
-    MdDialogModule,
-    MdAutocompleteModule,
-    MdOptionModule,
-    MdProgressSpinnerModule,
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
 
     CKEditorModule
   ],

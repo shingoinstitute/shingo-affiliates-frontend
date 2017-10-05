@@ -34,13 +34,13 @@ import { LoggerInterceptorProvider } from './interceptor.provider';
 
 // Material Design imports
 import { 
-  MdMenuModule, 
-  MdButtonModule,
-  MdSidenavModule,
-  MdToolbarModule,
-  MdListModule,
-  MdIconModule,
-  MdProgressSpinnerModule
+  MatMenuModule, 
+  MatButtonModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatListModule,
+  MatIconModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 @NgModule({
@@ -51,13 +51,13 @@ import {
     BrowserModule,
     BrowserAnimationsModule,
 
-    MdMenuModule,
-    MdButtonModule,
-    MdSidenavModule,
-    MdToolbarModule,
-    MdListModule,
-    MdIconModule,
-    MdProgressSpinnerModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatListModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
 
     HttpModule,
     HttpClientModule,

@@ -9,7 +9,9 @@
     <ng-container mdColumnDef="logo">
       <md-header-cell *mdHeaderCellDef> Logo </md-header-cell>
       <md-cell *mdCellDef="let aff" class="logo-cell">
-        <img src="{{ aff.logo }}">
+        <!-- <ng-container *ngIf="selectedId != aff.sfId"> -->
+          <img src="{{ aff.logo }}">
+        <!-- </ng-container> -->
 
         <ng-container *ngIf="selectedId == aff.sfId">
           <md-form-field [style.margin-left]="'8px'">

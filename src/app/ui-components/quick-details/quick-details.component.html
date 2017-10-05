@@ -3,7 +3,9 @@
 
   <div class="card-content">
     <h1 class="mat-headline">Announcements</h1>
-    <app-quick-detail-item *ngFor="let announcement of announcements" [announcement]="announcement"></app-quick-detail-item>
+    <div class="detail-item-container">
+      <app-quick-detail-item *ngFor="let announcement of announcements" [announcement]="announcement"></app-quick-detail-item>
+    </div>
   </div>
 
   <div class="card-actions">

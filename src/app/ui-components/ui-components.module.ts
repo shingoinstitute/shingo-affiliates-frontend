@@ -26,13 +26,13 @@ import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.c
 
 // Material Design imports
 import { 
-  MdNativeDateModule, 
-  MdDatepickerModule,
-  MdProgressSpinnerModule,
-  MdButtonModule,
-  MdIconModule,
-  MdTabsModule,
-  MdInputModule
+  MatNativeDateModule, 
+  MatDatepickerModule,
+  MatProgressSpinnerModule,
+  MatButtonModule,
+  MatIconModule,
+  MatTabsModule,
+  MatInputModule
 } from '@angular/material';
 
 @NgModule({
@@ -42,13 +42,13 @@ import {
     ReactiveFormsModule,
     FormsModule,
     
-    MdNativeDateModule,
-    MdDatepickerModule,
-    MdProgressSpinnerModule,
-    MdButtonModule,
-    MdIconModule,
-    MdTabsModule,
-    MdInputModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatInputModule,
 
     FlexLayoutModule,
     WorkshopsModule,

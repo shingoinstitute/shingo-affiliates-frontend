@@ -2,13 +2,13 @@
 
 .edit-workshop-container {
    min-height: 100vh;
-   margin: $defaultMargin * 2;
+   margin: $default-margin * 2;
 }
 .edit-workshop-header {
-   margin: $defaultMargin;
+   margin: $default-margin;
 }
 @media only screen and (max-width: $break-medium) {
    .edit-workshop-container {
-      margin: 0 0 $defaultMargin 0;
+      margin: 0 0 $default-margin 0;
    }
 }

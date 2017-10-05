@@ -14,36 +14,36 @@ import { FacilitatorFormComponent } from './facilitator-form/facilitator-form.co
 
 // Material Design imports
 import { 
-  MdIconModule, 
-  MdTableModule, 
-  MdPaginatorModule, 
-  MdSortModule, 
-  MdFormFieldModule, 
-  MdOptionModule, 
-  MdDialogModule,
-  MdSelectModule,
-  MdSnackBarModule,
-  MdButtonModule,
-  MdInputModule,
-  MdProgressSpinnerModule
+  MatIconModule, 
+  MatTableModule, 
+  MatPaginatorModule, 
+  MatSortModule, 
+  MatFormFieldModule, 
+  MatOptionModule, 
+  MatDialogModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatButtonModule,
+  MatInputModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     
-    MdIconModule,
-    MdTableModule,
-    MdPaginatorModule,
-    MdSortModule,
-    MdFormFieldModule,
-    MdOptionModule,
-    MdDialogModule,
-    MdSelectModule,
-    MdSnackBarModule,
-    MdButtonModule,
-    MdInputModule,
-    MdProgressSpinnerModule,
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatButtonModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
 
     FlexLayoutModule,
     FormsModule,

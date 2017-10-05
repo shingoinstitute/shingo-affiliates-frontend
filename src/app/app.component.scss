@@ -6,13 +6,13 @@
    display: flex;
    flex-direction: row;
    align-items: center;
-   padding: $defaultMargin ($defaultMargin * 2) $defaultMargin $defaultMargin;
+   padding: $default-margin ($default-margin * 2) $default-margin $default-margin;
 }
 a.toolbar-menu-btn:hover {
    background-color: #e0e0e0;
 }
 .toolbar-menu-btn > md-icon {
-   margin-right: $defaultMargin * 2;
+   margin-right: $default-margin * 2;
 }
 .toolbar-menu-btn > p {
    margin: 0;

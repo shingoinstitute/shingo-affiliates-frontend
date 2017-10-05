@@ -4,13 +4,13 @@
    min-height: 90vh; /* min height pushes screen down when content doesn't take up enough vertical space */
 }
 .profile-body {
-   margin: $defaultMargin;
+   margin: $default-margin;
 }
 .profile-body h1 {
   margin: 0;
 }
 .profile-actions {
-   margin: $defaultMargin;
+   margin: $default-margin;
 }
 img.profile-img {
   min-width: 150px;
@@ -19,7 +19,7 @@ img.profile-img {
   max-height: 150px;
 }
 div.bio {
-  padding: $defaultMargin * 2;
+  padding: $default-margin * 2;
   border: 1px solid lightgrey;
   border-radius: 3px;
   background: white;
