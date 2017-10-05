@@ -31,7 +31,8 @@ import {
   MdProgressSpinnerModule,
   MdButtonModule,
   MdIconModule,
-  MdTabsModule
+  MdTabsModule,
+  MdInputModule
 } from '@angular/material';
 
 @NgModule({
@@ -40,13 +41,14 @@ import {
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
-
+    
     MdNativeDateModule,
     MdDatepickerModule,
     MdProgressSpinnerModule,
     MdButtonModule,
     MdIconModule,
     MdTabsModule,
+    MdInputModule,
 
     FlexLayoutModule,
     WorkshopsModule,

@@ -77,9 +77,9 @@ export class AuthService extends BaseService {
     * Checks to see if user is authenticated. The user is authenticated if
     * the server returns a 200 response.
     * 
-    * @returns {BehaviorSubject<boolean>} 
+    * @returns {void} Returns void but causes `this.authenticationChange$` to emit a value.
     */
-  public userIsValid(): void {
+  public updateUserAuthStatus(): void {
     if (!this.http.jwt)
       return this.authenticationChange$.next(false);
 
@@ -98,7 +98,7 @@ export class AuthService extends BaseService {
         this._user = null;
         if (res.status === 403) this.authenticationChange$.next(false);
         else {
-          console.error('Unknown error in AuthService.userIsValid(): ', res);
+          console.error('Unknown error in AuthService.updateUserAuthStatus(): ', res);
           this.authenticationChange$.error(res.json ? res.json() : res);
         }
       });

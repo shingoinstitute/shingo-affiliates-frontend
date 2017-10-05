@@ -1,54 +1,48 @@
 @import '../../../../assets/sass/_globals';
 
-.login-page-wrapper {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
-   position: absolute; 
-   left: 0;
-   right: 0;
-   top: 0;
-   bottom: 0;
+$login-form-width: 400px;
+
+.login-page {
+  height: calc(100vh - #{$navbar-height});
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+@media only screen and (max-width: $break-small) {
+  .login-page {
+    height: calc(100vh - #{$navbar-height-sm});
+  }
+}
+.login-page-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 .login-form-container {
-   box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-   background-color: white;
-   width: 512px;
-   padding: $defaultMargin * 2;
+  background: white;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  padding: $defaultMargin * 2;
+  width: $login-form-width;
+}
+@media only screen and (max-width: #{$break-small}) {
+  .login-page-body {
+    align-items: start;
+  }
+  .login-page-body,
+  .login-form-container {
+    width: 100%;
+    height: stretch;
+  }
 }
 .login-form-header {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   justify-content: center;
-   margin-bottom: $defaultMargin * 3;
-}
-.login-form-header > img {
-   margin-right: $defaultMargin * 2;
-}
-.login-form {
-   display: flex;
-   flex-direction: column;
-}
-@media only screen and (max-width: 512px) {
-   .login-form-container {
-      padding: $defaultMargin * 2;
-      padding-top: 72px;
-      height: 100%;
-      margin: 0 auto;
-   }
-}
-.login-actions {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-}
-.login-actions * {
-   margin: $defaultMargin;
-}
-.login-actions > a {
-   text-decoration-line: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  img, h1 {
+    margin: $defaultMargin;
+  }
 }
 .message-container {
   min-height: 19px;
@@ -62,7 +56,29 @@
   align-items: center;
   height: 42px;
   margin-bottom: -42px;
+
+  md-spinner {
+    height: 42px;
+  }
 }
-.md-spinner-container > md-spinner {
-  height: 42px;
+form.login-form {
+  display: flex;
+  flex-direction: column;
+
+  md-form-field {
+    width: 100%;
+  }
+}
+.login-actions {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+
+   * {
+     margin: $defaultMargin;
+   }
+
+   a {
+     text-decoration-line: none;
+   }
 }

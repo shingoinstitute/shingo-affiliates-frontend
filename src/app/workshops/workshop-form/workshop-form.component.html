@@ -43,7 +43,6 @@
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.eventCountry && describe.eventCountry.inlineHelpText }} </p>
-
       <md-form-field>
         <input mdInput [mdAutocomplete]="autoEventCountry" placeholder="Event Country" formControlName="country" required>
       </md-form-field>
@@ -70,22 +69,24 @@
 
     <div class="input-item" fxLayoutGap="16px" [formGroup]="dateFormGroup">
       <p class="md-warn-text" *ngIf="dateFormGroup.errors && dateFormGroup.errors['invalid date']"> &#42;{{ dateFormGroup.errors['invalid date'] }} </p>
-      <div fxLayout="row">
+      <div fxLayout="row" fxLayoutGap="8px">
         <div fxLayout="column">
           <p class="mat-caption"> {{ describe.startDate && describe.startDate.inlineHelpText }} </p>
+          <!-- Start Date Picker -->
           <md-form-field>
-            <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
-              formControlName="startDate">
+            <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}" 
+              formControlName="startDate" [min]="today">
             <md-datepicker-toggle mdSuffix [for]="startDatePicker"></md-datepicker-toggle>
             <md-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate').value"></md-datepicker>
           </md-form-field>
         </div>
   
+        <!-- End Date Picker -->
         <div fxLayout="column">
           <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
           <md-form-field>
             <input required mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
-              formControlName="endDate">
+              formControlName="endDate" [min]="dateFormGroup.get('startDate').value">
             <md-datepicker-toggle mdSuffix [for]="endDatePicker"></md-datepicker-toggle>
             <md-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate').value"></md-datepicker>
           </md-form-field>

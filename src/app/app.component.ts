@@ -116,7 +116,7 @@ export class AppComponent implements OnDestroy {
       });
 
     // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
-    this.auth.userIsValid();
+    this.auth.updateUserAuthStatus();
   }
 
   /**
@@ -157,14 +157,19 @@ export class AppComponent implements OnDestroy {
     this.iconRegistry.addSvgIcon('person_black', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_person_outline_black_24px.svg'));
     this.iconRegistry.addSvgIcon('label_outline', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_label_outline_black_24px.svg'));
     this.iconRegistry.addSvgIcon('edit_mode_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_mode_edit_grey_24px.svg'));
+    this.iconRegistry.addSvgIcon('edit_mode_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_mode_edit_white_24px.svg'));
     this.iconRegistry.addSvgIcon('block_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_block_grey_24px.svg'));
+    this.iconRegistry.addSvgIcon('block_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_block_white_24px.svg'));
     this.iconRegistry.addSvgIcon('delete_forever_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_delete_forever_grey_24px.svg'));
     this.iconRegistry.addSvgIcon('delete_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_delete_grey_24px.svg'));
+    this.iconRegistry.addSvgIcon('delete_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_delete_white_24px.svg'));
     this.iconRegistry.addSvgIcon('renew_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_autorenew_grey_18px.svg'));
+    this.iconRegistry.addSvgIcon('renew_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_autorenew_white_18px.svg'));
     this.iconRegistry.addSvgIcon('file_upload', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_file_upload_black_18px.svg'));
     this.iconRegistry.addSvgIcon('description_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_grey_24px.svg'));
     this.iconRegistry.addSvgIcon('description_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_description_white_24px.svg'));
     this.iconRegistry.addSvgIcon('refresh_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_refresh_grey_18px.svg'));
+    this.iconRegistry.addSvgIcon('refresh_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_refresh_white_18px.svg'));
     this.iconRegistry.addSvgIcon('folder', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_folder_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('link', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_link_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('insert_drive_file', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_insert_drive_file_grey_18px.svg'));

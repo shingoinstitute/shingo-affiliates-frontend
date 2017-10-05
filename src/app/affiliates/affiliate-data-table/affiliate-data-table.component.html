@@ -58,31 +58,29 @@
         <span fxFlex></span>
         <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
       </md-header-cell>
-      <md-cell *mdCellDef="let aff" fxLayout>
+      <md-cell *mdCellDef="let aff" fxLayout fxLayoutGap="2px">
         <ng-container *ngIf="selectedId != aff.sfId">
-          <button md-icon-button (click)="selectedId = aff.sfId">
-                <md-icon svgIcon="edit_mode_grey"></md-icon>
-              </button>
+          <button md-mini-fab (click)="selectedId = aff.sfId">
+            <md-icon svgIcon="edit_mode_white"></md-icon>
+          </button>
 
-          <button md-icon-button (click)="delete(aff)">
-                <md-icon svgIcon="delete_grey"></md-icon>
-              </button>
-
-          <a md-icon-button routerLink="/admin/affiliates/form/{{ aff.sfId }}">
-            <md-icon svgIcon="description_grey"></md-icon>
+          <a md-mini-fab routerLink="/admin/affiliates/form/{{ aff.sfId }}">
+            <md-icon svgIcon="description_white"></md-icon>
           </a>
+
+          <button md-mini-fab color="primary" (click)="delete(aff)">
+            <md-icon svgIcon="delete_white"></md-icon>
+          </button>
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <button md-button (click)="selectedId = ''">
-                <md-icon svgIcon="cancel_grey"></md-icon>
-                <span> Cancel </span>
-              </button>
+          <button md-mini-fab color="primary" (click)="selectedId = ''">
+            <md-icon svgIcon="cancel_white"></md-icon>
+          </button>
 
-          <button md-button (click)="onSave.emit(aff)">
-                <md-icon svgIcon="save_grey"></md-icon>
-                <span> Save </span>
-              </button>
+          <button md-mini-fab (click)="onSave.emit(aff)">
+            <md-icon svgIcon="save_white"></md-icon>
+          </button>
         </ng-container>
 
       </md-cell>

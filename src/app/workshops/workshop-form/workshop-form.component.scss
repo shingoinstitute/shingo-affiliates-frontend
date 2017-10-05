@@ -1,8 +1,11 @@
 @import '../../../assets/sass/_globals';
 
 .form-group-container {
-   max-width: $mediumBreak;
+   max-width: $break-medium;
    margin-bottom: 142px;
+}
+md-form-field {
+    width: 100%;
 }
 form .input-item:nth-child(even) {
    background-color: $rowBackground;
@@ -18,47 +21,38 @@ form .input-item:nth-child(even) {
 .input-item > p {
    margin: 0;
 }
-
 form .facilitator {
     padding: $defaultMargin;
     width: 30%;
     display: flex;
     vertical-align: middle;
 }
-
 form .facilitator > button {
     left: 23%;
     position: absolute;
 }
-
 form .facilitator:nth-child(even) {
     background-color: $rowBackground;
 }
-
 form .facilitator, form .facilitator > button {
     margin-left: $defaultMargin * 2;
 }
-
 form .facilitator > div {
     float: left
 }
-
-form md-input-container md-spinner {
+form md-form-field md-spinner {
     height: 25px;
     width: 25px;
     float: right;
     opacity: 0.75;
 }
-
-form md-input-container input.autoComplete {
+form md-form-field input.autoComplete {
     width: fit-content;
 }
-
 form div.form-actions md-spinner {
     max-height: 36px;
     max-width: 25px;
 }
-
-form md-input-container md-hint.error {
+form md-form-field md-hint.error {
   color: #ff0000;
 }

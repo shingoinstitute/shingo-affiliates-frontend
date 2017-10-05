@@ -32,7 +32,7 @@ snack-bar-container.md-warn { background-color: $warn-color !important; }
 
 /* Sidenav */
 .mat-sidenav-content {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - $navbar-height);
 }
 md-sidenav {
    margin-right: 4px;
@@ -190,7 +190,7 @@ md-row { height: 56px; }
   flex-direction: row;
   flex: 1 0 auto;
 }
-md-input-container {
+md-form-field {
   flex: 1 0 auto;
 }
 .spinner-container {
