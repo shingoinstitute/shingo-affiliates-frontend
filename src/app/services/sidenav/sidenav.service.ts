@@ -44,6 +44,7 @@ export class SidenavService {
   public get canToggle() { return this.sidenav && this.isAuth && this.isMobile; }
 
   constructor(public _as: AuthService, public router: Router) {
+    this.isAuth = false;
     this._as.authenticationChange$.subscribe((isAuth: boolean) => {
       this.isAuth = isAuth;
     });

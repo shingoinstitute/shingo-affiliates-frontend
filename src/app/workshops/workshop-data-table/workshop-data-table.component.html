@@ -1,11 +1,18 @@
-<!-- <md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [disableClear]="true"> -->
 <md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [mdSortDisableClear]="true">
 
   <!-- Workshop Type Column -->
   <ng-container mdColumnDef="workshopType">
     <md-header-cell *mdHeaderCellDef md-sort-header> Course Type </md-header-cell>
     <md-cell *mdCellDef="let workshop" class="course-type">
-      <img src="{{ workshop.image }}">
+      <ng-container *ngIf="selectedSfId != workshop.sfId">
+        <img src="{{ workshop.image }}">
+      </ng-container>
+      
+      <ng-container *ngIf="selectedSfId == workshop.sfId">
+        <md-select floatPlaceholder="never" placeholder="Course Type" [(ngModel)]="workshop.type">
+          <md-option *ngFor="let type of CourseTypes" [value]="type">{{ type }}</md-option>
+        </md-select>
+      </ng-container>
     </md-cell>
   </ng-container>
 
@@ -27,13 +34,37 @@
   <!-- Start Date Column -->
   <ng-container mdColumnDef="startDate">
     <md-header-cell *mdHeaderCellDef md-sort-header> Start Date </md-header-cell>
-    <md-cell *mdCellDef="let workshop"> {{ workshop.startDateFormatted }} </md-cell>
+    <md-cell *mdCellDef="let workshop">
+      <ng-container *ngIf="selectedSfId != workshop.sfId">
+        {{ workshop.startDateFormatted }}
+      </ng-container>
+
+      <div *ngIf="selectedSfId == workshop.sfId">
+        <md-form-field class="workshop-date-picker-form-field">
+          <input mdInput [mdDatepicker]="startDatePicker" (dateChange)="startDateChange($event, workshop)" [value]="workshop.startDate" [max]="workshop.endDate"> 
+          <md-datepicker-toggle mdSuffix [for]="startDatePicker"></md-datepicker-toggle>
+          <md-datepicker #startDatePicker [startAt]="workshop.startDate"></md-datepicker>
+        </md-form-field>
+      </div>
+    </md-cell>
   </ng-container>
 
   <!-- End Date Column -->
   <ng-container mdColumnDef="endDate">
     <md-header-cell *mdHeaderCellDef md-sort-header> End Date </md-header-cell>
-    <md-cell *mdCellDef="let workshop"> {{ workshop.endDateFormatted }} </md-cell>
+    <md-cell *mdCellDef="let workshop">
+      <ng-container *ngIf="selectedSfId != workshop.sfId">
+          {{ workshop.endDateFormatted }}
+      </ng-container>
+        
+      <ng-container *ngIf="selectedSfId == workshop.sfId">
+        <md-form-field class="workshop-date-picker-form-field">
+          <input mdInput [mdDatepicker]="endDatePicker" (dateChange)="endDateChange($event, workshop)" [value]="workshop.endDate" [min]="workshop.startDate"> 
+          <md-datepicker-toggle mdSuffix [for]="endDatePicker"></md-datepicker-toggle>
+          <md-datepicker #endDatePicker [startAt]="workshop.endDate"></md-datepicker>
+        </md-form-field>
+      </ng-container>
+    </md-cell>
   </ng-container>
 
   <!-- Days Late Column -->
@@ -48,7 +79,6 @@
     <md-cell *mdCellDef="let workshop" class="instructors-cell">
       <i *ngIf="!workshop.instructors.length">No Instructors</i>
       <p [style.margin]="'0'">{{ workshop.instructors.join(', ') }}</p>
-      <!-- <p [style.margin]="'0'" [style.padding-bottom]="'4px'" *ngFor="let facilitator of workshop.instructors">{{ facilitator.name }}</p> -->
     </md-cell>
   </ng-container>
 
@@ -63,7 +93,7 @@
 
       <ng-container *ngIf="selectedSfId == workshop.sfId">
         <md-select floatPlaceholder="never" [(ngModel)]="workshop.status">
-          <md-option *ngFor="let status of workshopStatuses" [value]="status">{{ status }}</md-option>
+          <md-option *ngFor="let status of Statuses" [value]="status">{{ status }}</md-option>
         </md-select>
       </ng-container>
     </md-cell>
@@ -97,27 +127,31 @@
   <!-- Actions Column -->
   <ng-container mdColumnDef="actions">
     <md-header-cell *mdHeaderCellDef md-sort-header> Actions </md-header-cell>
-    <md-cell *mdCellDef="let workshop">
+    <md-cell *mdCellDef="let workshop" fxLayout="row" fxLayoutGap="2px">
 
       <!-- Non Editing Mode -->
       <ng-container *ngIf="selectedSfId != workshop.sfId">
-        <button md-icon-button (click)="selectedWorkshop = workshop">
-          <md-icon svgIcon="edit_mode_grey"></md-icon>
+        <button md-mini-fab color="accent" (click)="selectedWorkshop = workshop">
+          <md-icon svgIcon="edit_mode_white"></md-icon>
         </button>
         
-        <button md-icon-button (click)="delete(workshop)">
-          <md-icon svgIcon="delete_grey"></md-icon>
+        <button md-mini-fab color="accent" (click)="onSelectWorkshop(workshop)">
+          <md-icon svgIcon="description_white"></md-icon>
+        </button>
+
+        <button md-mini-fab color="primary" (click)="delete(workshop)">
+          <md-icon svgIcon="delete_white"></md-icon>
         </button>
       </ng-container>
 
       <!-- Edit Mode -->
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <button md-icon-button>
-          <md-icon svgIcon="cancel_grey" (click)="selectedWorkshop = null"></md-icon>
+        <button md-mini-fab color="primary" (click)="selectedWorkshop = null">
+          <md-icon svgIcon="cancel_white"></md-icon>
         </button>
 
-        <button md-icon-button>
-          <md-icon svgIcon="save_grey" (click)="save(workshop); this.selectedWorkshop = null;"></md-icon>
+        <button md-mini-fab color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
+          <md-icon svgIcon="save_white"></md-icon>
         </button>
       </ng-container>
 

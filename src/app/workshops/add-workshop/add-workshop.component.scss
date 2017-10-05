@@ -7,7 +7,7 @@
 .add-workshop-header {
    margin: $defaultMargin;
 }
-@media only screen and (max-width: $mediumBreak) {
+@media only screen and (max-width: $break-medium) {
    .add-workshop-container {
       margin: 0 0 $defaultMargin 0;
    }

@@ -14,6 +14,11 @@ export type WorkshopStatusType = 'Proposed' | 'Verified' | 'Action Pending' | 'R
  * @class Workshop
  */
 export class Workshop extends SFObject {
+
+  public static get CourseTypes(): WorkshopType[] { return ['Discover', 'Enable', 'Improve', 'Align', 'Build']; }
+  // tslint:disable-next-line:max-line-length
+  public static get WorkshopStatusTypes(): WorkshopStatusType[] { return ['Proposed', 'Verified', 'Action Pending', 'Ready To Be Invoiced', 'Invoiced, Not Paid', 'Archived', 'Cancelled']; }
+
   public get name(): string { return `${this.type} @ ${this.startDateFormatted} - ${this.endDateFormatted} by ${this.affiliate.name}`; }
 
   public get sfId(): string { return this.Id; }

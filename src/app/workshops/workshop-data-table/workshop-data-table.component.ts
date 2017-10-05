@@ -5,7 +5,7 @@ import { WorkshopDataSource } from '../../services/workshop/workshop-data-source
 import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { WorkshopService, WorkshopProperties, WorkshopTrackByStrategy } from '../../services/workshop/workshop.service';
-import { MdSort, MdPaginator, MdButton, MdDialog } from '@angular/material';
+import { MdSort, MdPaginator, MdButton, MdDialog, MdDatepickerInputEvent } from '@angular/material';
 import { Workshop, WorkshopStatusType } from '../workshop.model';
 import { Filter } from '../../services/filters/filter.abstract';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
@@ -27,7 +27,8 @@ export class WorkshopDataTableComponent implements OnInit {
 
   public selectedWorkshop: Workshop;
   public get selectedSfId() { return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''; }
-  public get workshopStatuses(): WorkshopStatusType[] { return ['Proposed', 'Verified', 'Action Pending', 'Ready To Be Invoiced', 'Invoiced, Not Paid', 'Archived', 'Cancelled']; }
+  public get Statuses() { return Workshop.WorkshopStatusTypes; }
+  public get CourseTypes() { return Workshop.CourseTypes; }
 
   public isLoading: boolean = true;
   public _workshopDataProvider: DataProvider<WorkshopService, Workshop>;
@@ -128,12 +129,14 @@ export class WorkshopDataTableComponent implements OnInit {
     return Math.floor((now - dueAt) / _1day);
   }
 
-  public onSelectRow(workshop) {
+  public onSelectWorkshop(workshop: Workshop) {
     this.router.navigateByUrl(`/workshops/${workshop.sfId}`);
   }
 
   public save(ws: Workshop) {
+    this.isLoading = true;
     this._ws.update(ws).subscribe(res => {
+      this.isLoading = false;
       console.log(res);
     });
   }
@@ -149,12 +152,35 @@ export class WorkshopDataTableComponent implements OnInit {
     dialogRef.afterClosed()
     .subscribe(result => {
       if (result) {
-        // this._ws.delete(ws)
-        //   .subscribe(res => {
-        //     console.log(res);
-        //   });
+        this.isLoading = true;
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 1500);
+        this._ws.delete(ws)
+          .subscribe(res => {
+            this.isLoading = false;
+            console.log(res);
+          });
       }
     });
+  }
+
+  public startDateChange(event: MdDatepickerInputEvent<any>, w: Workshop) {
+    const date = event.value;
+    if (date instanceof Date) {
+      w.startDate = date;
+    } else if (typeof date === 'string') {
+      w.startDate = new Date(date);
+    }
+  }
+
+  public endDateChange(event: MdDatepickerInputEvent<any>, w: Workshop) {
+    const date = event.value;
+    if (date instanceof Date) {
+      w.endDate = date;
+    } else if (typeof date === 'string') {
+      w.endDate = new Date(date);
+    }
   }
 
 }

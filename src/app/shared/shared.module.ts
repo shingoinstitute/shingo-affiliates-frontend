@@ -16,7 +16,8 @@ import {
   MdOptionModule ,
   MdProgressSpinnerModule,
   MdButtonModule,
-  MdIconModule
+  MdIconModule,
+  MdInputModule
 } from '@angular/material';
 
 
@@ -32,6 +33,7 @@ import {
     MdProgressSpinnerModule,
     MdButtonModule,
     MdIconModule,
+    MdInputModule,
 
     CKEditorModule
   ],

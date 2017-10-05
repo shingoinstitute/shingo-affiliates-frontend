@@ -3,7 +3,7 @@
 video {
    width: 50%;
 }
-@media only screen and (max-width: $mediumBreak) {
+@media only screen and (max-width: $break-medium) {
    video {
       width: 100%;
    }

@@ -1,37 +1,37 @@
-<div class="login-page-wrapper shingo-bg">
-
-  <!-- Login Form -->
-  <div class="login-form-container" *ngIf="didLoad">
-    <div class="login-form-header">
-      <img src="https://res.cloudinary.com/shingo/image/upload/c_scale,h_100/v1392063084/Shingo_Logo_mini_nzegar.png">
-      <h1 class="md-accent-text mat-title">Shingo Affiliate Portal</h1>
+<div class="login-page shingo-bg">
+  <div class="login-page-body">
+    <!-- Login Form -->
+    <div class="login-form-container" *ngIf="didLoad">
+      <div class="login-form-header">
+        <img src="https://res.cloudinary.com/shingo/image/upload/c_scale,h_100/v1392063084/Shingo_Logo_mini_nzegar.png">
+        <h1 class="md-accent-text mat-title">Shingo Affiliate Portal</h1>
+      </div>
+  
+      <div class="md-spinner-container">
+        <md-spinner *ngIf="isLoading"></md-spinner>
+      </div>
+  
+      <div class="message-container">
+        <p class="md-warn-text" *ngIf="errMsg" [innerHTML]="errMsg"></p>
+        <code class="md-warn-text" *ngIf="errBody" [innerHTML]="errBody"></code>
+      </div>
+  
+      <form class="login-form">
+        <md-form-field floatPlaceholder="always">
+          <input mdInput type="text" [(ngModel)]="email" name="email" placeholder="email">
+        </md-form-field>
+  
+        <md-form-field floatPlaceholder="always">
+          <input mdInput type="password" [(ngModel)]="password" name="password" placeholder="password" (keyup.enter)="onSubmit()">
+        </md-form-field>
+      </form>
+  
+      <div class="login-actions">
+        <button md-raised-button class="mat-primary" type="button" (click)="onSubmit()" [disabled]="isLoading">Login</button>
+        <a routerLink="/forgotpassword">Forgot Password?</a>
+        <a href="#">Help?</a>
+      </div>
     </div>
-
-    <div class="md-spinner-container">
-      <md-spinner *ngIf="isLoading"></md-spinner>
-    </div>
-
-    <div class="message-container">
-      <p class="md-warn-text" *ngIf="errMsg" [innerHTML]="errMsg"></p>
-      <code class="md-warn-text" *ngIf="errBody" [innerHTML]="errBody"></code>
-    </div>
-
-    <form class="login-form">
-      <md-form-field floatPlaceholder="always">
-        <input mdInput type="text" [(ngModel)]="email" name="email" placeholder="email">
-      </md-form-field>
-
-      <md-form-field floatPlaceholder="always">
-        <input mdInput type="password" [(ngModel)]="password" name="password" placeholder="password" (keyup.enter)="onSubmit()">
-      </md-form-field>
-    </form>
-
-    <div class="login-actions">
-      <button md-raised-button class="mat-primary" type="button" (click)="onSubmit()" [disabled]="isLoading">Login</button>
-      <a routerLink="/forgotpassword">Forgot Password?</a>
-      <a href="#">Help?</a>
-    </div>
-
   </div>
 
 </div>
