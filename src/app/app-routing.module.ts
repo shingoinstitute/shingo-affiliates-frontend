@@ -8,8 +8,6 @@ import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.c
 import { WorkshopDashboardComponent } from './workshops/workshop-dashboard/workshop-dashboard.component';
 import { ProfileComponent } from './ui-components/user-auth/profile/profile.component';
 import { LoginComponent } from './ui-components/user-auth/login/login.component';
-import { SupportComponent } from './ui-components/support/support.component';
-import { SupportTrainingComponent } from './ui-components/support/support-training/support-training.component';
 import { AdminPanelComponent } from './ui-components/admin-panel/admin-panel.component';
 import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component';
 import { PasswordResetComponent } from './ui-components/user-auth/password-reset/password-reset.component';
@@ -33,9 +31,6 @@ const appRoutes: Routes = [
   { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
   { path: 'profile', component: ProfileComponent, resolve: { user: UserResolver } },
   { path: 'login', component: LoginComponent },
-  { path: 'support', component: SupportComponent },
-  { path: 'support/training', component: SupportTrainingComponent },
-  { path: 'support/training/:video', component: SupportTrainingComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'resetpassword', component: PasswordResetComponent },
   { path: '403', component: ForbiddenPageComponent },

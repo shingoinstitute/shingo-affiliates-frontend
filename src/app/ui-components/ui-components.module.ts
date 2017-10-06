@@ -16,8 +16,6 @@ import { WorkshopMaterialsComponent } from './materials/workshop-materials/works
 import { ProfileComponent } from './user-auth/profile/profile.component';
 import { QuickDetailsComponent } from './quick-details/quick-details.component';
 import { QuickDetailItemComponent } from './quick-details/quick-detail-item/quick-detail-item.component';
-import { SupportComponent } from './support/support.component';
-import { SupportTrainingComponent } from './support/support-training/support-training.component';
 import { PasswordResetComponent } from './user-auth/password-reset/password-reset.component';
 import { ForgotPasswordComponent } from './user-auth/forgot-password/forgot-password.component';
 import { ChangePasswordDialog } from './user-auth/change-password-dialog/change-password-dialog.component';
@@ -25,8 +23,8 @@ import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.componen
 import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.component';
 
 // Material Design imports
-import { 
-  MatNativeDateModule, 
+import {
+  MatNativeDateModule,
   MatDatepickerModule,
   MatProgressSpinnerModule,
   MatButtonModule,
@@ -41,7 +39,7 @@ import {
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
-    
+
     MatNativeDateModule,
     MatDatepickerModule,
     MatProgressSpinnerModule,
@@ -63,9 +61,7 @@ import {
     ProfileComponent,
     QuickDetailItemComponent,
     QuickDetailsComponent,
-    SupportComponent,
     MaterialsDialog,
-    SupportTrainingComponent,
     PasswordResetComponent,
     ForgotPasswordComponent,
     ChangePasswordDialog,
@@ -80,8 +76,6 @@ import {
     ProfileComponent,
     QuickDetailItemComponent,
     QuickDetailsComponent,
-    SupportComponent,
-    SupportTrainingComponent,
     MaterialsDialog
   ],
   entryComponents: [
