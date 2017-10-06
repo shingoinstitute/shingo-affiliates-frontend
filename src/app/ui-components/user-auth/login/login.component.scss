@@ -16,10 +16,10 @@ $login-form-width: 400px;
 .login-page-body {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  align-items: start;
 }
 .login-form-container {
+  margin-top: $default-margin * 4;
   background: white;
   box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
   padding: $default-margin * 2;
@@ -27,12 +27,12 @@ $login-form-width: 400px;
 }
 @media only screen and (max-width: #{$break-small}) {
   .login-page-body {
-    align-items: start;
+    align-items: initial;
   }
   .login-page-body,
   .login-form-container {
     width: 100%;
-    height: stretch;
+    margin: 0;
   }
 }
 .login-form-header {
