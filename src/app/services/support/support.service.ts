@@ -1,39 +1,83 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders, HttpRequest } from '@angular/common/http';
 
-import { IVideo } from './video.interface';
+// App Modules
+import { HttpService } from '../http/http.service';
+import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
+import { Workshop } from '../../workshops/workshop.model';
+
+// RxJS Modules
+import { Observable } from 'rxjs/Observable';
+
+// RxJS operators
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/retryWhen';
+import 'rxjs/add/operator/take';
+
+export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c'];
+
+
+/* tslint:disable:all */
+export class SupportPage {
+  private title: string;
+  private content: string;
+  private category: string;
+
+  constructor(supportPage?: any) {
+    if (supportPage) Object.assign(this, supportPage);
+  }
+}
 
 @Injectable()
-export class SupportService {
+export class SupportService extends BaseAPIService {
 
-  public readonly videos: IVideo[] = [
-    {
-      id: 0,
-      title: 'Getting Started: Affiliate Portal Overview',
-      description: 'This video provides a brief overview of the Shingo Affiliate Portal.',
-      link: 'https://res.cloudinary.com/shingo/video/upload/v1480722163/Affiliates/AffiliatePortal/Overview.mp4',
-      thumbnail: 'https://res.cloudinary.com/shingo/video/upload/so_0,w_200,q_70/v1480722163/Affiliates/AffiliatePortal/Overview.jpg'
-    },
-    {
-      id: 1,
-      title: 'Add/Edit/Cancel Workshop',
-      description: 'A brief video detailing how to add, edit, and cancel workshops in the Shingo Affiliate Portal.',
-      link: 'https://res.cloudinary.com/shingo/video/upload/v1480722163/Affiliates/AffiliatePortal/AddEdit.mp4',
-      thumbnail: 'https://res.cloudinary.com/shingo/video/upload/so_0,w_200,q_70/v1480722163/Affiliates/AffiliatePortal/AddEdit.jpg'
-    },
-    {
-      id: 2,
-      title: 'Upload Attendee List/Evaluations',
-      description: 'A brief video detailing how to upload attendee lists and hard copy evaluations for workshops in the Shingo Affiliate Portal.',
-      link: 'https://res.cloudinary.com/shingo/video/upload/v1480722163/Affiliates/AffiliatePortal/Attendee_List.mp4',
-      thumbnail: 'https://res.cloudinary.com/shingo/video/upload/so_0,w_200,q_70/v1480722163/Affiliates/AffiliatePortal/Attendee_List.jpg'
-    },
-    {
-      id: 3,
-      title: 'Change/Reset Password',
-      description: 'A brief video detailing how to change or reset your password in the Shingo Affiliate Portal.',
-      link: 'https://res.cloudinary.com/shingo/video/upload/v1480722163/Affiliates/AffiliatePortal/Password.mp4',
-      thumbnail: 'https://res.cloudinary.com/shingo/video/upload/so_1,w_200,q_70/v1480722163/Affiliates/AffiliatePortal/Password.jpg'
-    }
-  ];
+  public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
+
+  public route: string = 'support';
+
+  constructor(public http: HttpService) { super(); }
+
+  public getAll(): Observable<SupportPage[]> {
+    return this.http.get(this.baseUrl)
+      .map(res => res.map(spJSON => new SupportPage(spJSON)))
+      .catch(this.handleError);
+  }
+
+  public getById(id: string): Observable<SupportPage> {
+    return this.http.get(this.baseUrl + `/${id}`)
+      .map(res => new SupportPage(res))
+      .catch(this.handleError);
+  }
+
+  public getCategory(name: string): Observable<SupportPage[]> {
+    return this.http.get(this.baseUrl + `/category/${name}`)
+      .map(res => res.map(spJSON => new SupportPage(spJSON)))
+      .catch(this.handleError);
+  }
+
+  public create(obj: any): Observable<ISFSuccessResult> {
+    throw new Error('Method not implemented.');
+  }
+
+  public update(obj: any): Observable<ISFSuccessResult> {
+    throw new Error('Method not implemented.');
+  }
+
+  public delete(obj: any): Observable<ISFSuccessResult> {
+    throw new Error('Method not implemented.');
+  }
+
+  public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS): Observable<any[]> {
+    // Set headers (NOTE: Must include token here)
+    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
+    headers = headers.set('x-search', query);
+    headers = headers.set('x-retrieve', fields.join());
+
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+      .map(res => res.map(spJSON => new Workshop(spJSON)))
+      .catch(this.handleError);
+  }
 
 }
