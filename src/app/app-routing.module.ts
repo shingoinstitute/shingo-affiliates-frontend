@@ -15,6 +15,8 @@ import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-de
 import { PasswordResetComponent } from './ui-components/user-auth/password-reset/password-reset.component';
 import { ForgotPasswordComponent } from './ui-components/user-auth/forgot-password/forgot-password.component';
 import { ForbiddenPageComponent } from './ui-components/forbidden-page/forbidden-page.component';
+import { PageNotFoundComponent } from './ui-components/page-not-found/page-not-found.component';
+
 
 /** Shared Module Components */
 import { IsValidResolver } from './services/auth/is-valid.resolver';
@@ -42,7 +44,8 @@ const appRoutes: Routes = [
   {
     path: 'admin',
     loadChildren: 'app/ui-components/admin-panel/admin-panel.module#AdminPanelModule'
-  }
+  },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

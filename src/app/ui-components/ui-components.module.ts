@@ -22,6 +22,7 @@ import { PasswordResetComponent } from './user-auth/password-reset/password-rese
 import { ForgotPasswordComponent } from './user-auth/forgot-password/forgot-password.component';
 import { ChangePasswordDialog } from './user-auth/change-password-dialog/change-password-dialog.component';
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.component';
 
 // Material Design imports
@@ -69,7 +70,8 @@ import {
     PasswordResetComponent,
     ForgotPasswordComponent,
     ChangePasswordDialog,
-    ForbiddenPageComponent
+    ForbiddenPageComponent,
+    PageNotFoundComponent
   ],
   exports: [
     DashboardComponent,

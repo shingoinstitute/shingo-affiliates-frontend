@@ -21,8 +21,7 @@ const adminRoutes: Routes = [
           { path: 'affiliates', component: AdminAffiliateTabComponent },
           { path: 'facilitators', component: AdminFacilitatorTabComponent },
           { path: 'facilitators/form/:id', component: FacilitatorFormComponent },
-          { path: 'affiliates/form/:id', component: AffiliateFormComponent },
-          { path: '**', redirectTo: 'affiliates' }
+          { path: 'affiliates/form/:id', component: AffiliateFormComponent }
         ]
       }
     ]
