@@ -30,7 +30,7 @@
 </md-toolbar>
 
 <md-sidenav-container>
-  <md-sidenav #sidenav mode="side" [opened]="isAuthenticated">
+  <md-sidenav #sidenav mode="side" [opened]="sidenavService && sidenavService.opened">
     <md-nav-list>
       <p class="bold-text">Main</p>
       <a md-list-item routerLink="/dashboard" routerLinkActive="active" (click)="sidenavService.close()">Dashboard</a>
