@@ -6,7 +6,11 @@
 
   <div class="page-body">
     <div class="support-categories-wrapper">
-      <app-support-category></app-support-category>
+      <div *ngFor="let category of categories">
+        <ng-container *ngIf="supportPages[category.toLowerCase()].length">
+          <app-support-category [supportPages]="supportPages[category.toLowerCase()]" category="{{ category }}"></app-support-category>
+        </ng-container>
+      </div>
     </div>
 
     <div class="support-search-wrapper">

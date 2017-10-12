@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { SupportHomeComponent } from './support-home.component';
 import { SupportSearchComponent } from './support-search/support-search.component';
@@ -9,6 +10,7 @@ import { SupportRoutingModule } from './support-routing.module';
 
 @NgModule({
   imports: [
+    CommonModule,
     SupportRoutingModule
   ],
   declarations: [

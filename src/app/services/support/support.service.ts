@@ -1,3 +1,4 @@
+// tslint:disable:variable-name
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpRequest } from '@angular/common/http';
 
@@ -18,12 +19,22 @@ import 'rxjs/add/operator/take';
 
 export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c'];
 
-
+export type SupportPageCategoryType = 'Authentication' | 'Workshops' | 'Dashboard' | 'Affiliates' | 'Facilitators' | 'Other' | undefined;
 
 export class SupportPage {
-  private title: string;
-  private content: string;
-  private category: string;
+  // public title: string;
+  // public content: string;
+  // public category: string;
+
+  public Category__c: string;
+  public Content__c: string;
+  public Title__c: string;
+
+  public get title(): string { return this.Title__c; }
+  public get content(): string { return this.Content__c; }
+  public get category(): string { return this.Category__c; }
+  
+  public static get SupportPageCategoryTypes(): SupportPageCategoryType[] { return ['Authentication', 'Workshops', 'Dashboard', 'Affiliates', 'Facilitators', 'Other']; }
 
   constructor(supportPage?: any) {
     if (supportPage) Object.assign(this, supportPage);
