@@ -1,0 +1,18 @@
+.page-not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    background-color: transparent;
+    margin-bottom: 24px;
+  }
+  
+  a {
+    text-decoration-style: none;
+    text-decoration: none;
+    color: #3366BB;
+    font-size: 18px;
+  }
+  
+}
