@@ -14,6 +14,7 @@ import { PasswordResetComponent } from './ui-components/user-auth/password-reset
 import { ForgotPasswordComponent } from './ui-components/user-auth/forgot-password/forgot-password.component';
 import { ForbiddenPageComponent } from './ui-components/forbidden-page/forbidden-page.component';
 import { PageNotFoundComponent } from './ui-components/page-not-found/page-not-found.component';
+import { SupportHomeComponent } from './support/support-home.component';
 
 
 /** Shared Module Components */
@@ -36,6 +37,10 @@ const appRoutes: Routes = [
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'resetpassword', component: PasswordResetComponent },
   { path: '403', component: ForbiddenPageComponent },
+  { 
+    path: 'support', 
+    loadChildren: 'app/support/support.module#SupportModule'
+  },
   {
     path: 'admin',
     loadChildren: 'app/ui-components/admin-panel/admin-panel.module#AdminPanelModule'

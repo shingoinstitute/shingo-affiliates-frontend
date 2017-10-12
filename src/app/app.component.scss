@@ -39,3 +39,12 @@ div.spinner-container md-spinner {
   top: calc(50% - 64px);
   left: -150px;
 }
+.nav-list-title {
+  color: white;
+  padding: $default-margin 0 $default-margin ($default-margin * 3);
+  margin-left: -$default-margin;
+  margin-right: -$default-margin;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  background-color: $primary-color-lighten-1;
+}

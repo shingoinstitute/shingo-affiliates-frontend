@@ -20,6 +20,9 @@ import { AffiliatesModule } from './affiliates/affiliates.module';
 /** Workshops */
 import { WorkshopsModule } from './workshops/workshops.module';
 
+/** Support */
+import { SupportModule } from './support/support.module';
+
 /** Interface Components */
 import { UIComponentsModule } from './ui-components/ui-components.module';
 
@@ -69,7 +72,8 @@ import {
     AffiliatesModule,
     FacilitatorsModule,
     WorkshopsModule,
-    UIComponentsModule
+    UIComponentsModule,
+    SupportModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

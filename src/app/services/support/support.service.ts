@@ -19,7 +19,7 @@ import 'rxjs/add/operator/take';
 export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c'];
 
 
-/* tslint:disable:all */
+
 export class SupportPage {
   private title: string;
   private content: string;
@@ -30,6 +30,7 @@ export class SupportPage {
   }
 }
 
+// tslint:disable-next-line:max-classes-per-file
 @Injectable()
 export class SupportService extends BaseAPIService {
 

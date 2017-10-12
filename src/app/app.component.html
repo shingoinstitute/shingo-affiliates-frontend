@@ -32,14 +32,24 @@
 <md-sidenav-container>
   <md-sidenav #sidenav mode="side" [opened]="sidenavService && sidenavService.opened">
     <md-nav-list>
-      <p class="bold-text">Main</p>
+      <p class="nav-list-title">Main Menu</p>
       <a md-list-item routerLink="/dashboard" routerLinkActive="active" (click)="sidenavService.close()">Dashboard</a>
+      <md-divider></md-divider>
       <a md-list-item routerLink="/workshops" routerLinkActive="active" (click)="sidenavService.close()">Workshops</a>
-      <a *ngIf="auth.user && auth.user.isAdmin" md-list-item routerLink="/admin" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
-      <p class="bold-text">Affiliate Materials</p>
+      <md-divider></md-divider>
+      <ng-container *ngIf="auth.user && auth.user.isAdmin">
+        <a md-list-item routerLink="/admin" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
+        <md-divider></md-divider>
+      </ng-container>
+      <a md-list-item routerLink="/support" routerLinkActive="active" (click)="sidenavService.close()">Support</a>
+      <md-divider></md-divider>
+      <p class="nav-list-title">Affiliate Materials</p>
       <a md-list-item nohref (click)="openMaterials('workshops')" (click)="sidenavService.close()">Workshop Materials</a>
+      <md-divider></md-divider>
       <a md-list-item nohref (click)="openMaterials('forms')" (click)="sidenavService.close()">Forms/Evaluations</a>
+      <md-divider></md-divider>
       <a md-list-item nohref (click)="openMaterials('marketing')" (click)="sidenavService.close()">Marketing Materials</a>
+      <md-divider></md-divider>
     </md-nav-list>
   </md-sidenav>
 

@@ -1,0 +1,30 @@
+@import '../../assets/sass/_globals';
+
+.support-page-container {
+  display: block;
+  margin: $default-margin * 2;
+
+  .page-body {
+    display: flex;
+    flex-direction: row;
+  }
+
+  @media only screen and (max-width: #{$break-small-1}) {
+    .page-body {
+      flex-direction: column;
+    }
+  }
+
+  .support-categories-wrapper,
+  .support-search-wrapper {
+    flex: 1;
+  }
+  
+}
+
+@media only screen and (min-width: #{$max-content-width}) {
+  .support-page-container {
+    margin: 0 auto;
+    width: 1200px;
+  }
+}

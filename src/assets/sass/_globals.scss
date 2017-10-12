@@ -5,8 +5,31 @@ $default-padding: 8px;
 $navbar-height: 64px;
 $navbar-height-sm: 56px;
 
+// breakpoints determined from material design guidelines. https://material.io/guidelines/layout/responsive-ui.html#responsive-ui-breakpoints
 $break-xs-small: 480px;
+$break-xs-small-1: 400px;
+$break-xs-small-2: 360px;
+
 $break-small: 600px;
+$break-small-1: 720px;
+$break-small-2: 840px;
+
 $break-medium: 960px;
-$break-large: 1280px;
-$break-xs-large: 1920px;
+$break-medium-1: 1024px;
+$break-medium-2: 1280px;
+
+$break-large: 1440px;
+$break-large-1: 1600px;
+$max-content-width: 1600px;
+
+$break-xlarge: 1920px;
+
+$primary-color: #003768;
+$primary-color-lighten-1: #26557f;
+$primary-color-lighten-2: #4d7395;
+$accent-color: #640921;
+$accent-color-lighten-1: #7b2e42;
+$accent-color-lighten-2: #935364;
+$warn-color: #f44336;
+$success-color: #4CAF50;
+$grey-color: #757575;
