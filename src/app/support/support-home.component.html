@@ -5,17 +5,27 @@
   </div>
 
   <div class="page-body">
-    <div class="support-categories-wrapper">
-      <div *ngFor="let category of categories">
-        <ng-container *ngIf="supportPages[category.toLowerCase()].length">
-          <app-support-category [supportPages]="supportPages[category.toLowerCase()]" category="{{ category }}"></app-support-category>
-        </ng-container>
-      </div>
-    </div>
 
     <div class="support-search-wrapper">
       <app-support-search></app-support-search>
     </div>
+
+    <!-- Support Categories -->
+    <div class="support-categories-wrapper">
+      <div class="support-categories-header">
+        <h1 class="mat-headline">What Category Do You Need Help With?</h1>
+      </div>
+      <div class="support-categories-body">
+        <md-card class="support-category-card" *ngFor="let category of supportCategoryProps" routerLink="/support/category/{{ category }}">
+          <p class="mat-subheading-2">{{ category }}</p>
+          <div class="category-icon">
+            <img src="{{ supportCategories[category].getIconByCategory() }}">
+          </div>
+        </md-card>
+      </div>
+    </div><!-- END Support Categories -->
+
+    
   </div>
 
 </div>

@@ -29,10 +29,12 @@ export class SupportPage {
   public Category__c: string;
   public Content__c: string;
   public Title__c: string;
+  public Category_Icon__c: string;
 
   public get title(): string { return this.Title__c; }
   public get content(): string { return this.Content__c; }
   public get category(): string { return this.Category__c; }
+  public get categoryIcon(): string { return this.Category_Icon__c; }
   
   public static get SupportPageCategoryTypes(): SupportPageCategoryType[] { return ['Authentication', 'Workshops', 'Dashboard', 'Affiliates', 'Facilitators', 'Other']; }
 
@@ -79,6 +81,13 @@ export class SupportService extends BaseAPIService {
 
   public delete(obj: any): Observable<ISFSuccessResult> {
     throw new Error('Method not implemented.');
+  }
+
+  public describe(): Observable<any> {
+    console.warn(`Method 'SupportService::describe' has not implemented but was called anyway`);
+    return Observable.of({
+      categories: SupportPage.SupportPageCategoryTypes
+    });
   }
 
   public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS): Observable<any[]> {

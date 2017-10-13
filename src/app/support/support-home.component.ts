@@ -1,28 +1,6 @@
-// tslint:disable:member-access
-// tslint:disable:max-classes-per-file
 import { Component } from '@angular/core';
 import { SupportService, SupportPage } from '../services/support/support.service';
-
-
-export class SupportPages {
-  public authentication: SupportPage[] = [];
-  public workshops: SupportPage[] = [];
-  public dashboard: SupportPage[] = [];
-  public affiliates: SupportPage[] = [];
-  public facilitators: SupportPage[] = [];
-  public other: SupportPage[] = [];
-
-  public assignSupportPagesToCategory(pages: SupportPage[]) {
-    for (const page of pages) {
-      const key = page.category ? page.category.toLowerCase() : 'other';
-      if ((this as Object).hasOwnProperty(key))
-        this[key].push(page);
-      else 
-        this['other'].push(page);
-    }
-  }
-
-}
+import { SupportCategory } from './support-category/support-category.model';
 
 @Component({
   selector: 'app-support-home',
@@ -31,15 +9,37 @@ export class SupportPages {
 })
 export class SupportHomeComponent {
 
-  public supportPages: SupportPages = new SupportPages();
-  public get categories(): string[] { return SupportPage.SupportPageCategoryTypes; }
+  public supportCategories: { [key: string]: SupportCategory } = {};
+  public get supportCategoryProps() { return Object.keys(this.supportCategories); }
+  public categories: string[] = [];
 
-  constructor(public _ss: SupportService) {
-    _ss.getAll().subscribe(pages => {
-      this.supportPages.assignSupportPagesToCategory(pages);
+  constructor(public supportService: SupportService) {
+
+    supportService.describe().subscribe(desc => {
+      if (desc && Array.isArray(desc.categories)) {
+        this.categories = desc.categories;
+      }
+    });
+
+    supportService.getAll().subscribe((pages: SupportPage[]) => {
+      this.sortPagesByCategory(pages);
+      // console.log(`Retrieved ${pages.length} support page${pages.length ? '' : 's'}`);
+      console.log('SUPPORT PAGES', pages);
     },
     err => {
       console.error(err);
     });
   }
+
+  public sortPagesByCategory(pages: SupportPage[]) {
+    pages.map(page => {
+      const category = page.category || 'Other';
+      if (this.supportCategories.hasOwnProperty(category)) {
+        this.supportCategories[category].pages.push(page);
+      } else {
+        this.supportCategories[category] = new SupportCategory(category, [page]);
+      }
+    });
+  }
+
 }
