@@ -33,7 +33,7 @@ export abstract class BaseAPIService extends BaseService {
   public abstract delete(obj: any): Observable<ISFSuccessResult>;
   public abstract search(query: string): Observable<any[]>;
 
-  public describe(route: 'workshops' | 'facilitators' | 'affiliates', http: HttpService): Observable<any> {
+  public describe(route: 'workshops' | 'facilitators' | 'affiliates' | 'support', http: HttpService): Observable<any> {
     return http.get(`${this.APIHost()}/${route}/describe`)
       .map(data => {
         const props = {};

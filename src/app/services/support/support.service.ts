@@ -17,7 +17,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/take';
 
-export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c'];
+export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c', 'Content__c'];
 
 export type SupportPageCategoryType = 'Authentication' | 'Workshops' | 'Dashboard' | 'Affiliates' | 'Facilitators' | 'Other' | undefined;
 
@@ -84,10 +84,7 @@ export class SupportService extends BaseAPIService {
   }
 
   public describe(): Observable<any> {
-    console.warn(`Method 'SupportService::describe' has not implemented but was called anyway`);
-    return Observable.of({
-      categories: SupportPage.SupportPageCategoryTypes
-    });
+    return super.describe('support', this.http);
   }
 
   public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS): Observable<any[]> {
@@ -97,7 +94,7 @@ export class SupportService extends BaseAPIService {
     headers = headers.set('x-retrieve', fields.join());
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
-      .map(res => res.map(spJSON => new Workshop(spJSON)))
+      .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }
 

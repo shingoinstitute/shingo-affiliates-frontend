@@ -1,13 +1,17 @@
 <div class="support-page-container">
   <div class="page-header">
-    <h1 class="mat-display-2">Support Home</h1>
-    <p class="mat-headline">This is the support page where we will make you feel warm and fuzzy about the affiliate portal.</p>
+    <p class="mat-display-1">Support Home</p>
+    <!-- <p class="mat-headline"></p> -->
   </div>
 
   <div class="page-body">
-
-    <div class="support-search-wrapper">
-      <app-support-search></app-support-search>
+    <div class="search-input-wrapper">
+      <form (ngSubmit)="onSearch()">
+        <md-form-field>
+          <input type="text" mdInput placeholder="Search Support Topics" [(ngModel)]="query" name="query">
+          <md-icon svgIcon="search_grey" mdSuffix></md-icon>
+        </md-form-field>
+      </form>
     </div>
 
     <!-- Support Categories -->
@@ -15,12 +19,12 @@
       <div class="support-categories-header">
         <h1 class="mat-headline">What Category Do You Need Help With?</h1>
       </div>
-      <div class="support-categories-body">
-        <md-card class="support-category-card" *ngFor="let category of supportCategoryProps" routerLink="/support/category/{{ category }}">
+      <div class="support-category-list">
+        <md-card class="support-category-card" *ngFor="let category of categories" routerLink="/support/category/{{ category }}">
           <p class="mat-subheading-2">{{ category }}</p>
-          <div class="category-icon">
-            <img src="{{ supportCategories[category].getIconByCategory() }}">
-          </div>
+          <!-- <div class="category-icon">
+            <img src="">
+          </div> -->
         </md-card>
       </div>
     </div><!-- END Support Categories -->

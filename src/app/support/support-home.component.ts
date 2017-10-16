@@ -1,6 +1,8 @@
+// tslint:disable:prefer-const
 import { Component } from '@angular/core';
 import { SupportService, SupportPage } from '../services/support/support.service';
 import { SupportCategory } from './support-category/support-category.model';
+import { Router, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-support-home',
@@ -10,36 +12,32 @@ import { SupportCategory } from './support-category/support-category.model';
 export class SupportHomeComponent {
 
   public supportCategories: { [key: string]: SupportCategory } = {};
-  public get supportCategoryProps() { return Object.keys(this.supportCategories); }
+
   public categories: string[] = [];
 
-  constructor(public supportService: SupportService) {
+  public query: string;
+
+  constructor(public supportService: SupportService, public router: Router) {
 
     supportService.describe().subscribe(desc => {
-      if (desc && Array.isArray(desc.categories)) {
-        this.categories = desc.categories;
-      }
-    });
-
-    supportService.getAll().subscribe((pages: SupportPage[]) => {
-      this.sortPagesByCategory(pages);
-      // console.log(`Retrieved ${pages.length} support page${pages.length ? '' : 's'}`);
-      console.log('SUPPORT PAGES', pages);
-    },
-    err => {
-      console.error(err);
+      this.parseDescription(desc);
     });
   }
 
-  public sortPagesByCategory(pages: SupportPage[]) {
-    pages.map(page => {
-      const category = page.category || 'Other';
-      if (this.supportCategories.hasOwnProperty(category)) {
-        this.supportCategories[category].pages.push(page);
-      } else {
-        this.supportCategories[category] = new SupportCategory(category, [page]);
+  public onSearch() {
+    this.router.navigateByUrl(`/support/search?q=${this.query || ''}`);
+  }
+
+  public parseDescription(desc: any) {
+    if (desc && desc.category && desc.category.picklistValues) {
+      let categories: string[] = [];
+      for (const value of desc.category.picklistValues) {
+        if (value.active && value.label) {
+          categories.push(value.label);
+        }
       }
-    });
+      this.categories = categories;
+    }
   }
 
 }
