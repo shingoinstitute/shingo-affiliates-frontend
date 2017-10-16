@@ -1,5 +1,11 @@
-<h1 class="mat-title">{{ category }}</h1>
-<div *ngFor="let page of supportPages">
-  <h1 class="mat-subheading-2">{{ page.title }}</h1>
-  <span [innerHTML]="page.content"></span>
+<div class="support-page-container">
+  <div class="support-page-body">
+    <h1 class="mat-title">Category - {{ category }}</h1>
+    <md-list>
+      <h3 md-subheader>Topics</h3>
+      <md-list-item *ngFor="let page of supportPages">
+        <a routerLink="/support/{{ page.id }}">{{ page.title }}</a>
+      </md-list-item>
+    </md-list>
+  </div>
 </div>

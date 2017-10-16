@@ -30,8 +30,8 @@ export class SupportSearchComponent implements OnInit {
     });
   }
 
-  public search(animateSpinner: boolean = true) {
-    this.isSearching = animateSpinner;
+  public search() {
+    this.isSearching = true;
     this.supportService.search(this.query)
     .distinctUntilChanged()
     .debounceTime(250)
@@ -41,14 +41,17 @@ export class SupportSearchComponent implements OnInit {
         this.results = res;
         for (const page of res) {
           if (typeof page.content === 'string') {
-            // remove html tags to shorten text when displaying search results
+            // HTML tags are removed to shorten text when displaying search results,
+            // then each word in the query is bolded to make it stand out in search result text.
             const content = page.content.replace(/\<[a-z]+\>|\<\/[a-z]+\>/g, ' ');
-            // each word in the query is bolded to make it stand out in search result text
             const tokens = this.query.split(' ').join('|');
             page.Content__c = content.replace(new RegExp(`(${tokens})`, 'gi'), '<strong>$1</strong>');
           }
         }
       }
+    }, err => {
+      console.error(err);
+      this.isSearching = false;
     });
   }
 

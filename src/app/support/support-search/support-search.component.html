@@ -17,7 +17,7 @@
   
     <ul class="search-result-list">
       <li class="search-result-item" *ngFor="let result of results">
-        <a class="mat-title" routerLink="/support/{{ result.category }}/{{ result.title }}">{{ result.title }}</a>
+        <a class="mat-title" routerLink="/support/{{ result.id }}">{{ result.title }}</a>
         <p class="mat-body-1" [innerHTML]="result.content"></p>
       </li>
     </ul>

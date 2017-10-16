@@ -30,11 +30,13 @@ export class SupportPage {
   public Content__c: string;
   public Title__c: string;
   public Category_Icon__c: string;
+  public Id: string;
 
   public get title(): string { return this.Title__c; }
   public get content(): string { return this.Content__c; }
   public get category(): string { return this.Category__c; }
   public get categoryIcon(): string { return this.Category_Icon__c; }
+  public get id(): string { return this.Id; }
   
   public static get SupportPageCategoryTypes(): SupportPageCategoryType[] { return ['Authentication', 'Workshops', 'Dashboard', 'Affiliates', 'Facilitators', 'Other']; }
 
