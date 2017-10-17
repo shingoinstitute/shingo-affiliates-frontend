@@ -4,7 +4,7 @@
   display: block;
   margin: $default-margin * 2;
 
-  .page-body {
+  .support-page-body {
     display: flex;
     flex-direction: column;
 
@@ -25,62 +25,68 @@
     .support-categories-wrapper {
       display: flex;
       flex-direction: column;
+      align-items: center;
   
       .support-categories-header {
         text-align: center;
       }
   
-      .support-category-list {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-self: center;
+      .support-categories-body {
         width: 100%;
-        max-width: $break-small-1;
-
-        .support-category-card {
-          margin: $default-margin * 2;
-          width: 148px;
-          height: 148px;
-          display: flex;
-          flex-direction: column;
-          cursor: pointer;
-  
-          p {
-            text-align: center;
-          }
-  
-          .category-icon {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            
-            img {
-              max-height: 100%;
-              max-width: 100%;
-              width: auto;
-              height: auto;
-            }
-          }
-  
-  
-        }
-
-        @media only screen and (max-width: #{$break-small}) {
-          .support-category-card {
-            width: 86px;
-            height: 86px;
-            p {
-              align-self: center;
-            }
-          }
-        }
-
+        max-width: $break-small;
       }
+
+      // .support-category-list {
+      //   display: flex;
+      //   flex-direction: column;
+      //   flex-wrap: wrap;
+      //   justify-content: center;
+      //   align-self: center;
+      //   width: 100%;
+      //   max-width: $break-small-1;
+
+      //   .support-category-card {
+      //     margin: $default-margin * 2;
+      //     width: 148px;
+      //     height: 148px;
+      //     display: flex;
+      //     flex-direction: column;
+      //     cursor: pointer;
+  
+      //     p {
+      //       text-align: center;
+      //     }
+  
+      //     .category-icon {
+      //       height: 100%;
+      //       width: 100%;
+      //       display: flex;
+      //       flex-direction: row;
+      //       align-items: center;
+      //       justify-content: center;
+            
+      //       img {
+      //         max-height: 100%;
+      //         max-width: 100%;
+      //         width: auto;
+      //         height: auto;
+      //       }
+      //     }
+  
+  
+      //   }
+
+      //   @media only screen and (max-width: #{$break-small}) {
+      //     .support-category-card {
+      //       width: 86px;
+      //       height: 86px;
+      //       p {
+      //         align-self: center;
+      //       }
+      //     }
+      //   }
+
+      // }
   
     }
   }

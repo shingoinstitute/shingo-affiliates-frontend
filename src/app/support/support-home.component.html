@@ -4,7 +4,7 @@
     <!-- <p class="mat-headline"></p> -->
   </div>
 
-  <div class="page-body">
+  <div class="support-page-body">
     <div class="search-input-wrapper">
       <form (ngSubmit)="onSearch()">
         <md-form-field>
@@ -23,17 +23,18 @@
         <p *ngFor="let category of categories">
           <a routerLink="/support/category/{{ category.toLowerCase() }}">{{ category }}</a>
         </p>
-        <div class="support-category-list">
-          <!-- <md-card class="support-category-card" *ngFor="let category of categories" routerLink="/support/category/{{ category }}">
-            <p class="mat-subheading-2">{{ category }}</p> -->
-          <!-- <div class="category-icon">
-            <img src="">
-          </div> -->
-          <!-- </md-card> -->
-        </div>
+        <!-- <div class="support-category-list">
+          <md-card class="support-category-card" *ngFor="let category of categories" routerLink="/support/category/{{ category }}">
+            <p class="mat-subheading-2">{{ category }}</p>
+            <div class="category-icon">
+              <img src="">
+            </div>
+          </md-card>
+        </div> -->
       </div>
       <!-- END Support Categories -->
 
     </div>
 
   </div>
+</div>
