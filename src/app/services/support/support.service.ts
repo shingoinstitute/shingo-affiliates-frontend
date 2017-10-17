@@ -17,9 +17,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/operator/take';
 
-export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c'];
+export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c', 'Content__c'];
 
-// tslint:disable-next-line:max-classes-per-file
 @Injectable()
 export class SupportService extends BaseAPIService {
 
@@ -65,11 +64,10 @@ export class SupportService extends BaseAPIService {
 
   public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS): Observable<any[]> {
     // Set headers (NOTE: Must include token here)
-    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
-    headers = headers.set('x-search', query);
+    let headers = new HttpHeaders().set('x-search', query);
     headers = headers.set('x-retrieve', fields.join());
-
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+    if (this.http.jwt !== '') headers = headers.set('x-jwt', this.http.jwt);
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: this.http.jwt !== '' })
       .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }

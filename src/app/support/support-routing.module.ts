@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 /** Interface Components */
 import { SupportHomeComponent } from './support-home.component';
+import { SupportSearchComponent } from './support-search/support-search.component';
 import { SupportCategoryComponent } from './support-category/support-category.component';
 import { SupportPageComponent } from './support-page/support-page.component';
 
@@ -18,14 +19,9 @@ const supportRoutes: Routes = [
         component: SupportHomeComponent,
         children: []
       },
-      {
-        path: 'category/:name',
-        component: SupportCategoryComponent
-      },
-      {
-        path: 'page/:id',
-        component: SupportPageComponent
-      }
+      { path: 'search', component: SupportSearchComponent },
+      { path: 'category/:name', component: SupportCategoryComponent },
+      { path: ':id', component: SupportPageComponent }
     ])
   ],
   exports: [

@@ -6,7 +6,8 @@ import { SupportService } from '../../services/support/support.service';
 
 @Component({
   selector: 'app-support-category',
-  templateUrl: './support-category.component.html'
+  templateUrl: './support-category.component.html',
+  styleUrls: ['./support-category.component.scss']
 })
 export class SupportCategoryComponent {
   @Input() public supportPages: SupportPage[] = [];

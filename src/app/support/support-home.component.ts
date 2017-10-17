@@ -1,7 +1,9 @@
+// tslint:disable:prefer-const
 import { Component } from '@angular/core';
 import { SupportService } from '../services/support/support.service';
 import { SupportPage } from '../services/support/support.model';
 import { SupportCategory } from './support-category/support-category.model';
+import { Router, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-support-home',
@@ -11,38 +13,33 @@ import { SupportCategory } from './support-category/support-category.model';
 export class SupportHomeComponent {
 
   public supportCategories: { [key: string]: SupportCategory } = {};
-  public get supportCategoryProps() { return Object.keys(this.supportCategories); }
+
   public categories: string[] = [];
 
-  constructor(public supportService: SupportService) {
+  public query: string;
+
+  constructor(public supportService: SupportService, public router: Router) {
 
     supportService.describe().subscribe(desc => {
-      console.log('got desc: ', desc);
-      if (desc.category.picklistValues) {
-        this.categories = desc.category.picklistValues.map(val => val.value).sort();
-        this.categories = ['All'].concat(this.categories);
-      }
+      this.parseDescription(desc);
     });
-
-    // supportService.getAll().subscribe((pages: SupportPage[]) => {
-    //   this.sortPagesByCategory(pages);
-    //   // console.log(`Retrieved ${pages.length} support page${pages.length ? '' : 's'}`);
-    //   console.log('SUPPORT PAGES', pages);
-    // },
-    //   err => {
-    //     console.error(err);
-    //   });
   }
 
-  public sortPagesByCategory(pages: SupportPage[]) {
-    pages.map(page => {
-      const category = page.category || 'Other';
-      if (this.supportCategories.hasOwnProperty(category)) {
-        this.supportCategories[category].pages.push(page);
-      } else {
-        this.supportCategories[category] = new SupportCategory(category, [page]);
+  public onSearch() {
+    this.router.navigateByUrl(`/support/search?q=${this.query || ''}`);
+  }
+
+  public parseDescription(desc: any) {
+    if (desc && desc.category && desc.category.picklistValues) {
+      let categories: string[] = [];
+      for (const value of desc.category.picklistValues) {
+        if (value.active && value.label) {
+          categories.push(value.label);
+        }
       }
-    });
+      categories = categories.sort();
+      this.categories = ['All'].concat(categories);
+    }
   }
 
 }

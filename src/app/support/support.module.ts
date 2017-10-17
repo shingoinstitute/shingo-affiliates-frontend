@@ -10,15 +10,27 @@ import { SupportRoutingModule } from './support-routing.module';
 
 import {
   MdButtonModule,
-  MdCardModule
+  MdCardModule,
+  MdFormFieldModule,
+  MdInputModule,
+  MdIconModule,
+  MdProgressSpinnerModule,
+  MdListModule
 } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     SupportRoutingModule,
     MdButtonModule,
-    MdCardModule
+    MdCardModule,
+    MdFormFieldModule,
+    MdInputModule,
+    FormsModule,
+    MdIconModule,
+    MdProgressSpinnerModule,
+    MdListModule
   ],
   declarations: [
     SupportHomeComponent,

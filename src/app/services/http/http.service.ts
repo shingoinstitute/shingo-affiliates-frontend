@@ -17,7 +17,6 @@ export class HttpService {
 
   public get _defaultReqOpts() {
     return {
-      // headers: new HttpHeaders().set('x-jwt', this.jwt || '').set('x-force-refresh', 'true') || [],
       headers: new HttpHeaders().set('x-jwt', this.jwt || '') || [],
       withCredentials: true,
       observe: 'body',
