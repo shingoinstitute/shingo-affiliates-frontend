@@ -1,2 +1,8 @@
-<h1 class="mat-title">{{ supportPage.category }} &mdash; {{ supportPage.title }}</h1>
-<div [innerHtml]="supportPage.content"></div>
+
+<div class="support-page-container">
+  <h1 class="mat-title">{{ supportPage.category }} &mdash; {{ supportPage.title }}</h1>
+  <div class="support-page-body">
+    <span [innerHtml]="supportPage.content"></span>
+  </div>
+
+</div>
