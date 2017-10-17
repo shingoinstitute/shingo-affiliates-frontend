@@ -1,5 +1,4 @@
-<h1 class="mat-title">{{ category }}</h1>
+<h1 class="mat-title">{{ category.charAt(0).toUpperCase() + category.substr(1) }}</h1>
 <div *ngFor="let page of supportPages">
-  <h1 class="mat-subheading-2">{{ page.title }}</h1>
-  <span [innerHTML]="page.content"></span>
+  <a routerLink="/support/page/{{page.Id}}">{{ page.title }}</a>
 </div>

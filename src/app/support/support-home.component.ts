@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { SupportService, SupportPage } from '../services/support/support.service';
+import { SupportService } from '../services/support/support.service';
+import { SupportPage } from '../services/support/support.model';
 import { SupportCategory } from './support-category/support-category.model';
 
 @Component({
@@ -16,19 +17,21 @@ export class SupportHomeComponent {
   constructor(public supportService: SupportService) {
 
     supportService.describe().subscribe(desc => {
-      if (desc && Array.isArray(desc.categories)) {
-        this.categories = desc.categories;
+      console.log('got desc: ', desc);
+      if (desc.category.picklistValues) {
+        this.categories = desc.category.picklistValues.map(val => val.value).sort();
+        this.categories = ['All'].concat(this.categories);
       }
     });
 
-    supportService.getAll().subscribe((pages: SupportPage[]) => {
-      this.sortPagesByCategory(pages);
-      // console.log(`Retrieved ${pages.length} support page${pages.length ? '' : 's'}`);
-      console.log('SUPPORT PAGES', pages);
-    },
-    err => {
-      console.error(err);
-    });
+    // supportService.getAll().subscribe((pages: SupportPage[]) => {
+    //   this.sortPagesByCategory(pages);
+    //   // console.log(`Retrieved ${pages.length} support page${pages.length ? '' : 's'}`);
+    //   console.log('SUPPORT PAGES', pages);
+    // },
+    //   err => {
+    //     console.error(err);
+    //   });
   }
 
   public sortPagesByCategory(pages: SupportPage[]) {

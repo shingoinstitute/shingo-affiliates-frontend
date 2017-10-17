@@ -1,11 +1,11 @@
-import { SupportPage } from '../../services/support/support.service';
+import { SupportPage } from '../../services/support/support.model';
 
 export class SupportCategory {
   public category: string = '';
 
   public pages: SupportPage[] = [];
 
-  public get iconUrl(): string { return this.pages && this.pages[0] && this.pages[0].categoryIcon ? this.pages[0].categoryIcon : ''; }
+  public get iconUrl(): string { return this.pages && this.pages[0] && ''; }
 
   constructor(category: string, pages: SupportPage[] = []) {
     this.category = category;

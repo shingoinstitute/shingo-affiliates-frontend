@@ -16,16 +16,13 @@
         <h1 class="mat-headline">What Category Do You Need Help With?</h1>
       </div>
       <div class="support-categories-body">
-        <md-card class="support-category-card" *ngFor="let category of supportCategoryProps" routerLink="/support/category/{{ category }}">
-          <p class="mat-subheading-2">{{ category }}</p>
-          <div class="category-icon">
-            <img src="{{ supportCategories[category].getIconByCategory() }}">
-          </div>
-        </md-card>
+        <p *ngFor="let category of categories">
+          <a routerLink="/support/category/{{ category.toLowerCase() }}">{{ category }}</a>
+        </p>
       </div>
-    </div><!-- END Support Categories -->
+    </div>
+    <!-- END Support Categories -->
 
-    
   </div>
 
 </div>

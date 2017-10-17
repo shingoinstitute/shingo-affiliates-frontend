@@ -24,47 +24,11 @@
     }
 
     .support-categories-body {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      display: block;
       justify-content: center;
-  
-      .support-category-card {
-        margin: $default-margin * 2;
-        width: calc((#{$break-x-small} / 2) - ((#{$default-margin} * 2) * 2));
-        height: calc((#{$break-x-small} / 2) - ((#{$default-margin} * 2) * 2));
-        display: flex;
-        flex-direction: column;
-        cursor: pointer;
-
-        p {
-          text-align: center;
-        }
-
-        .category-icon {
-          height: 100%;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          
-          img {
-            max-height: 100%;
-            max-width: 100%;
-            width: auto;
-            height: auto;
-          }
-        }
-
-
-      }
     }
 
   }
-
-  
-
 }
 
 @media only screen and (min-width: #{$max-content-width}) {
