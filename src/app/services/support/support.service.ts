@@ -63,11 +63,11 @@ export class SupportService extends BaseAPIService {
   }
 
   public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS): Observable<any[]> {
-    // Set headers (NOTE: Must include token here)
+    // Set headers (NOTE: Must include token here if it exists)
     let headers = new HttpHeaders().set('x-search', query);
     headers = headers.set('x-retrieve', fields.join());
-    if (this.http.jwt !== '') headers = headers.set('x-jwt', this.http.jwt);
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: this.http.jwt !== '' })
+    if (this.http.jwt !== null) headers = headers.set('x-jwt', this.http.jwt);
+    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }
