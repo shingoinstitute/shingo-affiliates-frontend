@@ -43,7 +43,8 @@ import {
   MatToolbarModule,
   MatListModule,
   MatIconModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatExpansionModule
 } from '@angular/material';
 
 @NgModule({
@@ -61,6 +62,7 @@ import {
     MatListModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
 
     HttpModule,
     HttpClientModule,

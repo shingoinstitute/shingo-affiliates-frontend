@@ -72,4 +72,21 @@ export class SupportService extends BaseAPIService {
       .catch(this.handleError);
   }
 
+  public getCategories(): Observable<any> {
+    return this.describe()
+      .map(desc => {
+        const categories: string[] = [];
+        if (desc && desc.category && desc.category.picklistValues) {
+          for (const value of desc.category.picklistValues) {
+            if (value.active && value.label) {
+              categories.push(value.label);
+            }
+          }
+          return categories.sort();
+        }
+        return categories;
+      })
+      .catch(this.handleError);
+  }
+
 }

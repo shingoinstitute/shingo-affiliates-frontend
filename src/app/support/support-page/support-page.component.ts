@@ -14,7 +14,9 @@ export class SupportPageComponent {
   @Input() public supportPage: SupportPage = new SupportPage();
 
   constructor(private route: ActivatedRoute, private _ss: SupportService) {
-    const id = this.route.snapshot.params['id'];
-    this._ss.getById(id).subscribe(page => this.supportPage = page);
+    route.params.subscribe(params => {
+      if (params.id)
+        this._ss.getById(params.id).subscribe(page => this.supportPage = page);
+    });
   }
 }
