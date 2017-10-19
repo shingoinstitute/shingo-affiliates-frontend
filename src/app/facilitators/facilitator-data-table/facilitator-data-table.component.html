@@ -1,108 +1,116 @@
 <div class="card">
-   <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
-   <!-- <md-table #table [dataSource]="dataSource" [disableClear]="true" mdSort> -->
-    <md-table #table [dataSource]="dataSource" mdSort [mdSortDisableClear]="true">
-      <!-- Name Column -->
-      <ng-container mdColumnDef="name">
-         <md-header-cell *mdHeaderCellDef md-sort-header> Facilitator </md-header-cell>
-         <md-cell *mdCellDef="let fac">
-   
-            <span [class.hidden]="selectedId == fac.sfId"> 
-              <p class="margin-none"> {{ fac.name }}  </p>
-              <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
-            </span>
-   
-            <md-form-field [class.hidden]="selectedId != fac.sfId">
-               <input mdInput class="fac-input" [(ngModel)]="fac.name">
-            </md-form-field>
-   
-         </md-cell>
-      </ng-container>
-   
-      <!-- Email Column -->
-      <ng-container mdColumnDef="email">
-         <md-header-cell *mdHeaderCellDef md-sort-header> Email </md-header-cell>
-         <md-cell *mdCellDef="let fac">
-   
-            <span [class.hidden]="selectedId == fac.sfId">{{ fac.email }}</span>
-   
-            <md-form-field [class.hidden]="selectedId != fac.sfId">
-               <input mdInput class="fac-input" [(ngModel)]="fac.email">
-            </md-form-field>
-   
-         </md-cell>
-      </ng-container>
-   
-      <!-- Affiliate Column -->
-      <ng-container mdColumnDef="organization">
-         <md-header-cell *mdHeaderCellDef md-sort-header> Affiliate </md-header-cell>
-         <md-cell *mdCellDef="let fac"> {{ fac.affiliate.name }} </md-cell>
-      </ng-container>
-   
-      <!-- Role Column -->
-      <ng-container mdColumnDef="role">
-        <md-header-cell *mdHeaderCellDef md-sort-header> Role </md-header-cell>
-        <md-cell *mdCellDef="let fac">
-           <span [class.hidden]="selectedId == fac.sfId"> {{ fac.role }} </span> 
+  <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
+  <!-- <md-table #table [dataSource]="dataSource" [disableClear]="true" mdSort> -->
+  <md-table #table [dataSource]="dataSource" mdSort [mdSortDisableClear]="true">
+    <!-- Name Column -->
+    <ng-container mdColumnDef="name">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Facilitator </md-header-cell>
+      <md-cell *mdCellDef="let fac">
 
-          <md-select [class.hidden]="selectedId != fac.sfId" [(ngModel)]="fac.role">
-            <md-option *ngFor="let role of roles" [value]="role"> {{ role }}</md-option>
-          </md-select>
+        <span [class.hidden]="selectedId == fac.sfId">
+          <p class="margin-none"> {{ fac.name }} </p>
+          <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
+        </span>
 
-        </md-cell>
-      </ng-container>
+        <md-form-field [class.hidden]="selectedId != fac.sfId">
+          <input mdInput class="fac-input" [(ngModel)]="fac.name">
+        </md-form-field>
 
-      <!-- Actions -->
-      <ng-container mdColumnDef="actions">
-         <md-header-cell *mdHeaderCellDef [style.align-items]="'center'">
-            <span> Actions </span>
-            <span fxFlex></span>
-            <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
-         </md-header-cell>
-         <md-cell *mdCellDef="let fac" fxLayout fxLayoutGap="2px">
-           <!-- Action Buttons -->
-            <ng-container *ngIf="selectedId != fac.sfId">
-              <button md-mini-fab (click)="selectedId = fac.sfId">
-                <md-icon class="icon-sm" svgIcon="edit_mode_white"></md-icon>
-              </button>
+      </md-cell>
+    </ng-container>
 
-              <a md-mini-fab routerLink="/admin/facilitators/form/{{ fac.sfId }}">
-                <md-icon class="icon-sm" svgIcon="description_white"></md-icon>
-              </a>
-               
-              <button md-mini-fab color="primary" (click)="onReset.emit(fac)">
-                <md-icon class="icon-sm" svgIcon="renew_white"></md-icon>
-              </button>
+    <!-- Email Column -->
+    <ng-container mdColumnDef="email">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Email </md-header-cell>
+      <md-cell *mdCellDef="let fac">
 
-              <button md-mini-fab color="primary" (click)="onDisable.emit(fac)">
-                <md-icon class="icon-sm" svgIcon="block_white"></md-icon>
-              </button>
+        <span [class.hidden]="selectedId == fac.sfId">{{ fac.email }}</span>
 
-              <button md-mini-fab color="primary" (click)="onDelete.emit(fac)">
-                  <md-icon class="icon-sm" svgIcon="delete_white"></md-icon>
-              </button>
-            </ng-container>
+        <md-form-field [class.hidden]="selectedId != fac.sfId">
+          <input mdInput class="fac-input" [(ngModel)]="fac.email">
+        </md-form-field>
 
-            <!-- Edit Row Actions -->
-            <ng-container *ngIf="selectedId == fac.sfId">
-              <button md-mini-fab color="primary" (click)="selectedId = ''">
-                 <md-icon svgIcon="cancel_white"></md-icon>
-              </button>
+      </md-cell>
+    </ng-container>
 
-              <button md-mini-fab (click)="onSave.emit(fac)">
-                 <md-icon svgIcon="save_white"></md-icon>
-              </button>
-            </ng-container>
-         </md-cell>
-      </ng-container>
-   
-      <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-      <md-row *mdRowDef="let fac; columns: displayedColumns;"></md-row>
-   </md-table>
-   
-    <div class="spinner-container" *ngIf="isLoading">
-      <md-spinner class="mat-accent"></md-spinner>
-    </div>
+    <!-- Affiliate Column -->
+    <ng-container mdColumnDef="organization">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Affiliate </md-header-cell>
+      <md-cell *mdCellDef="let fac"> {{ fac.affiliate.name }} </md-cell>
+    </ng-container>
 
-   <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
+    <!-- Role Column -->
+    <ng-container mdColumnDef="role">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Role </md-header-cell>
+      <md-cell *mdCellDef="let fac">
+        <span [class.hidden]="selectedId == fac.sfId"> {{ fac.role }} </span>
+
+        <md-select [class.hidden]="selectedId != fac.sfId" [(ngModel)]="fac.role">
+          <md-option *ngFor="let role of roles" [value]="role"> {{ role }}</md-option>
+        </md-select>
+
+      </md-cell>
+    </ng-container>
+
+    <!-- Last Login Column -->
+    <ng-container mdColumnDef="lastLogin">
+      <md-header-cell *mdHeaderCellDef md-sort-header> Last Login </md-header-cell>
+      <md-cell *mdCellDef="let fac">{{ fac.lastLogin }}</md-cell>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container mdColumnDef="actions">
+      <md-header-cell *mdHeaderCellDef [style.align-items]="'center'">
+        <span> Actions </span>
+        <span fxFlex></span>
+        <button class="refresh-button" md-icon-button (click)="refresh()">
+          <md-icon svgIcon="refresh_grey"></md-icon>
+        </button>
+      </md-header-cell>
+      <md-cell *mdCellDef="let fac" fxLayout fxLayoutGap="2px">
+        <!-- Action Buttons -->
+        <ng-container *ngIf="selectedId != fac.sfId">
+          <button md-mini-fab (click)="selectedId = fac.sfId">
+            <md-icon class="icon-sm" svgIcon="edit_mode_white"></md-icon>
+          </button>
+
+          <a md-mini-fab routerLink="/admin/facilitators/form/{{ fac.sfId }}">
+            <md-icon class="icon-sm" svgIcon="description_white"></md-icon>
+          </a>
+
+          <button md-mini-fab color="primary" (click)="onReset.emit(fac)">
+            <md-icon class="icon-sm" svgIcon="renew_white"></md-icon>
+          </button>
+
+          <button md-mini-fab color="primary" (click)="onDisable.emit(fac)">
+            <md-icon class="icon-sm" svgIcon="block_white"></md-icon>
+          </button>
+
+          <button md-mini-fab color="primary" (click)="onDelete.emit(fac)">
+            <md-icon class="icon-sm" svgIcon="delete_white"></md-icon>
+          </button>
+        </ng-container>
+
+        <!-- Edit Row Actions -->
+        <ng-container *ngIf="selectedId == fac.sfId">
+          <button md-mini-fab color="primary" (click)="selectedId = ''">
+            <md-icon svgIcon="cancel_white"></md-icon>
+          </button>
+
+          <button md-mini-fab (click)="onSave.emit(fac)">
+            <md-icon svgIcon="save_white"></md-icon>
+          </button>
+        </ng-container>
+      </md-cell>
+    </ng-container>
+
+    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
+    <md-row *mdRowDef="let fac; columns: displayedColumns;"></md-row>
+  </md-table>
+
+  <div class="spinner-container" *ngIf="isLoading">
+    <md-spinner class="mat-accent"></md-spinner>
+  </div>
+
+  <md-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
 </div>

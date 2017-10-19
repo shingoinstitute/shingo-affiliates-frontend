@@ -1,3 +1,4 @@
+import * as dateFormat from 'dateformat';
 
 import { Affiliate } from '../affiliates/affiliate.model';
 import { SFObject } from '../shared/models/sf-object.abstract.model';
@@ -70,6 +71,11 @@ export class Facilitator extends SFObject {
 
   public get id() { return this._id; }
 
+  public get lastLogin() {
+    if (this._lastLogin === '') return null;
+    return dateFormat(new Date(this._lastLogin), 'dd mmm, yyyy @ hh:mm:ss');
+  }
+
   // SF Properties
   /* tslint:disable:variable-name */
   public Id: string = '';
@@ -86,13 +92,16 @@ export class Facilitator extends SFObject {
   // Auth Properties
   public _id: number;
   public _role: { name: string } = { name: 'Facilitator' };
+  public _lastLogin: string;
 
   constructor(facilitator?: any) {
     super();
     if (facilitator) {
       facilitator.Account = new Affiliate(facilitator.Account);
       facilitator._id = facilitator.id;
+      facilitator._lastLogin = facilitator.lastLogin;
       delete facilitator.id;
+      delete facilitator.lastLogin;
       return Object.assign(this, facilitator);
     }
   }
