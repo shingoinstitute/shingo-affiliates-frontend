@@ -111,7 +111,7 @@ export class WorkshopService extends BaseAPIService {
   }
 
   public cancel(workshop: Workshop, reason: string): Observable<any> {
-    return this.http.post(this.baseUrl + `/${workshop.sfId}/cancel`, { reason })
+    return this.http.put(this.baseUrl + `/${workshop.sfId}/cancel`, { reason })
       .catch(this.handleError);
   }
 
