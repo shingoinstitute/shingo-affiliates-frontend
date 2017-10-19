@@ -24,7 +24,7 @@ export class FacilitatorDataTableComponent implements OnInit {
   @Output() public onReset = new EventEmitter<Facilitator>();
   @Output() public onSave = new EventEmitter<Facilitator>();
 
-  @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'actions'];
+  @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'lastLogin', 'actions'];
   @Input('dataSource') public dataSource: FacilitatorDataSource | null;
 
   @ViewChild(MdPaginator) public paginator: MdPaginator;
