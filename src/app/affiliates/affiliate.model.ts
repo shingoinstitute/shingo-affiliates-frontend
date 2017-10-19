@@ -29,7 +29,7 @@ export class Affiliate extends SFObject {
   public get logo() { return this.Logo__c; }
   public set logo(logo: string) { this.Logo__c = logo; }
 
-  public get pagePath() { return `${this.Page_Path__c}/${this.sfId}`; }
+  public get pagePath() { return `/affiliates/${this.sfId}`; }
 
   public get website() { return this.Website; }
   public set website(site: string) { this.Website = site; }
