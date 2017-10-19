@@ -20,7 +20,8 @@ export class UpcomingWorkshopsComponent {
       'endDate',
       'location',
       'instructors',
-      'verified'
+      'verified',
+      'actions'
     ];
     const upcomingFilter = filterFactory.createDateRangeFilter();
 

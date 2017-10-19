@@ -39,3 +39,27 @@ div.spinner-container md-spinner {
   top: calc(50% - 64px);
   left: -150px;
 }
+.nav-list-title {
+  color: white;
+  padding: $default-margin 0 $default-margin ($default-margin * 3);
+  margin: 0 -8px 0 -8px;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  background-color: $primary-color-lighten-1;
+}
+.panel-title {
+  font-size: 16px;
+}
+.nav-support-list-item:last-child {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+.nav-support-list-item {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+  a {
+    color: $link-color;
+  }
+}
+.nav-support-category {
+  box-shadow: none;
+}

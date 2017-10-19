@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class LoggerInterceptor implements HttpInterceptor {
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('DEBUG[http-intercept]: ', req);
+    // console.log('DEBUG[http-intercept]: ', req);
     return next.handle(req);
   }
 }

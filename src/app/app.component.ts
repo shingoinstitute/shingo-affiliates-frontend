@@ -19,6 +19,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 // RxJS operators
 import 'rxjs/add/operator/distinctUntilChanged';
+import { SupportService } from './services/support/support.service';
+import { SupportPage } from './services/support/support.model';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +28,9 @@ import 'rxjs/add/operator/distinctUntilChanged';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy {
+
+  public supportCategories: string[] = [];
+  public supportCategoryPages: { [key: string]: SupportPage[] } = {};
 
   public _sidenav: MdSidenav;
   @ViewChild('sidenav') public set sidenav(s: MdSidenav) {
@@ -45,6 +50,7 @@ export class AppComponent implements OnDestroy {
     public ws: WorkshopService,
     public sidenavService: SidenavService,
     public routerService: RouterService,
+    public supportService: SupportService,
     public dialog: MdDialog) {
 
     this.initIconRegistry();
@@ -57,7 +63,7 @@ export class AppComponent implements OnDestroy {
         this.activeRoute = route.url;
 
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login') {
+        if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login' && !this.activeRoute.match(/.*support.*/gi)) {
           this.authenticateOnLoad();
         }
       }
@@ -70,6 +76,8 @@ export class AppComponent implements OnDestroy {
         this.isLoading = false;
       }
     });
+
+    this.getSupportCategories();
   }
 
   public ngOnDestroy() {
@@ -174,5 +182,26 @@ export class AppComponent implements OnDestroy {
     this.iconRegistry.addSvgIcon('link', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_link_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('insert_drive_file', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_insert_drive_file_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('menu_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_menu_white_18px.svg'));
+  }
+
+  public getSupportCategories() {
+    this.supportService
+      .getCategories()
+      .subscribe(categories => {
+        for (const c of categories) {
+          this.getSupportCategoryPages(c);
+        }
+      });
+  }
+
+  public getSupportCategoryPages(category: string) {
+    this.supportService
+      .getCategory(category)
+      .subscribe(pages => {
+        if (pages.length) {
+          this.supportCategories.push(category);
+          this.supportCategoryPages[category] = pages;
+        }
+      }, err => console.error(err));
   }
 }

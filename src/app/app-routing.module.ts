@@ -8,14 +8,13 @@ import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.c
 import { WorkshopDashboardComponent } from './workshops/workshop-dashboard/workshop-dashboard.component';
 import { ProfileComponent } from './ui-components/user-auth/profile/profile.component';
 import { LoginComponent } from './ui-components/user-auth/login/login.component';
-import { SupportComponent } from './ui-components/support/support.component';
-import { SupportTrainingComponent } from './ui-components/support/support-training/support-training.component';
 import { AdminPanelComponent } from './ui-components/admin-panel/admin-panel.component';
 import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component';
 import { PasswordResetComponent } from './ui-components/user-auth/password-reset/password-reset.component';
 import { ForgotPasswordComponent } from './ui-components/user-auth/forgot-password/forgot-password.component';
 import { ForbiddenPageComponent } from './ui-components/forbidden-page/forbidden-page.component';
 import { PageNotFoundComponent } from './ui-components/page-not-found/page-not-found.component';
+import { SupportHomeComponent } from './support/support-home.component';
 
 
 /** Shared Module Components */
@@ -35,12 +34,13 @@ const appRoutes: Routes = [
   { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
   { path: 'profile', component: ProfileComponent, resolve: { user: UserResolver } },
   { path: 'login', component: LoginComponent },
-  { path: 'support', component: SupportComponent },
-  { path: 'support/training', component: SupportTrainingComponent },
-  { path: 'support/training/:video', component: SupportTrainingComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'resetpassword', component: PasswordResetComponent },
   { path: '403', component: ForbiddenPageComponent },
+  { 
+    path: 'support', 
+    loadChildren: 'app/support/support.module#SupportModule'
+  },
   {
     path: 'admin',
     loadChildren: 'app/ui-components/admin-panel/admin-panel.module#AdminPanelModule'

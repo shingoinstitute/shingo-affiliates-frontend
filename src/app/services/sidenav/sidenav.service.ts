@@ -36,7 +36,7 @@ export class SidenavService {
   public get isAuth() { return this._isAuth; }
   public set isAuth(auth: boolean) {
     this._isAuth = auth;
-    if (auth && this.sidenav && !this.isMobile) {
+    if (this.sidenav && !this.isMobile) {
       this._sidenav.open();
     } else if (this.sidenav) {
       this._sidenav.close();
@@ -47,7 +47,7 @@ export class SidenavService {
     return this.isAuth && !this.isMobile;
   }
 
-  public get canToggle() { return this.sidenav && this.isAuth && this.isMobile; }
+  public get canToggle() { return this.sidenav && this.isMobile; }
 
   constructor(public _as: AuthService, public router: Router) {
     this._as.authenticationChange$.subscribe((isAuth: boolean) => {

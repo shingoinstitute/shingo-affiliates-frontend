@@ -20,6 +20,9 @@ import { AffiliatesModule } from './affiliates/affiliates.module';
 /** Workshops */
 import { WorkshopsModule } from './workshops/workshops.module';
 
+/** Support */
+import { SupportModule } from './support/support.module';
+
 /** Interface Components */
 import { UIComponentsModule } from './ui-components/ui-components.module';
 
@@ -40,7 +43,8 @@ import {
   MatToolbarModule,
   MatListModule,
   MatIconModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule,
+  MatExpansionModule
 } from '@angular/material';
 
 @NgModule({
@@ -58,6 +62,7 @@ import {
     MatListModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatExpansionModule,
 
     HttpModule,
     HttpClientModule,
@@ -69,7 +74,8 @@ import {
     AffiliatesModule,
     FacilitatorsModule,
     WorkshopsModule,
-    UIComponentsModule
+    UIComponentsModule,
+    SupportModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

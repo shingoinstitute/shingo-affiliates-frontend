@@ -1,0 +1,52 @@
+@import '../../../assets/sass/_globals';
+
+.support-search-container {
+  margin: $default-margin;
+  display: flex;
+  flex-direction: column;
+
+  form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    md-form-field {
+      width: 100%;
+      max-width: $break-small;
+    }
+  }
+
+  .support-search-spinner-wrapper {
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    md-spinner {
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  .support-search-body {
+    align-self: center;
+    max-width: $break-small;
+    width: 100%;
+    margin: $default-margin;
+    display: flex;
+    flex-direction: column;
+
+    ul.search-result-list{
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      li.search-result-item {
+        margin-bottom: $default-margin * 6;
+
+        p {
+          margin: 8px 0;
+        }
+      }
+    }
+  }
+}
