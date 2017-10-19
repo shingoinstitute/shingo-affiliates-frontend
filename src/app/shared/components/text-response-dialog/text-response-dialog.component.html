@@ -1,0 +1,11 @@
+<h2 md-dialog-title>{{ title }}</h2>
+<md-dialog-content>
+  <div [innerHTML]="message"></div>
+  <md-form-field [style.width]="'100%'">
+    <textarea mdInput tabindex="1" [(ngModel)]="reason" required rows="7"></textarea>
+  </md-form-field>
+</md-dialog-content>
+<md-dialog-actions>
+  <button md-button class="mat-accent" [md-dialog-close]="reason">{{ acceptText }}</button>
+  <button md-button [md-dialog-close]="undefined">{{ cancelText }}</button>
+</md-dialog-actions>
