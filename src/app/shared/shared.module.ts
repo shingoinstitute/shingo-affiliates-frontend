@@ -8,12 +8,13 @@ import { SimpleMessageDialog } from './components/simple-message-dialog/simple-m
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
 import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
+import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component';
 
 // Material Design imports
-import { 
-  MatDialogModule, 
-  MatAutocompleteModule, 
-  MatOptionModule ,
+import {
+  MatDialogModule,
+  MatAutocompleteModule,
+  MatOptionModule,
   MatProgressSpinnerModule,
   MatButtonModule,
   MatIconModule,
@@ -41,7 +42,8 @@ import {
     AlertDialogComponent,
     IconLegendComponent,
     SimpleMessageDialog,
-    SfLookupComponent
+    SfLookupComponent,
+    TextResponseDialogComponent
   ],
   exports: [
     // MdDialogModule,
@@ -49,11 +51,13 @@ import {
     AlertDialogComponent,
     IconLegendComponent,
     SimpleMessageDialog,
-    SfLookupComponent
+    SfLookupComponent,
+    TextResponseDialogComponent
   ],
   entryComponents: [
     AlertDialogComponent,
-    SimpleMessageDialog
+    SimpleMessageDialog,
+    TextResponseDialogComponent
   ]
 })
 export class SharedModule {

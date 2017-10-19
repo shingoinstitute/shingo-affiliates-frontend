@@ -5,7 +5,13 @@
       <div fxLayout="column">
         <b class="mat-subheading">{{workshop.type}} ( {{workshop.isPublic ? 'Public' : 'public'}} ) &mdash; {{workshop.location}}</b>
         <p>Status:&emsp;{{workshop.status}}</p>
-        <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" md-raised-button class="mat-accent"> Edit &ensp;<md-icon svgIcon="edit_white"></md-icon></button>
+        <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" md-raised-button class="mat-accent"> Edit &ensp;
+          <md-icon svgIcon="edit_white"></md-icon>
+        </button>
+        <br>
+        <button *ngIf="canCancel()" [style.height]="'fit-content'" (click)="cancel()" md-raised-button class="mat-warn"> Cancel &ensp;
+          <md-icon svgIcon="cancel_white"></md-icon>
+        </button>
       </div>
     </div>
     <br>

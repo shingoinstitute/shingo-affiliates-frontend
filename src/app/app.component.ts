@@ -63,9 +63,9 @@ export class AppComponent implements OnDestroy {
         this.activeRoute = route.url;
 
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        // if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login' && !this.activeRoute.match(/.*support.*/gi)) {
-        // }
-        this.authenticateOnLoad();
+        if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login' && !this.activeRoute.match(/.*support.*/gi)) {
+          this.authenticateOnLoad();
+        }
       }
     });
 
