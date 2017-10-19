@@ -11,6 +11,10 @@ import { AffiliateFormState, State } from './affiliate-form-state.class';
 import { Subscription } from 'rxjs/Rx';
 import { CustomValidators } from 'ng2-validation';
 
+
+// Lodash functions
+import { merge } from 'lodash';
+
 declare var $: any;
 
 @Component({
@@ -139,6 +143,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
 
   public onSave() {
     this.snackbar.open('Saving Changes...');
+    merge(this.affiliate, this.affForm.value);
     switch (this.state.state) {
       case State.Creating: this.create(); break;
       case State.Mapping: this.map(); break;

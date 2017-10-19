@@ -31,7 +31,10 @@ import {
   MatButtonModule,
   MatIconModule,
   MatTabsModule,
-  MatInputModule
+  MatInputModule,
+  MatToolbarModule,
+  MatDialogModule,
+  MatCardModule
 } from '@angular/material';
 
 @NgModule({
@@ -48,6 +51,9 @@ import {
     MatIconModule,
     MatTabsModule,
     MatInputModule,
+    MatToolbarModule,
+    MatDialogModule,
+    MatCardModule,
 
     FlexLayoutModule,
     WorkshopsModule,
