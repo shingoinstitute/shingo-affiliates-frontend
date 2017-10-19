@@ -12,7 +12,7 @@ export class SidenavService {
   public get sidenav() { return this._sidenav; }
   public set sidenav(s: MdSidenav) { 
     this._sidenav = s; 
-    if (this.isAuth && !this._isMobile && this._sidenav) {
+    if (!this._isMobile && this._sidenav) {
       this._sidenav.open();
     } else if (this._sidenav) {
       this._sidenav.close();
@@ -44,7 +44,7 @@ export class SidenavService {
   }
 
   public get opened(): boolean {
-    return this.isAuth && !this.isMobile;
+    return !this.isMobile;
   }
 
   public get canToggle() { return this.sidenav && this.isMobile; }
@@ -77,7 +77,7 @@ export class SidenavService {
   // Allow sidenav to open when the viewport width < 960px AND if the user is authenticated.
   // The sidenav should remain open if the user is authenticated and the viewport width is <= 960px.
   public open() {
-    if (this.sidenav && this.isAuth && this.isMobile) {
+    if (this.sidenav && this.isMobile) {
       return this.sidenav.open();
     }
   }
