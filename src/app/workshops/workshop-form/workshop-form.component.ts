@@ -176,7 +176,7 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   public getAffiliate(): string {
-    if (this.workshopForm.value.affiliate.sfId) return this.workshopForm.value.affiliate.sfId;
+    if (this.workshopForm.value.affiliate.sfObject) return this.workshopForm.value.affiliate.sfObject.sfId;
     else return this.auth.user.affiliate;
   }
 
