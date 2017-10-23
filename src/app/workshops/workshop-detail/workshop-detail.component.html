@@ -16,7 +16,7 @@
           <h2 class="roboto">Drop Attendee List Here</h2>
         </div>
 
-        <md-progress-bar *ngIf="uploadAttendeeProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadAttendeeProgress"></md-progress-bar>
+        <mat-progress-bar *ngIf="uploadAttendeeProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadAttendeeProgress"></mat-progress-bar>
 
         <div class="files">
           <div class="file" *ngIf="attendeeFile">
@@ -38,7 +38,7 @@
           <h2 class="roboto ">Drop Evaluations Here</h2>
         </div>
 
-        <md-progress-bar *ngIf="uploadEvalutationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvalutationsProgress"></md-progress-bar>
+        <mat-progress-bar *ngIf="uploadEvalutationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvalutationsProgress"></mat-progress-bar>
 
         <div class="files " fxLayout="row " fxLayoutGap="8px">
           <div class="file " *ngFor="let file of evaluations ">
@@ -54,6 +54,6 @@
 
     </div>
 
-    <button *ngIf="showAttendeeUpload || showEvalUpload" md-raised-button class="mat-primary " (click)="upload() " [disabled]="!attendeeFile && !evaluations.length ">Upload Files</button>
+    <button *ngIf="showAttendeeUpload || showEvalUpload" mat-raised-button class="mat-primary " (click)="upload() " [disabled]="!attendeeFile && !evaluations.length ">Upload Files</button>
   </div>
 </div>

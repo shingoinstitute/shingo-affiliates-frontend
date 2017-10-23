@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 
 import { AuthService } from '../../../services/auth/auth.service';
 
@@ -16,7 +16,7 @@ export class ChangePasswordDialog {
   public confirmPassword: string;
   public isLoading: boolean = false;
 
-  constructor(public dialogRef: MdDialogRef<ChangePasswordDialog>, public auth: AuthService) { }
+  constructor(public dialogRef: MatDialogRef<ChangePasswordDialog>, public auth: AuthService) { }
 
   public onSubmit() {
     if (this.newPassword !== this.confirmPassword) return;

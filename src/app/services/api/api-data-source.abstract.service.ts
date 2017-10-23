@@ -1,5 +1,5 @@
 import { DataSource } from '@angular/cdk/table';
-import { MdPaginator, MdSort } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 
 import { BaseAPIService } from './base-api.abstract.service';
 import { SFObject } from '../../shared/models/sf-object.abstract.model';
@@ -19,8 +19,8 @@ export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject
 
   constructor(
     public _dp: DataProvider<S, T>,
-    public paginator?: MdPaginator,
-    public sort?: MdSort
+    public paginator?: MatPaginator,
+    public sort?: MatSort
   ) { super(); }
 
   public connect(): Observable<T[]> {
@@ -28,9 +28,9 @@ export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject
     const dataChanges = changes.map(change => {
       if (change instanceof DataProvider || change instanceof Filter) {
         return change.dataChange;
-      } else if (change instanceof MdPaginator) {
+      } else if (change instanceof MatPaginator) {
         return change.page;
-      } else if (change instanceof MdSort) {
+      } else if (change instanceof MatSort) {
         return change.sortChange;
       }
     });

@@ -1,35 +1,35 @@
 <!-- All folders and files that deal with forms go here -->
-<md-card style="overflow-y: scroll;" class="md-whiteframe-3dp">
-  <md-card-title>
+<mat-card style="overflow-y: scroll;" class="md-whiteframe-3dp">
+  <mat-card-title>
 
     <span class="md-headline">Forms</span>
 
-  </md-card-title>
-  <md-card-content>
+  </mat-card-title>
+  <mat-card-content>
     <div fxLayout="column" fxLayoutGap="8px">
-      <div><span class="clickable" (click)="folder['Evaluation']=!folder['Evaluation']"><md-icon svgIcon="folder" aria-label="Open Instructor Evaluation Folder"></md-icon> <b>Instructor Evaluation</b> </span>
+      <div><span class="clickable" (click)="folder['Evaluation']=!folder['Evaluation']"><mat-icon svgIcon="folder" aria-label="Open Instructor Evaluation Folder"></mat-icon> <b>Instructor Evaluation</b> </span>
         <a class="mat-primary" target="_blank" href="https://usu.app.box.com/files/0/f/8549280365/Instructor_Evaluations">
-          <md-icon svgIcon="link"></md-icon>
+          <mat-icon svgIcon="link"></mat-icon>
         </a>
       </div>
       <ul *ngIf="folder['Evaluation']" class="no-bullets">
         <li>
           <a class="mat-primary" target="_blank" href="https://usu.co1.qualtrics.com/jfe/form/SV_3z2ZVhBmLFVsXdj">
-            <md-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (Online)"></md-icon> Online</a>
+            <mat-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (Online)"></mat-icon> Online</a>
         </li>
         <li>
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/hqg8su339i5cvuqnnov6z2xt0jyb7o8r">
-            <md-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (English)"></md-icon> English</a>
+            <mat-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (English)"></mat-icon> English</a>
         </li>
         <li>
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/y0mcnq3sw5lr7j6xun2g7jh998e88j3n">
-            <md-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (Espanol)"></md-icon> Español</a>
+            <mat-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (Espanol)"></mat-icon> Español</a>
         </li>
       </ul>
       <a class="mat-primary" target="_blank" href="https://usu.box.com/s/y2sq8u7um8uz3fyktc2aq15xx9d5yojd">
-        <md-icon svgIcon="insert_drive_file" aria-label="Open Attendance Form"></md-icon> Attendance Form</a>
+        <mat-icon svgIcon="insert_drive_file" aria-label="Open Attendance Form"></mat-icon> Attendance Form</a>
       <a class="mat-primary" target="_blank" href="https://usu.box.com/s/99cio2jdoqk17hgo6cqm9q6v3j39d3mv">
-        <md-icon svgIcon="insert_drive_file" aria-label="Open Name Sign"></md-icon> Name Sign</a>
+        <mat-icon svgIcon="insert_drive_file" aria-label="Open Name Sign"></mat-icon> Name Sign</a>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

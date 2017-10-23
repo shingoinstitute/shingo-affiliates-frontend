@@ -1,7 +1,7 @@
 // Angular Modules
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 // App Modules
 import { WorkshopService } from '../../services/workshop/workshop.service';
@@ -18,7 +18,7 @@ export class WorkshopComponent {
 
   @Input() public workshop: Workshop;
 
-  constructor(public router: Router, public auth: AuthService, public _ws: WorkshopService, public dialog: MdDialog) { }
+  constructor(public router: Router, public auth: AuthService, public _ws: WorkshopService, public dialog: MatDialog) { }
 
   public canEdit() {
     if (this.auth.user && this.auth.user.isAdmin) return true;

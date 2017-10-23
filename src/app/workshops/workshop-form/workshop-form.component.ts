@@ -2,7 +2,7 @@
 import { Component, ViewChild, ElementRef, QueryList, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn, AbstractControl, ValidationErrors } from '@angular/forms';
-import { MdCheckbox, MdAutocomplete, MdAutocompleteTrigger, MdOption, MdOptionSelectionChange, MdSnackBar } from '@angular/material';
+import { MatCheckbox, MatAutocomplete, MatAutocompleteTrigger, MatOption, MatOptionSelectionChange, MatSnackBar } from '@angular/material';
 
 // App Modules
 import { AuthService } from '../../services/auth/auth.service';
@@ -80,7 +80,7 @@ export class WorkshopFormComponent implements OnInit {
     public _fs: FacilitatorService,
     public _as: AffiliateService,
     public _ws: WorkshopService,
-    public snackbar: MdSnackBar) { }
+    public snackbar: MatSnackBar) { }
 
   public ngOnInit() {
     this.createForm();

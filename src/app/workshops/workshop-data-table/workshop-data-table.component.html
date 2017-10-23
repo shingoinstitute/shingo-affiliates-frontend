@@ -1,169 +1,169 @@
-<md-table #table mdSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [mdSortDisableClear]="true">
+<mat-table #table matSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [matSortDisableClear]="true">
 
   <!-- Workshop Type Column -->
-  <ng-container mdColumnDef="workshopType">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Course Type </md-header-cell>
-    <md-cell *mdCellDef="let workshop" class="course-type">
+  <ng-container matColumnDef="workshopType">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Course Type </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="course-type">
       <ng-container *ngIf="selectedSfId != workshop.sfId">
         <img src="{{ workshop.image }}">
       </ng-container>
       
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <md-select floatPlaceholder="never" placeholder="Course Type" [(ngModel)]="workshop.type">
-          <md-option *ngFor="let type of CourseTypes" [value]="type">{{ type }}</md-option>
-        </md-select>
+        <mat-select floatPlaceholder="never" placeholder="Course Type" [(ngModel)]="workshop.type">
+          <mat-option *ngFor="let type of CourseTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>
       </ng-container>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <!-- Action Type Column -->
-  <ng-container mdColumnDef="actionType">
-    <md-header-cell *mdHeaderCellDef md-sort-header class="action-type-header-cell"> Action Type </md-header-cell>
-    <md-cell *mdCellDef="let workshop" class="action-type-cell"> {{ workshop.status }} </md-cell>
+  <ng-container matColumnDef="actionType">
+    <mat-header-cell *matHeaderCellDef mat-sort-header class="action-type-header-cell"> Action Type </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="action-type-cell"> {{ workshop.status }} </mat-cell>
   </ng-container>
 
   <!-- Location Column -->
-  <ng-container mdColumnDef="location">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Location </md-header-cell>
-    <md-cell *mdCellDef="let workshop">
+  <ng-container matColumnDef="location">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
+    <mat-cell *matCellDef="let workshop">
       <p>{{ workshop.city }}</p>
       <p *ngIf="workshop.country !== ''" [style.font-size]="'12px'">{{ workshop.country }}</p>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <!-- Start Date Column -->
-  <ng-container mdColumnDef="startDate">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Start Date </md-header-cell>
-    <md-cell *mdCellDef="let workshop">
+  <ng-container matColumnDef="startDate">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
+    <mat-cell *matCellDef="let workshop">
       <ng-container *ngIf="selectedSfId != workshop.sfId">
         {{ workshop.startDateFormatted }}
       </ng-container>
 
       <div *ngIf="selectedSfId == workshop.sfId">
-        <md-form-field class="workshop-date-picker-form-field">
-          <input mdInput [mdDatepicker]="startDatePicker" (dateChange)="startDateChange($event, workshop)" [value]="workshop.startDate" [max]="workshop.endDate"> 
-          <md-datepicker-toggle mdSuffix [for]="startDatePicker"></md-datepicker-toggle>
-          <md-datepicker #startDatePicker [startAt]="workshop.startDate"></md-datepicker>
-        </md-form-field>
+        <mat-form-field class="workshop-date-picker-form-field">
+          <input matInput [matDatepicker]="startDatePicker" (dateChange)="startDateChange($event, workshop)" [value]="workshop.startDate" [max]="workshop.endDate"> 
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker [startAt]="workshop.startDate"></mat-datepicker>
+        </mat-form-field>
       </div>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <!-- End Date Column -->
-  <ng-container mdColumnDef="endDate">
-    <md-header-cell *mdHeaderCellDef md-sort-header> End Date </md-header-cell>
-    <md-cell *mdCellDef="let workshop">
+  <ng-container matColumnDef="endDate">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
+    <mat-cell *matCellDef="let workshop">
       <ng-container *ngIf="selectedSfId != workshop.sfId">
           {{ workshop.endDateFormatted }}
       </ng-container>
         
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <md-form-field class="workshop-date-picker-form-field">
-          <input mdInput [mdDatepicker]="endDatePicker" (dateChange)="endDateChange($event, workshop)" [value]="workshop.endDate" [min]="workshop.startDate"> 
-          <md-datepicker-toggle mdSuffix [for]="endDatePicker"></md-datepicker-toggle>
-          <md-datepicker #endDatePicker [startAt]="workshop.endDate"></md-datepicker>
-        </md-form-field>
+        <mat-form-field class="workshop-date-picker-form-field">
+          <input matInput [matDatepicker]="endDatePicker" (dateChange)="endDateChange($event, workshop)" [value]="workshop.endDate" [min]="workshop.startDate"> 
+          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker [startAt]="workshop.endDate"></mat-datepicker>
+        </mat-form-field>
       </ng-container>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <!-- Days Late Column -->
-  <ng-container mdColumnDef="daysLate">
-    <md-header-cell *mdHeaderCellDef class="days-late-header-cell"> Days Late </md-header-cell>
-    <md-cell *mdCellDef="let workshop" class="days-late-cell"> Due: {{ formatDaysLate(workshop) }} </md-cell>
+  <ng-container matColumnDef="daysLate">
+    <mat-header-cell *matHeaderCellDef class="days-late-header-cell"> Days Late </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="days-late-cell"> Due: {{ formatDaysLate(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Instructors Column -->
-  <ng-container mdColumnDef="instructors">
-    <md-header-cell *mdHeaderCellDef> Instructor(s) </md-header-cell>
-    <md-cell *mdCellDef="let workshop" class="instructors-cell">
+  <ng-container matColumnDef="instructors">
+    <mat-header-cell *matHeaderCellDef> Instructor(s) </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="instructors-cell">
       <i *ngIf="!workshop.instructors.length">No Instructors</i>
       <p [style.margin]="'0'">{{ workshop.instructors.join(', ') }}</p>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <!-- Status Column -->
-  <ng-container mdColumnDef="status">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Status </md-header-cell>
+  <ng-container matColumnDef="status">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
 
-    <md-cell *mdCellDef="let workshop">
+    <mat-cell *matCellDef="let workshop">
       <ng-container *ngIf="selectedSfId != workshop.sfId">
         {{ workshop.status }}
       </ng-container>
 
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <md-select floatPlaceholder="never" [(ngModel)]="workshop.status">
-          <md-option *ngFor="let status of Statuses" [value]="status">{{ status }}</md-option>
-        </md-select>
+        <mat-select floatPlaceholder="never" [(ngModel)]="workshop.status">
+          <mat-option *ngFor="let status of Statuses" [value]="status">{{ status }}</mat-option>
+        </mat-select>
       </ng-container>
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <!-- Verified Column -->
-  <ng-container mdColumnDef="verified">
-    <md-header-cell *mdHeaderCellDef md-sort-header arrowPosition="center"> Verified? </md-header-cell>
-    <md-cell *mdCellDef="let workshop">
-      <md-icon svgIcon="checkmark_green" *ngIf="workshop.isVerified"></md-icon>
-      <md-icon svgIcon="cancel_red" *ngIf="!workshop.isVerified"></md-icon>
-    </md-cell>
+  <ng-container matColumnDef="verified">
+    <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="center"> Verified? </mat-header-cell>
+    <mat-cell *matCellDef="let workshop">
+      <mat-icon svgIcon="checkmark_green" *ngIf="workshop.isVerified"></mat-icon>
+      <mat-icon svgIcon="cancel_red" *ngIf="!workshop.isVerified"></mat-icon>
+    </mat-cell>
   </ng-container>
 
   <!-- Edit Button Column -->
-  <ng-container mdColumnDef="edit">
-    <md-header-cell *mdHeaderCellDef> Edit &emsp;&emsp;&emsp;&emsp;
-      <button class="refresh-button" md-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
-    </md-header-cell>
-    <md-cell *mdCellDef="let workshop">
-      <button (click)="onEdit(workshop.sfId)" md-raised-button> Edit &ensp;<md-icon svgIcon="edit_grey"></md-icon></button>
-    </md-cell>
+  <ng-container matColumnDef="edit">
+    <mat-header-cell *matHeaderCellDef> Edit &emsp;&emsp;&emsp;&emsp;
+      <button class="refresh-button" mat-button (click)="refresh()"><mat-icon svgIcon="refresh_grey"></mat-icon></button>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let workshop">
+      <button (click)="onEdit(workshop.sfId)" mat-raised-button> Edit &ensp;<mat-icon svgIcon="edit_grey"></mat-icon></button>
+    </mat-cell>
   </ng-container>
 
   <!-- Due Date Column -->
-  <ng-container mdColumnDef="dueDate">
-    <md-header-cell *mdHeaderCellDef md-sort-header class="due-date-header-cell"> Due Date </md-header-cell>
-    <md-cell *mdCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </md-cell>
+  <ng-container matColumnDef="dueDate">
+    <mat-header-cell *matHeaderCellDef mat-sort-header class="due-date-header-cell"> Due Date </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </mat-cell>
   </ng-container>
 
   <!-- Actions Column -->
-  <ng-container mdColumnDef="actions">
-    <md-header-cell *mdHeaderCellDef md-sort-header> Actions </md-header-cell>
-    <md-cell *mdCellDef="let workshop" fxLayout="row" fxLayoutGap="2px">
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" fxLayout="row" fxLayoutGap="2px">
 
       <!-- Non Editing Mode -->
       <ng-container *ngIf="selectedSfId != workshop.sfId">
-        <button md-mini-fab color="accent" (click)="selectedWorkshop = workshop">
-          <md-icon svgIcon="edit_mode_white"></md-icon>
+        <button mat-mini-fab color="accent" (click)="selectedWorkshop = workshop">
+          <mat-icon svgIcon="edit_mode_white"></mat-icon>
         </button>
         
-        <button md-mini-fab color="accent" (click)="onSelectWorkshop(workshop)">
-          <md-icon svgIcon="description_white"></md-icon>
+        <button mat-mini-fab color="accent" (click)="onSelectWorkshop(workshop)">
+          <mat-icon svgIcon="description_white"></mat-icon>
         </button>
 
-        <button md-mini-fab color="primary" (click)="delete(workshop)" *ngIf="authService.user && authService.user.isAdmin">
-          <md-icon svgIcon="delete_white"></md-icon>
+        <button mat-mini-fab color="primary" (click)="delete(workshop)" *ngIf="authService.user && authService.user.isAdmin">
+          <mat-icon svgIcon="delete_white"></mat-icon>
         </button>
       </ng-container>
 
       <!-- Edit Mode -->
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <button md-mini-fab color="primary" (click)="selectedWorkshop = null">
-          <md-icon svgIcon="cancel_white"></md-icon>
+        <button mat-mini-fab color="primary" (click)="selectedWorkshop = null">
+          <mat-icon svgIcon="cancel_white"></mat-icon>
         </button>
 
-        <button md-mini-fab color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
-          <md-icon svgIcon="save_white"></md-icon>
+        <button mat-mini-fab color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
+          <mat-icon svgIcon="save_white"></mat-icon>
         </button>
       </ng-container>
 
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
-  <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-  <md-row [id]="workshop.sfId" *mdRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></md-row>
-</md-table>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row [id]="workshop.sfId" *matRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></mat-row>
+</mat-table>
 
 <div class="spinner-container" *ngIf="isLoading">
-  <md-spinner></md-spinner>
+  <mat-spinner></mat-spinner>
 </div>
 
-<md-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></md-paginator>
+<mat-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>

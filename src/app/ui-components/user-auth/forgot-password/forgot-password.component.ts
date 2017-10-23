@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
 import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component';
@@ -19,7 +19,7 @@ export class ForgotPasswordComponent implements OnInit {
 
   constructor(
     public _fs: FacilitatorService,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     public router: Router
   ) { }
 

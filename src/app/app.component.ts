@@ -1,6 +1,6 @@
 // Angular Modules
 import { Component, ViewChild, HostListener, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { MdIconRegistry, MdSidenav, MdDialog } from '@angular/material';
+import { MatIconRegistry, MatSidenav, MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
 
@@ -32,14 +32,14 @@ export class AppComponent implements OnDestroy, AfterViewInit {
   public supportCategories: string[] = [];
   public supportCategoryPages: { [key: string]: SupportPage[] } = {};
 
-  @ViewChild('sidenav') public sidenav: MdSidenav;
+  @ViewChild('sidenav') public sidenav: MatSidenav;
 
   public isLoading: boolean = true;
   public isAuthenticated: boolean = false;
   public activeRoute: string;
   public routeToLoginSubscription: Subscription;
 
-  constructor(public iconRegistry: MdIconRegistry,
+  constructor(public iconRegistry: MatIconRegistry,
     public sanitizer: DomSanitizer,
     public router: Router,
     public auth: AuthService,
@@ -47,7 +47,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     public sidenavService: SidenavService,
     public routerService: RouterService,
     public supportService: SupportService,
-    public dialog: MdDialog) {
+    public dialog: MatDialog) {
 
     this.initIconRegistry();
 

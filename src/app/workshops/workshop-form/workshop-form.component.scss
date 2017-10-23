@@ -4,7 +4,7 @@
    max-width: $break-medium;
    margin-bottom: 142px;
 }
-md-form-field {
+mat-form-field {
     width: 100%;
 }
 form .input-item:nth-child(even) {
@@ -40,19 +40,19 @@ form .facilitator, form .facilitator > button {
 form .facilitator > div {
     float: left
 }
-form md-form-field md-spinner {
+form mat-form-field mat-spinner {
     height: 25px;
     width: 25px;
     float: right;
     opacity: 0.75;
 }
-form md-form-field input.autoComplete {
+form mat-form-field input.autoComplete {
     width: fit-content;
 }
-form div.form-actions md-spinner {
+form div.form-actions mat-spinner {
     max-height: 36px;
     max-width: 25px;
 }
-form md-form-field md-hint.error {
+form mat-form-field mat-hint.error {
   color: #ff0000;
 }

@@ -1,17 +1,17 @@
-md-cell,
-md-header-cell {
+mat-cell,
+mat-header-cell {
    flex: 2;
    padding-right: 24px;
 }
-md-cell:last-child,
-md-header-cell:last-child {
+mat-cell:last-child,
+mat-header-cell:last-child {
    padding-right: 4px;
 }
 
-md-cell:first-child,
-md-cell:last-child,
-md-header-cell:first-child,
-md-header-cell:last-child {
+mat-cell:first-child,
+mat-cell:last-child,
+mat-header-cell:first-child,
+mat-header-cell:last-child {
    flex: 1;
 }
 .course-type {
@@ -28,6 +28,6 @@ md-header-cell:last-child {
 .course-type > div{
    width: 40px;
 }
-md-row {
+mat-row {
    height: 64px;
 }

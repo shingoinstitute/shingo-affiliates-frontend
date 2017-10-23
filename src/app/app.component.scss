@@ -11,7 +11,7 @@
 a.toolbar-menu-btn:hover {
    background-color: #e0e0e0;
 }
-.toolbar-menu-btn > md-icon {
+.toolbar-menu-btn > mat-icon {
    margin-right: $default-margin * 2;
 }
 .toolbar-menu-btn > p {
@@ -31,7 +31,7 @@ div.spinner-container {
   width: 100%;
   height: 100%;
 }
-div.spinner-container md-spinner {
+div.spinner-container mat-spinner {
   position: relative;
   width: 100%;
   margin: 0;

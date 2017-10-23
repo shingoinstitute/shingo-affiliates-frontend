@@ -1,11 +1,11 @@
 <div class="filter-options-container" fxLayout="column">
     <div fxLayout="row" fxLayoutGap="16px">
-        <a md-raised-button class="mat-primary" routerLink="/workshops/new">
-            <md-icon svgIcon="edit_white"></md-icon>
+        <a mat-raised-button class="mat-primary" routerLink="/workshops/new">
+            <mat-icon svgIcon="edit_white"></mat-icon>
             <span>Add Workshop</span>
         </a>
         <div class="filter-options-header">
-            <button md-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<md-icon [svgIcon]="showFilters ? 'expand_less' : 'expand_more'"></md-icon></button>
+            <button mat-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<mat-icon [svgIcon]="showFilters ? 'expand_less' : 'expand_more'"></mat-icon></button>
         </div>
     </div>
     <div #filterBox class="filter-options-body" fxLayout="column" fxLayoutGap="36px" [style.opacity]="showFilters ? '1' : '0'"
@@ -13,27 +13,27 @@
         <div fxLayout="row">
             <div fxLayout="column" fxFlex="20%">
                 <h4 class="mat-subheading">Filter:
-                    <button md-raised-button type="button" (click)="clearFilters()">
-                        Clear <md-icon svgIcon="x_red"></md-icon>
+                    <button mat-raised-button type="button" (click)="clearFilters()">
+                        Clear <mat-icon svgIcon="x_red"></mat-icon>
                     </button>
                 </h4>
-                <md-checkbox *ngFor="let filter of filterOptions; let i = index" [value]="filter" [id]="i">{{ filter }}</md-checkbox>
+                <mat-checkbox *ngFor="let filter of filterOptions; let i = index" [value]="filter" [id]="i">{{ filter }}</mat-checkbox>
             </div>
             <div fxLayout="column" fxFlex="80%" fxLayoutGap="16px">
                 <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showStatusFilter ? 'flex' : 'none'">
-                    <md-select [style.width]="'100%'" #statusSelect="mdSelect" placeholder="Status" [(ngModel)]="selectedStatuses" (change)="selectedStatusChanged($event)"
+                    <mat-select [style.width]="'100%'" #statusSelect="matSelect" placeholder="Status" [(ngModel)]="selectedStatuses" (change)="selectedStatusChanged($event)"
                         multiple="true" floatPlaceholder="auto">
-                        <md-option *ngFor="let status of statuses" [value]="status">{{status}}</md-option>
-                    </md-select>
+                        <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+                    </mat-select>
                 </div>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showTextFilter ? 'flex' : 'none'">
-                    <md-form-field>
-                        <input mdInput #textSearchInput placeholder="filter..." [(ngModel)]="textSearch">
-                        <md-icon mdSuffix svgIcon="search_grey"></md-icon>
-                    </md-form-field>
+                    <mat-form-field>
+                        <input matInput #textSearchInput placeholder="filter..." [(ngModel)]="textSearch">
+                        <mat-icon matSuffix svgIcon="search_grey"></mat-icon>
+                    </mat-form-field>
                 </div>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showDateRange ? 'flex' : 'none'">
@@ -41,19 +41,19 @@
                         <div fxLayout fxLayoutGap="8px">
                             <p class="text-md" [style.color]="'#757575'">Date</p>
 
-                            <md-form-field floatPlaceholder="always">
-                                <input mdInput [mdDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
-                                <md-datepicker-toggle mdSuffix [for]="startDateFilterPicker"></md-datepicker-toggle>
-                                <md-datepicker #startDateFilterPicker></md-datepicker>
-                            </md-form-field>
+                            <mat-form-field floatPlaceholder="always">
+                                <input matInput [matDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
+                                <mat-datepicker-toggle matSuffix [for]="startDateFilterPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startDateFilterPicker></mat-datepicker>
+                            </mat-form-field>
 
-                            <md-form-field floatPlaceholder="always">
-                                <input mdInput [mdDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
-                                <md-datepicker-toggle mdSuffix [for]="endDateFilterPicker"></md-datepicker-toggle>
-                                <md-datepicker #endDateFilterPicker></md-datepicker>
-                            </md-form-field>
-                            <button md-button type="button" (click)="clearDateFilter()">
-                                <md-icon svgIcon="x_red"></md-icon>
+                            <mat-form-field floatPlaceholder="always">
+                                <input matInput [matDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
+                                <mat-datepicker-toggle matSuffix [for]="endDateFilterPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #endDateFilterPicker></mat-datepicker>
+                            </mat-form-field>
+                            <button mat-button type="button" (click)="clearDateFilter()">
+                                <mat-icon svgIcon="x_red"></mat-icon>
                             </button>
                         </div>
                     </div>

@@ -10,7 +10,7 @@
     flex-direction: row;
     justify-content: center;
 
-    md-form-field {
+    mat-form-field {
       width: 100%;
       max-width: $break-small;
     }
@@ -22,7 +22,7 @@
     flex-direction: column;
     align-items: center;
 
-    md-spinner {
+    mat-spinner {
       height: 24px;
       width: 24px;
     }

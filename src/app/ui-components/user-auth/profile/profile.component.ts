@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import { User } from '../../../shared/models/user.model';
 import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog.component';
@@ -15,7 +15,7 @@ export class ProfileComponent implements OnInit {
 
   public user: User;
 
-  constructor(public route: ActivatedRoute, public dialog: MdDialog) { }
+  constructor(public route: ActivatedRoute, public dialog: MatDialog) { }
 
   public ngOnInit() {
     this.user = this.route.snapshot.data['user'];

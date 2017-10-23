@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component';
@@ -20,7 +20,7 @@ export class PasswordResetComponent implements OnInit {
   public isLoading: boolean = false;
 
   constructor(public _fs: FacilitatorService,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     public route: ActivatedRoute,
     public router: Router) { }
 

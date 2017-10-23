@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Inject, Optional, ElementRef, ViewChild, OnDe
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
 import { Affiliate } from '../affiliate.model';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
@@ -40,9 +40,9 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
   public affiliateSummary: string;
 
   constructor(
-    @Optional() @Inject(MD_DIALOG_DATA) public data: any,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
     public _as: AffiliateService,
-    public snackbar: MdSnackBar,
+    public snackbar: MatSnackBar,
     public location: Location,
     public route: ActivatedRoute,
     public fb: FormBuilder
