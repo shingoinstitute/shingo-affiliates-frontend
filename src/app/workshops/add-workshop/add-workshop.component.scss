@@ -1,117 +1,120 @@
 @import '../../../assets/sass/_globals';
 
 .add-workshop-container {
-   min-height: 100vh;
-   margin: $default-margin * 2;
+  display: block;
+  width: 100%;
+  max-width: $break-small;
+  margin: 0 auto;
+
+  .add-workshop-header {
+    margin: $default-margin;
+  }
 }
-.add-workshop-header {
-   margin: $default-margin;
-}
-@media only screen and (max-width: $break-medium) {
-   .add-workshop-container {
-      margin: 0 0 $default-margin 0;
-   }
+@media only screen and (max-width: $break-small) {
+  .add-workshop-container {
+    margin: $default-margin;
+  }
 }
 .form-group-container {
-   max-width: 75%;
-   padding: 16px;
+  max-width: 75%;
+  padding: 16px;
 }
 form > * {
-   margin-bottom: 8px;
-   margin-top: 8px;
+  margin-bottom: 8px;
+  margin-top: 8px;
 }
 .form-group {
-   display: flex;
-   flex-direction: row;
-   align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-.form-group>* {
-   padding: 12px;
+.form-group > * {
+  padding: 12px;
 }
 #cm-input-container {
-   position: relative;
-   display: flex;
-   display: -webkit-flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   align-items: center;
+  position: relative;
+  display: flex;
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  align-items: center;
 }
 .cm-autocomplete,
 .cm-spinner {
-   padding: 0 !important;
+  padding: 0 !important;
 }
 .cm-spinner {
-   position: absolute;
-   height: 20px;
-   width: 20px;
-   right: 12px;
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  right: 12px;
 }
 .inst-table {
-   flex: 1 0;
-   padding: 4px !important;
-   display: block;
-   justify-content: left;
+  flex: 1 0;
+  padding: 4px !important;
+  display: block;
+  justify-content: left;
 }
 .inst-header-cell {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   align-items: center;
-   -webkit-align-items: center;
-   flex: 1 0 auto;
-   font-weight: 300;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  align-items: center;
+  -webkit-align-items: center;
+  flex: 1 0 auto;
+  font-weight: 300;
 }
 .inst-header-row,
 .inst-row {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   -webkit-align-items: center;
-   align-items: center;
-   -webkit-justify-content: left;
-   justify-content: left;
-   padding: 0 24px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: left;
+  justify-content: left;
+  padding: 0 24px;
 }
 .inst-header-row:last-child {
-   border-top: 1px solid lightgrey;
+  border-top: 1px solid lightgrey;
 }
 .inst-header-row {
-   height: 40px;
+  height: 40px;
 }
 .inst-row {
-   border-bottom: 1px solid lightgrey;
-   display: flex;
-   height: 48px;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  height: 48px;
 }
 .inst-cell,
 .inst-header-cell {
-   padding-right: 24px;
+  padding-right: 24px;
 }
 .inst-cell:first-child {
-   flex: 1 0;
+  flex: 1 0;
 }
 .inst-cell:last-child {
-   flex: 0 1;
-   padding: 0;
+  flex: 0 1;
+  padding: 0;
 }
 button.inst-del-btn {
-   background-color: transparent;
-   border: none;
-   outline: none;
-   margin: 0;
-   padding: 4px;
-   cursor: pointer;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   /* height: 24px;
-   width: 24px; */
+  background-color: transparent;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* height: 24px;
+  width: 24px; */
 }
 button.inst-del-btn * {
-   margin: 0;
+  margin: 0;
 }
 button.inst-del-btn:hover {
-   background-color: #e3e3e3;
+  background-color: #e3e3e3;
 }
