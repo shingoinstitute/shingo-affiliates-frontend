@@ -75,7 +75,7 @@
           <!-- Start Date Picker -->
           <md-form-field>
             <input required mdInput [mdDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}" 
-              formControlName="startDate" [min]="today">
+              formControlName="startDate">
             <md-datepicker-toggle mdSuffix [for]="startDatePicker"></md-datepicker-toggle>
             <md-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate').value"></md-datepicker>
           </md-form-field>
@@ -86,7 +86,7 @@
           <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
           <md-form-field>
             <input required mdInput [mdDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
-              formControlName="endDate" [min]="dateFormGroup.get('startDate').value">
+              formControlName="endDate">
             <md-datepicker-toggle mdSuffix [for]="endDatePicker"></md-datepicker-toggle>
             <md-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate').value"></md-datepicker>
           </md-form-field>

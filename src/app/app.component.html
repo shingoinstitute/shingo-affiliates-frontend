@@ -41,7 +41,7 @@
         <a md-list-item routerLink="/workshops" routerLinkActive="active" (click)="sidenavService.close()">Workshops</a>
         <md-divider></md-divider>
         <ng-container *ngIf="auth.user && auth.user.isAdmin">
-          <a md-list-item routerLink="/admin" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
+          <a md-list-item routerLink="/admin/affiliates" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
           <md-divider></md-divider>
         </ng-container>
         <p class="nav-list-title">Affiliate Materials</p>

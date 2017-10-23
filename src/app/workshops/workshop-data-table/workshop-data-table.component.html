@@ -139,7 +139,7 @@
           <md-icon svgIcon="description_white"></md-icon>
         </button>
 
-        <button md-mini-fab color="primary" (click)="delete(workshop)">
+        <button md-mini-fab color="primary" (click)="delete(workshop)" *ngIf="authService.user && authService.user.isAdmin">
           <md-icon svgIcon="delete_white"></md-icon>
         </button>
       </ng-container>

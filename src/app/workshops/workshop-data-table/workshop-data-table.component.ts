@@ -9,6 +9,7 @@ import { MdSort, MdPaginator, MdButton, MdDialog, MdDatepickerInputEvent } from 
 import { Workshop, WorkshopStatusType } from '../workshop.model';
 import { Filter } from '../../services/filters/filter.abstract';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-workshop-data-table',
@@ -45,7 +46,7 @@ export class WorkshopDataTableComponent implements OnInit {
     'Invoiced, Not Paid': 'Awaiting Payment'
   };
 
-  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router, public dialog: MdDialog) {
+  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router, public dialog: MdDialog, public authService: AuthService) {
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider();
     this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }

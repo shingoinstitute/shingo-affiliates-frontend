@@ -58,7 +58,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   public get user(): User { return this.route.snapshot.data['user']; }
 
-  constructor(public filterFactory: WorkshopFilterFactory, public _ws: WorkshopService, public router: Router, public route: ActivatedRoute) {
+  constructor(public filterFactory: WorkshopFilterFactory, public _ws: WorkshopService, public router: Router, public route: ActivatedRoute, public authService: AuthService) {
     this.setStatuses();
   }
 
