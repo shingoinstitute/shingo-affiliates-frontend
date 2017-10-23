@@ -113,18 +113,6 @@ export class WorkshopFormComponent implements OnInit {
       billing: [this.workshop.billing, [Validators.required, Validators.email]],
       facilitator: ['']
     });
-
-    const dateRangeValidator = (c: AbstractControl): ValidationErrors => {
-      try {
-        const start = c.get('startDate').value;
-        const end = c.get('endDate').value;
-        return start.valueOf() <= end.valueOf() ? null : { 'invalid date': 'ending date must be on or after the starting date.' } as ValidationErrors;
-      } catch (e) {
-        return null;
-      }
-    };
-
-    this.dateFormGroup.setValidators(dateRangeValidator);
   }
 
   public onSubmit() {

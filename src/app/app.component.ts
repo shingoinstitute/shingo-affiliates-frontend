@@ -27,16 +27,12 @@ import { SupportPage } from './services/support/support.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, AfterViewInit {
 
   public supportCategories: string[] = [];
   public supportCategoryPages: { [key: string]: SupportPage[] } = {};
 
-  public _sidenav: MdSidenav;
-  @ViewChild('sidenav') public set sidenav(s: MdSidenav) {
-    this._sidenav = this.sidenavService.sidenav = s;
-    this.getInitialWindowWidth();
-  }
+  @ViewChild('sidenav') public sidenav: MdSidenav;
 
   public isLoading: boolean = true;
   public isAuthenticated: boolean = false;
@@ -61,11 +57,16 @@ export class AppComponent implements OnDestroy {
         // On `NavigationEnd`, capture current route so we can re-redirect the user (if they aren't authenticated)
         // to the route they originally intended to visit, *after* a successful log in.
         this.activeRoute = route.url;
+        
 
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
         if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login') {
           this.authenticateOnLoad();
           this.getSupportCategories();
+        } else {
+            setTimeout(() => {
+              this.sidenavService.sidenav.close();
+            }, 0);
         }
       }
     });
@@ -77,6 +78,11 @@ export class AppComponent implements OnDestroy {
         this.isLoading = false;
       }
     });
+  }
+
+  public ngAfterViewInit() {
+    this.sidenavService.sidenav = this.sidenav;
+    this.getInitialWindowWidth();
   }
 
   public ngOnDestroy() {

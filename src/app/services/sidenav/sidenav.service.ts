@@ -10,13 +10,15 @@ export class SidenavService {
 
   public _sidenav: MdSidenav;
   public get sidenav() { return this._sidenav; }
-  public set sidenav(s: MdSidenav) { 
-    this._sidenav = s; 
-    if (!this._isMobile && this._sidenav) {
-      this._sidenav.open();
-    } else if (this._sidenav) {
-      this._sidenav.close();
-    }
+  public set sidenav(s: MdSidenav) {
+    this._sidenav = s;
+    setTimeout(() => {
+      if (!this._isMobile && this._sidenav) {
+        this._sidenav.open();
+      } else if (this._sidenav) {
+        this._sidenav.close();
+      }
+    }, 0);
   }
 
   public _isMobile: boolean;
@@ -54,6 +56,17 @@ export class SidenavService {
       this.isAuth = isAuth;
     });
     
+    this.router.events.subscribe((route) => {
+      if (route instanceof NavigationEnd) {
+        const url = route.url;
+        if (url.match(/.*password.*/gi) || url === '/login') {
+          this.sidenav.close();
+        } else {
+          this.open();
+        }
+      }
+    });
+
     this._as.updateUserAuthStatus();
   }
 
