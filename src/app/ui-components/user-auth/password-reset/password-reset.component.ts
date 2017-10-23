@@ -14,6 +14,7 @@ export class PasswordResetComponent implements OnInit {
 
   public password: string;
   public passwordConfirm: string;
+  // public errMsg: string;
   public errMsg: string;
   public errBody: string;
   public isLoading: boolean = false;
@@ -29,13 +30,16 @@ export class PasswordResetComponent implements OnInit {
   }
 
   public onSubmit() {
+
     if (this.password !== this.passwordConfirm) {
       this.errMsg = 'Passwords don\'t match';
       return;
     }
+
     this.errBody = '';
     this.errMsg = '';
     this.isLoading = true;
+
     this._fs.changePassword(this.route.snapshot.queryParams['token'], this.password)
       .subscribe((data) => {
         this.isLoading = false;
@@ -48,6 +52,9 @@ export class PasswordResetComponent implements OnInit {
         const msg = err.error && err.error.error ? err.error.error : '';
         if (msg === 'EMAIL_NOT_FOUND' || msg === 'USER_NOT_FOUND') {
           this.errMsg = 'Email not found.';
+        } else if (msg === 'RESET_TOKEN_EXPIRED') {
+          // tslint:disable-next-line:max-line-length
+          this.errMsg = 'Password-reset token expired. Password reset links expire 15 minutes after being sent to your email account. Please <a href="/forgotpassword">request a new link</a>.';
         } else if (err.status === 0) {
           this.errMsg = 'Connection Refused.';
           this.errBody = 'We may be experiencing server difficulties, please try again later.';

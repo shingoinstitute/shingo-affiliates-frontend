@@ -27,16 +27,12 @@ import { SupportPage } from './services/support/support.model';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent implements OnDestroy, AfterViewInit {
 
   public supportCategories: string[] = [];
   public supportCategoryPages: { [key: string]: SupportPage[] } = {};
 
-  public _sidenav: MdSidenav;
-  @ViewChild('sidenav') public set sidenav(s: MdSidenav) {
-    this._sidenav = this.sidenavService.sidenav = s;
-    this.getInitialWindowWidth();
-  }
+  @ViewChild('sidenav') public sidenav: MdSidenav;
 
   public isLoading: boolean = true;
   public isAuthenticated: boolean = false;
@@ -62,9 +58,15 @@ export class AppComponent implements OnDestroy {
         // to the route they originally intended to visit, *after* a successful log in.
         this.activeRoute = route.url;
 
+
+        this.getSupportCategories();
         // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
         if (!this.activeRoute.match(/.*password.*/gi) && this.activeRoute !== '/login' && !this.activeRoute.match(/.*support.*/gi)) {
           this.authenticateOnLoad();
+        } else if (this.activeRoute === '/login' || this.activeRoute.match(/.*password.*/gi)) {
+          setTimeout(() => {
+            this.sidenavService.sidenav.close();
+          }, 0);
         }
       }
     });
@@ -76,8 +78,11 @@ export class AppComponent implements OnDestroy {
         this.isLoading = false;
       }
     });
+  }
 
-    this.getSupportCategories();
+  public ngAfterViewInit() {
+    this.sidenavService.sidenav = this.sidenav;
+    this.getInitialWindowWidth();
   }
 
   public ngOnDestroy() {
@@ -188,6 +193,8 @@ export class AppComponent implements OnDestroy {
     this.supportService
       .getCategories()
       .subscribe(categories => {
+        this.supportCategories = [];
+        this.supportCategoryPages = {};
         for (const c of categories) {
           this.getSupportCategoryPages(c);
         }

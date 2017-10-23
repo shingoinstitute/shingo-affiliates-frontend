@@ -28,8 +28,15 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   public onSubmit() {
+
     this.errBody = '';
     this.errMsg = '';
+
+    if (!this.email.length || !this.email.includes('@')) {
+      this.errMsg = 'Please enter a valid email address before subitting.';
+      return;
+    }
+
     this.isLoading = true;
     this._fs.resetPassword(this.email)
       .subscribe((data) => {
