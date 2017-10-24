@@ -102,7 +102,7 @@ $affiliate-app-warn:    mat-palette($mat-red);
 // Create the theme object (a Sass map containing all of the palettes).
 $affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-accent, $affiliate-app-warn);
 
-/* CSS height fix for md-sidenav-container */
+// CSS height fix for mat-sidenav-container
 .mat-drawer-content {
     min-height: calc(100vh - 64px);
 }
@@ -112,7 +112,7 @@ $affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-acc
     }
 }
 
-/* Custom button styles */
+// Custom button stylings
 @mixin button($affiliate-app-theme) {
    .mat-raised-button.mat-primary,
    .mat-raised-button.mat-accent,
@@ -129,10 +129,8 @@ $affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-acc
    }
 }
 
-/* ---------------------------------------------------------- */
-/* CSS fixes for issues in workshop-data-table.component.html */
-/* ---------------------------------------------------------- */
-md-form-field.workshop-date-picker-form-field {
+// CSS fixes for issues in workshop-data-table.component.html
+mat-form-field.workshop-date-picker-form-field {
     width: 100%;
 
     .mat-input-wrapper.mat-form-field-wrapper {
@@ -142,7 +140,13 @@ md-form-field.workshop-date-picker-form-field {
             position: initial;
         }
     }  
-} 
+}
+
+// Hack to get stems of the sort direction indicator arrows on data tables to appear vertical.
+// As of angular material version beta.12, the stems of the arrows are tilted by 45 degrees.
+.mat-sort-header-stem {
+    transform: rotate(0deg);
+}
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

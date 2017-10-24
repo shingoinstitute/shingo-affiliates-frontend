@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MdSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material';
 import { AuthService } from '../auth/auth.service';
 import { AppComponent } from '../../app.component';
 import { Router, NavigationEnd } from '@angular/router';
@@ -8,9 +8,9 @@ import { RouterService } from '../router/router.service';
 @Injectable()
 export class SidenavService {
 
-  public _sidenav: MdSidenav;
+  public _sidenav: MatSidenav;
   public get sidenav() { return this._sidenav; }
-  public set sidenav(s: MdSidenav) {
+  public set sidenav(s: MatSidenav) {
     this._sidenav = s;
     setTimeout(() => {
       if (!this._isMobile && this._sidenav) {

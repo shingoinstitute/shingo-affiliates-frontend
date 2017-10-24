@@ -1,11 +1,11 @@
 <div class="support-page-container">
   <div class="support-page-body">
     <h1 class="mat-title">Category &mdash; {{ category.charAt(0).toUpperCase() + category.substr(1) }}</h1>
-    <md-list>
-      <h3 md-subheader>Topics</h3>
-      <md-list-item *ngFor="let page of supportPages">
+    <mat-list>
+      <h3 matSubheader>Topics</h3>
+      <mat-list-item *ngFor="let page of supportPages">
         <a routerLink="/support/{{ page.Id }}">{{ page.title }}</a>
-      </md-list-item>
-    </md-list>
+      </mat-list-item>
+    </mat-list>
   </div>
 </div>

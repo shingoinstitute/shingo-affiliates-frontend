@@ -1,16 +1,16 @@
-<md-card class="container">
+<mat-card class="container">
   <div fxLayout="column" fxLayoutGap="8px">
     <div fxLayout="row" fxLayoutGap="8px" class="detail-row">
       <img class="course-img" [src]="largeImage()">
       <div fxLayout="column">
         <b class="mat-subheading">{{workshop.type}} ( {{workshop.isPublic ? 'Public' : 'public'}} ) &mdash; {{workshop.location}}</b>
         <p>Status:&emsp;{{workshop.status}}</p>
-        <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" md-raised-button class="mat-accent"> Edit &ensp;
-          <md-icon svgIcon="edit_white"></md-icon>
+        <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" mat-raised-button class="mat-accent"> Edit &ensp;
+          <mat-icon svgIcon="edit_white"></mat-icon>
         </button>
         <br>
-        <button *ngIf="canCancel()" [style.height]="'fit-content'" (click)="cancel()" md-raised-button class="mat-warn"> Cancel &ensp;
-          <md-icon svgIcon="cancel_white"></md-icon>
+        <button *ngIf="canCancel()" [style.height]="'fit-content'" (click)="cancel()" mat-raised-button class="mat-warn"> Cancel &ensp;
+          <mat-icon svgIcon="cancel_white"></mat-icon>
         </button>
       </div>
     </div>
@@ -40,4 +40,4 @@
       </div>
     </div>
   </div>
-</md-card>
+</mat-card>

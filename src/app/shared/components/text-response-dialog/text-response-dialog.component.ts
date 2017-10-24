@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MD_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-text-response-dialog',
@@ -13,7 +13,7 @@ export class TextResponseDialogComponent {
   public cancelText: string;
   public reason: string;
 
-  constructor( @Inject(MD_DIALOG_DATA) public data: { title: string, message: string, acceptText: string, cancelText: string }) {
+  constructor( @Inject(MAT_DIALOG_DATA) public data: { title: string, message: string, acceptText: string, cancelText: string }) {
     this.title = data.title;
     this.message = data.message;
     this.acceptText = data.acceptText;

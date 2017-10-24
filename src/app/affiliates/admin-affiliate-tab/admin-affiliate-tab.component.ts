@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Affiliate } from '../../affiliates/affiliate.model';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
 import { ISFSuccessResult } from '../../services/api/base-api.abstract.service';
-import { MdSnackBar, MdDialog } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component';
 import { Router, NavigationExtras } from '@angular/router';
@@ -22,7 +22,7 @@ export class AdminAffiliateTabComponent {
   public selectedAffiliate: Affiliate;
   public isLoading: boolean = true;
 
-  constructor(public dialog: MdDialog, public _as: AffiliateService, public snackbar: MdSnackBar, public router: Router) { }
+  constructor(public dialog: MatDialog, public _as: AffiliateService, public snackbar: MatSnackBar, public router: Router) { }
 
   public onSave(affiliate?: Affiliate) {
     this.isLoading = true;

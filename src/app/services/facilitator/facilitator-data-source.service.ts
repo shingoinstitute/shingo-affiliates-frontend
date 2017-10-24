@@ -1,5 +1,5 @@
 // Angular Modules
-import { MdPaginator, MdSort } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 
 // App Modules
 import { FacilitatorService } from './facilitator.service';
@@ -12,8 +12,8 @@ export class FacilitatorDataSource extends APIDataSource<FacilitatorService, Fac
 
   constructor(
     public _fdp: DataProvider<FacilitatorService, Facilitator>,
-    public paginator?: MdPaginator,
-    public sort?: MdSort
+    public paginator?: MatPaginator,
+    public sort?: MatSort
   ) { super(_fdp, paginator, sort); }
 
   protected getSortedData(): Facilitator[] {

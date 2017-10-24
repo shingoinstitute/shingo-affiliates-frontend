@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import { MdDialog, MdPaginator, MdSort } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 
 
 import { DataProvider } from '../../services/data-provider/data-provider.service';
@@ -27,8 +27,8 @@ export class FacilitatorDataTableComponent implements OnInit {
   @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'lastLogin', 'actions'];
   @Input('dataSource') public dataSource: FacilitatorDataSource | null;
 
-  @ViewChild(MdPaginator) public paginator: MdPaginator;
-  @ViewChild(MdSort) public sort: MdSort;
+  @ViewChild(MatPaginator) public paginator: MatPaginator;
+  @ViewChild(MatSort) public sort: MatSort;
 
   public facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
   public selectedId: string = '';
@@ -37,7 +37,7 @@ export class FacilitatorDataTableComponent implements OnInit {
   public isLoading: boolean;
 
   constructor(
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     public router: RouterService,
     public providerFactory: DataProviderFactory,
     public _fs: FacilitatorService

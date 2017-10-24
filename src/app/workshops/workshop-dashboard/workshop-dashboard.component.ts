@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
-import { MdRadioButton, MdDatepicker, MdSort, MdPaginator, MdCheckboxChange, MdCheckbox, MdSelect, MdSelectChange } from '@angular/material';
+import { MatRadioButton, MatDatepicker, MatSort, MatPaginator, MatCheckboxChange, MatCheckbox, MatSelect, MatSelectChange } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../services/auth/auth.service';
@@ -29,15 +29,15 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public get showStatusFilter(): boolean { return this._showStatusFilter; }
   public get showTextFilter(): boolean { return this._showTextFilter; }
 
-  @ViewChildren(MdCheckbox) public checkboxen: MdCheckbox[];
+  @ViewChildren(MatCheckbox) public checkboxen: MatCheckbox[];
 
-  @ViewChild('startDateFilterPicker') public startDFPicker: MdDatepicker<Date>;
-  @ViewChild('endDateFilterPicker') public endDFPicker: MdDatepicker<Date>;
+  @ViewChild('startDateFilterPicker') public startDFPicker: MatDatepicker<Date>;
+  @ViewChild('endDateFilterPicker') public endDFPicker: MatDatepicker<Date>;
 
   @ViewChild('startDFInput') public startDFInput: ElementRef;
   @ViewChild('endDFInput') public endDFInput: ElementRef;
 
-  @ViewChild(MdSelect) public statusSelect: MdSelect;
+  @ViewChild(MatSelect) public statusSelect: MatSelect;
   @ViewChild('textSearchInput') public textSearchInput: ElementRef;
 
   @ViewChild(WorkshopDataTableComponent) public workshopTable: WorkshopDataTableComponent;
@@ -85,7 +85,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     this.fillViewPortHeight();
-    const observable: Observable<MdCheckboxChange>[] = this.checkboxen.map(cbc => Observable.from(cbc.change));
+    const observable: Observable<MatCheckboxChange>[] = this.checkboxen.map(cbc => Observable.from(cbc.change));
     Observable.merge(...observable)
       .subscribe((event) => this.filter(event));
   }
@@ -116,7 +116,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/workshops/${sfId}/edit`);
   }
 
-  public selectedStatusChanged(event: MdSelectChange) {
+  public selectedStatusChanged(event: MatSelectChange) {
     const index = this.filters.findIndex(f => f.name === 'by Status');
     this.filters[index].dataChange.next({ key: 'status', value: this.selectedStatuses });
   }
@@ -140,7 +140,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public filter(cbc: MdCheckboxChange) {
+  public filter(cbc: MatCheckboxChange) {
     const value = cbc.source.value;
     let payload: { data: any, deactivate: number[] };
     const indices = {

@@ -5,7 +5,7 @@ import { WorkshopDataSource } from '../../services/workshop/workshop-data-source
 import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
 import { WorkshopService, WorkshopProperties, WorkshopTrackByStrategy } from '../../services/workshop/workshop.service';
-import { MdSort, MdPaginator, MdButton, MdDialog, MdDatepickerInputEvent } from '@angular/material';
+import { MatSort, MatPaginator, MatButton, MatDialog, MatDatepickerInputEvent } from '@angular/material';
 import { Workshop, WorkshopStatusType } from '../workshop.model';
 import { Filter } from '../../services/filters/filter.abstract';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
@@ -23,8 +23,8 @@ export class WorkshopDataTableComponent implements OnInit {
   @Input() public filters: Filter[] = [];
   @Output() public editClick: EventEmitter<string> = new EventEmitter<string>();
 
-  @ViewChild(MdSort) public sort: MdSort;
-  @ViewChild(MdPaginator) public paginator: MdPaginator;
+  @ViewChild(MatSort) public sort: MatSort;
+  @ViewChild(MatPaginator) public paginator: MatPaginator;
 
   public selectedWorkshop: Workshop;
   public get selectedSfId() { return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''; }
@@ -46,7 +46,7 @@ export class WorkshopDataTableComponent implements OnInit {
     'Invoiced, Not Paid': 'Awaiting Payment'
   };
 
-  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router, public dialog: MdDialog, public authService: AuthService) {
+  constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router, public dialog: MatDialog, public authService: AuthService) {
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider();
     this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
@@ -166,7 +166,7 @@ export class WorkshopDataTableComponent implements OnInit {
     });
   }
 
-  public startDateChange(event: MdDatepickerInputEvent<any>, w: Workshop) {
+  public startDateChange(event: MatDatepickerInputEvent<any>, w: Workshop) {
     const date = event.value;
     if (date instanceof Date) {
       w.startDate = date;
@@ -175,7 +175,7 @@ export class WorkshopDataTableComponent implements OnInit {
     }
   }
 
-  public endDateChange(event: MdDatepickerInputEvent<any>, w: Workshop) {
+  public endDateChange(event: MatDatepickerInputEvent<any>, w: Workshop) {
     const date = event.value;
     if (date instanceof Date) {
       w.endDate = date;

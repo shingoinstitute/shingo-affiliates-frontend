@@ -2,52 +2,52 @@
    <ng-container *ngFor="let icon of displayedIcons">
       <div [ngSwitch]="icon" class="icon-legend-item">
          <ng-template [ngSwitchCase]="'edit'">
-            <md-icon svgIcon="edit_mode_grey"></md-icon>
+            <mat-icon svgIcon="edit_mode_grey"></mat-icon>
             <p> = Edit </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'delete'">
-            <md-icon svgIcon="delete_grey"></md-icon>
+            <mat-icon svgIcon="delete_grey"></mat-icon>
             <p> = Delete </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'deleteAccount'">
-            <md-icon svgIcon="delete_grey"></md-icon>
+            <mat-icon svgIcon="delete_grey"></mat-icon>
             <p> = Delete Account </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'disable'">
-            <md-icon svgIcon="block_grey"></md-icon>
+            <mat-icon svgIcon="block_grey"></mat-icon>
             <p> = Disable Account </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'save'">
-            <md-icon svgIcon="save_grey"></md-icon>
+            <mat-icon svgIcon="save_grey"></mat-icon>
             <p> = Save </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'reset'">
-            <md-icon svgIcon="renew_grey"></md-icon>
+            <mat-icon svgIcon="renew_grey"></mat-icon>
             <p> = Reset Password </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'cancel'">
-            <md-icon svgIcon="cancel_grey"></md-icon>
+            <mat-icon svgIcon="cancel_grey"></mat-icon>
             <p> = Cancel </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'form'">
-           <md-icon svgIcon="description_grey"></md-icon>
+           <mat-icon svgIcon="description_grey"></mat-icon>
            <p> = Open Edit Detail </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'accept'">
-           <md-icon svgIcon="checkmark_grey"></md-icon>
+           <mat-icon svgIcon="checkmark_grey"></mat-icon>
            <p> = Accept </p>
          </ng-template>
 
          <ng-template [ngSwitchCase]="'refresh'">
-           <md-icon svgIcon="refresh_grey"></md-icon>
+           <mat-icon svgIcon="refresh_grey"></mat-icon>
            <p> = Refresh </p>
          </ng-template>
 

@@ -34,7 +34,7 @@
 .input-item:not(:last-child) {
   margin-bottom: 8px;
 }
-.input-item > md-form-field {
+.input-item > mat-form-field {
   margin-right: 16px;
 }
 .form-actions {
@@ -59,7 +59,7 @@
   flex-direction: column;
   align-items: center;
 }
-.spinner-container md-spinner {
+.spinner-container mat-spinner {
   position: absolute;
   height: 48px;
 }

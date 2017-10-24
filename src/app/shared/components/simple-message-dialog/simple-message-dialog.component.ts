@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MD_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-simple-message-dialog',
@@ -8,6 +8,6 @@ import { MD_DIALOG_DATA } from '@angular/material';
 // tslint:disable-next-line:component-class-suffix
 export class SimpleMessageDialog {
 
-  constructor( @Inject(MD_DIALOG_DATA) public message: string) { }
+  constructor( @Inject(MAT_DIALOG_DATA) public message: string) { }
 
 }

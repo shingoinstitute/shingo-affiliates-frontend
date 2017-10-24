@@ -9,13 +9,13 @@ import { SupportPageComponent } from './support-page/support-page.component';
 import { SupportRoutingModule } from './support-routing.module';
 
 import {
-  MdButtonModule,
-  MdCardModule,
-  MdFormFieldModule,
-  MdInputModule,
-  MdIconModule,
-  MdProgressSpinnerModule,
-  MdListModule
+  MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatIconModule,
+  MatProgressSpinnerModule,
+  MatListModule
 } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 
@@ -23,14 +23,14 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     SupportRoutingModule,
-    MdButtonModule,
-    MdCardModule,
-    MdFormFieldModule,
-    MdInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
     FormsModule,
-    MdIconModule,
-    MdProgressSpinnerModule,
-    MdListModule
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatListModule
   ],
   declarations: [
     SupportHomeComponent,

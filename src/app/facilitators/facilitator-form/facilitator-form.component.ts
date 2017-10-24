@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, Input, Optional, ElementRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
+import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators, ValidatorFn, FormBuilder } from '@angular/forms';
 
 import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
@@ -34,8 +34,8 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   public routeSubscription;
 
   constructor(
-    @Optional() @Inject(MD_DIALOG_DATA) public data: any,
-    public snackbar: MdSnackBar,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
+    public snackbar: MatSnackBar,
     public _fs: FacilitatorService,
     public location: Location,
     public route: ActivatedRoute,

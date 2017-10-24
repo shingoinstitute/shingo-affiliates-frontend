@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Facilitator } from '../../facilitators/facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
-import { MdSnackBar, MdDialog } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component';
 import { Router } from '@angular/router';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
@@ -17,7 +17,7 @@ export class AdminFacilitatorTabComponent {
   public displayedColumns: string[] = ['name'];
   public newFacilitator: Facilitator;
 
-  constructor(public _fs: FacilitatorService, public snackbar: MdSnackBar, public dialog: MdDialog, public router: Router) { }
+  constructor(public _fs: FacilitatorService, public snackbar: MatSnackBar, public dialog: MatDialog, public router: Router) { }
 
   public onSave(facilitator: Facilitator) {
     this.isLoading = true;

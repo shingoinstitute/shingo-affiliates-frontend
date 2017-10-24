@@ -2,100 +2,100 @@
 
   <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
 
-  <!-- <md-table #table [dataSource]="dataSource" mdSort [disableClear]="true"> -->
-  <md-table #table [dataSource]="dataSource" mdSort [mdSortDisableClear]="true">
+  <!-- <mat-table #table [dataSource]="dataSource" matSort [disableClear]="true"> -->
+  <mat-table #table [dataSource]="dataSource" matSort [matSortDisableClear]="true">
 
     <!-- Logo Column -->
-    <ng-container mdColumnDef="logo">
-      <md-header-cell *mdHeaderCellDef> Logo </md-header-cell>
-      <md-cell *mdCellDef="let aff" class="logo-cell">
+    <ng-container matColumnDef="logo">
+      <mat-header-cell *matHeaderCellDef> Logo </mat-header-cell>
+      <mat-cell *matCellDef="let aff" class="logo-cell">
         <!-- <ng-container *ngIf="selectedId != aff.sfId"> -->
           <img src="{{ aff.logo }}">
         <!-- </ng-container> -->
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <md-form-field [style.margin-left]="'8px'">
-            <input mdInput [(ngModel)]="aff.logo">
-          </md-form-field>
+          <mat-form-field [style.margin-left]="'8px'">
+            <input matInput [(ngModel)]="aff.logo">
+          </mat-form-field>
         </ng-container>
-      </md-cell>
+      </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container mdColumnDef="name">
-      <md-header-cell *mdHeaderCellDef md-sort-header> Affiliate </md-header-cell>
-      <md-cell *mdCellDef="let aff">
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Affiliate </mat-header-cell>
+      <mat-cell *matCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
           {{ aff.name }}
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <md-form-field>
-            <input mdInput [(ngModel)]="aff.name">
-          </md-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="aff.name">
+          </mat-form-field>
         </ng-container>
-      </md-cell>
+      </mat-cell>
     </ng-container>
 
     <!-- Website Column -->
-    <ng-container mdColumnDef="website">
-      <md-header-cell *mdHeaderCellDef md-sort-header> Website </md-header-cell>
-      <md-cell *mdCellDef="let aff">
+    <ng-container matColumnDef="website">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Website </mat-header-cell>
+      <mat-cell *matCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
           <a href="{{aff.website}}" target="_blank">{{aff.website}}</a>
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <md-form-field>
-            <input mdInput [(ngModel)]="aff.website">
-          </md-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="aff.website">
+          </mat-form-field>
         </ng-container>
-      </md-cell>
+      </mat-cell>
     </ng-container>
 
     <!-- Actions -->
-    <ng-container mdColumnDef="actions">
-      <md-header-cell *mdHeaderCellDef [style.align-items]="'center'">
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef [style.align-items]="'center'">
         <span> Actions </span>
         <span fxFlex></span>
-        <button class="refresh-button" md-icon-button (click)="refresh()"><md-icon svgIcon="refresh_grey"></md-icon></button>
-      </md-header-cell>
-      <md-cell *mdCellDef="let aff" fxLayout fxLayoutGap="2px">
+        <button class="refresh-button" mat-icon-button (click)="refresh()"><mat-icon svgIcon="refresh_grey"></mat-icon></button>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let aff" fxLayout fxLayoutGap="2px">
         <ng-container *ngIf="selectedId != aff.sfId">
-          <button md-mini-fab (click)="selectedId = aff.sfId">
-            <md-icon svgIcon="edit_mode_white"></md-icon>
+          <button mat-mini-fab (click)="selectedId = aff.sfId">
+            <mat-icon svgIcon="edit_mode_white"></mat-icon>
           </button>
 
-          <a md-mini-fab routerLink="/admin/affiliates/form/{{ aff.sfId }}">
-            <md-icon svgIcon="description_white"></md-icon>
+          <a mat-mini-fab routerLink="/admin/affiliates/form/{{ aff.sfId }}">
+            <mat-icon svgIcon="description_white"></mat-icon>
           </a>
 
-          <button md-mini-fab color="primary" (click)="delete(aff)">
-            <md-icon svgIcon="delete_white"></md-icon>
+          <button mat-mini-fab color="primary" (click)="delete(aff)">
+            <mat-icon svgIcon="delete_white"></mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <button md-mini-fab color="primary" (click)="selectedId = ''">
-            <md-icon svgIcon="cancel_white"></md-icon>
+          <button mat-mini-fab color="primary" (click)="selectedId = ''">
+            <mat-icon svgIcon="cancel_white"></mat-icon>
           </button>
 
-          <button md-mini-fab (click)="onSave.emit(aff)">
-            <md-icon svgIcon="save_white"></md-icon>
+          <button mat-mini-fab (click)="onSave.emit(aff)">
+            <mat-icon svgIcon="save_white"></mat-icon>
           </button>
         </ng-container>
 
-      </md-cell>
+      </mat-cell>
     </ng-container>
 
-    <md-header-row *mdHeaderRowDef="displayedColumns"></md-header-row>
-    <md-row *mdRowDef="let aff; columns: displayedColumns;"></md-row>
-  </md-table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let aff; columns: displayedColumns;"></mat-row>
+  </mat-table>
 
   <div class="spinner-container" *ngIf="isLoading">
-    <md-spinner class="mat-accent"></md-spinner>
+    <mat-spinner class="mat-accent"></mat-spinner>
   </div>
 
-  <md-paginator #paginator [length]="affiliateDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]">
-  </md-paginator>
+  <mat-paginator #paginator [length]="affiliateDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]">
+  </mat-paginator>
 </div>

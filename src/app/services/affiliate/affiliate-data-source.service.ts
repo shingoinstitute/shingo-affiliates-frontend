@@ -1,5 +1,5 @@
 // Angular Modules
-import { MdPaginator, MdSort } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 
 // App Modules
 import { AffiliateService } from './affiliate.service';
@@ -12,8 +12,8 @@ export class AffiliateDataSource extends APIDataSource<AffiliateService, Affilia
 
   constructor(
     public _adp: DataProvider<AffiliateService, Affiliate>,
-    public paginator?: MdPaginator,
-    public sort?: MdSort
+    public paginator?: MatPaginator,
+    public sort?: MatSort
   ) { super(_adp, paginator, sort); }
 
   protected getSortedData(): Affiliate[] {
