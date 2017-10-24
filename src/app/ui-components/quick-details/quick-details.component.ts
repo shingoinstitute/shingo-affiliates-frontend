@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { AnnouncementService } from '../../services/announcement/announcement.service';
 import { Announcement } from '../../services/announcement/announcement.model';
 import { MaterialsDialog } from '../materials/materials-dialog/materials-dialog.component';
@@ -14,7 +14,7 @@ export class QuickDetailsComponent implements OnInit {
 
   public announcements: Announcement[];
 
-  constructor(public announcement: AnnouncementService, public dialog: MdDialog) { }
+  constructor(public announcement: AnnouncementService, public dialog: MatDialog) { }
 
   public ngOnInit() {
     this.announcement.getAnnouncements().subscribe(data => {

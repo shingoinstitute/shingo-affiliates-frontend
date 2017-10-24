@@ -11,9 +11,9 @@ import { AffiliatesModule } from '../../affiliates/affiliates.module';
 import { FacilitatorsModule } from '../../facilitators/facilitators.module';
 
 import {
-  MdButtonModule,
-  MdTabsModule,
-  MdIconModule
+  MatButtonModule,
+  MatTabsModule,
+  MatIconModule
 } from '@angular/material';
 
 @NgModule({
@@ -23,9 +23,9 @@ import {
     FlexLayoutModule,
 
     // MaterialModule,
-    MdButtonModule,
-    MdTabsModule,
-    MdIconModule,
+    MatButtonModule,
+    MatTabsModule,
+    MatIconModule,
 
     AffiliatesModule,
     FacilitatorsModule

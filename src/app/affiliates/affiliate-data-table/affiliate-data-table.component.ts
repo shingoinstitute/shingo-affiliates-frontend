@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { MdPaginator, MdSort, MdDialog, MdDialogRef } from '@angular/material';
+import { MatPaginator, MatSort, MatDialog, MatDialogRef } from '@angular/material';
 
 import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { AffiliateService } from '../../services/affiliate/affiliate.service';
@@ -28,8 +28,8 @@ export class AffiliateDataTableComponent implements OnInit {
   @Output() public onDelete = new EventEmitter<Affiliate>();
   @Output() public onForm = new EventEmitter<Affiliate>();
 
-  @ViewChild(MdPaginator) public paginator: MdPaginator;
-  @ViewChild(MdSort) public sort: MdSort;
+  @ViewChild(MatPaginator) public paginator: MatPaginator;
+  @ViewChild(MatSort) public sort: MatSort;
 
   public affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
   public isLoading: boolean = true;
@@ -37,7 +37,7 @@ export class AffiliateDataTableComponent implements OnInit {
   public displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form', 'refresh'];
 
 
-  constructor(public dialog: MdDialog, public providerFactory: DataProviderFactory, public _as: AffiliateService, public router: RouterService) {
+  constructor(public dialog: MatDialog, public providerFactory: DataProviderFactory, public _as: AffiliateService, public router: RouterService) {
     this.affiliateDataProvider = providerFactory.getAffiliateDataProvider();
     this.affiliateDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }

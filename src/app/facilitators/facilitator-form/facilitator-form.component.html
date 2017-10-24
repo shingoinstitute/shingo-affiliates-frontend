@@ -1,18 +1,18 @@
 <form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer id="disable-lastpass-search">
 
   <div class="spinner-container">
-    <md-spinner class="mat-accent" *ngIf="isLoading"></md-spinner>
+    <mat-spinner class="mat-accent" *ngIf="isLoading"></mat-spinner>
   </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
-      <button md-raised-button type="button" [md-dialog-close]="false"> Cancel </button>
+      <button mat-raised-button type="button" class="mat-accent" [matDialogClose]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
+      <button mat-raised-button type="button" [matDialogClose]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
-      <button md-raised-button type="button" (click)="location.back()"> Cancel </button>
+      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
+      <button mat-raised-button type="button" (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 
@@ -26,21 +26,21 @@
   </div>
 
   <div class="input-item">
-    <md-form-field>
-      <input mdInput [(ngModel)]="facilitator.firstName" placeholder="First Name" formControlName="firstName" required>
-    </md-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="facilitator.firstName" placeholder="First Name" formControlName="firstName" required>
+    </mat-form-field>
   </div>
 
   <div class="input-item">
-    <md-form-field>
-      <input mdInput [(ngModel)]="facilitator.lastName" placeholder="Last Name" formControlName="lastName" required>
-    </md-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="facilitator.lastName" placeholder="Last Name" formControlName="lastName" required>
+    </mat-form-field>
   </div>
 
   <div class="input-item">
-    <md-form-field>
-      <input mdInput [(ngModel)]="facilitator.title" formControlName="title" placeholder="Title">
-    </md-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="facilitator.title" formControlName="title" placeholder="Title">
+    </mat-form-field>
   </div>
 
   <div class="input-item">
@@ -48,9 +48,9 @@
       <img src="{{ facilitator.photo }}">
     </div>
 
-    <md-form-field>
-      <input mdInput [(ngModel)]="facilitator.photo" formControlName="photo" placeholder="Photograph URL">
-    </md-form-field>
+    <mat-form-field>
+      <input matInput [(ngModel)]="facilitator.photo" formControlName="photo" placeholder="Photograph URL">
+    </mat-form-field>
   </div>
 
   <div class="input-item">
@@ -60,20 +60,20 @@
 
   <div class="input-item">
     <p class="mat-caption">*Facilitators must be assigned an affiliate to change their role type.</p>
-    <md-select [(ngModel)]="facilitator.role" placeholder="Role" formControlName="role">
-      <md-option *ngFor="let role of roles" [value]="role"> {{ role }}</md-option>
-    </md-select>
+    <mat-select [(ngModel)]="facilitator.role" placeholder="Role" formControlName="role">
+      <mat-option *ngFor="let role of roles" [value]="role"> {{ role }}</mat-option>
+    </mat-select>
   </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button md-raised-button type="button" class="mat-accent" [md-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
-      <button md-raised-button type="button" [md-dialog-close]="false"> Cancel </button>
+      <button mat-raised-button type="button" class="mat-accent" [matDialogClose]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
+      <button mat-raised-button type="button" [matDialogClose]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button md-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
-      <button md-raised-button type="button" (click)="location.back()"> Cancel </button>
+      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
+      <button mat-raised-button type="button" (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 

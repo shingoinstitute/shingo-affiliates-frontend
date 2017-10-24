@@ -1,13 +1,13 @@
 <div class="support-search-container">
   <form (ngSubmit)="search()">
-    <md-form-field>
-      <input type="text" mdInput placeholder="Search Support Topics" [(ngModel)]="query" name="query">
-      <md-icon mdSuffix svgIcon="search_grey"></md-icon>
-    </md-form-field>
+    <mat-form-field>
+      <input type="text" matInput placeholder="Search Support Topics" [(ngModel)]="query" name="query">
+      <mat-icon matSuffix svgIcon="search_grey"></mat-icon>
+    </mat-form-field>
   </form>
 
   <div class="support-search-spinner-wrapper">
-    <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
+    <mat-spinner class="mat-accent" *ngIf="isSearching"></mat-spinner>
   </div>
 
   <div class="support-search-body">

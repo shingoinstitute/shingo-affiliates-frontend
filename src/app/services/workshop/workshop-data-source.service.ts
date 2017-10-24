@@ -1,5 +1,5 @@
 // Angular Modules
-import { MdPaginator, MdSort } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 
 // App Modules
 import { WorkshopService } from './workshop.service';
@@ -11,8 +11,8 @@ export class WorkshopDataSource extends APIDataSource<WorkshopService, Workshop>
 
   constructor(
     public _wdp: DataProvider<WorkshopService, Workshop>,
-    public paginator?: MdPaginator,
-    public sort?: MdSort
+    public paginator?: MatPaginator,
+    public sort?: MatSort
   ) { super(_wdp, paginator, sort); }
 
   protected getSortedData(): Workshop[] {

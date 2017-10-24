@@ -1,61 +1,61 @@
-<md-toolbar class="mat-primary">
+<mat-toolbar class="mat-primary">
   <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
   <span fxFlex></span>
 
-  <button md-icon-button [mdMenuTriggerFor]="menu" *ngIf="isAuthenticated">
-    <md-icon svgIcon="account_circle_white"></md-icon>
+  <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">
+    <mat-icon svgIcon="account_circle_white"></mat-icon>
   </button>
 
-  <button md-icon-button *ngIf="sidenavService.canToggle" (click)="sidenavService.toggleSidenav()">
-    <md-icon svgIcon="menu_white"></md-icon>
+  <button mat-icon-button *ngIf="sidenavService.canToggle" (click)="sidenavService.toggleSidenav()">
+    <mat-icon svgIcon="menu_white"></mat-icon>
   </button>
 
-  <a md-button *ngIf="!isAuthenticated" routerLink="/login">Login</a>
+  <a mat-button *ngIf="!isAuthenticated" routerLink="/login">Login</a>
 
-  <md-menu #menu="mdMenu">
+  <mat-menu #menu="matMenu">
     <div class="menu-btn-container">
       <a class="toolbar-menu-btn" routerLink="/profile">
-        <md-icon svgIcon="person_black"></md-icon>
+        <mat-icon svgIcon="person_black"></mat-icon>
         <p>Profile</p>
       </a>
       <!-- <a class="toolbar-menu-btn" routerLink="/support">
-        <md-icon svgIcon="support_black"></md-icon>
+        <mat-icon svgIcon="support_black"></mat-icon>
         <p>Support</p>
       </a> -->
       <a class="toolbar-menu-btn" routerLink="/login" (click)="logoutHandler()">
-        <md-icon svgIcon="logout_black"></md-icon>
+        <mat-icon svgIcon="logout_black"></mat-icon>
         <p>Logout</p>
       </a>
     </div>
-  </md-menu>
+  </mat-menu>
 
-</md-toolbar>
+</mat-toolbar>
 
-<md-sidenav-container>
-  <md-sidenav #sidenav mode="side" [opened]="sidenavService && sidenavService.opened">
-    <md-nav-list>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" [opened]="sidenavService && sidenavService.opened">
+    <mat-nav-list>
       <ng-container *ngIf="isAuthenticated">
         <p class="nav-list-title">Main Menu</p>
-        <a md-list-item routerLink="/dashboard" routerLinkActive="active" (click)="sidenavService.close()">Dashboard</a>
-        <md-divider></md-divider>
-        <a md-list-item routerLink="/workshops" routerLinkActive="active" (click)="sidenavService.close()">Workshops</a>
-        <md-divider></md-divider>
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="active" (click)="sidenavService.close()">Dashboard</a>
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/workshops" routerLinkActive="active" (click)="sidenavService.close()">Workshops</a>
+        <mat-divider></mat-divider>
         <ng-container *ngIf="auth.user && auth.user.isAdmin">
-          <a md-list-item routerLink="/admin/affiliates" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
-          <md-divider></md-divider>
+          <a mat-list-item routerLink="/admin/affiliates" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
+          <mat-divider></mat-divider>
         </ng-container>
         <p class="nav-list-title">Affiliate Materials</p>
-        <a md-list-item nohref (click)="openMaterials('workshops')" (click)="sidenavService.close()">Workshop Materials</a>
-        <md-divider></md-divider>
-        <a md-list-item nohref (click)="openMaterials('forms')" (click)="sidenavService.close()">Forms/Evaluations</a>
-        <md-divider></md-divider>
-        <a md-list-item nohref (click)="openMaterials('marketing')" (click)="sidenavService.close()">Marketing Materials</a>
-        <md-divider></md-divider>
+        <a mat-list-item nohref (click)="openMaterials('workshops')" (click)="sidenavService.close()">Workshop Materials</a>
+        <mat-divider></mat-divider>
+        <a mat-list-item nohref (click)="openMaterials('forms')" (click)="sidenavService.close()">Forms/Evaluations</a>
+        <mat-divider></mat-divider>
+        <a mat-list-item nohref (click)="openMaterials('marketing')" (click)="sidenavService.close()">Marketing Materials</a>
+        <mat-divider></mat-divider>
       </ng-container>
 
       <p class="nav-list-title">Support</p>
-      <a md-list-item routerLink="/support" (click)="sidenavService.close()">Support Home</a>
-      <md-divider></md-divider>
+      <a mat-list-item routerLink="/support" (click)="sidenavService.close()">Support Home</a>
+      <mat-divider></mat-divider>
       <mat-expansion-panel class="mat-elevation-z nav-support-category" *ngFor="let category of supportCategories" [style.border-bottom]="'1px solid lightgrey'">
         <mat-expansion-panel-header>
           <mat-panel-title class="panel-title">
@@ -63,19 +63,19 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
       
-        <md-list *ngIf="supportCategoryPages[category]">
-          <md-list-item *ngFor="let page of supportCategoryPages[category]" class="nav-support-list-item">
+        <mat-list *ngIf="supportCategoryPages[category]">
+          <mat-list-item *ngFor="let page of supportCategoryPages[category]" class="nav-support-list-item">
             <a class="mat-caption" routerLink="/support/{{ page.Id }}" (click)="sidenavService.close()">{{ page.title }}</a>
-          </md-list-item>
-        </md-list>
+          </mat-list-item>
+        </mat-list>
 
       </mat-expansion-panel>
-    </md-nav-list>
-  </md-sidenav>
+    </mat-nav-list>
+  </mat-sidenav>
 
   <router-outlet class="main-content"></router-outlet>
 
-</md-sidenav-container>
+</mat-sidenav-container>
 <div class="spinner-container" *ngIf="isLoading">
-  <md-spinner></md-spinner>
+  <mat-spinner></mat-spinner>
 </div>

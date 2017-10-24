@@ -49,7 +49,7 @@ $login-form-width: 400px;
   margin-top: $default-margin * 2;
   margin-bottom: $default-margin * 2;
 }
-.md-spinner-container {
+.mat-spinner-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -57,7 +57,7 @@ $login-form-width: 400px;
   height: 42px;
   margin-bottom: -42px;
 
-  md-spinner {
+  mat-spinner {
     height: 42px;
   }
 }
@@ -65,7 +65,7 @@ form.login-form {
   display: flex;
   flex-direction: column;
 
-  md-form-field {
+  mat-form-field {
     width: 100%;
   }
 }

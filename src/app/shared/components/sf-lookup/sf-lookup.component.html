@@ -1,17 +1,17 @@
 <div class="lookup-container" [formGroup]="lookup">
   <div class="input-container">
-    <md-form-field>
-      <input class="autoComplete" type="text" mdInput formControlName="sfObject" [mdAutocomplete]="auto" [placeholder]="placeholder"
+    <mat-form-field>
+      <input class="autoComplete" type="text" matInput formControlName="sfObject" [matAutocomplete]="auto" [placeholder]="placeholder"
         required>
       <div class="search-spinner-wrapper">
-        <md-spinner class="mat-accent" *ngIf="isSearching"></md-spinner>
+        <mat-spinner class="mat-accent" *ngIf="isSearching"></mat-spinner>
       </div>
-    </md-form-field>
+    </mat-form-field>
 
-    <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
-      <md-option *ngFor="let o of objects" [value]="o" (onSelectionChange)="onSelectChange(o)">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option *ngFor="let o of objects" [value]="o" (onSelectionChange)="onSelectChange(o)">
         {{ displayObjFn(o) }}
-      </md-option>
-    </md-autocomplete>
+      </mat-option>
+    </mat-autocomplete>
   </div>
 </div>

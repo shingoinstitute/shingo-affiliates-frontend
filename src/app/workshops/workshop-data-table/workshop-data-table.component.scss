@@ -19,13 +19,13 @@
 .in-grace-period {
    background-color: #c3cfdc;
 }
-md-row {
+mat-row {
    cursor: pointer;
 }
-md-row.past-due:hover {
+mat-row.past-due:hover {
    background-color: #DDC4BC;
 }
-md-row.in-grace-period:hover {
+mat-row.in-grace-period:hover {
    background-color: #B7BFC7;
 }
 .action-type-header-cell,
@@ -53,7 +53,7 @@ div.spinner-container {
   text-align: center;
   background: white;
 }
-div.spinner-container md-spinner {
+div.spinner-container mat-spinner {
   display: inline-block;
   max-width: 25px;
   max-height: 25px;
