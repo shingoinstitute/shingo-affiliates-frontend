@@ -62,7 +62,7 @@
             {{ category }}
           </mat-panel-title>
         </mat-expansion-panel-header>
-      
+
         <mat-list *ngIf="supportCategoryPages[category]">
           <mat-list-item *ngFor="let page of supportCategoryPages[category]" class="nav-support-list-item">
             <a class="mat-caption" routerLink="/support/{{ page.Id }}" (click)="sidenavService.close()">{{ page.title }}</a>

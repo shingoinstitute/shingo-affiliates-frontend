@@ -1,6 +1,11 @@
 // Angular Modules
+<<<<<<< HEAD
 import { Component, ViewChild, HostListener, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatIconRegistry, MatSidenav, MatDialog } from '@angular/material';
+=======
+import { Component, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { MdIconRegistry, MdSidenav, MdSidenavToggleResult } from '@angular/material';
+>>>>>>> master
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
 
@@ -144,6 +149,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     });
   }
 
+<<<<<<< HEAD
   public openMaterials(folder: string) {
     const folders = { workshops: false, marketing: false, forms: false };
     folders[folder] = true;
@@ -199,6 +205,17 @@ export class AppComponent implements OnDestroy, AfterViewInit {
           this.getSupportCategoryPages(c);
         }
       });
+=======
+  /**
+   * Creates a subscription that listens to events emitted by `this.onResize()`
+   * and opens or closes the sidenav depending on the screen size. Also closes
+   * the sidenav if the user is not logged in.
+   */
+  winResizeHandler() {
+    this.windowWidthChange
+      .debounceTime(100)
+      .subscribe((width: number) => this.showSidenav = width >= 960);
+>>>>>>> master
   }
 
   public getSupportCategoryPages(category: string) {
