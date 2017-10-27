@@ -3,7 +3,7 @@
     <mat-form-field>
       <input class="autoComplete" type="text" matInput formControlName="sfObject" [matAutocomplete]="auto" [placeholder]="placeholder"
         required>
-      <div class="search-spinner-wrapper">
+      <div class="spinner-container search-spinner-wrapper">
         <mat-spinner class="mat-accent" *ngIf="isSearching"></mat-spinner>
       </div>
     </mat-form-field>
