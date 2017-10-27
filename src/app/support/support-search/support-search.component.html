@@ -14,10 +14,10 @@
     <div class="search-info-wrapper">
       <p class="mat-caption" *ngIf="results">{{ results.length }} result{{ results.length == 1 ? '' : 's' }}</p>
     </div>
-  
+
     <ul class="search-result-list">
       <li class="search-result-item" *ngFor="let result of results">
-        <a class="mat-title" routerLink="/support/{{ result.id }}">{{ result.title }}</a>
+        <a class="mat-title" routerLink="/support/{{ result.sfId }}">{{ result.title }}</a>
         <p class="mat-body-1" [innerHTML]="result.content"></p>
       </li>
     </ul>

@@ -44,7 +44,7 @@ export class SupportSearchComponent implements OnInit {
             if (typeof page.content === 'string') {
               // HTML tags are removed to shorten text when displaying search results,
               // then each word in the query is bolded to make it stand out in search result text.
-              const content = page.content.replace(/\<[a-z]+\>|\<\/[a-z]+\>/g, ' ');
+              const content = page.content.replace(/<[^>]*>/g, ' ');
               const tokens = this.query.split(' ').join('|');
               page.Content__c = content.replace(new RegExp(`(${tokens})`, 'gi'), '<strong>$1</strong>');
             }
