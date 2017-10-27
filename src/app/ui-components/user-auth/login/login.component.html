@@ -1,0 +1,37 @@
+<div class="login-page shingo-bg">
+  <div class="login-page-body">
+    <!-- Login Form -->
+    <div class="login-form-container" *ngIf="didLoad">
+      <div class="login-form-header">
+        <img src="https://res.cloudinary.com/shingo/image/upload/c_scale,h_100/v1392063084/Shingo_Logo_mini_nzegar.png">
+        <h1 class="md-accent-text mat-title">Shingo Affiliate Portal</h1>
+      </div>
+  
+      <div class="mat-spinner-container">
+        <mat-spinner *ngIf="isLoading"></mat-spinner>
+      </div>
+  
+      <div class="message-container">
+        <p class="md-warn-text" *ngIf="errMsg" [innerHTML]="errMsg"></p>
+        <code class="md-warn-text" *ngIf="errBody" [innerHTML]="errBody"></code>
+      </div>
+  
+      <form class="login-form">
+        <mat-form-field floatPlaceholder="always">
+          <input matInput type="text" [(ngModel)]="email" name="email" placeholder="email">
+        </mat-form-field>
+  
+        <mat-form-field floatPlaceholder="always">
+          <input matInput type="password" [(ngModel)]="password" name="password" placeholder="password" (keyup.enter)="onSubmit()">
+        </mat-form-field>
+      </form>
+  
+      <div class="login-actions">
+        <button mat-raised-button class="mat-primary" type="button" (click)="onSubmit()" [disabled]="isLoading">Login</button>
+        <a routerLink="/forgotpassword">Forgot Password?</a>
+        <a href="/support">Help?</a>
+      </div>
+    </div>
+  </div>
+
+</div>

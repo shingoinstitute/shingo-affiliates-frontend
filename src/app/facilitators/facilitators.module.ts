@@ -1,30 +1,64 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '@angular/material';
+
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CdkTableModule } from '@angular/cdk';
-import { FacilitatorComponent } from './facilitator/facilitator.component';
+
+import { SharedModule } from '../shared/shared.module';
+import { AffiliatesModule } from '../affiliates/affiliates.module';
+
+import { AdminFacilitatorTabComponent } from './admin-facilitator-tab/admin-facilitator-tab.component';
 import { FacilitatorDataTableComponent } from './facilitator-data-table/facilitator-data-table.component';
 import { FacilitatorFormComponent } from './facilitator-form/facilitator-form.component';
-import { SharedModule } from "../shared/shared.module";
+
+// Material Design imports
+import { 
+  MatIconModule, 
+  MatTableModule, 
+  MatPaginatorModule, 
+  MatSortModule, 
+  MatFormFieldModule, 
+  MatOptionModule, 
+  MatDialogModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatButtonModule,
+  MatInputModule,
+  MatProgressSpinnerModule
+} from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    MaterialModule,
+    
+    MatIconModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatButtonModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
+
     FlexLayoutModule,
-    CdkTableModule,
     FormsModule,
-    SharedModule.forRoot()
+    ReactiveFormsModule,
+    RouterModule,
+    SharedModule.forRoot(),
+    AffiliatesModule
   ],
   declarations: [
-    FacilitatorComponent,
+    AdminFacilitatorTabComponent,
     FacilitatorDataTableComponent,
     FacilitatorFormComponent
   ],
   exports: [
-    FacilitatorComponent,
+    AdminFacilitatorTabComponent,
     FacilitatorDataTableComponent,
     FacilitatorFormComponent
   ],
@@ -32,12 +66,13 @@ import { SharedModule } from "../shared/shared.module";
     FacilitatorFormComponent
   ]
 })
-export class FacilitatorsModule { }
+export default class FacilitatorsModule { }
 
 export {
-  FacilitatorComponent,
+  FacilitatorsModule,
   FacilitatorDataTableComponent,
-  FacilitatorFormComponent
-}
+  FacilitatorFormComponent,
+  AdminFacilitatorTabComponent
+};
 
-export * from './Facilitator';
+// export * from './facilitator.model';

@@ -1,0 +1,15 @@
+<div class="container">
+
+  <!-- Actions -->
+  <div class="tab-actions">
+    <a mat-raised-button class="mat-primary" routerLink="/admin/affiliates/form/create">
+      <mat-icon svgIcon="edit_white"></mat-icon>
+      <span> Create </span>
+    </a>
+  </div>
+
+  <!-- Data Table -->
+  <app-affiliate-data-table [displayedColumns]="displayedColumns" (onDelete)="onDelete($event)" (onSave)="onSave($event)" (onForm)="openForm($event)">
+  </app-affiliate-data-table>
+
+</div>

@@ -1,45 +1,100 @@
-<div class="form-container">
+<div class="form-container" [formGroup]="affForm" [class.loading-active]="isLoading" #formContainer>
+
+  <div class="spinner-container">
+    <mat-spinner class="mat-accent" *ngIf="isLoading"></mat-spinner>
+  </div>
+
+  <div class="form-actions">
+    <ng-container *ngIf="!isDialog">
+      <button mat-raised-button class="mat-accent" (click)="onSave()"> Save </button>
+      <button mat-raised-button (click)="location.back()"> Cancel </button>
+    </ng-container>
+  </div>
 
   <div class="form-header">
-    <h3>
-      Affiliate Form
-      <ng-container *ngIf="affiliate.sfId != ''">
-        - {{ affiliate.sfId }}
-      </ng-container>
-    </h3>
+    <h3 class="mat-headline"> Affiliate Form </h3>
+    <p *ngIf="affiliate.sfId!==''"> Salesforce ID: {{ affiliate.sfId }} </p>
   </div>
 
-  <div class="input-item">
-    <div class="logo-img">
-      <img src="{{ affiliate.logo }}" alt="logo image">
+  <div class="form-body">
+
+    <div class="input-item">
+      <app-sf-lookup #afLookup formControlName="affiliate" [sfObject]="affiliate" [fields]="extraFields" [displayFn]="displayFn.bind(this)"
+        placeholder="Name" (onSelect)="selectedAffiliate($event)" (onChange)="affiliate.name = $event"></app-sf-lookup>
     </div>
 
-    <md-input-container>
-      <input mdInput placeholder="Logo URL" [(ngModel)]="affiliate.logo">
-    </md-input-container>
-  </div>
+    <div class="input-item">
+      <div class="logo-img">
+        <img src="{{ affiliate.logo }}" alt="logo image">
+      </div>
 
-  <div class="input-item">
-    <md-input-container>
-      <input mdInput placeholder="Name" [(ngModel)]="affiliate.name">
-    </md-input-container>
-  </div>
+      <mat-form-field>
+        <input matInput placeholder="Logo URL" formControlName="logo">
+      </mat-form-field>
+    </div>
 
-  <div class="input-item">
-    <md-input-container>
-        <input mdInput placeholder="Website" [(ngModel)]="affiliate.website">
-      </md-input-container>
+    <div class="input-item">
+      <mat-form-field>
+        <input matInput placeholder="Website" formControlName="website">
+      </mat-form-field>
+    </div>
+
+    <div class="input-item">
+      <p class="mat-body-2">Contact Information</p>
+      <mat-form-field>
+        <input matInput placeholder="Public Contact Name" formControlName="publicContact">
+      </mat-form-field>
+      <!-- </div> -->
+
+      <!-- <div class="input-item"> -->
+      <mat-form-field>
+        <input matInput placeholder="Public Contact Email" formControlName="publicContactEmail">
+      </mat-form-field>
+      <!-- </div> -->
+
+      <!-- <div class="input-item"> -->
+      <mat-form-field>
+        <input matInput placeholder="Public Contact Phone" formControlName="publicContactPhone">
+      </mat-form-field>
+    </div>
+
+    <div class="input-item">
+      <mat-form-field floatPlaceholder="always">
+        <input type="text" matInput formControlName="langControl" [matAutocomplete]="langSearch" placeholder="Languages">
+
+        <mat-autocomplete #langSearch="matAutocomplete">
+          <mat-option *ngFor="let lang of languageOptions | async" [value]="lang" (onSelectionChange)="onSelectLanguage(lang)">
+            {{ lang }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+
+      <div class="language-list">
+        <p class="mat-body-2"> Languages </p>
+        <div class="language-list-item" *ngFor="let lang of affiliate.languages">
+          <button mat-icon-button (click)="removeLanguage(lang)">
+            <mat-icon svgIcon="delete_grey"></mat-icon>
+          </button> {{ lang }}
+        </div>
+      </div>
+    </div>
+
+    <div class="input-item">
+      <p class="mat-body-2">Summary</p>
+      <ckeditor [(ngModel)]="affiliateSummary" debounce="500" [ngModelOptions]="{standalone: true}"></ckeditor>
+    </div>
   </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button md-raised-button class="mat-accent" [md-dialog-close]="affiliate"> Save </button>
-      <button md-raised-button [md-dialog-close]="false"> Cancel </button>
+      <button mat-raised-button class="mat-accent" [matDialogClose]="affiliate" [disabled]="!affForm.valid"> Save </button>
+      <button mat-raised-button [matDialogClose]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-        <button md-raised-button class="mat-accent" (click)="onClickSave()"> Save </button>
+      <button mat-raised-button class="mat-accent" (click)="onSave()"> Save </button>
+      <button mat-raised-button (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
 </div>
-

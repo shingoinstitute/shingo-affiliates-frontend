@@ -6,11 +6,11 @@
 }
 
 .detail-row {
-    padding: $defaultMargin;    
+    padding: $default-margin;    
 }
 
 .container .detail-row:nth-child(even) {
-    background-color: $rowBackground;
+    background-color: $row-background-color;
  }
 
 .course-img {

@@ -11,9 +11,12 @@
 .logo-cell > img {
    height: 100%;
 }
-md-input-container input {
+mat-form-field input {
   background-color: #efefef;
   padding: 3px;
   border-radius: 2px;
   width: 97%;
+}
+button.refresh-button {
+  margin-left: 15%;
 }

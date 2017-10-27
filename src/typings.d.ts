@@ -5,3 +5,8 @@ interface NodeModule {
 }
 
 type DateRange = [Date, Date] & { 2?: void };
+
+// Declare `withoutTime` function to Date prototype (defined in main.ts)
+interface Date {
+  withoutTime(): Date;
+}

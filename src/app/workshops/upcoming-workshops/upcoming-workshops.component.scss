@@ -1,0 +1,33 @@
+mat-cell,
+mat-header-cell {
+   flex: 2;
+   padding-right: 24px;
+}
+mat-cell:last-child,
+mat-header-cell:last-child {
+   padding-right: 4px;
+}
+
+mat-cell:first-child,
+mat-cell:last-child,
+mat-header-cell:first-child,
+mat-header-cell:last-child {
+   flex: 1;
+}
+.course-type {
+   display: flex;
+   flex-direction: column;
+   padding-left: 16px;
+   margin: 0;
+}
+@media only screen and (max-width: 960px) {
+   .course-type {
+      padding: 0;
+   }
+}
+.course-type > div{
+   width: 40px;
+}
+mat-row {
+   height: 64px;
+}

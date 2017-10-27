@@ -1,19 +1,40 @@
 .form-container {
-  width: 960px;
+  width: 680px;
+  margin-bottom: 48px;
   display: flex;
   flex-direction: column;
 }
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 680px) {
   .form-container {
     width: 100%;
+    max-height: 100vh;
   }
 }
+.form-header {
+  padding: 8px;
+  background-color: #efefef;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-bottom: 8px;
+}
+.form-body {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
 .input-item {
+  padding: 4px;
   flex: 1 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
-.input-item > md-input-container {
+.input-item:nth-child(even) {
+  background-color: #efefef;
+}
+.input-item:not(:last-child) {
+  margin-bottom: 8px;
+}
+.input-item > mat-form-field {
   margin-right: 16px;
 }
 .form-actions {
@@ -26,9 +47,25 @@
 .logo-img {
   max-width: 100px;
   max-height: 100px;
-  margin: 0 16px;
 }
 .logo-img > img {
+  border-radius: 4px;
   width: 100%;
   height: 100%;
+}
+.spinner-container {
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.spinner-container mat-spinner {
+  position: absolute;
+  height: 48px;
+}
+.loading-active {
+  color: lightgrey;
+}
+md-form-field {
+  width: 100%;
 }

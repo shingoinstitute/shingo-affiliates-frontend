@@ -1,0 +1,35 @@
+<!-- All folders and files that deal with forms go here -->
+<mat-card style="overflow-y: scroll;" class="md-whiteframe-3dp">
+  <mat-card-title>
+
+    <span class="md-headline">Forms</span>
+
+  </mat-card-title>
+  <mat-card-content>
+    <div fxLayout="column" fxLayoutGap="8px">
+      <div><span class="clickable" (click)="folder['Evaluation']=!folder['Evaluation']"><mat-icon svgIcon="folder" aria-label="Open Instructor Evaluation Folder"></mat-icon> <b>Instructor Evaluation</b> </span>
+        <a class="mat-primary" target="_blank" href="https://usu.app.box.com/files/0/f/8549280365/Instructor_Evaluations">
+          <mat-icon svgIcon="link"></mat-icon>
+        </a>
+      </div>
+      <ul *ngIf="folder['Evaluation']" class="no-bullets">
+        <li>
+          <a class="mat-primary" target="_blank" href="https://usu.co1.qualtrics.com/jfe/form/SV_3z2ZVhBmLFVsXdj">
+            <mat-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (Online)"></mat-icon> Online</a>
+        </li>
+        <li>
+          <a class="mat-primary" target="_blank" href="https://usu.box.com/s/hqg8su339i5cvuqnnov6z2xt0jyb7o8r">
+            <mat-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (English)"></mat-icon> English</a>
+        </li>
+        <li>
+          <a class="mat-primary" target="_blank" href="https://usu.box.com/s/y0mcnq3sw5lr7j6xun2g7jh998e88j3n">
+            <mat-icon svgIcon="insert_drive_file" aria-label="Open Evaluation Form (Espanol)"></mat-icon> Español</a>
+        </li>
+      </ul>
+      <a class="mat-primary" target="_blank" href="https://usu.box.com/s/y2sq8u7um8uz3fyktc2aq15xx9d5yojd">
+        <mat-icon svgIcon="insert_drive_file" aria-label="Open Attendance Form"></mat-icon> Attendance Form</a>
+      <a class="mat-primary" target="_blank" href="https://usu.box.com/s/99cio2jdoqk17hgo6cqm9q6v3j39d3mv">
+        <mat-icon svgIcon="insert_drive_file" aria-label="Open Name Sign"></mat-icon> Name Sign</a>
+    </div>
+  </mat-card-content>
+</mat-card>

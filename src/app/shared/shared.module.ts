@@ -1,39 +1,69 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AffiliateLookupComponent } from './components/affiliate-lookup/affiliate-lookup.componet';
-import { MaterialModule, MdDialogModule } from '@angular/material';
-import { FillViewHeightDirective } from './directives/fill-height.directive';
-import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
+
+import { CKEditorModule } from 'ng2-ckeditor';
+
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
+import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
+import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
+import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component';
+
+// Material Design imports
+import {
+  MatDialogModule,
+  MatAutocompleteModule,
+  MatOptionModule,
+  MatProgressSpinnerModule,
+  MatButtonModule,
+  MatIconModule,
+  MatInputModule
+} from '@angular/material';
+
+
 @NgModule({
-   declarations: [
-      IconLegendComponent,
-      SimpleMessageDialog,
-      AffiliateLookupComponent
-   ],
-   imports: [ 
-      CommonModule,
-      FormsModule,
-      ReactiveFormsModule,
-      MaterialModule,
-      MdDialogModule
-   ],
-   exports: [
-      IconLegendComponent,
-      SimpleMessageDialog,
-      AffiliateLookupComponent,
-      MdDialogModule
-   ],
-   entryComponents: [
-    SimpleMessageDialog
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+
+    MatDialogModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+
+    CKEditorModule
+  ],
+  declarations: [
+    AlertDialogComponent,
+    IconLegendComponent,
+    SimpleMessageDialog,
+    SfLookupComponent,
+    TextResponseDialogComponent
+  ],
+  exports: [
+    // MdDialogModule,
+    CKEditorModule,
+    AlertDialogComponent,
+    IconLegendComponent,
+    SimpleMessageDialog,
+    SfLookupComponent,
+    TextResponseDialogComponent
+  ],
+  entryComponents: [
+    AlertDialogComponent,
+    SimpleMessageDialog,
+    TextResponseDialogComponent
   ]
 })
 export class SharedModule {
-  static forRoot(): ModuleWithProviders {
+  public static forRoot(): ModuleWithProviders {
     return {
-      ngModule: SharedModule,
-      providers: [FillViewHeightDirective]
+      ngModule: SharedModule
     };
   }
 }

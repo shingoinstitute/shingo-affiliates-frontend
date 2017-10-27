@@ -1,16 +1,43 @@
 .form-container {
+  width: 680px;
   display: flex;
   flex-direction: column;
-  max-width: 960px;
+}
+@media only screen and (max-width: 680px) {
+  .form-container {
+    width: 100%;
+  }
+}
+.form-header {
+  padding: 8px;
+  background-color: #efefef;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-bottom: 8px;
 }
 .input-item {
+  padding: 4px;
   flex: 1 0;
+  display: flex;
+  flex-direction: column;
+}
+.input-item > mat-form-field {
+  flex: 1 0;
+  margin-right: 16px;
+  width: 100%;
+}
+.input-item:nth-child(even) {
+  background-color: #efefef;
+}
+.input-item:not(:last-child) {
+  margin-bottom: 8px;
+}
+.form-actions {
   display: flex;
   flex-direction: row;
 }
-.input-item > md-input-container {
-  flex: 1 0;
-  margin-right: 16px;
+.form-actions > button {
+  margin: 8px;
 }
 .facilitator-img {
   max-height: 100px;
@@ -22,4 +49,27 @@
 }
 app-affiliate-lookup {
   flex: 1 0 auto;
+}
+.spinner-container {
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.spinner-container mat-spinner {
+  position: absolute;
+  height: 48px;
+}
+.loading-active {
+  color: lightgrey;
+}
+.search-spinner-container {
+  position: relative;
+  display: flex;
+}
+.search-spinner-container mat-spinner {
+  position: absolute;
+  height: 24px;
+  right: 0;
+  top: -24px;
 }

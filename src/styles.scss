@@ -12,6 +12,10 @@ html {
 html, body, .main-content {
    margin: 0;
 }
+a {
+  text-decoration: none;
+  color: #279FCD;
+}
 .container {
    margin: 16px;
 }
@@ -22,26 +26,31 @@ html, body, .main-content {
 .md-accent { background-color: $accent-color; }
 .md-accent-text { color: $accent-color; }
 .md-warn { background-color: $warn-color; }
+snack-bar-container.md-warn { background-color: $warn-color !important; }
 .md-warn-text { color: $warn-color; }
 .md-success { background-color: $success-color; }
 .md-success-text { color: $success-color; }
 .md-grey, .grey { color: $grey-color; }
 .grey-text, .md-grey-text { color: $grey-color; }
+.margin-none { margin: 0; }
 
 /* Sidenav */
-md-sidenav {
+.mat-sidenav-content {
+  min-height: calc(100vh - $navbar-height);
+}
+mat-sidenav {
    margin-right: 4px;
    box-shadow: 1px 0 3px rgba(0,0,0,.24);
    width: 250px;
 }
-md-nav-list {
+mat-nav-list {
    margin: 8px;
 }
-md-nav-list a.active {
+mat-nav-list a.active {
    background-color: #e5e5ff !important;
    border-left: 5px solid $primary-color-lighten-2;
 }
-md-nav-list p {
+mat-nav-list p {
    margin: 8px 0 8px 0;
    font-weight: 600;
 }
@@ -52,7 +61,7 @@ md-nav-list p {
 .text-md { font-size: 14px; }
 .text-lg { font-size: 18px; }
 
-/* Cards (because sometimes `md-card` is just too annoying) */
+/* Cards (because sometimes `mat-card` is just too annoying) */
 .card {
    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
    border-radius: 2px;
@@ -79,7 +88,7 @@ md-nav-list p {
 }
 
 /* Misc */
-button md-icon ~ span { margin-left: 4px; }
+button mat-icon ~ span { margin-left: 4px; }
 .mat-sort-header-container{
    display: flex;
    cursor: pointer
@@ -133,21 +142,21 @@ button md-icon ~ span { margin-left: 4px; }
 .mat-sort-header-pointer-right { 
    background: currentColor;width:8px;height:2px;position:absolute;bottom:0;right:0
 }
-md-row md-cell,
-md-header-row md-header-cell {
+mat-row mat-cell,
+mat-header-row mat-header-cell {
    padding: 0 24px 0 4px;
 }
-md-row md-cell:last-child,
-md-header-row md-header-cell:last-child {
+mat-row mat-cell:last-child,
+mat-header-row mat-header-cell:last-child {
    padding-left: -4px;
 }
-md-row md-cell:first-child,
-md-header-row md-header-cell:first-child {
+mat-row mat-cell:first-child,
+mat-header-row mat-header-cell:first-child {
    padding: 0;
    margin-right: 16px;
 }
-md-cell > p { margin: 4px 0 4px 0;}
-md-row { height: 56px; }
+mat-cell > p { margin: 4px 0 4px 0;}
+mat-row { height: 56px; }
 .hidden { display: none !important; }
 
 /* Flex helpers */
@@ -171,4 +180,38 @@ md-row { height: 56px; }
 }
 .--flex-center {
    align-items: center;
+}
+
+/* Lookups */
+.lookup-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 8px;
+}
+.input-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0 auto;
+}
+mat-form-field {
+  flex: 1 0 auto;
+}
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  mat-spinner {
+    position: absolute;
+    top: 16px;
+    height: 24px !important;
+    width: 24px !important;
+
+    svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+
+  }
 }

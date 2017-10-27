@@ -1,0 +1,84 @@
+@import '../../../../assets/sass/_globals';
+
+$login-form-width: 400px;
+
+.login-page {
+  height: calc(100vh - #{$navbar-height});
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+@media only screen and (max-width: $break-small) {
+  .login-page {
+    height: calc(100vh - #{$navbar-height-sm});
+  }
+}
+.login-page-body {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+}
+.login-form-container {
+  margin-top: $default-margin * 4;
+  background: white;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  padding: $default-margin * 2;
+  width: $login-form-width;
+}
+@media only screen and (max-width: #{$break-small}) {
+  .login-page-body {
+    align-items: initial;
+  }
+  .login-page-body,
+  .login-form-container {
+    width: 100%;
+    margin: 0;
+  }
+}
+.login-form-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  img, h1 {
+    margin: $default-margin;
+  }
+}
+.message-container {
+  min-height: 19px;
+  margin-top: $default-margin * 2;
+  margin-bottom: $default-margin * 2;
+}
+.mat-spinner-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 42px;
+  margin-bottom: -42px;
+
+  mat-spinner {
+    height: 42px;
+  }
+}
+form.login-form {
+  display: flex;
+  flex-direction: column;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+.login-actions {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+
+   * {
+     margin: $default-margin;
+   }
+
+   a {
+     text-decoration-line: none;
+   }
+}

@@ -1,0 +1,25 @@
+<div class="support-search-container">
+  <form (ngSubmit)="search()">
+    <mat-form-field>
+      <input type="text" matInput placeholder="Search Support Topics" [(ngModel)]="query" name="query">
+      <mat-icon matSuffix svgIcon="search_grey"></mat-icon>
+    </mat-form-field>
+  </form>
+
+  <div class="support-search-spinner-wrapper">
+    <mat-spinner class="mat-accent" *ngIf="isSearching"></mat-spinner>
+  </div>
+
+  <div class="support-search-body">
+    <div class="search-info-wrapper">
+      <p class="mat-caption" *ngIf="results">{{ results.length }} result{{ results.length == 1 ? '' : 's' }}</p>
+    </div>
+  
+    <ul class="search-result-list">
+      <li class="search-result-item" *ngFor="let result of results">
+        <a class="mat-title" routerLink="/support/{{ result.id }}">{{ result.title }}</a>
+        <p class="mat-body-1" [innerHTML]="result.content"></p>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 @import '../../../app-theme';
 
-md-input-container { width: 100%; }
+mat-form-field { width: 100%; }
 
 .fac-input {
    background-color: #efefef;
@@ -9,7 +9,7 @@ md-input-container { width: 100%; }
    width: 97%;
    font-weight: 300;
 }
-md-icon.icon-sm {
+mat-icon.icon-sm {
   height: 18px;
   width: 18px;
 }

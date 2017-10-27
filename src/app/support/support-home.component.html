@@ -1,0 +1,40 @@
+<div class="support-page-container">
+  <div class="page-header">
+    <p class="mat-display-1">Support Home</p>
+    <!-- <p class="mat-headline"></p> -->
+  </div>
+
+  <div class="support-page-body">
+    <div class="search-input-wrapper">
+      <form (ngSubmit)="onSearch()">
+        <mat-form-field>
+          <input type="text" matInput placeholder="Search Support Topics" [(ngModel)]="query" name="query">
+          <mat-icon svgIcon="search_grey" matSuffix></mat-icon>
+        </mat-form-field>
+      </form>
+    </div>
+
+    <!-- Support Categories -->
+    <div class="support-categories-wrapper">
+      <div class="support-categories-header">
+        <h1 class="mat-headline">What Topic Do You Need Help With?</h1>
+      </div>
+      <div class="support-categories-body">
+        <p *ngFor="let category of categories">
+          <a routerLink="/support/category/{{ category.toLowerCase() }}">{{ category }}</a>
+        </p>
+        <!-- <div class="support-category-list">
+          <mat-card class="support-category-card" *ngFor="let category of categories" routerLink="/support/category/{{ category }}">
+            <p class="mat-subheading-2">{{ category }}</p>
+            <div class="category-icon">
+              <img src="">
+            </div>
+          </mat-card>
+        </div> -->
+      </div>
+      <!-- END Support Categories -->
+
+    </div>
+
+  </div>
+</div>

@@ -1,81 +1,102 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { DataProvider } from "../../services/data-provider.service";
-import { AffiliateService } from "../../services/affiliate/affiliate.service";
-import { Affiliate } from "../Affiliate";
-import { DataProviderFactory } from "../../services/data-provider-factory.service";
-import { AffiliateDataSource } from "../../services/affiliate/affiliate-data-source.service";
-import { MdPaginator, MdSort, MdDialog } from "@angular/material";
-import { IconType } from "../../shared/components/icon-legend/icon-legend.component";
-import { AffiliateFormComponent } from "../affiliate-form/affiliate-form.component";
+import { Component, ViewChild, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { MatPaginator, MatSort, MatDialog, MatDialogRef } from '@angular/material';
 
+import { DataProvider } from '../../services/data-provider/data-provider.service';
+import { AffiliateService } from '../../services/affiliate/affiliate.service';
+import { Affiliate } from '../affiliate.model';
+import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service';
+import { AffiliateDataSource } from '../../services/affiliate/affiliate-data-source.service';
+import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
+import { AffiliateFormComponent } from '../affiliate-form/affiliate-form.component';
+import { Filter } from '../../services/filters/filter.abstract';
+import { RouterService } from '../../services/router/router.service';
+
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-affiliate-data-table',
   templateUrl: './affiliate-data-table.component.html',
   styleUrls: ['./affiliate-data-table.component.scss']
 })
-export class AffiliateDataTableComponent {
+export class AffiliateDataTableComponent implements OnInit {
 
-  affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
+  @Input() public dataSource: AffiliateDataSource | null;
+  @Input() public displayedColumns: string[] = ['logo', 'name', 'website'];
+  @Input() public filters: Filter[] = [];
 
-  @ViewChild('paginator') paginator: MdPaginator;
-  @ViewChild(MdSort) sort: MdSort;
-  
-  @Input() dataSource: AffiliateDataSource | null;
-  @Input() displayedColumns = ["logo", "name", "website"];
-  
-  @Output('onClickSave') onClickSaveEventEmitter = new EventEmitter<Affiliate>();
-  @Output('onClickDelete') onClickDeleteEventEmitter = new EventEmitter<Affiliate>();
-  @Output('onLoadComplete') onLoadCompleteEventEmitter = new EventEmitter<void>();
-  
-  // `selectedId` used to track which row is being edited.
-  selectedId: string = '';
-  
-  displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form'];
+  @Output() public onSave = new EventEmitter<Affiliate>();
+  @Output() public onDelete = new EventEmitter<Affiliate>();
+  @Output() public onForm = new EventEmitter<Affiliate>();
 
-  trackByIndex(index, item) { return index; }
+  @ViewChild(MatPaginator) public paginator: MatPaginator;
+  @ViewChild(MatSort) public sort: MatSort;
 
-  constructor(public dialog: MdDialog, private providerFactory: DataProviderFactory, private _as: AffiliateService) {
+  public affiliateDataProvider: DataProvider<AffiliateService, Affiliate>;
+  public isLoading: boolean = true;
+  public selectedId: string = '';
+  public displayedIcons: IconType[] = ['edit', 'delete', 'save', 'form', 'refresh'];
+
+
+  constructor(public dialog: MatDialog, public providerFactory: DataProviderFactory, public _as: AffiliateService, public router: RouterService) {
     this.affiliateDataProvider = providerFactory.getAffiliateDataProvider();
+    this.affiliateDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
 
-  ngOnInit() {
-    this.onClickSaveEventEmitter.subscribe(() => { this.selectedId = ''; });
+  public ngOnInit() {
+    this.onSave.subscribe(() => { this.selectedId = ''; });
     // Init dataSource for data table
-    this.dataSource = new AffiliateDataSource(this.affiliateDataProvider, this.paginator, this.sort);
+    if (!this.dataSource) {
+      this.dataSource = new AffiliateDataSource(this.affiliateDataProvider, this.paginator, this.sort);
+    } else {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+
+    if (this.filters) this.dataSource.addFilters(this.filters);
+
     // Set 'name' as default sorted column
     this.sort.sort({ id: 'name', start: 'asc', disableClear: false });
-    // Listen to reload data event
-    this._as.shouldReloadData$.subscribe(() => {
-      console.log('refreshing data');
+  }
+
+  public refresh() {
+    try {
       this.affiliateDataProvider.refresh();
-    });
-
-    this.affiliateDataProvider.dataChange.subscribe(() => {
-      if (this.affiliateDataProvider.data.length > 0) {
-        this.onLoadCompleteEventEmitter.emit();
-      }
-    });
+    } catch (error) {
+      if (error.status === 403) {
+        if (error.error === 'ACCESS_FORBIDDEN') this.router.navigateRoutes(['/403']);
+        else this.router.navigateRoutes(['/login', '/admin']);
+      } else
+        throw error;
+    }
   }
 
-  onClickDelete(affiliate: Affiliate) {
-    this.onClickDeleteEventEmitter.emit(affiliate);
-  }
+  public trackByIndex(index, item) { return item.sfId; }
 
-  onClickForm(affiliate: Affiliate) {
-    let dialogRef = this.dialog.open(AffiliateFormComponent, {
+  public delete(affiliate: Affiliate) { this.onDelete.emit(affiliate); }
+
+  /**
+   * @deprecated keeping this function around just in case, but we're most 
+   * likely moving away from using dialogs to open edit-detail-forms completely.
+   */
+  public openFormDialog(affiliate: Affiliate) {
+    // determine height and width value of dialog
+    const height = window.innerWidth < 960 ? '100vh' : '90vh';
+    const width = window.innerWidth < 960 ? String(window.innerWidth) : null;
+
+    const dialogRef = this.dialog.open(AffiliateFormComponent, {
       data: {
         isDialog: true,
         affiliate: affiliate
+      },
+      height: height,
+      width: width
+    });
+
+    dialogRef.afterClosed().subscribe(af => {
+      if (af) {
+        this.onSave.emit(af);
       }
     });
-    
-    dialogRef.afterClosed().subscribe(affiliate => {
-      console.log(affiliate);
-      if (affiliate) {
-        this.onClickSaveEventEmitter.emit(affiliate);
-      }
-    });
-  }  
+  }
 
 }

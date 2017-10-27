@@ -1,14 +1,17 @@
 @import '../../../assets/sass/_globals';
 
 .form-group-container {
-   max-width: $mediumBreak;
+   max-width: $break-medium;
    margin-bottom: 142px;
 }
+mat-form-field {
+    width: 100%;
+}
 form .input-item:nth-child(even) {
-   background-color: $rowBackground;
+   background-color: $row-background-color;
 }
 .form-actions {
-   margin: ($defaultMargin * 2) 0 ($defaultMargin * 2) 0;
+   margin: ($default-margin * 2) 0 ($default-margin * 2) 0;
 }
 .input-item {
    padding: 8px;
@@ -18,43 +21,38 @@ form .input-item:nth-child(even) {
 .input-item > p {
    margin: 0;
 }
-
 form .facilitator {
-    padding: $defaultMargin;
+    padding: $default-margin;
     width: 30%;
     display: flex;
     vertical-align: middle;
 }
-
 form .facilitator > button {
     left: 23%;
     position: absolute;
 }
-
 form .facilitator:nth-child(even) {
-    background-color: $rowBackground;
+    background-color: $row-background-color;
 }
-
 form .facilitator, form .facilitator > button {
-    margin-left: $defaultMargin * 2;
+    margin-left: $default-margin * 2;
 }
-
 form .facilitator > div {
     float: left
 }
-
-form md-input-container md-spinner {
+form mat-form-field mat-spinner {
     height: 25px;
     width: 25px;
     float: right;
     opacity: 0.75;
 }
-
-form md-input-container input.autoComplete {
+form mat-form-field input.autoComplete {
     width: fit-content;
 }
-
-form div.form-actions md-spinner {
+form div.form-actions mat-spinner {
     max-height: 36px;
     max-width: 25px;
+}
+form mat-form-field mat-hint.error {
+  color: #ff0000;
 }

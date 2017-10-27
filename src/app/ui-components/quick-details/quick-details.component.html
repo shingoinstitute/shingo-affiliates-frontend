@@ -1,0 +1,16 @@
+<div class="card" [style.height]="'auto'">
+  <div class="card-header">Quick Details</div>
+
+  <div class="card-content">
+    <h1 class="mat-headline">Announcements</h1>
+    <div class="detail-item-container">
+      <app-quick-detail-item *ngFor="let announcement of announcements" [announcement]="announcement"></app-quick-detail-item>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <button mat-raised-button class="mat-primary" (click)="displayAfMaterials()">
+      <mat-icon svgIcon="folder_special_white"></mat-icon><span>Affiliate Materials</span>
+    </button>
+  </div>
+</div>

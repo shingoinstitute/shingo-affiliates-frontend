@@ -1,0 +1,11 @@
+<h2 matDialogTitle>{{ title }}</h2>
+<mat-dialog-content>
+  <div [innerHTML]="message"></div>
+  <mat-form-field [style.width]="'100%'">
+    <textarea matInput tabindex="1" [(ngModel)]="reason" required rows="7"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button class="mat-accent" [matDialogClose]="reason">{{ acceptText }}</button>
+  <button mat-button [matDialogClose]="undefined">{{ cancelText }}</button>
+</mat-dialog-actions>

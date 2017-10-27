@@ -1,0 +1,7 @@
+.detail-item-container {
+  display: flex;
+  flex-direction: column;
+}
+.detail-item-container app-quick-detail-item:nth-child(odd) {
+  background-color: lightgrey;
+}

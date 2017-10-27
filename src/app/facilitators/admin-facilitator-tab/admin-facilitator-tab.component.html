@@ -1,0 +1,17 @@
+<div class="container">
+
+  <ng-container *ngIf="newFacilitator">
+    <app-facilitator-form [facilitator]="newFacilitator"></app-facilitator-form>
+  </ng-container>
+
+  <div class="actions">
+    <a mat-raised-button class="mat-primary" routerLink="/admin/facilitators/form/create">
+      <mat-icon svgIcon="edit_white"></mat-icon>
+      <span> Create </span>
+    </a>
+  </div>
+  <!-- Data Table -->
+  <app-facilitator-data-table (onDisable)="onDisable($event)" (onDelete)="onDelete($event)" (onReset)="resetPassword($event)"
+    (onSave)="onSave($event)" (onLoadComplete)="isLoading = false">
+  </app-facilitator-data-table>
+</div>

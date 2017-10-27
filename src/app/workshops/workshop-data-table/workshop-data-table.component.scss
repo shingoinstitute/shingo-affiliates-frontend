@@ -13,20 +13,19 @@
       margin: 0 auto;
    }
 }
-
 .past-due {
    background-color: #ffd8c9;
 }
 .in-grace-period {
    background-color: #c3cfdc;
 }
-md-row {
+mat-row {
    cursor: pointer;
 }
-md-row.past-due:hover {
+mat-row.past-due:hover {
    background-color: #DDC4BC;
 }
-md-row.in-grace-period:hover {
+mat-row.in-grace-period:hover {
    background-color: #B7BFC7;
 }
 .action-type-header-cell,
@@ -49,20 +48,17 @@ md-row.in-grace-period:hover {
 .instructors-cell {
    flex: 1 0;
 }
-
 div.spinner-container {
   width: 100%;
   text-align: center;
   background: white;
 }
-
-div.spinner-container md-spinner {
+div.spinner-container mat-spinner {
   display: inline-block;
   max-width: 25px;
   max-height: 25px;
   padding: 8px;
 }
-
 button.refresh-button {
   margin-left: 15%;
 }

@@ -1,0 +1,9 @@
+<div fill-height>
+  
+  <nav mat-tab-nav-bar>
+    <a mat-tab-link routerLink="/admin/affiliates" routerLinkActive #aff="routerLinkActive" [active]="aff.isActive">Affiliates</a>
+    <a mat-tab-link routerLink="/admin/facilitators" routerLinkActive #fac="routerLinkActive" [active]="fac.isActive">Facilitators</a>
+  </nav>
+
+   <router-outlet></router-outlet>
+</div>

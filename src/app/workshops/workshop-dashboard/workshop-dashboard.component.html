@@ -1,0 +1,68 @@
+<div class="filter-options-container" fxLayout="column">
+    <div fxLayout="row" fxLayoutGap="16px">
+        <a mat-raised-button class="mat-primary" routerLink="/workshops/new">
+            <mat-icon svgIcon="edit_white"></mat-icon>
+            <span>Add Workshop</span>
+        </a>
+        <div class="filter-options-header">
+            <button mat-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<mat-icon [svgIcon]="showFilters ? 'expand_less' : 'expand_more'"></mat-icon></button>
+        </div>
+    </div>
+    <div #filterBox class="filter-options-body" fxLayout="column" fxLayoutGap="36px" [style.opacity]="showFilters ? '1' : '0'"
+        [style.height]="showFilters ? '275px' : '0'">
+        <div fxLayout="row">
+            <div fxLayout="column" fxFlex="20%">
+                <h4 class="mat-subheading">Filter:
+                    <button mat-raised-button type="button" (click)="clearFilters()">
+                        Clear <mat-icon svgIcon="x_red"></mat-icon>
+                    </button>
+                </h4>
+                <mat-checkbox *ngFor="let filter of filterOptions; let i = index" [value]="filter" [id]="i">{{ filter }}</mat-checkbox>
+            </div>
+            <div fxLayout="column" fxFlex="80%" fxLayoutGap="16px">
+                <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
+
+                <div fxLayout="row" fxLayoutGap="8px" [style.display]="showStatusFilter ? 'flex' : 'none'">
+                    <mat-select [style.width]="'100%'" #statusSelect="matSelect" placeholder="Status" [(ngModel)]="selectedStatuses" (change)="selectedStatusChanged($event)"
+                        multiple="true" floatPlaceholder="auto">
+                        <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+                    </mat-select>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="8px" [style.display]="showTextFilter ? 'flex' : 'none'">
+                    <mat-form-field>
+                        <input matInput #textSearchInput placeholder="filter..." [(ngModel)]="textSearch">
+                        <mat-icon matSuffix svgIcon="search_grey"></mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="8px" [style.display]="showDateRange ? 'flex' : 'none'">
+                    <div fxLayout="column">
+                        <div fxLayout fxLayoutGap="8px">
+                            <p class="text-md" [style.color]="'#757575'">Date</p>
+
+                            <mat-form-field floatPlaceholder="always">
+                                <input matInput [matDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
+                                <mat-datepicker-toggle matSuffix [for]="startDateFilterPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startDateFilterPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field floatPlaceholder="always">
+                                <input matInput [matDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
+                                <mat-datepicker-toggle matSuffix [for]="endDateFilterPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #endDateFilterPicker></mat-datepicker>
+                            </mat-form-field>
+                            <button mat-button type="button" (click)="clearDateFilter()">
+                                <mat-icon svgIcon="x_red"></mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <app-workshop-data-table [filters]="filters" [displayedColumns]="displayedColumns" (editClick)="goToWorkshopEdit($event)"></app-workshop-data-table>
+</div>
