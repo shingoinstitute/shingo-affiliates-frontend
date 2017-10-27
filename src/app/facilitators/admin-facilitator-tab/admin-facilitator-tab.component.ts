@@ -30,14 +30,14 @@ export class AdminFacilitatorTabComponent {
   }
 
   public onDelete(f: Facilitator) {
-    this.presentAlertDialog(f, `Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.`);
+    this.presentAlertDialog(f, `Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.`, true);
   }
 
   public onDisable(f: Facilitator) {
     this.presentAlertDialog(f, `Are you sure you want to disable <strong>${f.name}'s</strong> account?`);
   }
 
-  public presentAlertDialog(f: Facilitator, msg: string) {
+  public presentAlertDialog(f: Facilitator, msg: string, isDelete: boolean = false) {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
         sfObject: f,
@@ -46,8 +46,10 @@ export class AdminFacilitatorTabComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
+      if (result === true && isDelete) {
         this.delete(f);
+      } else if (result === true) {
+        this.disable(f);
       }
     });
   }

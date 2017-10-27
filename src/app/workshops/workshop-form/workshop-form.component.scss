@@ -40,19 +40,29 @@ form .facilitator, form .facilitator > button {
 form .facilitator > div {
     float: left
 }
-form mat-form-field mat-spinner {
-    height: 25px;
-    width: 25px;
-    float: right;
-    opacity: 0.75;
-}
 form mat-form-field input.autoComplete {
     width: fit-content;
-}
-form div.form-actions mat-spinner {
-    max-height: 36px;
-    max-width: 25px;
 }
 form mat-form-field mat-hint.error {
   color: #ff0000;
 }
+div.search-spinner-wrapper {
+  display: block;
+  height: 36px;
+  right: -36px;
+  top: 6px;
+}
+div.search-spinner-wrapper {
+  mat-spinner {
+   position: absolute;
+   top: 0;
+   right: 0;
+   height: 24px !important;
+   width: 24px !important;
+ 
+   svg {
+     width: 24px !important;
+     height: 24px !important;
+   }
+  }
+ }
