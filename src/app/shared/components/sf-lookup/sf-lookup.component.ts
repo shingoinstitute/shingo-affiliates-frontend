@@ -3,7 +3,7 @@ import { FormControl, FormGroup, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VAL
 
 import { SFObject } from '../../models/sf-object.abstract.model';
 import { Affiliate } from '../../../affiliates/affiliate.model';
-import { AffiliateService } from '../../../services/affiliate/affiliate.service';
+import { AffiliateService, DEFAULT_AFFILIATE_SEARCH_FIELDS } from '../../../services/affiliate/affiliate.service';
 
 import { Facilitator } from '../../../facilitators/facilitator.model';
 import { FacilitatorService } from '../../../services/facilitator/facilitator.service';
@@ -110,7 +110,8 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
       let searchFn: Observable<SFObject[]>;
 
       if (this.sfObject instanceof Affiliate) {
-        searchFn = this._as.search(query);
+        if (!this.fields || !this.fields.length) this.fields = DEFAULT_AFFILIATE_SEARCH_FIELDS;
+        searchFn = this._as.search(query, this.fields);
       } else if (this.sfObject instanceof Facilitator) {
         searchFn = this._fs.search(query, this.fields, this.extraArgs);
       } else if (this.sfObject instanceof Workshop) {
@@ -122,14 +123,14 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
       }
 
       searchFn.subscribe((data: SFObject[]) => {
-          this.isSearching = false;
-          this.objects = data.map(o => o).sort((a: SFObject, b: SFObject) => {
-            return a.name > b.name ? 1 : -1;
-          });
-        }, err => {
-          this.isSearching = false;
-          console.error(err);
+        this.isSearching = false;
+        this.objects = data.map(o => o).sort((a: SFObject, b: SFObject) => {
+          return a.name > b.name ? 1 : -1;
         });
+      }, err => {
+        this.isSearching = false;
+        console.error(err);
+      });
     }
   }
 

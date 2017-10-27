@@ -3,7 +3,7 @@
     <div fxLayout="row" fxLayoutGap="8px" class="detail-row">
       <img class="course-img" [src]="largeImage()">
       <div fxLayout="column">
-        <b class="mat-subheading">{{workshop.type}} ( {{workshop.isPublic ? 'Public' : 'public'}} ) &mdash; {{workshop.location}}</b>
+        <b class="mat-subheading">{{workshop.type}} ( {{workshop.isPublic ? 'Public' : 'Private'}} ) &mdash; {{workshop.location}}</b>
         <p>Status:&emsp;{{workshop.status}}</p>
         <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" mat-raised-button class="mat-accent"> Edit &ensp;
           <mat-icon svgIcon="edit_white"></mat-icon>
