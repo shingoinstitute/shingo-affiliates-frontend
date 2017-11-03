@@ -3,7 +3,6 @@ import { By } from '@angular/platform-browser';
 import { MockComponent } from 'ng2-mock-component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule } from '@angular/material';
 
 import { DashboardComponent } from './dashboard.component';
 import { QuickDetailsComponent } from '../quick-details/quick-details.component';
@@ -18,7 +17,6 @@ describe('DashboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MaterialModule,
         FlexLayoutModule
       ],
       declarations: [
