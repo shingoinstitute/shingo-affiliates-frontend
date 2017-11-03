@@ -107,7 +107,8 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
       this.isSearching = true;
       this.onChange.emit(query);
 
-      let searchFn: Observable<SFObject[]>;
+      // let searchFn: Observable<SFObject[]>;
+      let searchFn: Observable<SFObject[]> = this._as.search(query, DEFAULT_AFFILIATE_SEARCH_FIELDS);
 
       if (this.sfObject instanceof Affiliate) {
         if (!this.fields || !this.fields.length) this.fields = DEFAULT_AFFILIATE_SEARCH_FIELDS;
@@ -118,7 +119,9 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
         searchFn = this._ws.search(query);
       } else if (this.sfObject instanceof CourseManager) {
         searchFn = this._as.searchCMS(query, this.extraArgs);
-      } else {
+      }
+
+      if (!searchFn) {
         throw new Error(`Cannot determine a search function for ${typeof this.sfObject}`);
       }
 

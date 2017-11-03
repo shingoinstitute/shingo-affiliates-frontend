@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Router, RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule } from '@angular/material';
 
 import { AdminPanelComponent } from './admin-panel.component';
 
@@ -17,7 +16,6 @@ describe('AdminPanelComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        MaterialModule,
         FlexLayoutModule
       ],
       declarations: [AdminPanelComponent],

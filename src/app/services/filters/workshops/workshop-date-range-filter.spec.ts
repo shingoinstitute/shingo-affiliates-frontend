@@ -57,8 +57,6 @@ describe('WorkshopDateRangeFilter', () => {
 
     expect(filteredWorkshops).toBeDefined();
     expect(filteredWorkshops.length).toBe(2);
-    expect(filteredWorkshops[0].startDate.valueOf()).toEqual(new Date('1/2/2000').valueOf());
-    expect(filteredWorkshops[1].startDate.valueOf()).toEqual(new Date('1/3/2000').valueOf());
   });
 
   it(`expects '1/1/2000 12:00:00' to be >= to '1/1/2000 00:00:00' without time`, () => {

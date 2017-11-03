@@ -119,7 +119,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
       .distinctUntilChanged()
       .subscribe(isValid => {
         this.isAuthenticated = isValid;
-        console.log('authentication changes: activeRoute -- ', this.activeRoute);
         if (!this.isAuthenticated && this.activeRoute !== '/login') {
           this.routerService.navigateRoutes(['/login', this.activeRoute]);
         }

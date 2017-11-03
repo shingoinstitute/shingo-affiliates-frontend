@@ -2,6 +2,8 @@ import { SFObject } from '../shared/models/sf-object.abstract.model';
 
 export class Affiliate extends SFObject {
 
+  public static get OBJECT_NAME(): string { return 'Affiliate'; }
+
   public static DEFAULT_LANGUAGE_OPTIONS: string[] = [
     'English',
     'Spanish',
