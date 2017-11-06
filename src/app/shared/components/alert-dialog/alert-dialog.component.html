@@ -1,4 +1,4 @@
-<h2 matDialogTitle>Delete {{ sfObj.constructor.name }}?</h2>
+<h3 matDialogTitle [innerHTML]="title"></h3>
 <mat-dialog-content [innerHTML]="message"></mat-dialog-content>
 <mat-dialog-actions>
    <button mat-button class="mat-accent" [matDialogClose]="true">Confirm</button>

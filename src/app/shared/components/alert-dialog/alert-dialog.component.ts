@@ -10,9 +10,11 @@ export class AlertDialogComponent {
 
   public sfObj: SFObject;
   public message: string;
+  public title: string;
 
-  constructor( @Inject(MAT_DIALOG_DATA) public data: { sfObject: any, message: string }) {
+  constructor( @Inject(MAT_DIALOG_DATA) public data: { sfObject: any, title: string, message: string }) {
     this.sfObj = data.sfObject as SFObject;
-    this.message = data.message;
+    this.title = data.title ? data.title : '';
+    this.message = data.message ? data.message : '';
   }
 }

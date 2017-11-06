@@ -11,7 +11,11 @@
     </a>
   </div>
   <!-- Data Table -->
-  <app-facilitator-data-table (onDisable)="onDisable($event)" (onDelete)="onDelete($event)" (onReset)="resetPassword($event)"
-    (onSave)="onSave($event)" (onLoadComplete)="isLoading = false">
+  <app-facilitator-data-table 
+    (onDisable)="onDisable($event)" 
+    (onDelete)="onDelete($event)" 
+    (onReset)="onResetPassword($event)"
+    (onSave)="onSave($event)" 
+    (onLoadComplete)="isLoading = false">
   </app-facilitator-data-table>
 </div>
