@@ -30,26 +30,55 @@ export class AdminFacilitatorTabComponent {
   }
 
   public onDelete(f: Facilitator) {
-    this.presentAlertDialog(f, `Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.`, true);
+    const msg = `
+      Are you sure you want to delete <strong>${f.name}'s</strong> account? This action cannot be undone.
+      <br>
+      <span class="mat-caption">This action will delete the user's contact information from Salesforce and remove them from the database.</span>
+    `;
+    const title = `Delete ${f.constructor.name}?`;
+    this.presentAlertDialog(f, msg, title);
   }
 
   public onDisable(f: Facilitator) {
-    this.presentAlertDialog(f, `Are you sure you want to disable <strong>${f.name}'s</strong> account?`);
+    const msg = `
+    Are you sure you want to disable <strong>${f.name}'s</strong> account?
+    <br>
+    <span class="mat-caption">This action will remove the user's ability to login without deleting their account information.</span>
+    `;
+    const title = `Disable ${f.constructor.name}?`;
+    this.presentAlertDialog(f, msg, title);
   }
 
-  public presentAlertDialog(f: Facilitator, msg: string, isDelete: boolean = false) {
+  public presentAlertDialog(f: Facilitator, msg: string, title: string = '', shouldDelete: boolean = false) {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
+        title: title,
         sfObject: f,
         message: msg
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === true && isDelete) {
+      if (result === true && shouldDelete) {
         this.delete(f);
       } else if (result === true) {
         this.disable(f);
+      }
+    });
+  }
+
+  public onResetPassword(f: Facilitator) {
+    const dialogReg = this.dialog.open(AlertDialogComponent, {
+      data: {
+        title: `Reset Password?`,
+        sfObject: f,
+        message: `Send password-reset email to ${f.name}?`
+      }
+    });
+
+    dialogReg.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.resetPassword(f);
       }
     });
   }
