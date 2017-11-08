@@ -72,12 +72,22 @@ export class LoginComponent implements OnInit {
   }
 
   public findErrorMsg(obj: object, key: string = 'error'): string {
-    if (obj && typeof obj[key] === 'object') {
-      return this.findErrorMsg(obj[key]);
-    } else if (typeof obj[key] === 'string') {
-      return obj[key];
-    } else {
-      return '';
+    while (obj.hasOwnProperty(key)) {
+      obj = obj[key];
+      if (typeof obj === 'string') {
+        const message: string = obj;
+        if (message.match(/\{.*\}/g)) {
+          try {
+            obj = JSON.parse(message);
+            console.warn(obj);
+          } catch (e) {
+            return '';
+          }
+        } else {
+          return message;
+        }
+      }
     }
+    return '';
   }
 }
