@@ -44,8 +44,10 @@ export class WorkshopFormComponent implements OnInit {
 
   @Input() public submitFunction: (workshop: Workshop) => Observable<ISFSuccessResult>;
   @Input() public workshop: Workshop = new Workshop();
+  @Input() public isNewWorkshop: boolean;
 
   public isLoading: boolean = false;
+
 
   public get dateFormGroup(): FormGroup { return this.workshopForm.get('dates') as FormGroup; }
 
@@ -58,7 +60,6 @@ export class WorkshopFormComponent implements OnInit {
   public describe: any = {};
   public today: Date = new Date();
   public tomorrow: Date = new Date(this.today.valueOf() + (1000 * 60 * 60 * 24));
-
 
   public workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
   public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
@@ -80,7 +81,9 @@ export class WorkshopFormComponent implements OnInit {
     public _fs: FacilitatorService,
     public _as: AffiliateService,
     public _ws: WorkshopService,
-    public snackbar: MatSnackBar) { }
+    public snackbar: MatSnackBar) {
+
+    }
 
   public ngOnInit() {
     this.createForm();

@@ -26,7 +26,7 @@
       </mat-select>
     </div>
 
-    <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
+    <div class="input-item" *ngIf="auth.user && auth.user.isAdmin && !isNewWorkshop">
       <p class="mat-caption"> {{ describe.status && describe.status.inlineHelpText }} </p>
       <mat-select placeholder="{{ describe.status && describe.status.label || 'Workshop Status'}}" floatPlaceholder="auto" required
         formControlName="status">
@@ -112,7 +112,11 @@
     </div>
 
     <div class="input-item">
-      <app-sf-lookup formControlName="facilitator" [sfObject]="'facilitator'" [displayFn]="contactDisplayWith.bind(this)" (onSelect)="onFacilitatorSelected($event)"
+      <app-sf-lookup formControlName="facilitator" 
+        [sfObject]="'facilitator'" 
+        [displayFn]="contactDisplayWith.bind(this)" 
+        (onSelect)="onFacilitatorSelected($event)"
+        [isRequired]="false"
         placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"></app-sf-lookup>
 
       <div>
@@ -121,13 +125,13 @@
     </div>
 
     <h5 *ngIf="workshop.instructors.length">Instructors</h5>
-    <div class="facilitator" *ngFor="let facilitator of workshop.instructors">
-      <div>
+    <div class="facilitator-list" *ngFor="let facilitator of workshop.instructors">
+      <div class="facilitator-item">
         <b>{{facilitator.Name}}</b>
         <br>
         <i>{{facilitator.Email}}</i>
       </div>
-      <button mat-button type="button" (click)="workshop.removeInstructorById(facilitator.sfId)">
+      <button mat-icon-button type="button" (click)="workshop.removeInstructorById(facilitator.sfId)">
         <mat-icon svgIcon="x_red"></mat-icon>
       </button>
     </div>

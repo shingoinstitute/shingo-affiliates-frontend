@@ -13,6 +13,7 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import 'rxjs/add/observable/throw';
 
 import { pick } from 'lodash';
+import { HttpHeaders } from '@angular/common/http';
 
 export interface ISFSuccessResult {
   id: string;
@@ -34,6 +35,9 @@ export abstract class BaseAPIService extends BaseService {
   public abstract search(query: string): Observable<any[]>;
 
   public describe(route: 'workshops' | 'facilitators' | 'affiliates' | 'support', http: HttpService): Observable<any> {
+    // let headers = new HttpHeaders().set('x-jwt', http.jwt);
+    // headers = headers.set('x-force-refresh', 'true');
+    // return http.get(`${this.APIHost()}/${route}/describe`, { headers })
     return http.get(`${this.APIHost()}/${route}/describe`)
       .map(data => {
         const props = {};

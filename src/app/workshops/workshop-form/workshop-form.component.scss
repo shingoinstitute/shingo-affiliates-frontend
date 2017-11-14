@@ -14,6 +14,8 @@ form .input-item:nth-child(even) {
    margin: ($default-margin * 2) 0 ($default-margin * 2) 0;
 }
 .input-item {
+   margin-top: 8px;
+   margin-bottom: 8px;
    padding: 8px;
    display: flex;
    flex-direction: column;
@@ -21,24 +23,20 @@ form .input-item:nth-child(even) {
 .input-item > p {
    margin: 0;
 }
-form .facilitator {
-    padding: $default-margin;
-    width: 30%;
-    display: flex;
-    vertical-align: middle;
-}
-form .facilitator > button {
-    left: 23%;
-    position: absolute;
-}
-form .facilitator:nth-child(even) {
-    background-color: $row-background-color;
-}
-form .facilitator, form .facilitator > button {
-    margin-left: $default-margin * 2;
-}
-form .facilitator > div {
-    float: left
+form {
+    .facilitator-list {
+        display: flex;
+        flex-direction: row;
+
+        .facilitator-item {
+            margin-left: $default-margin * 2;
+            margin-bottom: $default-margin;
+            margin-top: $default-margin;
+        }
+    }
+    .facilitator-list:nth-child(even) {
+        background-color: $row-background-color;
+    }
 }
 form mat-form-field input.autoComplete {
     width: fit-content;
