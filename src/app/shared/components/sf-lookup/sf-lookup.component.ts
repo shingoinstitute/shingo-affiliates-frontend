@@ -15,6 +15,7 @@ import { CourseManager } from '../../../workshops/course-manager.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 import { Subject } from 'rxjs/Subject';
+import { ValidationErrors } from '@angular/forms/src/directives/validators';
 
 @Component({
   selector: 'app-sf-lookup',
@@ -32,6 +33,9 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   @Input() public fields: string[];
   @Input() public extraArgs: any;
   @Input() public displayFn: (o: SFObject) => string;
+
+  // Should the lookup component input field be required?
+  @Input() public isRequired: boolean = true;
 
   @Output() public onSelect = new EventEmitter<SFObject>();
   @Output() public onChange = new EventEmitter<string>();
@@ -63,8 +67,9 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   public ngOnInit() {
+    
     this.lookup = this.fb.group({
-      sfObject: [this.sfObject, Validators.required]
+      sfObject: [this.sfObject]
     });
     if (this.placeholder === undefined) this.placeholder = 'Search...';
     if (typeof this.sfObject === 'string') {
@@ -90,6 +95,15 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   public ngAfterViewInit() {
+    // If `this.isRequired` is true, add the isRequired validator to the FormControl
+    if (this.isRequired) {
+      // Get the FormControl object
+      const sfObjectFormControl = this.lookup.get('sfObject');
+      // Add the validator to the FormControl
+      sfObjectFormControl.setValidators([Validators.required]);
+    }
+
+
     this.lookup.controls.sfObject.valueChanges
       .filter(query => query && query.length > 2)
       .subscribe(query => this.queryHandlerSource.next(query));
@@ -140,6 +154,16 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   public onSelectChange(sfObject: SFObject) {
     this.sfObject = sfObject;
     this.onSelect.emit(sfObject);
+
+    // If 'sfObject' inside the lookupForm is not required (as determined by `this.isRequired`)
+    // then clear the form when an item is selected.
+    if (!this.isRequired) {
+      // Get the FormControl from the lookup FormGroup
+      const sfObjectFormControl = this.lookup.get('sfObject');
+      // Set the FormControl value to '' to clear it
+      sfObjectFormControl.setValue('');
+    }
+
   }
 
   public reduceErrors() {
