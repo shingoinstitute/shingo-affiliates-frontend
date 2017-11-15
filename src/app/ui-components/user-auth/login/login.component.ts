@@ -56,7 +56,8 @@ export class LoginComponent implements OnInit {
       }, err => {
         console.error(err);
         this.isLoading = false;
-        const msg = this.findErrorMsg(err);
+        // const msg = this.findErrorMsg(err);
+        const msg = err.error ? err.error : '';
         if (msg === 'INVALID_PASSWORD')
           this.errMsg = 'Invalid password.';
         else if (msg === 'EMAIL_NOT_FOUND')
@@ -65,29 +66,29 @@ export class LoginComponent implements OnInit {
           this.errMsg = 'Connection Refused.';
           this.errBody = 'We may be experiencing server difficulties, please try again later.';
         } else {
-          this.errMsg = `An unknown error occured. Please try again later.`;
-          this.errBody = JSON.stringify(err, null, 3);
+          // this.errMsg = `An unknown error occured. Please try again later.`;
+          this.errBody = JSON.stringify(err.error, null, 3);
         }
       });
   }
 
-  public findErrorMsg(obj: object, key: string = 'error'): string {
-    while (obj.hasOwnProperty(key)) {
-      obj = obj[key];
-      if (typeof obj === 'string') {
-        const message: string = obj;
-        if (message.match(/\{.*\}/g)) {
-          try {
-            obj = JSON.parse(message);
-            console.warn(obj);
-          } catch (e) {
-            return '';
-          }
-        } else {
-          return message;
-        }
-      }
-    }
-    return '';
-  }
+  // public findErrorMsg(obj: object, key: string = 'error'): string {
+  //   while (obj.hasOwnProperty(key)) {
+  //     obj = obj[key];
+  //     if (typeof obj === 'string') {
+  //       const message: string = obj;
+  //       if (message.match(/\{.*\}/g)) {
+  //         try {
+  //           obj = JSON.parse(message);
+  //           console.warn(obj);
+  //         } catch (e) {
+  //           return '';
+  //         }
+  //       } else {
+  //         return message;
+  //       }
+  //     }
+  //   }
+  //   return '';
+  // }
 }

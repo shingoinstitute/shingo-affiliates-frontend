@@ -10,7 +10,6 @@ export class RouterService {
   constructor(public router: Router) { }
 
   public nextRoute() {
-    console.log('calling nextRoute() with stack: ', this.routeStack);
     if (this.routeStack.length > 0)
       this.router.navigateByUrl(this.routeStack.shift());
     else

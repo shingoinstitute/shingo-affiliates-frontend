@@ -30,37 +30,37 @@ export class FacilitatorService extends BaseAPIService {
   public getAll(): Observable<Facilitator[]> {
     return this.http.get(this.baseUrl)
       .map(res => res.map(facJSON => new Facilitator(facJSON)))
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public getById(id: string): Observable<Facilitator> {
     return this.http.get(`${this.baseUrl}/${id}`)
       .map(res => new Facilitator(res))
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public create(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.post(`${this.baseUrl}`, obj)
       .map(res => res)
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public map(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.post(`${this.baseUrl}/${obj.sfId}`, obj)
       .map(res => res)
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public update(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
       .map(res => res)
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public delete(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
       .map(res => res)
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   /**
@@ -69,7 +69,7 @@ export class FacilitatorService extends BaseAPIService {
   public disable(obj: Facilitator): Observable<ISFSuccessResult> {
     return this.http.delete(`${this.baseUrl}/${obj.sfId}/unmap`)
       .map(res => res)
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   /**
@@ -89,7 +89,7 @@ export class FacilitatorService extends BaseAPIService {
 
     return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(facJSON => new Facilitator(facJSON)))
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public describe(): Observable<Facilitator> {
@@ -103,13 +103,13 @@ export class FacilitatorService extends BaseAPIService {
   public resetPassword(email: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/resetpassword/${email}`)
       .map(res => res)
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public changePassword(token: string, password): Observable<Facilitator> {
     return this.http.post(`${this.baseUrl}/resetpassword/token`, { token, password })
       .map(res => new Facilitator(res))
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
 }

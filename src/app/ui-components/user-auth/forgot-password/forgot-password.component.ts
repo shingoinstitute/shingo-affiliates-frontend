@@ -47,15 +47,14 @@ export class ForgotPasswordComponent implements OnInit {
         dialogRef.afterClosed().subscribe(() => this.router.navigateByUrl('/login'));
       }, err => {
         console.error('error', err);
-        const msg = err.error && err.error.error ? err.error.error : '';
+        const msg = err.error ? err.error : '';
         if (msg === 'EMAIL_NOT_FOUND' || msg === 'USER_NOT_FOUND') {
-          this.errMsg = 'Email not found.';
+          this.errMsg = 'An account using that email was not found.';
         } else if (err.status === 0) {
           this.errMsg = 'Connection Refused.';
           this.errBody = 'We may be experiencing server difficulties, please try again later.';
         } else {
-          this.errMsg = `An unknown error occured. Please try again later.`;
-          this.errBody = JSON.stringify(err, null, 3);
+          this.errBody = JSON.stringify(err.error, null, 3);
         }
       });
   }

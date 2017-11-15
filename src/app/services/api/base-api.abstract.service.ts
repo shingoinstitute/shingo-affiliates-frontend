@@ -44,7 +44,7 @@ export abstract class BaseAPIService extends BaseService {
 
         return props;
       })
-      .catch(this.handleError);
+      .catch(err => this.handleError(err));
   }
 
   public sfObjectFactory<T>(type: { new(...args: any[]): T; }, ...args: any[]): T {

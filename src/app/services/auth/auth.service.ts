@@ -50,7 +50,7 @@ export class AuthService extends BaseService {
         this.authenticationChange$.next(res.status === 200);
         return data;
       })
-      .catch(err => Observable.throw(err));
+      .catch(err => this.handleError(err));
   }
 
   /**
@@ -70,7 +70,7 @@ export class AuthService extends BaseService {
         this.authenticationChange$.next(false);
         return data;
       })
-      .catch(err => Observable.throw(err));
+      .catch(err => this.handleError(err));
   }
 
   /**
@@ -87,9 +87,7 @@ export class AuthService extends BaseService {
     options.observe = 'response';
 
     this.http.get<User>(`${this.authHost}/valid`, options)
-      .catch(err => {
-        return Observable.throw(err);
-      })
+      .catch(err => this.handleError(err))
       .subscribe(res => {
         const data: any = res.body;
         this._user = new User(data);
@@ -123,10 +121,11 @@ export class AuthService extends BaseService {
   }
 
   public changeUserPassword(password: string): Observable<any> {
-    return this.http.post<User>(`${this.authHost}/changepassword`, { password }).map(res => {
-      this.http.jwt = res.jwt;
-      return res;
-    });
+    return this.http.post<User>(`${this.authHost}/changepassword`, { password })
+      .map(res => {
+        this.http.jwt = res.jwt;
+        return res;
+      });
   }
 
 }
