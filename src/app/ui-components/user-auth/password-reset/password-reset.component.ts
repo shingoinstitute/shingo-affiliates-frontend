@@ -58,6 +58,8 @@ export class PasswordResetComponent implements OnInit {
         } else if (err.status === 0) {
           this.errMsg = 'Connection Refused.';
           this.errBody = 'We may be experiencing server difficulties, please try again later.';
+        } else if (msg === 'USER_NOT_FOUND') {
+          this.errMsg = 'User not found. Please make sure you are using the correct email address associated with the affiliate portal.';
         } else {
           this.errMsg = `An unknown error occured. Please try again later.`;
           this.errBody = JSON.stringify(err, null, 3);

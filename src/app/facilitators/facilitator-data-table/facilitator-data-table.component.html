@@ -8,7 +8,7 @@
       <mat-cell *matCellDef="let fac">
 
         <span [class.hidden]="selectedId == fac.sfId">
-          <p class="margin-none"> {{ fac.name }} </p>
+          <p class="margin-none"> {{ fac.lastName }}, {{ fac.firstName }} </p>
           <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
         </span>
 
