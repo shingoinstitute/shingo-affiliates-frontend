@@ -30,17 +30,22 @@ export class FacilitatorDataSource extends APIDataSource<FacilitatorService, Fac
       switch (this.sort.active) {
         case 'name': [propA, propB] = [a.lastName, b.lastName]; break;
         case 'email': [propA, propB] = [a.email, b.email]; break;
+        case 'role': [propA, propB] = [<string>a.role, <string>b.role]; break;
+        case 'lastLogin': [propA, propB] = [a.lastLogin, b.lastLogin]; break;
+        case 'organization': [propA, propB] = [a.affiliate.name, b.affiliate.name]; break;
         default: [propA, propB] = [a.lastName, b.lastName];
       }
 
       let valueA = isNaN(+propA) ? propA : +propA;
       let valueB = isNaN(+propB) ? propB : +propB;
 
-      if (typeof valueA === 'string')
+      if (this.sort.active === 'lastLogin') {
+        valueA = new Date(<string>valueA).valueOf();
+        valueB = new Date(<string>valueB).valueOf();
+      } else if (typeof valueA === 'string' && typeof valueB === 'string') {
         valueA = valueA.toLowerCase();
-
-      if (typeof valueB === 'string')
         valueB = valueB.toLowerCase();
+      }
 
       return (valueA < valueB ? -1 : 1) * (this.sort.direction === 'asc' ? 1 : -1);
     });

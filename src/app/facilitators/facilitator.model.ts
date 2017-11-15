@@ -39,7 +39,7 @@ export class Facilitator extends SFObject {
   }
 
   public get role() {
-    if (String(this._role.name).includes('Course Manager')) {
+    if (String(this._role.name).match(/(Course Manager)/gi)) {
       return 'Course Manager';
     }
     return this._role.name as FacilitatorRoleType;
