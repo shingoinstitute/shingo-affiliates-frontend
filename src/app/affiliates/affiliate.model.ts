@@ -28,7 +28,11 @@ export class Affiliate extends SFObject {
   public get summary() { return this.Summary__c; }
   public set summary(summary: string) { this.Summary__c = summary; }
 
-  public get logo() { return this.Logo__c; }
+  public get logo() {
+    if (this.Logo__c)
+      return this.Logo__c.replace(/^http(?!s)/gi, 'https');
+    return '';
+  }
   public set logo(logo: string) { this.Logo__c = logo; }
 
   public get pagePath() { return `/affiliates/${this.sfId}`; }
