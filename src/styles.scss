@@ -60,6 +60,9 @@ mat-nav-list p {
 .text-sm { font-size: 10px; }
 .text-md { font-size: 14px; }
 .text-lg { font-size: 18px; }
+.word-nowrap {
+  white-space: nowrap;
+}
 
 /* Cards (because sometimes `mat-card` is just too annoying) */
 .card {
@@ -211,6 +214,41 @@ mat-form-field {
     svg {
       width: 24px !important;
       height: 24px !important;
+    }
+  }
+}
+mat-table.admin-data-table {
+  mat-row {
+    mat-cell {
+      cursor: default;
+    }
+    mat-cell:not(.dt-actions-cell) {
+      overflow: hidden;
+    }
+    mat-cell.dt-actions-cell {
+      overflow: visible;
+      padding-right: 0;
+    }
+    mat-cell.dt-email-cell:hover,
+    mat-cell.dt-last-login-cell:hover,
+    mat-cell.dt-name-cell:hover {
+      display: inline-table;
+      background-color: #efefef;
+      z-index: 9999;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      border-radius: 4px;
+      cursor: default;
+    }
+  }
+}
+@media only screen and (max-width: $break-small) {
+  mat-table.admin-data-table {
+    width: $break-medium-1;
+  }
+  app-icon-legend {
+    div.icon-legend-container {
+      width: $break-medium-1;
     }
   }
 }
