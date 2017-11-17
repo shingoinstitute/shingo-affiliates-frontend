@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 
-
 import { DataProvider } from '../../services/data-provider/data-provider.service';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
@@ -10,6 +9,7 @@ import { DataProviderFactory } from '../../services/data-provider/data-provider-
 import { IconType } from '../../shared/components/icon-legend/icon-legend.component';
 import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component';
 import { RouterService } from '../../services/router/router.service';
+import { Filter } from '../../services/filters/filter.abstract';
 
 @Component({
   selector: 'app-facilitator-data-table',
@@ -26,6 +26,7 @@ export class FacilitatorDataTableComponent implements OnInit {
 
   @Input('displayedColumns') public displayedColumns = ['name', 'email', 'organization', 'role', 'lastLogin', 'actions'];
   @Input('dataSource') public dataSource: FacilitatorDataSource | null;
+  @Input('filters') public filters: Filter[] = [];
 
   @ViewChild(MatPaginator) public paginator: MatPaginator;
   @ViewChild(MatSort) public sort: MatSort;
@@ -42,13 +43,18 @@ export class FacilitatorDataTableComponent implements OnInit {
     public providerFactory: DataProviderFactory,
     public _fs: FacilitatorService
   ) {
-    this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider();
+    this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider(); 
   }
 
   public ngOnInit() {
     this.onSave.subscribe(() => { this.selectedId = ''; });
     // Init dataSource
     this.dataSource = new FacilitatorDataSource(this.facilitatorDataProvider, this.paginator, this.sort);
+
+    // Add filters if any have been added through `@Input('filters) public filter`.
+    if (this.filters.length) {
+      this.dataSource.addFilters(this.filters);
+    }
 
     // Set default sorted column
     this.sort.sort({ id: 'name', start: 'asc', disableClear: false });

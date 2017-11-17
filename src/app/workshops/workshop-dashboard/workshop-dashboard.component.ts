@@ -50,8 +50,8 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public deactivated: string[] = [];
   public displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'status', 'verified', 'actions'];
   public filterOption: string;
-  public filterOptions: string[] = [];
-  public filters: Filter[];
+  public filterOptions: string[] = []; // the list of available filter options shown to the user
+  public filters: Filter[]; // the list of filter objects used to do the actual filtering
   public selectedStatuses: any[] = [];
   public statuses: string[] = [];
   public textSearch: string = '';

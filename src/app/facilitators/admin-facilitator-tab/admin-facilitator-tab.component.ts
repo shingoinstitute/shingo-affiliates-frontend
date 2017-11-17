@@ -1,23 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Facilitator } from '../../facilitators/facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component';
 import { Router } from '@angular/router';
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
+import { FacilitatorFilterFactory } from '../../services/filters/facilitators/facilitator-filter-factory.service';
+import { OnInit, AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Filter } from '../../services/filters/filter.abstract';
+
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/fromEvent';
 
 @Component({
   selector: 'app-admin-facilitator-tab',
   templateUrl: './admin-facilitator-tab.component.html',
   styleUrls: ['./admin-facilitator-tab.component.scss']
 })
-export class AdminFacilitatorTabComponent {
+export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('nameFilterInput') public nameFilterInput: ElementRef;
 
   public isLoading: boolean = true;
   public displayedColumns: string[] = ['name'];
   public newFacilitator: Facilitator;
+  public filters: Filter[] = [];
+  public nameFilterText: string = '';
 
-  constructor(public _fs: FacilitatorService, public snackbar: MatSnackBar, public dialog: MatDialog, public router: Router) { }
+  constructor(public _fs: FacilitatorService, public filterFactory: FacilitatorFilterFactory, public snackbar: MatSnackBar, public dialog: MatDialog, public router: Router) { }
+
+  public ngOnInit() {
+    // Create text filter to filter facilitators by name.
+    const textFilter = this.filterFactory.createTextFilter('Filter By Name');
+    // Add the filter to `this.filters`, which is then passed into the data-table in `admin-facilitator-tabl.component.html`.
+    this.filters.push(textFilter);
+  }
+
+  public ngAfterViewInit() {
+    // Create an observalbe that listens to changes to the `nameFilterInput` input field
+    const nameFilterInputChange = Observable.fromEvent(this.nameFilterInput.nativeElement, 'keyup').debounceTime(250);
+    // Subscribe to the event listener. When a user types inside the input field, the nameFilter is notified of changes and the data table should update accordingly.
+    nameFilterInputChange.subscribe((event) => {
+      const nameFilterIndex = this.filters.findIndex(f => f.name === 'Filter By Name');
+      const nameFilter = this.filters[nameFilterIndex];
+      nameFilter.dataChange.next(this.nameFilterText);
+    });
+  }
 
   public onSave(facilitator: Facilitator) {
     this.isLoading = true;
