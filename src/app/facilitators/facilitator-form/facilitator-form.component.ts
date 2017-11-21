@@ -29,7 +29,7 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   public isSearching: boolean;
   public facilitatorsOpts: Facilitator[] = [];
   public roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS;
-  public isNewFacilitator: boolean;
+  public didSelectExistingSFContact: boolean;
 
   public routeSubscription;
 
@@ -105,18 +105,23 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
     this.checkForAffiliate();
   }
 
+  /**
+   * @desc onSelectFacilitator is invoked when a user is selected from the sf-lookup-field on the facilitator form
+   * @param {Facilitator} f: the facilitator object the user selected
+   */
   public onSelectFacilitator(f: Facilitator) {
+    console.log('selected facilitator: ', f.sfId);
     if (f && f instanceof Facilitator) {
       this.facilitator = f;
       this.formGroup.controls.affiliate.patchValue({ 'sfObject': f.affiliate });
       this.formGroup.controls.affiliate.updateValueAndValidity();
-      this.isNewFacilitator = true;
+      this.didSelectExistingSFContact = true;
       this.checkForAffiliate();
     }
   }
 
   public onSelectAffiliate(affiliate: Affiliate) {
-    console.log('selecting affiliate ', affiliate);
+    console.log('selecting affiliate ', affiliate.sfId);
     if (affiliate) {
       this.facilitator.affiliate = affiliate;
       this.checkForAffiliate();
@@ -127,11 +132,14 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
 
   public onSave() {
     this.snackbar.open('Saving Changes...');
-    if (this.isNewFacilitator) {
+    if (this.didSelectExistingSFContact) {
+      console.log('mapping new facilitator to contact: ', this.facilitator.sfId);
       this.map();
-    } else if (this.facilitator.sfId === '') {
+    } else if (!this.facilitator.sfId.length) {
+      console.log('creating new facilitator');
       this.create();
     } else {
+      console.log('updating facilitator: ', this.facilitator.sfId);
       this.update();
     }
   }
@@ -143,6 +151,7 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
       this.snackbar.open('Update Successful', null, { duration: 2000 });
       this.location.back();
     }, err => {
+      this.isLoading = false;
       this.handleError(err);
     });
   }

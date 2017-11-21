@@ -13,6 +13,11 @@ export class TextFilter<T> extends Filter {
     this.dataChangeSource.subscribe(filter => this._filter = filter);
   }
 
+  /**
+   * @desc - applyFilter accepts an array of data, then applies it's filter to the data
+   * and returns the filtered data.
+   * @param data 
+   */
   public applyFilter(data: T[]): T[] {
     if ((typeof this._filter !== 'string')) return data;
     return data.filter(d => JSON.stringify(d).toLowerCase().includes(this._filter.toLowerCase()));

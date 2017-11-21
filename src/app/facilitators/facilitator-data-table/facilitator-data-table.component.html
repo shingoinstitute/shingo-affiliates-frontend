@@ -1,15 +1,15 @@
 <div class="card">
   <app-icon-legend [displayedIcons]="displayedIcons"></app-icon-legend>
   <!-- <mat-table #table [dataSource]="dataSource" [disableClear]="true" matSort> -->
-  <mat-table #table [dataSource]="dataSource" matSort [matSortDisableClear]="true">
+  <mat-table #table [dataSource]="dataSource" matSort [matSortDisableClear]="true" class="admin-data-table">
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Facilitator </mat-header-cell>
-      <mat-cell *matCellDef="let fac">
+      <mat-cell *matCellDef="let fac" class="dt-name-cell">
 
         <span [class.hidden]="selectedId == fac.sfId">
-          <p class="margin-none"> {{ fac.lastName }}, {{ fac.firstName }} </p>
-          <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
+          <p class="margin-none word-nowrap"> {{ fac.lastName }}, {{ fac.firstName }} </p>
+          <p class="mat-caption word-nowrap grey-text margin-none"> {{ fac.title }} </p>
         </span>
 
         <mat-form-field [class.hidden]="selectedId != fac.sfId">
@@ -22,7 +22,7 @@
     <!-- Email Column -->
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-      <mat-cell *matCellDef="let fac">
+      <mat-cell *matCellDef="let fac" class="dt-email-cell">
 
         <span [class.hidden]="selectedId == fac.sfId">{{ fac.email }}</span>
 
@@ -55,7 +55,9 @@
     <!-- Last Login Column -->
     <ng-container matColumnDef="lastLogin">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Last Login </mat-header-cell>
-      <mat-cell *matCellDef="let fac">{{ fac.lastLogin }}</mat-cell>
+      <mat-cell *matCellDef="let fac" class="dt-last-login-cell">
+          <p class="word-nowrap">{{ fac.lastLogin }}</p>
+      </mat-cell>
     </ng-container>
 
     <!-- Actions -->
@@ -67,7 +69,7 @@
           <mat-icon svgIcon="refresh_grey"></mat-icon>
         </button>
       </mat-header-cell>
-      <mat-cell *matCellDef="let fac" fxLayout fxLayoutGap="2px">
+      <mat-cell *matCellDef="let fac" fxLayout fxLayoutGap="2px" class="dt-actions-cell">
         <!-- Action Buttons -->
         <ng-container *ngIf="selectedId != fac.sfId">
           <button mat-mini-fab (click)="selectedId = fac.sfId">

@@ -115,6 +115,7 @@ export class Facilitator extends SFObject {
       AccountId: this.affiliateId,
       Title: this.title,
       Biography__c: this.biography,
+      Photograph__c: this.photo,
       id: this.id,
       role: this._role
     };

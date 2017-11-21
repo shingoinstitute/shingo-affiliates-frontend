@@ -48,20 +48,22 @@ export class WorkshopDataTableComponent implements OnInit {
 
   constructor(public providerFactory: DataProviderFactory, public _ws: WorkshopService, public router: Router, public dialog: MatDialog, public authService: AuthService) {
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider();
-    this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
-
+  
   public ngOnInit() {
     if (!this.dataSource)
-      this.dataSource = new WorkshopDataSource(this._workshopDataProvider, this.paginator, this.sort);
+    this.dataSource = new WorkshopDataSource(this._workshopDataProvider, this.paginator, this.sort);
     else {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
-
+    
     if (this.filters) this.dataSource.addFilters(this.filters);
-
+    
     this.sort.sort({ id: 'startDate', start: 'asc', disableClear: false });
+
+    // Begin listening to `dataLoading` event so this component knows when to toggle `isLoading` on/off.
+    this._workshopDataProvider.dataLoading.subscribe(loading => this.isLoading = loading);
   }
 
   public refresh() { this._workshopDataProvider.refresh(); }

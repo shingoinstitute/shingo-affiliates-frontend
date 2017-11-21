@@ -10,8 +10,15 @@
       <span> Create </span>
     </a>
   </div>
+
+  <!-- Facilitator Search Filter -->
+  <mat-form-field floatPlaceholder="auto">
+    <input matInput placeholder="Search..." [(ngModel)]="nameFilterText" #nameFilterInput>
+  </mat-form-field>
+
   <!-- Data Table -->
-  <app-facilitator-data-table 
+  <app-facilitator-data-table
+    [filters]="filters"
     (onDisable)="onDisable($event)" 
     (onDelete)="onDelete($event)" 
     (onReset)="onResetPassword($event)"

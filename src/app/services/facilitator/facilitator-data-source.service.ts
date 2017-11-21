@@ -25,8 +25,6 @@ export class FacilitatorDataSource extends APIDataSource<FacilitatorService, Fac
       let propA: number | string = '';
       let propB: number | string = '';
 
-      console.log('SORT BY: ' + this.sort.active);
-
       switch (this.sort.active) {
         case 'name': [propA, propB] = [a.lastName, b.lastName]; break;
         case 'email': [propA, propB] = [a.email, b.email]; break;
