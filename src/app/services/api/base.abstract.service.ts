@@ -12,7 +12,7 @@ export abstract class BaseService {
   public handleError(error: Response | any): ErrorObservable {
     if (error.error && typeof error.error === 'string') {
       try {
-        error.error = this.deStringifyError(error);
+        error.error = this.parseErrResponse(error);
         if (error.error === '') {
           error.error = error.message;
         }
@@ -31,7 +31,7 @@ export abstract class BaseService {
   }
 
   /**
-   * deStringifyError
+   * parseErrResponse
    * 
    * Error responses from the API like to change error objects into JSON strings
    * for some reason. This method attempts to un-stringify the error object
@@ -51,7 +51,7 @@ export abstract class BaseService {
    * }
    * 
    */
-  public deStringifyError(obj: object): string {
+  public parseErrResponse(obj: object): string {
     const key = 'error';
     while (obj.hasOwnProperty(key)) {
       obj = obj[key];

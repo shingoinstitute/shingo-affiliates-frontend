@@ -50,6 +50,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
   public onSave(facilitator: Facilitator) {
     this.isLoading = true;
     this.snackbar.open('Saving Changes...');
+    console.log(`Facilitator: `, facilitator);
     if (facilitator.sfId === '') {
       this.create(facilitator);
     } else {
@@ -64,7 +65,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
       <span class="mat-caption">This action will delete the user's contact information from Salesforce and remove them from the database.</span>
     `;
     const title = `Delete ${f.constructor.name}?`;
-    this.presentAlertDialog(f, msg, title);
+    this.presentAlertDialog(f, msg, title, true);
   }
 
   public onDisable(f: Facilitator) {
@@ -78,7 +79,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
   }
 
   public presentAlertDialog(f: Facilitator, msg: string, title: string = '', shouldDelete: boolean = false) {
-    const dialogRef = this.dialog.open(AlertDialogComponent, {
+    const dialogBoxRef = this.dialog.open(AlertDialogComponent, {
       data: {
         title: title,
         sfObject: f,
@@ -86,7 +87,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogBoxRef.afterClosed().subscribe(result => {
       if (result === true && shouldDelete) {
         this.delete(f);
       } else if (result === true) {
