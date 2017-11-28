@@ -10,7 +10,7 @@
 
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
       <mat-option *ngFor="let o of objects" [value]="o" (onSelectionChange)="onSelectChange(o)">
-        {{ displayObjFn(o) }}
+        <div [innerHtml]="displayObjFn(o)"></div>
       </mat-option>
     </mat-autocomplete>
   </div>
