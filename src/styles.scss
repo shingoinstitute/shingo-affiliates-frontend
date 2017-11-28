@@ -252,3 +252,17 @@ mat-table.admin-data-table {
     }
   }
 }
+
+.search-holder {
+  display: flex;
+}
+
+.small-light-text {
+  font-size: small;
+  font-weight: lighter;
+}
+
+img.thumbnail-search {
+  max-height: 40px;
+  padding-right: 10px;
+}

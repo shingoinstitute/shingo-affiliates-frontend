@@ -13,7 +13,7 @@ import { Affiliate } from '../../affiliates/affiliate.model';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languages__c', 'Logo__c', 'Website'];
+export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languages__c', 'Logo__c', 'Website', 'Summary__c'];
 
 @Injectable()
 export class AffiliateService extends BaseAPIService {

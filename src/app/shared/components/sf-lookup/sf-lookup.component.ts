@@ -174,13 +174,30 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   public displayObjFn(obj: any): string {
-    if (obj instanceof Facilitator) return obj.email;
-    else if (obj instanceof Affiliate) return obj.name;
-    else if (obj instanceof CourseManager) return obj.name;
+    console.log('displayFn: ', obj);
+    if (obj instanceof Facilitator)
+      return `<div class="search-holder">
+        ${obj.photo !== '' ? '<img class="thumbnail-search" src="' + obj.photo + '" />' : ''}
+        ${obj.name}${obj.email !== '' ? '&nbsp;:<span class="small-light-text">&emsp;' + obj.email : ''}</span>
+      </div>`;
+    else if (obj instanceof Affiliate)
+      return `<div class="search-holder">
+        ${obj.logo !== '' ? '<img class="thumbnail-search" src="' + obj.logo + '" />' : ''}
+        ${obj.name}${obj.summary === null || obj.summary === 'null' || obj.summary === '' 
+        ? '' : '&nbsp;:<span class="small-light-text">&emsp;' + this.truncate(obj.summary.replace(/(<([^>]+)>)/ig, ''), 25)}</span>
+      </div>`;
+    else if (obj instanceof CourseManager)
+      return `<div class="search-holder">
+        ${obj.name}${obj.email !== '' ? '&nbsp;:<span class="small-light-text">&emsp;' + obj.email : ''}</span>
+      </div>`;
     else if (typeof obj.name !== 'undefined') return obj.name;
     else if (typeof obj.email !== 'undefined') return obj.name;
     else if (typeof obj === 'string') return obj;
     else return `Parsing Error!`;
   }
 
+  private truncate(str:  string, len: number, postfix: string = '...'): string {
+    if (str.length <= len) return str;
+    return str.substr(0, len) + postfix;
+  }
 }

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
 import { Affiliate } from '../affiliate.model';
-import { AffiliateService } from '../../services/affiliate/affiliate.service';
+import { AffiliateService, DEFAULT_AFFILIATE_SEARCH_FIELDS } from '../../services/affiliate/affiliate.service';
 import { AffiliateFormState, State } from './affiliate-form-state.class';
 
 import { Subscription } from 'rxjs/Rx';
@@ -28,7 +28,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
 
   @ViewChild('formContainer') public formContainer: ElementRef;
 
-  public extraFields: string[] = ['Public_Contact__c', 'Public_Contact_Email__c', 'Public_Contact_Phone__c', 'Summary__c'];
+  public extraFields: string[] = ['Public_Contact__c', 'Public_Contact_Email__c', 'Public_Contact_Phone__c'].concat(DEFAULT_AFFILIATE_SEARCH_FIELDS);
 
   public state: AffiliateFormState;
   public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
