@@ -24,7 +24,7 @@ export class AuthService extends BaseService {
 
   public get authHost(): string { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}/auth`; }
 
-  protected _baseUrl: string = (isDevMode() ? 'http://localhost' : 'https://api.shingo.org/v2/affiliates');
+  protected _baseUrl: string = (isDevMode() ? 'http://129.123.47.34' : 'https://api.shingo.org/v2/affiliates');
   protected _basePort: string = (isDevMode() ? '8080' : '');
 
   constructor(public http: HttpService) {
