@@ -35,6 +35,8 @@ import { merge } from 'lodash';
 
 import { CustomValidators } from 'ng2-validation';
 
+const MILLI_DAY = 1000 * 60 * 60 * 24;
+
 @Component({
   selector: 'app-workshop-form',
   templateUrl: './workshop-form.component.html',
@@ -58,8 +60,6 @@ export class WorkshopFormComponent implements OnInit {
   public facilitatorOpts: Facilitator[] = [];
   public affiliates: Affiliate[] = [];
   public describe: any = {};
-  public today: Date = new Date();
-  public tomorrow: Date = new Date(this.today.valueOf() + (1000 * 60 * 60 * 24));
 
   public workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build'];
   public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS;
@@ -109,8 +109,8 @@ export class WorkshopFormComponent implements OnInit {
       hostSite: [this.workshop.hostSite, Validators.required],
       courseManager: [this.workshop.courseManager || new CourseManager(), Validators.required],
       dates: this.fb.group({
-        startDate: [this.workshop.startDate || new Date(), Validators.required],
-        endDate: [this.workshop.endDate || new Date(Date.now()), Validators.required]
+        startDate: [this.workshop.startDate || new Date(Date.now() - MILLI_DAY), Validators.required],
+        endDate: [this.workshop.endDate || new Date(Date.now() + MILLI_DAY * 2), Validators.required]
       }),
       website: [this.workshop.website],
       billing: [this.workshop.billing, [Validators.required, Validators.email]],

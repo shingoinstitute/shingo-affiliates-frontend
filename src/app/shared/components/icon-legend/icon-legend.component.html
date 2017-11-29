@@ -1,6 +1,11 @@
 <div class="icon-legend-container">
    <ng-container *ngFor="let icon of displayedIcons">
       <div [ngSwitch]="icon" class="icon-legend-item">
+          <ng-template [ngSwitchCase]="'loginAs'">
+              <mat-icon svgIcon="supervisor_account_grey"></mat-icon>
+              <p> = Login As </p>
+           </ng-template>
+
          <ng-template [ngSwitchCase]="'edit'">
             <mat-icon svgIcon="edit_mode_grey"></mat-icon>
             <p> = Edit </p>

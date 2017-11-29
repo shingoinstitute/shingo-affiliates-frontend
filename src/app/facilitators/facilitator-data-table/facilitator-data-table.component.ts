@@ -1,3 +1,4 @@
+import { AuthService } from '../../services/auth/auth.service';
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatDialog, MatPaginator, MatSort } from '@angular/material';
 
@@ -34,14 +35,15 @@ export class FacilitatorDataTableComponent implements OnInit {
   public facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>;
   public selectedId: string = '';
   public roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS;
-  public displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form', 'refresh'];
+  public displayedIcons: IconType[] = ['edit', 'deleteAccount', 'disable', 'reset', 'form', 'refresh', 'loginAs'];
   public isLoading: boolean;
 
   constructor(
     public dialog: MatDialog,
     public router: RouterService,
     public providerFactory: DataProviderFactory,
-    public _fs: FacilitatorService
+    public _fs: FacilitatorService,
+    public _as: AuthService
   ) {
     this.facilitatorDataProvider = providerFactory.getFacilitatorDataProvider(); 
   }
@@ -98,6 +100,12 @@ export class FacilitatorDataTableComponent implements OnInit {
     dialogRef.afterClosed().subscribe((f: Facilitator) => {
       if (f)
         this.onSave.emit(f);
+    });
+  }
+
+  public loginAs(facilitator: Facilitator) {
+    this._as.loginAs(facilitator).subscribe(() => {
+      this.router.navigateRoutes(['/dashboard']);
     });
   }
 

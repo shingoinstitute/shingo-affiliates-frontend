@@ -72,6 +72,10 @@
       <mat-cell *matCellDef="let fac" fxLayout fxLayoutGap="2px" class="dt-actions-cell">
         <!-- Action Buttons -->
         <ng-container *ngIf="selectedId != fac.sfId">
+          <button mat-mini-fab (click)="loginAs(fac)">
+            <mat-icon class="icon-sm" svgIcon="supervisor_account_white"></mat-icon>
+          </button>
+          
           <button mat-mini-fab (click)="selectedId = fac.sfId">
             <mat-icon class="icon-sm" svgIcon="edit_mode_white"></mat-icon>
           </button>

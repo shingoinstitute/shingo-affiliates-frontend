@@ -1,10 +1,11 @@
 // Angular Modules
+import { Facilitator } from '../../facilitators/facilitator.model';
 import { Injectable, EventEmitter, isDevMode } from '@angular/core';
 
 // App Modules
 import { HttpService } from '../http/http.service';
 import { BaseService } from '../api/base.abstract.service';
-import { User } from '../../shared/models/user.model';
+import { User, UserState } from '../../shared/models/user.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs/Observable';
@@ -24,8 +25,10 @@ export class AuthService extends BaseService {
 
   public get authHost(): string { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}/auth`; }
 
-  protected _baseUrl: string = (isDevMode() ? 'http://129.123.47.34' : 'https://api.shingo.org/v2/affiliates');
+  protected _baseUrl: string = (isDevMode() ? 'http://localhost' : 'https://api.shingo.org/v2/affiliates');
   protected _basePort: string = (isDevMode() ? '8080' : '');
+
+  private adminToken: string;
 
   constructor(public http: HttpService) {
     super();
@@ -39,17 +42,11 @@ export class AuthService extends BaseService {
     * @returns {Observable<any>} 
     * @memberof AuthService
     */
-  public login(paylod: { email: string, password: string }): Observable<any> {
+  public login(payload: { email: string, password: string }): Observable<any> {
     const options = this.http._defaultReqOpts;
     options.observe = 'response';
-    return this.http.post<{ email: string, password: string }>(`${this.authHost}/login`, paylod, options)
-      .map(res => {
-        const data = res.body;
-        this._user = new User(data);
-        this.http.jwt = data.jwt;
-        this.authenticationChange$.next(res.status === 200);
-        return data;
-      })
+    return this.http.post<{ email: string, password: string }>(`${this.authHost}/login`, payload, options)
+      .map(res => this.handleLogin(res))
       .catch(err => this.handleError(err));
   }
 
@@ -64,12 +61,7 @@ export class AuthService extends BaseService {
     options.observe = 'response';
 
     return this.http.get(`${this.authHost}/logout`, options)
-      .map((data: Response) => {
-        this._user = null;
-        this.http.removeToken();
-        this.authenticationChange$.next(false);
-        return data;
-      })
+      .map(data => this.handleLogout(data))
       .catch(err => this.handleError(err));
   }
 
@@ -86,13 +78,10 @@ export class AuthService extends BaseService {
     const options = this.http._defaultReqOpts;
     options.observe = 'response';
 
+    const state = this._user ? this._user.state : UserState.Normal;
+
     this.http.get<User>(`${this.authHost}/valid`, options)
-      .catch(err => this.handleError(err))
-      .subscribe(res => {
-        const data: any = res.body;
-        this._user = new User(data);
-        this.authenticationChange$.next(res.status === 200);
-      }, res => {
+      .subscribe(res => this.handleLogin(res, state), res => {
         this._user = null;
         if (res.status === 403) this.authenticationChange$.next(false);
         else {
@@ -114,8 +103,7 @@ export class AuthService extends BaseService {
     options.observe = 'response';
     return this.http.get<User>(`${this.authHost}/valid`, options)
       .map(res => {
-        const data = res.body;
-        this._user = new User(data);
+        this.handleLogin(res, this._user.state);
         return this._user;
       });
   }
@@ -126,6 +114,50 @@ export class AuthService extends BaseService {
         this.http.jwt = res.jwt;
         return res;
       });
+  }
+
+  public loginAs(facilitator: Facilitator): any {
+    const options = this.http._defaultReqOpts;
+    options.observe = 'response';
+    if (!this._user.isAdmin) throw Error('Cannot loginAs if not Admin');   
+    
+    this.adminToken = this.http.jwt;
+    
+    return this.http.post(`${this.authHost}/loginas`, {
+      adminId: this._user.authId,
+      userId: facilitator._id
+    }, options)
+    .map(res => this.handleLogin(res, UserState.LoggedInAs))
+    .catch(error => {
+        this.adminToken = null;
+        return this.handleError(error);
+    });
+  }
+
+  private handleLogin(res: any, state: UserState = UserState.Normal): any {
+    const data = res.body;
+    this._user = new User(data);
+    this._user.state = state;
+    if (data.adminToken) {
+      this._user.state = UserState.LoggedInAs;
+      this.adminToken = data.adminToken;
+    }
+    this.http.jwt = data.jwt;
+    this.authenticationChange$.next(res.status === 200);
+    return data;
+  }
+
+  private handleLogout(data: any): any {
+    if (this._user.state === UserState.LoggedInAs) {
+      this.user.state = UserState.Normal;
+      this.http.jwt = this.adminToken;
+      this.adminToken = null;
+    } else {
+      this._user = null;
+      this.http.removeToken();
+    }
+    
+    this.updateUserAuthStatus();
   }
 
 }
