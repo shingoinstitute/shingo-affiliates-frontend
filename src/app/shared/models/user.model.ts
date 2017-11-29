@@ -1,3 +1,8 @@
+export enum UserState {
+  Normal,
+  LoggedInAs
+}
+
 export class User {
 
   public get sfId(): string { return this.Id; }
@@ -11,20 +16,23 @@ export class User {
   public get bio(): string { return this.Biography__c; }
   public get isAdmin(): boolean { return this.role && this.roleName === 'Affiliate Manager'; }
 
+  public get state(): UserState { return this._state; }
+  public set state(state: UserState) { this._state = state; }
   // SF Properties
   /* tslint:disable:variable-name */
-  public Id: string;
-  public Name: string;
-  public Email: string;
-  public AccountId: string;
-  public Title: string;
-  public Photograph__c: string;
-  public Biography__c: string;
+  private Id: string;
+  private Name: string;
+  private Email: string;
+  private AccountId: string;
+  private Title: string;
+  private Photograph__c: string;
+  private Biography__c: string;
+  private _state: UserState = UserState.Normal;
   /* tslint:enable:variable-name */
 
   // Auth Properties
-  public id: number;
-  public role: { id: number, name: string };
+  private id: number;
+  private role: { id: number, name: string };
 
   constructor(user?) {
     if (user) return Object.assign(this, user);

@@ -2,5 +2,7 @@
 {
   "editor.tabSize": 2,
   "team.remoteUrl": "https://shingoinstitute.visualstudio.com",
-  "team.teamProject": "Affiliate Portal"
+  "team.teamProject": "Affiliate Portal",
+  "editor.minimap.maxColumn": 60,
+  "editor.minimap.enabled": false
 }
