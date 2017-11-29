@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/distinctUntilChanged';
 import { SupportService } from './services/support/support.service';
 import { SupportPage } from './services/support/support.model';
+import { UserState } from './shared/models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -135,9 +136,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
    * Handles logging out... yeah.
    */
   public logoutHandler() {
-    this.auth.logout().subscribe(() => {
-      this.auth.authenticationChange$.next(false);
-    }, err => {
+    this.auth.logout().subscribe(() => console.log('Log out successful...'), err => {
       console.error(err);
       this.auth.authenticationChange$.next(false);
     });
@@ -186,6 +185,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     this.iconRegistry.addSvgIcon('link', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_link_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('insert_drive_file', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_insert_drive_file_grey_18px.svg'));
     this.iconRegistry.addSvgIcon('menu_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_menu_white_18px.svg'));
+    this.iconRegistry.addSvgIcon('supervisor_account_white', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_supervisor_account_white_24px.svg'));
+    this.iconRegistry.addSvgIcon('supervisor_account_grey', this.sanitizer.bypassSecurityTrustResourceUrl('assets/imgs/icons/ic_supervisor_account_grey_18px.svg'));
   }
 
   public getSupportCategories() {
@@ -209,5 +210,17 @@ export class AppComponent implements OnDestroy, AfterViewInit {
           this.supportCategoryPages[category] = pages;
         }
       }, err => console.error(err));
+  }
+
+  public isLoggedInAs(): boolean {
+    return this.auth.user && this.auth.user.state === UserState.LoggedInAs;
+  }
+
+  public getLoggedInInfo(): string {
+    if(this.auth.user)
+    {
+      return `${this.auth.user.name} (${this.auth.user.roleName})`;
+    }
+    return 'unknown';
   }
 }

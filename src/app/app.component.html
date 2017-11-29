@@ -1,6 +1,6 @@
-<mat-toolbar class="mat-primary">
+<mat-toolbar class="mat-primary" [ngClass]="{'logged-in-as': isLoggedInAs()}">
   <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
-  <span fxFlex></span>
+  <span fxFlex><div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <b>{{getLoggedInInfo()}}</b></div></span>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">
     <mat-icon svgIcon="account_circle_white"></mat-icon>
@@ -22,7 +22,7 @@
         <mat-icon svgIcon="support_black"></mat-icon>
         <p>Support</p>
       </a> -->
-      <a class="toolbar-menu-btn" routerLink="/login" (click)="logoutHandler()">
+      <a class="toolbar-menu-btn" (click)="logoutHandler()">
         <mat-icon svgIcon="logout_black"></mat-icon>
         <p>Logout</p>
       </a>
