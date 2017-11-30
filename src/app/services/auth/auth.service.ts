@@ -147,7 +147,8 @@ export class AuthService extends BaseService {
     return data;
   }
 
-  private handleLogout(data: any): any {
+  private handleLogout(data: any): UserState {
+    const prevState = this._user.state || UserState.Normal;
     if (this._user.state === UserState.LoggedInAs) {
       this.user.state = UserState.Normal;
       this.http.jwt = this.adminToken;
@@ -158,6 +159,7 @@ export class AuthService extends BaseService {
     }
     
     this.updateUserAuthStatus();
+    return prevState;
   }
 
 }

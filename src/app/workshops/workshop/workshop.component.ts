@@ -41,10 +41,10 @@ export class WorkshopComponent {
       }
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Workshop cancled with result', result);
       if (result !== undefined) {
         this.workshop.status = 'Cancelled';
-        this._ws.cancel(this.workshop, result).subscribe(cancelled => console.log(cancelled));
+        this._ws.cancel(this.workshop, result)
+        .subscribe(cancelled => cancelled);
       }
     });
   }

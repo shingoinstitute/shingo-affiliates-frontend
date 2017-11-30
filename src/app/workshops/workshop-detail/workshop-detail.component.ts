@@ -20,7 +20,7 @@ export class WorkshopDetailComponent implements OnInit {
   public errors: string[] = [];
 
   public uploadAttendeeProgress: number = 0;
-  public uploadEvalutationsProgress: number = 0;
+  public uploadEvaluationsProgress: number = 0;
 
 
   public supportedFileTypes: string[] = ['text/csv', 'application/pdf', 'application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
@@ -95,19 +95,23 @@ export class WorkshopDetailComponent implements OnInit {
         this.uploadAttendeeProgress = percentDone;
       } else if (event instanceof HttpResponse) {
         this.uploadAttendeeProgress = 0;
+      } else {
+        this.uploadAttendeeProgress = 0;
       }
     });
   }
 
   public uploadEvaluationsFiles() {
     const files = this.evaluations.filter(f => f.lastModifiedDate);
-    this.uploadEvalutationsProgress = 0;
+    this.uploadEvaluationsProgress = 0;
     this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
         const percentDone = Math.round(100 * event.loaded / event.total);
-        this.uploadEvalutationsProgress = percentDone;
+        this.uploadEvaluationsProgress = percentDone;
       } else if (event instanceof HttpResponse) {
-        this.uploadEvalutationsProgress = 0;
+        this.uploadEvaluationsProgress = 0;
+      } else {
+        this.uploadAttendeeProgress = 0;
       }
     });
   }

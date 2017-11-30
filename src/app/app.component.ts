@@ -136,7 +136,11 @@ export class AppComponent implements OnDestroy, AfterViewInit {
    * Handles logging out... yeah.
    */
   public logoutHandler() {
-    this.auth.logout().subscribe(() => console.log('Log out successful...'), err => {
+    this.auth.logout().subscribe(state => {
+      if (state === UserState.LoggedInAs) {
+        this.routerService.navigateRoutes(['/admin/facilitators']);
+      }
+    }, err => {
       console.error(err);
       this.auth.authenticationChange$.next(false);
     });

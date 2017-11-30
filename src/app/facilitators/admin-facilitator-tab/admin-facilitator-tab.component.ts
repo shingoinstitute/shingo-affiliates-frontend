@@ -50,7 +50,6 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
   public onSave(facilitator: Facilitator) {
     this.isLoading = true;
     this.snackbar.open('Saving Changes...');
-    console.log(`Facilitator: `, facilitator);
     if (facilitator.sfId === '') {
       this.create(facilitator);
     } else {
