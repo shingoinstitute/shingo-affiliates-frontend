@@ -110,7 +110,6 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
    * @param {Facilitator} f: the facilitator object the user selected
    */
   public onSelectFacilitator(f: Facilitator) {
-    console.log('selected facilitator: ', f.sfId);
     if (f && f instanceof Facilitator) {
       this.facilitator = f;
       this.formGroup.controls.affiliate.patchValue({ 'sfObject': f.affiliate });
@@ -121,7 +120,6 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   public onSelectAffiliate(affiliate: Affiliate) {
-    console.log('selecting affiliate ', affiliate.sfId);
     if (affiliate) {
       this.facilitator.affiliate = affiliate;
       this.checkForAffiliate();
@@ -133,13 +131,10 @@ export class FacilitatorFormComponent implements OnInit, AfterViewInit, OnDestro
   public onSave() {
     this.snackbar.open('Saving Changes...');
     if (this.didSelectExistingSFContact) {
-      console.log('mapping new facilitator to contact: ', this.facilitator.sfId);
       this.map();
     } else if (!this.facilitator.sfId.length) {
-      console.log('creating new facilitator');
       this.create();
     } else {
-      console.log('updating facilitator: ', this.facilitator.sfId);
       this.update();
     }
   }

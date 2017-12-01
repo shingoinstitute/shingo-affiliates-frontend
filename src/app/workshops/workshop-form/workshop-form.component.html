@@ -127,9 +127,11 @@
     <h5 *ngIf="workshop.instructors.length">Instructors</h5>
     <div class="facilitator-list" *ngFor="let facilitator of workshop.instructors">
       <div class="facilitator-item">
-        <b>{{facilitator.Name}}</b>
-        <br>
-        <i>{{facilitator.Email}}</i>
+        <img style="float: left;" class="thumbnail-search profile" [src]="facilitator.photo" />
+        <div>
+          <b>{{facilitator.Name}}</b>
+          <i>{{facilitator.Email}}</i>
+        </div>
       </div>
       <button mat-icon-button type="button" (click)="workshop.removeInstructorById(facilitator.sfId)">
         <mat-icon svgIcon="x_red"></mat-icon>

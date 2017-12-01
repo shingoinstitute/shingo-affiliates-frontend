@@ -16,6 +16,7 @@ import { Workshop } from '../workshops/workshop.model';
 import { DataProviderFactory } from './data-provider/data-provider-factory.service';
 import { IsValidResolver } from './auth/is-valid.resolver';
 import { UserResolver } from './auth/user.resolver';
+import { IsAdminGuard } from './auth/is-admin.guard';
 
 @NgModule()
 export class ServicesModule {
@@ -37,7 +38,8 @@ export class ServicesModule {
         FacilitatorFilterFactory,
         DataProviderFactory,
         IsValidResolver,
-        UserResolver
+        UserResolver,
+        IsAdminGuard
       ]
     };
   }

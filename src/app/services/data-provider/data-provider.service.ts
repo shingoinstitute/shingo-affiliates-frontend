@@ -30,7 +30,7 @@ export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
     if (!this._filters.length) return this.dataChangeSource.value;
 
     // Filters exist, so apply dem
-    const data = [];
+    const data: Array<T[]> = [];
     for (const filter of this._filters) {
       data.push(filter.applyFilter(this.dataChangeSource.value || []));
     }
@@ -38,7 +38,7 @@ export class DataProvider<S extends BaseAPIService, T extends SFObject>  {
     const intersection = this.dataChangeSource.value.filter(w => {
       let keep = 0;
       for (const filtered of data) {
-        if (new Set(filtered).has(w)) keep++;
+        if (filtered.find(v => v === w)) keep++;
       }
       return keep === data.length;
     });

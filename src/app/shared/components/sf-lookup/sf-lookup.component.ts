@@ -174,10 +174,9 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   public displayObjFn(obj: any): string {
-    console.log('displayFn: ', obj);
     if (obj instanceof Facilitator)
       return `<div class="search-holder">
-        ${obj.photo !== '' ? '<img class="thumbnail-search" src="' + obj.photo + '" />' : ''}
+        ${obj.photo !== '' ? '<img class="thumbnail-search profile" src="' + obj.photo + '" />' : ''}
         ${obj.name}${obj.email !== '' ? '&nbsp;:<span class="small-light-text">&emsp;' + obj.email : ''}</span>
       </div>`;
     else if (obj instanceof Affiliate)
