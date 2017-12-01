@@ -264,7 +264,12 @@ mat-table.admin-data-table {
 
 img.thumbnail-search {
   max-height: 40px;
-  padding-right: 10px;
+  max-width: 60px;
+  margin-right: 10px;
+}
+
+img.thumbnail-search.profile {
+  border-radius: 30%;
 }
 
 .mat-toolbar.mat-primary.logged-in-as, .mat-toolbar.logged-in-as {

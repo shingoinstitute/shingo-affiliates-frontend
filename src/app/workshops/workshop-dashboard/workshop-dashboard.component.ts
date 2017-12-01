@@ -29,7 +29,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public get showStatusFilter(): boolean { return this._showStatusFilter; }
   public get showTextFilter(): boolean { return this._showTextFilter; }
 
-  @ViewChildren(MatCheckbox) public checkboxen: MatCheckbox[];
+  @ViewChildren(MatCheckbox) public selectedFilters: MatCheckbox[];
 
   @ViewChild('startDateFilterPicker') public startDFPicker: MatDatepicker<Date>;
   @ViewChild('endDateFilterPicker') public endDFPicker: MatDatepicker<Date>;
@@ -85,7 +85,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     this.fillViewPortHeight();
-    const observable: Observable<MatCheckboxChange>[] = this.checkboxen.map(cbc => Observable.from(cbc.change));
+    const observable: Observable<MatCheckboxChange>[] = this.selectedFilters.map(cbc => Observable.from(cbc.change));
     Observable.merge(...observable)
       .subscribe((event) => this.filter(event));
   }
@@ -186,7 +186,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       this.removeDeactivated(at(this.filterOptions, deactivate));
       this.applyFilter(indices[cbc.source.value], { data: undefined, deactivate: [] });
     }
-    this.deactivateCheckboxes();
+    this.deactivateFilters();
   }
 
   public applyFilter(index: number, { data, deactivate }) {
@@ -194,9 +194,9 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.deactivated = this.deactivated.concat(at(this.filterOptions, deactivate));
   }
 
-  public deactivateCheckboxes() {
+  public deactivateFilters() {
     const values = new Set(this.deactivated);
-    this.checkboxen.map(cb => {
+    this.selectedFilters.map(cb => {
       if (values.has(cb.value)) cb.disabled = true;
       else cb.disabled = false;
     });
@@ -210,9 +210,9 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this._showDateRange = this._showTextFilter = this._showStatusFilter = false;
     this.filters.map(f => f.dataChange.next(undefined));
     this.deactivated = [];
-    this.checkboxen.map(cb => cb.checked = false);
+    this.selectedFilters.map(cb => cb.checked = false);
     this.selectedStatuses = [];
-    this.deactivateCheckboxes();
+    this.deactivateFilters();
   }
 
   public clearDateFilter() {

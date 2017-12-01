@@ -140,7 +140,6 @@ export class WorkshopDataTableComponent implements OnInit {
     this.isLoading = true;
     this._ws.update(ws).subscribe(res => {
       this.isLoading = false;
-      console.log(res);
     });
   }
 
@@ -162,7 +161,6 @@ export class WorkshopDataTableComponent implements OnInit {
         this._ws.delete(ws)
           .subscribe(res => {
             this.isLoading = false;
-            console.log(res);
           });
       }
     });
