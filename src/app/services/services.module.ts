@@ -14,7 +14,7 @@ import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-facto
 import { FacilitatorFilterFactory } from './filters/facilitators/facilitator-filter-factory.service';
 import { Workshop } from '../workshops/workshop.model';
 import { DataProviderFactory } from './data-provider/data-provider-factory.service';
-import { IsValidResolver } from './auth/is-valid.resolver';
+import { IsValidGuard } from './auth/is-valid.guard';
 import { UserResolver } from './auth/user.resolver';
 import { IsAdminGuard } from './auth/is-admin.guard';
 
@@ -37,7 +37,7 @@ export class ServicesModule {
         WorkshopFilterFactory,
         FacilitatorFilterFactory,
         DataProviderFactory,
-        IsValidResolver,
+        IsValidGuard,
         UserResolver,
         IsAdminGuard
       ]

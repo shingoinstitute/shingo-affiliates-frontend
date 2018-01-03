@@ -18,7 +18,7 @@ import { SupportHomeComponent } from './support/support-home.component';
 
 
 /** Shared Module Components */
-import { IsValidResolver } from './services/auth/is-valid.resolver';
+import { IsValidGuard } from './services/auth/is-valid.guard';
 import { UserResolver } from './services/auth/user.resolver';
 import { IsAdminGuard } from './services/auth/is-admin.guard';
 
@@ -28,12 +28,12 @@ import { WorkshopResolver } from './workshops/workshop.resolver';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [IsValidResolver] },
-  { path: 'workshops/new', component: AddWorkshopComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
-  { path: 'workshops/:id/edit', component: EditWorkshopComponent, canActivate: [IsValidResolver], resolve: { workshop: WorkshopResolver } },
-  { path: 'workshops/:id', component: WorkshopDetailComponent, canActivate: [IsValidResolver], resolve: { workshop: WorkshopResolver } },
-  { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
-  { path: 'profile', component: ProfileComponent, canActivate: [IsValidResolver], resolve: { user: UserResolver } },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [IsValidGuard] },
+  { path: 'workshops/new', component: AddWorkshopComponent, canActivate: [IsValidGuard], resolve: { user: UserResolver } },
+  { path: 'workshops/:id/edit', component: EditWorkshopComponent, canActivate: [IsValidGuard], resolve: { workshop: WorkshopResolver } },
+  { path: 'workshops/:id', component: WorkshopDetailComponent, canActivate: [IsValidGuard], resolve: { workshop: WorkshopResolver } },
+  { path: 'workshops', component: WorkshopDashboardComponent, canActivate: [IsValidGuard], resolve: { user: UserResolver } },
+  { path: 'profile', component: ProfileComponent, canActivate: [IsValidGuard], resolve: { user: UserResolver } },
   { path: 'login', component: LoginComponent },
   { path: 'forgotpassword', component: ForgotPasswordComponent },
   { path: 'resetpassword', component: PasswordResetComponent },
@@ -45,7 +45,7 @@ const appRoutes: Routes = [
   {
     path: 'admin',
     loadChildren: 'app/ui-components/admin-panel/admin-panel.module#AdminPanelModule',
-    canActivate: [IsValidResolver, IsAdminGuard]
+    canActivate: [IsValidGuard, IsAdminGuard]
   },
   { path: '**', component: PageNotFoundComponent }
 ];
