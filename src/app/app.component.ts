@@ -52,8 +52,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
     this.initIconRegistry();
 
-    console.log('app.component.ts:constructor called');
-
     this.routeToLoginSubscription = this.router.events.subscribe((route) => {
       // Subscribe to router event stream
       if (route instanceof NavigationEnd) {
@@ -71,9 +69,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
             this.sidenavService.sidenav.close();
           }, 0);
         }
-      } else if (route instanceof NavigationCancel && route.url !== '/login') {
-        this.routerService.navigateRoutes(['/login']);
       }
+
     });
 
     this.router.events.subscribe(route => {

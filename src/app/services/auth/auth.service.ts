@@ -75,19 +75,25 @@ export class AuthService extends BaseService {
     if (!this.http.jwt)
       return this.authenticationChange$.next(false);
 
+    this.isValid();
+  }
+
+  public isValid(): Observable<boolean> {
+
     const options = this.http._defaultReqOpts;
     options.observe = 'response';
 
     const state = this._user ? this._user.state : UserState.Normal;
-
-    this.http.get<User>(`${this.authHost}/valid`, options)
-      .subscribe(res => this.handleLogin(res, state), res => {
+    return this.http.get<User>(`${this.authHost}/valid`, options)
+      .map(res => {
+        this.handleLogin(res, state);
+        return true;
+      }).catch(error => {
+        // We don't care about HTTP 4XX errors, only HTTP 500 error
+        if(error.status && error.status === 500) console.error('Caught error in auth.isValid(): ', error);
         this._user = null;
-        if (res.status === 403) this.authenticationChange$.next(false);
-        else {
-          console.error('Unknown error in AuthService.updateUserAuthStatus(): ', res);
-          this.authenticationChange$.error(res.json ? res.json() : res);
-        }
+        this.authenticationChange$.next(false);
+        return Observable.from([false]);
       });
   }
 
