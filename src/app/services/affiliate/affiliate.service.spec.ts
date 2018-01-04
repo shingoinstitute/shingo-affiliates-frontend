@@ -67,10 +67,26 @@ describe('AffiliateService', () => {
   });
 
   it('should update an affiliate', () => {
-    const test = new Affiliate({ Name: 'test aff', Id: 'someId' });
+    const test = new Affiliate({ Name: 'test aff', Id: 'some sf id' });
 
     service.update(test).subscribe(res => {
       expect(res).not.toBeUndefined();
+    });
+  });
+
+  it('should delete an affiliate', () => {
+    const test = new Affiliate({ Name: 'test aff', Id: 'someId' });
+
+    service.delete(test).subscribe(res => {
+      expect(res).not.toBeUndefined();
+    });
+  });
+
+  it('should be able to search for an affiliate', () => {
+
+    service.search("test").subscribe((res: Affiliate[]) => {
+      expect(res).not.toBeUndefined();
+      expect(res.length).toBe(2);
     });
   });
 

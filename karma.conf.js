@@ -35,7 +35,7 @@ module.exports = function (config) {
     files: [ { pattern: './src/test.ts', watched: false }, { pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css', watched: false, included: true }, ],
     junitReporter: {
       outputDir: '',
-      outputFile: 'test.xml'
+      outputFile: 'unitTests.xml'
     }
   });
 };
