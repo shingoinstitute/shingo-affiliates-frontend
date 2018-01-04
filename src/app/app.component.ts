@@ -2,7 +2,7 @@
 import { Component, ViewChild, HostListener, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatIconRegistry, MatSidenav, MatDialog } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized } from '@angular/router';
+import { Router, NavigationEnd, RouteConfigLoadEnd, NavigationStart, RouteConfigLoadStart, RoutesRecognized, NavigationCancel } from '@angular/router';
 
 // App Modules
 import { AuthService } from './services/auth/auth.service';
@@ -70,6 +70,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
           }, 0);
         }
       }
+
     });
 
     this.router.events.subscribe(route => {

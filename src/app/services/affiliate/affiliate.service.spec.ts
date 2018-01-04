@@ -66,4 +66,12 @@ describe('AffiliateService', () => {
     });
   });
 
+  it('should update an affiliate', () => {
+    const test = new Affiliate({ Name: 'test aff', Id: 'someId' });
+
+    service.update(test).subscribe(res => {
+      expect(res).not.toBeUndefined();
+    });
+  });
+
 });
