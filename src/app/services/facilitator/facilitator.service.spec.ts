@@ -3,13 +3,21 @@ import { TestBed, inject } from '@angular/core/testing';
 import { FacilitatorService } from './facilitator.service';
 import { HttpServiceMock } from '../http/http-service-mock';
 import { Facilitator } from '../../facilitators/facilitator.model';
+import { verify, instance, anyString, anything } from 'ts-mockito';
+
 
 describe('FacilitatorService', () => {
 
-  let service: FacilitatorService;
+  let mockFacilitators = [
+    new Facilitator({ Id: 'some sf id 1', fields: [], lastLogin: '' }),
+    new Facilitator({ Id: 'some sf id 2', fields: [], lastLogin: '' })
+  ];
 
+  let service: FacilitatorService;
+  let mockHttp: HttpServiceMock;
   beforeEach(() => {
-    service = new FacilitatorService(new HttpServiceMock([]));
+    mockHttp = new HttpServiceMock(mockFacilitators);
+    service = new FacilitatorService(instance(mockHttp.mock));
   });
 
   it('should be created', () => {
@@ -29,15 +37,20 @@ describe('FacilitatorService', () => {
 
   it('should call #getAll', () => {
     service.getAll()
-      .subscribe(data => {
-        expect(data).not.toBeUndefined();
+      .subscribe(res => {
+        expect(res.length).toBe(2);
+        expect(res[0]).not.toBeUndefined();
+        expect(res[0].sfId).toBe(mockFacilitators[0].sfId);
+        expect(res[1].sfId).toBe(mockFacilitators[1].sfId);
+        verify(mockHttp.mock.get(anyString())).once();
       });
   });
 
   it('should call #getById', () => {
-    service.getById('some id')
+    service.getById('some sf id 1')
       .subscribe(data => {
         expect(data).not.toBeUndefined();
+        verify(mockHttp.mock.get(anyString())).once();
       });
   });
   
@@ -84,7 +97,8 @@ describe('FacilitatorService', () => {
   });
 
   it('should call #describe', () => {
-    service = new FacilitatorService(new HttpServiceMock({ fields: [] }));
+    mockHttp.init(mockFacilitators[0]);
+    service.http = instance(mockHttp.mock);
     service.describe().subscribe(data => {
       expect(data).not.toBeUndefined();
     });

@@ -117,7 +117,7 @@ export class AuthService extends BaseService {
   public changeUserPassword(password: string): Observable<any> {
     return this.http.post<User>(`${this.authHost}/changepassword`, { password })
       .map(res => {
-        this.http.jwt = res.jwt;
+        this.http.setJwt(res.jwt);
         return res;
       });
   }
@@ -148,7 +148,7 @@ export class AuthService extends BaseService {
       this._user.state = UserState.LoggedInAs;
       this.adminToken = data.adminToken;
     }
-    this.http.jwt = data.jwt;
+    this.http.setJwt(data.jwt);
     this.authenticationChange$.next(res.status === 200);
     return data;
   }
@@ -157,7 +157,7 @@ export class AuthService extends BaseService {
     const prevState = this._user.state || UserState.Normal;
     if (this._user.state === UserState.LoggedInAs) {
       this.user.state = UserState.Normal;
-      this.http.jwt = this.adminToken;
+      this.http.setJwt(this.adminToken);
       this.adminToken = null;
     } else {
       this._user = null;

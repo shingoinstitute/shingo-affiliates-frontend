@@ -1,5 +1,9 @@
+import { when, mock, instance, anyOfClass, anyString, anything } from 'ts-mockito';
+import { HttpHeaders } from '@angular/common/http';
+import 'rxjs/add/observable/of';
 import { HttpService } from './http.service';
 import { Observable } from 'rxjs/Observable';
+import { E2BIG } from 'constants';
 
 // TODO: Move MockHttpService to http folder
 // TODO: Override other functions
@@ -7,39 +11,34 @@ import { Observable } from 'rxjs/Observable';
 // injected into classes that depend on it.
 // NOTE: The mocked interface needs to match
 // the mockees interface
-export class HttpServiceMock extends HttpService {
+export class HttpServiceMock {
 
-  private _jwt: string = null;
-  public get jwt(): string { return  'some jwt token'; }
-  public set jwt(value: string) { this._jwt = value; }
+  private mockInstance: HttpService;
 
-  constructor(private mockObj: any) { super(null, null); }
+  public get mock(): HttpService { return this.mockInstance; }
 
-  // As get is used to get arrays of and single 
-  // instances of Affiliates, return the right one
-  public get<T>(url: string, options: any): Observable<any> {
-    if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
-    return Observable.of(this.mockObj);
+  public constructor(expectedData: any) {
+    this.init(expectedData);
   }
 
-  // Post always returns an SFSuccessResponse for Affiliates
-  public post<T>(url: string, body: any): Observable<any> {
-    if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
-    return Observable.of(this.mockObj);
-  }
+  public init(expectedData: any) {
+    this.mockInstance = mock(HttpService);
 
-  public put<T>(url: string, body: any): Observable<any> {
-    if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
-    return Observable.of(this.mockObj);
-  }
-  
-  public delete<T>(url: string): Observable<any> {
-    if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
-    return Observable.of(this.mockObj);
-  }
 
-  public removeToken() {
-    this.jwt = null;
+    when(this.mockInstance.get(anyString())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance.get(anyString(), anything())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance.post(anyString(), anything())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance.post(anyString(), anything(), anything())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance.put(anyString(), anything())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance.delete(anyString())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance.request(anything())).thenReturn(Observable.of(expectedData));
+    when(this.mockInstance._defaultReqOpts).thenReturn({
+      headers: new HttpHeaders().set('x-jwt', '') || [],
+      withCredentials: true,
+      observe: 'body',
+      responseType: 'json'
+    });
+
   }
 
 }

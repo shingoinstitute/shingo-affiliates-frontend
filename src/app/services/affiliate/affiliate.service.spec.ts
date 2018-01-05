@@ -12,19 +12,25 @@ import { HttpEvent } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpServiceMock } from '../http/http-service-mock';
 
+
+import { verify, instance, anyString, anything } from 'ts-mockito';
+import { HttpModule } from '@angular/http/src/http_module';
+
 describe('AffiliateService', () => {
 
   let mockAffiliates = [
-    { Id: 'some sf id' },
-    { Id: 'some sf id' }
+    new Affiliate({ Id: 'some sf id 1' }),
+    new Affiliate({ Id: 'some sf id 2' })
   ];
 
   // No need to use the Angular TestBed
   // as we simply can inject the mock 
   // ourselves (we don't care about it Singletonness)
   let service: AffiliateService;
+  let mockHttp : HttpServiceMock;
   beforeEach(() => {
-    service = new AffiliateService(new HttpServiceMock(mockAffiliates));
+    mockHttp = new HttpServiceMock(mockAffiliates);
+    service = new AffiliateService(instance(mockHttp.mock));
   });
 
   it('should be created', () => {
@@ -45,16 +51,21 @@ describe('AffiliateService', () => {
     service.getAll().subscribe(res => {
       expect(res.length).toBe(2);
       expect(res[0]).not.toBeUndefined();
-      expect(res[0].sfId).toBe('some sf id');
-      expect(res[1].sfId).toBe('some sf id');
+      expect(res[0].sfId).toBe(mockAffiliates[0].sfId);
+      expect(res[1].sfId).toBe(mockAffiliates[1].sfId);
+      verify(mockHttp.mock.get(anyString())).once();
     });
   });
 
   // We should get back the first "mock" affiliate
   it('should get an affiliate by id', () => {
-    service.getById('some sf id').subscribe((res: Affiliate) => {
+    mockHttp.init(mockAffiliates[0]);
+    service.http = instance(mockHttp.mock);
+    
+    service.getById('some sf id 1').subscribe((res: any) => {
       expect(res).not.toBeUndefined();
-      expect(res.sfId).toBe('some sf id');
+      expect(res.sfId).toBe(mockAffiliates[0].sfId);
+      verify(mockHttp.mock.get(anyString())).once();
     });
   });
 
@@ -63,6 +74,7 @@ describe('AffiliateService', () => {
     const test = new Affiliate({ Name: 'test aff' });
     service.create(test).subscribe(res => {
       expect(res).not.toBeUndefined();
+      verify(mockHttp.mock.post(anyString(), anything())).once();
     });
   });
 
@@ -71,6 +83,7 @@ describe('AffiliateService', () => {
 
     service.update(test).subscribe(res => {
       expect(res).not.toBeUndefined();
+      verify(mockHttp.mock.put(anyString(), anything())).once();
     });
   });
 
@@ -79,6 +92,7 @@ describe('AffiliateService', () => {
 
     service.delete(test).subscribe(res => {
       expect(res).not.toBeUndefined();
+      verify(mockHttp.mock.delete(anyString())).once();
     });
   });
 
@@ -87,6 +101,7 @@ describe('AffiliateService', () => {
     service.search("test").subscribe((res: Affiliate[]) => {
       expect(res).not.toBeUndefined();
       expect(res.length).toBe(2);
+      verify(mockHttp.mock.get(anyString(), anything())).once();
     });
   });
 

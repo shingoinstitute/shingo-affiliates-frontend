@@ -3,11 +3,14 @@
 import { AuthService } from './auth.service';
 import { HttpServiceMock } from '../http/http-service-mock';
 import { User } from '../../shared/models/user.model';
+import { verify, instance, anyString, anything } from 'ts-mockito';
 
 describe('AuthService', () => {
   let service: AuthService;
+  let mockHttp: HttpServiceMock;
   beforeEach(() => {
-    service = new AuthService(new HttpServiceMock({ body: { jwt: 'some jwt', user: {id: 'id', name: 'name'} } }));
+    mockHttp = new HttpServiceMock({ body: { jwt: 'some jwt', user: {id: 'id', name: 'name'} } })
+    service = new AuthService(instance(mockHttp.mock));
   });
 
   it('should be created', () => {
@@ -26,7 +29,7 @@ describe('AuthService', () => {
     let spy = spyOn(service.authenticationChange$, 'next');
 
     expect(service.authenticationChange$.next).not.toHaveBeenCalled();
-    
+
     service.login({
       email: 'email',
       password: 'password'
@@ -44,7 +47,7 @@ describe('AuthService', () => {
   });
 
   it(`expects #getUser to get a user`, () => {
-    service = new AuthService(new HttpServiceMock({body: {}}));
+    // service = new AuthService(instance(mockHttp.mock));
 
     service.login({
       email: 'email',

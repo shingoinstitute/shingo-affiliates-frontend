@@ -13,7 +13,7 @@ export class HttpService {
 
   public get jwt(): string { return this._cs.get('x-jwt') || null; }
 
-  public set jwt(token: string) { this._cs.put('x-jwt', token); }
+  public setJwt(token: string) { this._cs.put('x-jwt', token); }
 
   public get _defaultReqOpts() {
     return {
