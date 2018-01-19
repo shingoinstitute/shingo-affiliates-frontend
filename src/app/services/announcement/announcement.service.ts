@@ -15,6 +15,11 @@ export class AnnouncementService {
     return Observable.create(observer => {
       observer.next([
         {
+          'title': 'Webinar Video',
+          'message': 'If you missed the webinar, <a href= "https://usu.co1.qualtrics.com/jfe/form/SV_3ad3xzOnGvLt0ah">watch it here.</a> When you\'ve completed the video, be sure to take <a href= "https://usu.co1.qualtrics.com/jfe/form/SV_3ad3xzOnGvLt0ah">this survey.</a>',
+          'priority': 5
+        },
+        {
           'title': 'Registration URL Update',
           'message': 'We have updated the system to not require a registration URL if the workshop is public.',
           'priority': 0
@@ -22,7 +27,7 @@ export class AnnouncementService {
         {
           'title': 'Safari Issues',
           // tslint:disable-next-line:max-line-length
-          'message': 'There was some issues discovered when accessing the Affiliate Portal from the Safari web browser. The known issues have been addressed. If you find \'bugs\' or \'issues\' please email shingo.coord@usu.edu with a description of what is happening and please include the browser you are using.\n\nThank you',
+          'message': 'There were some issues discovered when accessing the Affiliate Portal from the Safari web browser. The known issues have been addressed. If you find \'bugs\' or \'issues\' please email shingo.coord@usu.edu with a description of what is happening and please include the browser you are using.\n\nThank you',
           'priority': 1
         }
       ]);
