@@ -16,7 +16,7 @@ export class AnnouncementService {
       observer.next([
         {
           'title': 'Webinar Video',
-          'message': 'If you missed the webinar, <a href= "https://usu.co1.qualtrics.com/jfe/form/SV_3ad3xzOnGvLt0ah">watch it here.</a> When you\'ve completed the video, be sure to take <a href= "https://usu.co1.qualtrics.com/jfe/form/SV_3ad3xzOnGvLt0ah">this survey.</a>',
+          'message': 'If you missed the webinar, be sure to <a href= "">watch it here.</a>',
           'priority': 5
         },
         {
