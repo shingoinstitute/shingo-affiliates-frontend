@@ -16,7 +16,7 @@ export class AnnouncementService {
       observer.next([
         {
           'title': 'Webinar Video',
-          'message': 'If you missed the webinar, be sure to <a href= "">watch it here.</a>',
+          'message': 'If you missed the webinar, be sure to <a href="https://youtu.be/tlKbdAtQIGk">watch it here.</a>',
           'priority': 5
         },
         {
