@@ -25,22 +25,42 @@ export class Workshop extends SFObject {
 
   public get startDate(): Date {
     const date = this.Start_Date__c instanceof Date ? this.Start_Date__c : new Date(this.Start_Date__c);
-    return new Date(date.valueOf() + (1000 * 60 * 60 * 7)); // offset by 7 hours
+    const newDate = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
+
+    if (newDate.getDate() !== date.getDate()) {
+      return newDate;
+    }
+    return date;
   }
   public set startDate(date: Date) {
-    date.setUTCHours(7, 0, 0, 0); // offset by 7 hours
-    this.Start_Date__c = date;
+    // strips the local time information, so it is just the local date
+    // creates a utc date from local date
+    const newDate = new Date();
+    newDate.setUTCFullYear(date.getFullYear());
+    newDate.setUTCMonth(date.getMonth());
+    newDate.setUTCDate(date.getDate());
+    newDate.setUTCHours(0, 0, 0, 0);
+    this.Start_Date__c = newDate;
   }
 
   public get startDateFormatted(): string { return Workshop.formatDate(this.startDate); }
 
   public get endDate(): Date {
     const date = this.End_Date__c instanceof Date ? this.End_Date__c : new Date(this.End_Date__c);
-    return new Date(date.valueOf() + (1000 * 60 * 60 * 7)); // offset by 7 hours
+    const newDate = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
+
+    if (newDate.getDate() !== date.getDate()) {
+      return newDate;
+    }
+    return date;
   }
   public set endDate(date: Date) {
-    date.setUTCHours(7, 0, 0, 0); // offset by 7 hours
-    this.End_Date__c = date;
+    const newDate = new Date();
+    newDate.setUTCFullYear(date.getFullYear());
+    newDate.setUTCMonth(date.getMonth());
+    newDate.setUTCDate(date.getDate());
+    newDate.setUTCHours(0, 0, 0, 0);
+    this.End_Date__c = newDate;
   }
 
   public get endDateFormatted(): string { return Workshop.formatDate(this.endDate); }
@@ -148,9 +168,8 @@ export class Workshop extends SFObject {
   }
 
   public static formatDate(d: string | number | Date) {
-    const date: any = d;
     try {
-      return dateFormat(new Date(date), 'dd mmm, yyyy');
+      return dateFormat(new Date(d as any), 'dd mmm, yyyy');
     } catch (e) {
       return '';
     }
