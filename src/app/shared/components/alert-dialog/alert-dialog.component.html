@@ -1,6 +1,12 @@
-<h3 matDialogTitle [innerHTML]="title"></h3>
+<h3 matDialogTitle [innerHTML]="title" *ngIf="title"></h3>
 <mat-dialog-content [innerHTML]="message"></mat-dialog-content>
 <mat-dialog-actions>
-   <button mat-button class="mat-accent" [matDialogClose]="true">Confirm</button>
-   <button mat-button matDialogClose>Cancel</button>
+  <div *ngIf="destructive">
+   <button mat-button matDialogClose>{{ cancel }}</button>
+   <button mat-button class="mat-accent" [matDialogClose]="true" color="warn">{{ confirm }}</button>
+  </div>
+  <div *ngIf="!destructive">
+   <button mat-button matDialogClose>{{ cancel }}</button>
+   <button mat-button class="mat-accent" [matDialogClose]="true">{{ confirm }}</button>
+  </div>
 </mat-dialog-actions>
