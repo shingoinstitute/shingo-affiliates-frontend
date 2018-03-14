@@ -24,43 +24,28 @@ export class Workshop extends SFObject {
   public get sfId(): string { return this.Id; }
 
   public get startDate(): Date {
-    const date = this.Start_Date__c instanceof Date ? this.Start_Date__c : new Date(this.Start_Date__c);
-    const newDate = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
+    const date = this.Start_Date__c instanceof Date
+    ? this.Start_Date__c // we have already set the start date 
+    : this.offsetUTCDate(new Date(this.Start_Date__c));
+    // we are getting the start date from a iso string from salesforce so we must
+    // account for their truncation
 
-    if (newDate.getDate() !== date.getDate()) {
-      return newDate;
-    }
     return date;
   }
   public set startDate(date: Date) {
-    // strips the local time information, so it is just the local date
-    // creates a utc date from local date
-    const newDate = new Date();
-    newDate.setUTCFullYear(date.getFullYear());
-    newDate.setUTCMonth(date.getMonth());
-    newDate.setUTCDate(date.getDate());
-    newDate.setUTCHours(0, 0, 0, 0);
-    this.Start_Date__c = newDate;
+    this.Start_Date__c = date;
   }
 
   public get startDateFormatted(): string { return Workshop.formatDate(this.startDate); }
 
   public get endDate(): Date {
-    const date = this.End_Date__c instanceof Date ? this.End_Date__c : new Date(this.End_Date__c);
-    const newDate = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
-
-    if (newDate.getDate() !== date.getDate()) {
-      return newDate;
-    }
+    const date = this.End_Date__c instanceof Date
+      ? this.End_Date__c
+      : this.offsetUTCDate(new Date(this.End_Date__c));
     return date;
   }
   public set endDate(date: Date) {
-    const newDate = new Date();
-    newDate.setUTCFullYear(date.getFullYear());
-    newDate.setUTCMonth(date.getMonth());
-    newDate.setUTCDate(date.getDate());
-    newDate.setUTCHours(0, 0, 0, 0);
-    this.End_Date__c = newDate;
+    this.End_Date__c = date;
   }
 
   public get endDateFormatted(): string { return Workshop.formatDate(this.endDate); }
@@ -125,6 +110,7 @@ export class Workshop extends SFObject {
     return this.Status__c.toLowerCase() !== 'proposed';
   }
   public get dueDate(): string {
+    // due 7 days from the endDate
     const dueDate = new Date(this.endDate).valueOf() + (1000 * 60 * 60 * 24 * 7);
     return Workshop.formatDate(new Date(dueDate));
   }
@@ -137,7 +123,7 @@ export class Workshop extends SFObject {
   /* tslint:disable:variable-name */
   public Id: string = '';
   public Start_Date__c: Date = new Date();
-  public End_Date__c: Date = new Date(Date.now() + (1000 * 60 * 60 * 24));
+  public End_Date__c: Date = new Date(Date.now() + (1000 * 60 * 60 * 24)); // end date starts 1 day from the current time
   public Course_Manager__r: CourseManager = new CourseManager();
   public Course_Manager__c: string = '';
   public facilitators: Facilitator[] = [];
@@ -183,12 +169,26 @@ export class Workshop extends SFObject {
   public removeInstructorById(sfId: string): void { this.facilitators = this.facilitators.filter(f => f['Id'] !== sfId); }
   public removeInstructorByIndex(index: number): void { this.facilitators.splice(index, 1); }
 
+  private offsetLocalDate(d: Date) {
+    return new Date(d.valueOf() - d.getTimezoneOffset() * 60 * 1000);
+  }
+
+  private offsetUTCDate(d: Date) {
+    // if hours minutes and seconds are zero, we assume we got the date from
+    // salesforce. therefore we shift back to local time
+    if (d.getUTCHours() === 0 && d.getUTCMinutes() === 0 && d.getUTCSeconds() === 0)
+      return new Date(d.valueOf() + d.getTimezoneOffset() * 60 * 1000);
+    else
+      return d;
+  }
+
   // Utility methods
+  // tslint:disable-next-line:member-ordering
   public toJSON(): object {
     return {
       Id: this.sfId,
-      Start_Date__c: this.startDate,
-      End_Date__c: this.endDate,
+      Start_Date__c: this.offsetLocalDate(this.startDate),
+      End_Date__c: this.offsetLocalDate(this.endDate),
       Course_Manager__c: this.courseManagerId,
       Event_City__c: this.city,
       Event_Country__c: this.country,
