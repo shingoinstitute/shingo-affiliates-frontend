@@ -8,7 +8,7 @@ import { WorkshopService, WorkshopProperties, WorkshopTrackByStrategy } from '..
 import { MatSort, MatPaginator, MatButton, MatDialog, MatDatepickerInputEvent } from '@angular/material';
 import { Workshop, WorkshopStatusType } from '../workshop.model';
 import { Filter } from '../../services/filters/filter.abstract';
-import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component';
+import { AlertDialogComponent, AlertDialogData } from '../../shared/components/alert-dialog/alert-dialog.component';
 import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
@@ -147,20 +147,22 @@ export class WorkshopDataTableComponent implements OnInit {
     const dialogRef = this.dialog.open(AlertDialogComponent, {
       data: {
         sfObject: ws,
-        message: `This will permanently delete the selected workshop. Proceed?`
-      }
+        title: 'Delete Workshop?',
+        message: 'This will permanently delete the selected workshop.',
+        destructive: true,
+        confirm: 'Yes, Delete Workshop',
+        cancel: 'No, Keep Workshop'
+      } as AlertDialogData
     });
 
     dialogRef.afterClosed()
     .subscribe(result => {
       if (result) {
         this.isLoading = true;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, 1500);
         this._ws.delete(ws)
           .subscribe(res => {
             this.isLoading = false;
+            this.refresh();
           });
       }
     });

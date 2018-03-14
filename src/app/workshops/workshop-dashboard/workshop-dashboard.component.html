@@ -23,10 +23,12 @@
                 <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showStatusFilter ? 'flex' : 'none'">
-                    <mat-select [style.width]="'100%'" #statusSelect="matSelect" placeholder="Status" [(ngModel)]="selectedStatuses" (change)="selectedStatusChanged($event)"
-                        multiple="true" floatPlaceholder="auto">
-                        <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
-                    </mat-select>
+                    <mat-form-field>
+                        <mat-select [style.width]="'100%'" #statusSelect="matSelect" placeholder="Status" [(ngModel)]="selectedStatuses" (change)="selectedStatusChanged($event)"
+                            multiple="true" floatPlaceholder="auto">
+                            <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
                 <div fxLayout="row" fxLayoutGap="8px" [style.display]="showTextFilter ? 'flex' : 'none'">

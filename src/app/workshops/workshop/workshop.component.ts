@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material';
 import { WorkshopService } from '../../services/workshop/workshop.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { Workshop } from '../workshop.model';
-import { TextResponseDialogComponent } from '../../shared/components/text-response-dialog/text-response-dialog.component';
+import { TextResponseDialogComponent, TextResponseData } from '../../shared/components/text-response-dialog/text-response-dialog.component';
 
 @Component({
   selector: 'app-workshop',
@@ -34,11 +34,12 @@ export class WorkshopComponent {
   public cancel() {
     const dialogRef = this.dialog.open(TextResponseDialogComponent, {
       data: {
-        title: 'Cancel Workshop',
+        title: 'Cancel Workshop?',
         message: 'Please state the reason for cancelling this workshop...',
-        acceptText: 'Cancel',
-        cancelText: 'Nevermind'
-      }
+        acceptText: 'Yes, Cancel Workshop',
+        cancelText: 'No, Keep Workshop',
+        destructive: true
+      } as TextResponseData
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
