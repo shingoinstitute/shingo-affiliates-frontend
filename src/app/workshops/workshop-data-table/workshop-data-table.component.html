@@ -124,6 +124,18 @@
     <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </mat-cell>
   </ng-container>
 
+  <!-- Host City Column -->
+  <ng-container matColumnDef="hostCity">
+    <mat-header-cell *matHeaderCellDef mat-sort-header class="due-date-header-cell"> Host City </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.city }} </mat-cell>
+  </ng-container>
+
+  <!-- Host Country Column -->
+  <ng-container matColumnDef="hostCountry">
+    <mat-header-cell *matHeaderCellDef mat-sort-header class="due-date-header-cell"> Host Country </mat-header-cell>
+    <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.country }} </mat-cell>
+  </ng-container>
+
   <!-- Actions Column -->
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>

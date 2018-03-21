@@ -12,26 +12,32 @@
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.workshopType && describe.workshopType.inlineHelpText }} </p>
-      <mat-select placeholder="{{ describe.workshopType && describe.workshopType.label || 'Type' }}" floatPlaceholder="auto" formControlName="type"
-        required>
-        <mat-option *ngFor="let type of workshopTypes" [value]="type"> {{ type }} </mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-select placeholder="{{ describe.workshopType && describe.workshopType.label || 'Type' }}" floatPlaceholder="auto" formControlName="type"
+          required>
+          <mat-option *ngFor="let type of workshopTypes" [value]="type"> {{ type }} </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="input-item">
       <p class="mat-caption"> {{ describe.language && describe.language.inlineHelpText }} </p>
-      <mat-select placeholder="{{ describe.language && describe.language.label || 'Language' }}" floatPlaceholder="auto" required
-        formControlName="language">
-        <mat-option *ngFor="let lang of languages" [value]="lang">{{ lang }}</mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-select placeholder="{{ describe.language && describe.language.label || 'Language' }}" floatPlaceholder="auto" required
+          formControlName="language">
+          <mat-option *ngFor="let lang of languages" [value]="lang">{{ lang }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="input-item" *ngIf="auth.user && auth.user.isAdmin && !isNewWorkshop">
       <p class="mat-caption"> {{ describe.status && describe.status.inlineHelpText }} </p>
-      <mat-select placeholder="{{ describe.status && describe.status.label || 'Workshop Status'}}" floatPlaceholder="auto" required
-        formControlName="status">
-        <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-select placeholder="{{ describe.status && describe.status.label || 'Workshop Status'}}" floatPlaceholder="auto" required
+          formControlName="status">
+          <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div class="input-item">
@@ -105,7 +111,7 @@
       <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
       <mat-form-field>
         <input matInput placeholder="{{ describe.registrationWebsite && describe.registrationWebsite.label || 'Registration URL' }}"
-          formControlName="website" (keyup)="prefixWebsite()">
+          formControlName="website">
         <mat-hint align="start" *ngIf="workshopForm.controls.website.errors?.required" class="error">A registration website is required if the workshop is public</mat-hint>
         <mat-hint align="start" *ngIf="workshopForm.controls.website.errors?.url" class="error">'{{workshopForm.controls.website.value}}' is not a valid URL</mat-hint>
       </mat-form-field>
