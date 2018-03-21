@@ -17,12 +17,12 @@ export class WorkshopFilterFactory extends FilterFactory {
     return new WorkshopDateRangeFilter(name);
   }
 
-  public createPropertyFilter(name: string = `WorkshopDateRangeFilter:${WorkshopFilterFactory.id}`): PropertyFilter<Workshop> {
+  public createPropertyFilter(name: string = `WorkshopPropertyFilter:${WorkshopFilterFactory.id}`): PropertyFilter<Workshop> {
     WorkshopFilterFactory.id++;
     return new PropertyFilter<Workshop>(name);
   }
 
-  public createTextFilter(name: string = `WorkshopDateRangeFilter:${WorkshopFilterFactory.id}`): TextFilter<Workshop> {
+  public createTextFilter(name: string = `WorkshopTextFilter:${WorkshopFilterFactory.id}`): TextFilter<Workshop> {
     WorkshopFilterFactory.id++;
     return new TextFilter<Workshop>(name);
   }
