@@ -40,19 +40,22 @@ export class FacilitatorService extends BaseAPIService {
   }
 
   public create(obj: Facilitator): Observable<ISFSuccessResult> {
-    return this.http.post(`${this.baseUrl}`, obj)
+    const { __name, ...rest } = JSON.parse(JSON.stringify(obj));
+    return this.http.post(`${this.baseUrl}`, rest)
       .map(res => res)
       .catch(err => this.handleError(err));
   }
 
   public map(obj: Facilitator): Observable<ISFSuccessResult> {
-    return this.http.post(`${this.baseUrl}/${obj.sfId}`, obj)
+    const { __name, ...rest } = JSON.parse(JSON.stringify(obj));
+    return this.http.post(`${this.baseUrl}/${obj.sfId}`, rest)
       .map(res => res)
       .catch(err => this.handleError(err));
   }
 
   public update(obj: Facilitator): Observable<ISFSuccessResult> {
-    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+    const { __name, ...rest } = JSON.parse(JSON.stringify(obj));
+    return this.http.put(`${this.baseUrl}/${obj.sfId}`, rest)
       .map(res => res)
       .catch(err => this.handleError(err));
   }
