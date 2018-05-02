@@ -15,8 +15,8 @@ export class AnnouncementService {
     return Observable.create(observer => {
       observer.next([
         {
-          'title': 'Webinar Video',
-          'message': 'If you missed the webinar, be sure to <a href="https://youtu.be/tlKbdAtQIGk">watch it here.</a> When you\'re done, make sure to fill out the survey in the description of the video.' ,
+          'title': 'Webinar - April 30, 2018',
+          'message': 'If you missed the webinar, be sure to <a href="https://youtu.be/U_FxdMXDOic">watch it here.</a> When you\'re done, make sure to fill out the survey in the description of the video.' ,
           'priority': 5
         },
         {
