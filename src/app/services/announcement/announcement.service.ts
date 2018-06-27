@@ -12,25 +12,21 @@ export class AnnouncementService {
 
   public getAnnouncements(): Observable<Announcement[]> {
     /** TODO: Remove after actual API route is implemented */
-    return Observable.create(observer => {
-      observer.next([
-        {
-          'title': 'Webinar - April 30, 2018',
-          'message': 'If you missed the webinar, be sure to <a href="https://youtu.be/U_FxdMXDOic">watch it here.</a> When you\'re done, make sure to fill out the survey in the video\'s description.' ,
-          'priority': 5
-        },
-        {
-          'title': 'Registration URL Update',
-          'message': 'We have updated the system to not require a registration URL if the workshop is public.',
-          'priority': 0
-        },
-        {
-          'title': 'Safari Issues',
+    return new Observable<Announcement[]>(observer => {
+      const announcements: Announcement[] = [
+        new Announcement('Webinar - April 30, 2018',
           // tslint:disable-next-line:max-line-length
-          'message': 'There was some issues discovered when accessing the Affiliate Portal from the Safari web browser. The known issues have been addressed. If you find \'bugs\' or \'issues\' please email shingo.coord@usu.edu with a description of what is happening and please include the browser you are using.\n\nThank you',
-          'priority': 1
-        }
-      ]);
+          'If you missed the webinar, be sure to <a href="https://youtu.be/U_FxdMXDOic">watch it here.</a> When you\'re done, make sure to fill out the survey in the video\'s description.' ,
+          5
+        ),
+        new Announcement('Webinar - July 17, 2018',
+          // tslint:disable-next-line:max-line-length
+          'The next affiliate webinar is on July 17 at 9 am MT. Please visit <a href="https://connect.usu.edu/shingo">https://connect.usu.edu/shingo</a> to join us live, or watch the recording that will be posted here a couple of days later. Remember that all facilitators are required to view the webinars, so don’t forget to log back into the portal. See you soon!',
+          4
+        )
+      ];
+
+      observer.next(announcements);
     });
   }
 
