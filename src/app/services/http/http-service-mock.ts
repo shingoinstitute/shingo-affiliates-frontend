@@ -1,5 +1,5 @@
-import { HttpService } from './http.service';
-import { Observable } from 'rxjs';
+import { APIHttpService } from './http.service';
+import { Observable } from 'rxjs/Observable';
 
 // TODO: Move MockHttpService to http folder
 // TODO: Override other functions
@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 // injected into classes that depend on it.
 // NOTE: The mocked interface needs to match
 // the mockees interface
-export class HttpServiceMock extends HttpService {
+export class HttpServiceMock extends APIHttpService {
 
   private _jwt: string = null;
   public get jwt(): string { return  'some jwt token'; }
@@ -15,25 +15,25 @@ export class HttpServiceMock extends HttpService {
 
   constructor(private mockObj: any) { super(null, null); }
 
-  // As get is used to get arrays of and single 
+  // As get is used to get arrays of and single
   // instances of Affiliates, return the right one
-  public get<T>(url: string, options: any): Observable<any> {
+  public get = <T>(url: string, options: any): Observable<any> => {
     if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
     return Observable.of(this.mockObj);
   }
 
   // Post always returns an SFSuccessResponse for Affiliates
-  public post<T>(url: string, body: any): Observable<any> {
+  public post = <T>(url: string, body: any): Observable<any> => {
     if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
     return Observable.of(this.mockObj);
   }
 
-  public put<T>(url: string, body: any): Observable<any> {
+  public put = <T>(url: string, body: any): Observable<any> => {
     if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
     return Observable.of(this.mockObj);
   }
-  
-  public delete<T>(url: string): Observable<any> {
+
+  public delete = <T>(url: string): Observable<any> => {
     if (url.includes('some sf id')) return Observable.of(this.mockObj[0]);
     return Observable.of(this.mockObj);
   }

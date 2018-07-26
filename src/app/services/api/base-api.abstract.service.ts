@@ -2,17 +2,18 @@
 import { isDevMode } from '@angular/core';
 
 // App Modules
-import { HttpService } from '../http/http.service';
+import { APIHttpService } from '../http/http.service';
 import { BaseService } from './base.abstract.service';
 
 // RxJS Modules
 import { Observable } from 'rxjs';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 // RxJS operators
 
 
 import { pick } from 'lodash';
+import { sfToCamelCase } from '../../util/util';
+import { environment } from '../../../environments/environment';
 
 export interface ISFSuccessResult {
   id: string;
@@ -22,8 +23,7 @@ export interface ISFSuccessResult {
 
 export abstract class BaseAPIService extends BaseService {
 
-  protected _baseUrl: string = (isDevMode() ? 'http://localhost' : 'https://api.shingo.org/v2/affiliates');
-  protected _basePort: string = (isDevMode() ? '8080' : '');
+  protected _baseUrl = environment.apiUrl;
 
   // Contract for all APIServices;
   public abstract getAll(): Observable<any[]>;
@@ -33,14 +33,14 @@ export abstract class BaseAPIService extends BaseService {
   public abstract delete(obj: any): Observable<ISFSuccessResult>;
   public abstract search(query: string): Observable<any[]>;
 
-  public describe(route: 'workshops' | 'facilitators' | 'affiliates' | 'support', http: HttpService): Observable<any> {
-    return http.get(`${this.APIHost()}/${route}/describe`)
+  public describe(route: 'workshops' | 'facilitators' | 'affiliates' | 'support', http: APIHttpService): Observable<any> {
+    return http.get<any>(`${this.APIHost()}/${route}/describe`)
       .map(data => {
         const props = {};
 
         data.fields.filter(field => field.inlineHelpText || field.label || field.picklistValues)
           .map(field => pick(field, ['inlineHelpText', 'label', 'name', 'picklistValues']))
-          .forEach(field => props[this.toCamelCase(field.name)] = field);
+          .forEach(field => props[sfToCamelCase(field.name)] = field);
 
         return props;
       })
@@ -51,5 +51,5 @@ export abstract class BaseAPIService extends BaseService {
     return new type(args);
   }
 
-  protected APIHost() { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}`; }
+  protected APIHost() { return this._baseUrl; }
 }

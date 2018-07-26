@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
 import { AuthService } from './auth.service';
-import { User } from '../../shared/models/user.model';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class IsValidGuard implements CanActivate {
@@ -12,10 +11,8 @@ export class IsValidGuard implements CanActivate {
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
     return this.auth.isValid().map(value => {
-      if(!value) this.router.navigate(['login']);
+      if (!value) this.router.navigate(['login']);
       return value;
-    })
-    
+    });
   }
-
 }

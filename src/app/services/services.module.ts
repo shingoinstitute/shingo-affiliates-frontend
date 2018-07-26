@@ -5,7 +5,7 @@ import { Announcement } from './announcement/announcement.model';
 import { AuthService } from './auth/auth.service';
 import { CountriesService } from './countries/countries.service';
 import { FacilitatorService } from './facilitator/facilitator.service';
-import { HttpService } from './http/http.service';
+import { APIHttpService } from './http/http.service';
 import { RouterService } from './router/router.service';
 import { SidenavService } from './sidenav/sidenav.service';
 import { SupportService } from './support/support.service';
@@ -24,7 +24,7 @@ export class ServicesModule {
     return {
       ngModule: ServicesModule,
       providers: [
-        HttpService,
+        APIHttpService,
         AnnouncementService,
         AuthService,
         CountriesService,

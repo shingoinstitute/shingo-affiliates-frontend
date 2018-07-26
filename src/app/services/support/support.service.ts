@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpRequest } from '@angular/common/http';
 
 // App Modules
-import { HttpService } from '../http/http.service';
+import { APIHttpService } from '../http/http.service';
 import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
 import { SupportPage } from './support.model';
 
@@ -24,24 +24,24 @@ export class SupportService extends BaseAPIService {
 
   public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  public route: string = 'support';
+  public route = 'support';
 
-  constructor(public http: HttpService) { super(); }
+  constructor(public http: APIHttpService) { super(); }
 
-  public getAll(): Observable<SupportPage[]> {
-    return this.http.get(this.baseUrl)
+  public getAll() {
+    return this.http.get<any[]>(this.baseUrl)
       .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }
 
-  public getById(id: string): Observable<SupportPage> {
-    return this.http.get(this.baseUrl + `/${id}`)
+  public getById(id: string) {
+    return this.http.get<any>(this.baseUrl + `/${id}`)
       .map(res => new SupportPage(res))
       .catch(this.handleError);
   }
 
-  public getCategory(name: string): Observable<SupportPage[]> {
-    return this.http.get(this.baseUrl + `/category/${name}`)
+  public getCategory(name: string) {
+    return this.http.get<any[]>(this.baseUrl + `/category/${name}`)
       .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }
@@ -58,16 +58,16 @@ export class SupportService extends BaseAPIService {
     throw new Error('Method not implemented.');
   }
 
-  public describe(): Observable<any> {
+  public describe() {
     return super.describe('support', this.http);
   }
 
-  public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS): Observable<any[]> {
+  public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS) {
     // Set headers (NOTE: Must include token here if it exists)
     let headers = new HttpHeaders().set('x-search', query);
     headers = headers.set('x-retrieve', fields.join());
     if (this.http.jwt !== null) headers = headers.set('x-jwt', this.http.jwt);
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+    return this.http.get<any[]>(this.baseUrl + '/search', { headers, withCredentials: true })
       .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }

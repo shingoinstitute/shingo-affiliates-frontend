@@ -5,7 +5,7 @@ import { TestBed, inject, getTestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { CookieService, CookieModule } from 'ngx-cookie';
 
-import { HttpService } from './http.service';
+import { APIHttpService } from './http.service';
 import { HttpRequest } from '@angular/common/http';
 import { HttpResponse } from '@angular/common/http';
 import { ComponentFixture } from '@angular/core/testing';
@@ -18,19 +18,19 @@ describe('HttpService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HttpService],
+      providers: [APIHttpService],
       imports: [
         HttpClientTestingModule,
         CookieModule.forRoot()
       ]
     });
-    
+
     injector = getTestBed();
     cookieService = injector.get(CookieService);
 
   });
 
-  it('should be created', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
+  it('should be created', inject([APIHttpService, HttpTestingController], (http: APIHttpService, httpMock: HttpTestingController) => {
     expect(http).toBeTruthy();
     expect(http.get).toBeDefined();
     expect(http.post).toBeDefined();
@@ -40,7 +40,7 @@ describe('HttpService', () => {
     expect(http.removeToken).toBeDefined();
   }));
 
-  it('expects a GET request', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
+  it('expects a GET request', inject([APIHttpService, HttpTestingController], (http: APIHttpService, httpMock: HttpTestingController) => {
     // Make an HTTP GET request, and expect that it return an object
     // of the form {name: 'Test Data'}.
     http
@@ -65,7 +65,7 @@ describe('HttpService', () => {
     httpMock.verify();
   }));
 
-  it('expects a POST request', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
+  it('expects a POST request', inject([APIHttpService, HttpTestingController], (http: APIHttpService, httpMock: HttpTestingController) => {
     http
     .post('/data', { name: 'Test Name' })
     .subscribe(data => expect(data['name']).toEqual('Test Name'));
@@ -79,7 +79,7 @@ describe('HttpService', () => {
     httpMock.verify();
   }));
 
-  it('expects a PUT request', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
+  it('expects a PUT request', inject([APIHttpService, HttpTestingController], (http: APIHttpService, httpMock: HttpTestingController) => {
     http
     .put('/data', { id: '123', name: 'old name' })
     .subscribe(data => {
@@ -96,9 +96,10 @@ describe('HttpService', () => {
     httpMock.verify();
   }));
 
-  it('expects a DELETE request', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
+  it('expects a DELETE request',
+    inject([APIHttpService, HttpTestingController], (http: APIHttpService, httpMock: HttpTestingController) => {
     http
-    .delete('/data', { id: '123', name: 'old name' })
+    .delete('/data/123')
     .subscribe(data => expect(data['success']).toEqual('true'));
 
     const req = httpMock.expectOne('/data');
@@ -110,7 +111,8 @@ describe('HttpService', () => {
     httpMock.verify();
   }));
 
-  it('expects to make an HTTP Request', inject([HttpService, HttpTestingController], (http: HttpService, httpMock: HttpTestingController) => {
+  it('expects to make an HTTP Request',
+    inject([APIHttpService, HttpTestingController], (http: APIHttpService, httpMock: HttpTestingController) => {
     const httpRequest: HttpRequest<any> = new HttpRequest<any>('GET', '/testurl');
 
     http
@@ -120,7 +122,7 @@ describe('HttpService', () => {
           expect(res.body['success']).toEqual('true');
         }
       });
-    
+
       const req = httpMock.expectOne('/testurl');
 
       expect(req.request.method).toEqual(httpRequest.method);
@@ -130,7 +132,7 @@ describe('HttpService', () => {
       httpMock.verify();
   }));
 
-  it('can set and remove jwt token from cookies', inject([HttpService], (http: HttpService) => {
+  it('can set and remove jwt token from cookies', inject([APIHttpService], (http: APIHttpService) => {
     // set a cookie with cookieService
     cookieService.put('x-jwt', 'mocktoken');
 

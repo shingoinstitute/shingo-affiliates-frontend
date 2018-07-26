@@ -3,7 +3,7 @@ import { TestBed, inject, getTestBed } from '@angular/core/testing';
 
 import { AffiliateService } from './affiliate.service';
 
-import { HttpService } from '../http/http.service';
+import { APIHttpService } from '../http/http.service';
 import { Injector } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
@@ -20,7 +20,7 @@ describe('AffiliateService', () => {
   ];
 
   // No need to use the Angular TestBed
-  // as we simply can inject the mock 
+  // as we simply can inject the mock
   // ourselves (we don't care about it Singletonness)
   let service: AffiliateService;
   beforeEach(() => {

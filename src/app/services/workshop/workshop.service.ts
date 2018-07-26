@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpRequest } from '@angular/common/http';
 
 // App Modules
-import { HttpService } from '../http/http.service';
+import { APIHttpService } from '../http/http.service';
 import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
 import { Workshop } from '../../workshops/workshop.model';
 
@@ -18,7 +18,14 @@ import { Observable } from 'rxjs';
 
 
 export { ISFSuccessResult, Workshop };
-export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affiliate__c'];
+export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
+  'Id',
+  'Start_Date__c',
+  'End_Date__c',
+  'Status__c',
+  'Workshop_Type__c',
+  'Organizing_Affiliate__c'
+];
 
 export type WorkshopProperties = 'actionType'
   | 'workshopType'
@@ -42,47 +49,46 @@ export class WorkshopService extends BaseAPIService {
 
   public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  public route: string = 'workshops';
+  public route = 'workshops';
 
-  constructor(public http: HttpService) { super(); }
+  constructor(public http: APIHttpService) { super(); }
 
-  public getAll(): Observable<Workshop[]> {
-    return this.http.get(this.baseUrl)
+  public getAll() {
+    return this.http.get<any[]>(this.baseUrl)
       .map(res => res.map(wkJSON => new Workshop(wkJSON)))
       .catch(this.handleError);
   }
 
-  public getById(id: string): Observable<Workshop> {
+  public getById(id: string) {
     return this.http.get(this.baseUrl + `/${id}`)
       .map(res => new Workshop(res))
       .catch(this.handleError);
   }
 
-  public create(obj: Workshop): Observable<ISFSuccessResult> {
-    return this.http.post(this.baseUrl, obj)
-      .map(res => res as ISFSuccessResult)
+  public create(obj: Workshop) {
+    return this.http.post<ISFSuccessResult>(this.baseUrl, obj)
       .catch(this.handleError);
   }
 
-  public update(obj: Workshop): Observable<ISFSuccessResult> {
-    return this.http.put(this.baseUrl + `/${obj.sfId}`, obj)
-      .map(res => res as ISFSuccessResult)
+  public update(obj: Workshop) {
+    return this.http.put<ISFSuccessResult>(this.baseUrl + `/${obj.sfId}`, obj)
       .catch(this.handleError);
   }
 
-  public delete(obj: Workshop): Observable<ISFSuccessResult> {
-    return this.http.delete(this.baseUrl + `/${obj.sfId}`)
-      .map(res => res as ISFSuccessResult)
+  public delete(obj: Workshop) {
+    return this.http.delete<ISFSuccessResult>(this.baseUrl + `/${obj.sfId}`)
       .catch(this.handleError);
   }
 
-  public search(query: string, fields: string[] = DEFAULT_WORKSHOP_SEARCH_FIELDS): Observable<Workshop[]> {
-    // Set headers (NOTE: Must include token here)
-    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
-    headers = headers.set('x-search', query);
-    headers = headers.set('x-retrieve', fields.join());
+  public search(query: string, fields: string[] = DEFAULT_WORKSHOP_SEARCH_FIELDS) {
+    const options = {
+      ...this.http._defaultReqOpts,
+      headers: this.http._defaultReqOpts.headers
+        .set('x-search', query)
+        .set('x-retrieve', fields.join())
+    };
 
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+    return this.http.get<any[]>(this.baseUrl + '/search', options)
       .map(res => res.map(wkJSON => new Workshop(wkJSON)))
       .catch(this.handleError);
   }
@@ -91,23 +97,21 @@ export class WorkshopService extends BaseAPIService {
     return super.describe('workshops', this.http);
   }
 
-  public uploadAttendeeFile(id: string, file): Observable<any> {
-
-    const options = this.http._defaultReqOpts;
+  // FIXME: Fix stupid overly broad type
+  public uploadAttendeeFile(id: string, file: File): Observable<any> {
+    const options = { ...this.http._defaultReqOpts, reportProgress: true };
     const formData: FormData = new FormData();
     formData.append('attendeeList', file, file.name);
-    const req = new HttpRequest('POST', `${this.baseUrl}/${id}/attendee_file`, formData, { reportProgress: true, ...options });
-    return this.http.request(req);
+    return this.http.post(`${this.baseUrl}/${id}/attendee_file`, formData, options);
   }
 
   public uploadEvaluations(id: string, files: File[]): Observable<any> {
-    const options = this.http._defaultReqOpts;
+    const options = { ...this.http._defaultReqOpts, reportProgress: true };
     const formData: FormData = new FormData();
     for (const file of files) {
       formData.append('evaluationFiles', file, file.name);
     }
-    const req = new HttpRequest('POST', `${this.baseUrl}/${id}/evaluation_files`, formData, { reportProgress: true, ...options });
-    return this.http.request(req);
+    return this.http.post(`${this.baseUrl}/${id}/evaluation_files`, formData, options);
   }
 
   public cancel(workshop: Workshop, reason: string): Observable<any> {

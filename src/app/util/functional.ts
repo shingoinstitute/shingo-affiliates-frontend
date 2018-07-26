@@ -59,3 +59,25 @@ export function compose<A, B, C, D, E, F, G, H, I, J>(
 export function compose(...fns: Function[]) {
   return (...args: any[]) => fns.reduceRight((res, fn) => [fn.call(null, ...res)], args)[0];
 }
+
+export const applyDefaults = (defs: {[pos: number]: any}) =>
+                      <F extends (...args: any[]) => any>(f: F): F => {
+  return function() {
+    const args: any[] = [];
+    for (let i = 0; i < arguments.length; i++) {
+      if (i in defs && typeof arguments[i] === 'undefined') {
+        args.push(defs[i]);
+      } else {
+        args.push(arguments[i]);
+      }
+    }
+
+    for (const key of Object.keys(args)) {
+      if (!args[key]) {
+        args.push(defs[key]);
+      }
+    }
+
+    return f(...args);
+  } as any as F;
+};

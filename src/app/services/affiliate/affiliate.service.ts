@@ -4,7 +4,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { RequestOptionsArgs, Headers } from '@angular/http';
 
 // App Modules
-import { HttpService } from '../http/http.service';
+import { APIHttpService } from '../http/http.service';
 import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
 import { CourseManager } from '../../workshops/course-manager.model';
 import { Affiliate } from '../../affiliates/affiliate.model';
@@ -17,13 +17,13 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languag
 @Injectable()
 export class AffiliateService extends BaseAPIService {
 
-  public route: string = 'affiliates';
+  public route = 'affiliates';
   public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
-  constructor(public http: HttpService) { super(); }
+  constructor(public http: APIHttpService) { super(); }
 
-  public getAll(): Observable<Affiliate[]> {
-    return this.http.get(`${this.baseUrl}`)
+  public getAll() {
+    return this.http.get<any[]>(`${this.baseUrl}`)
       .map(res => res.map(afJSON => new Affiliate(afJSON)))
       .catch(this.handleError);
   }
@@ -34,43 +34,47 @@ export class AffiliateService extends BaseAPIService {
       .catch<Affiliate, Affiliate>(this.handleError);
   }
 
-  public create(obj: Affiliate): Observable<ISFSuccessResult> {
-    return this.http.post(`${this.baseUrl}`, obj)
+  public create(obj: Affiliate) {
+    return this.http.post<ISFSuccessResult>(`${this.baseUrl}`, obj)
       .map(res => res)
       .catch(this.handleError);
   }
 
-  public update(obj: Affiliate): Observable<ISFSuccessResult> {
-    return this.http.put(`${this.baseUrl}/${obj.sfId}`, obj)
+  public update(obj: Affiliate) {
+    return this.http.put<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, obj)
       .map(res => res)
       .catch(this.handleError);
   }
 
-  public delete(obj: Affiliate): Observable<ISFSuccessResult> {
-    return this.http.delete(`${this.baseUrl}/${obj.sfId}`)
+  public delete(obj: Affiliate) {
+    return this.http.delete<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`)
       .map(res => res)
       .catch(this.handleError);
   }
 
-  public search(query: string, fields: string[] = DEFAULT_AFFILIATE_SEARCH_FIELDS): Observable<Affiliate[]> {
-    // Set headers (NOTE: Must include token here)
-    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
-    headers = headers.set('x-search', query);
-    headers = headers.set('x-retrieve', fields.join());
-    headers = headers.set('x-force-refresh', 'true');
+  public search(query: string, fields: string[] = DEFAULT_AFFILIATE_SEARCH_FIELDS) {
+    const options = {
+      ...this.http._defaultReqOpts,
+      headers: this.http._defaultReqOpts.headers
+        .set('x-search', query)
+        .set('x-retrieve', fields.join())
+        .set('x-force-refresh', 'true')
+    };
 
-    return this.http.get(this.baseUrl + '/search', { headers, withCredentials: true })
+    return this.http.get<any[]>(this.baseUrl + '/search', options)
       .map(res => res.map(afJSON => new Affiliate(afJSON)))
       .catch(this.handleError);
   }
 
-  public searchCMS(query: string, id: string): Observable<CourseManager[]> {
-    // Set headers (NOTE: Must include token here)
-    let headers = new HttpHeaders().set('x-jwt', this.http.jwt);
-    headers = headers.set('x-search', query);
-    headers = headers.set('x-retrieve', ['Id', 'Name', 'Email']);
+  public searchCMS(query: string, id: string) {
+    const options = {
+      ...this.http._defaultReqOpts,
+      headers: this.http._defaultReqOpts.headers
+        .set('x-search', query)
+        .set('x-retrieve', ['Id', 'Name', 'Email'])
+    };
 
-    return this.http.get(`${this.baseUrl}/${id}/coursemanagers`, { headers, withCredentials: true })
+    return this.http.get<any[]>(`${this.baseUrl}/${id}/coursemanagers`, options)
       .map(res => res.map(cmJSON => new CourseManager(cmJSON)))
       .catch(this.handleError);
   }
@@ -79,9 +83,15 @@ export class AffiliateService extends BaseAPIService {
     return super.describe('affiliates', this.http);
   }
 
-  public map(affiliate: Affiliate): Observable<{ mapped: boolean }> {
-    return this.http.post(`${this.baseUrl}/${affiliate.sfId}/map`, affiliate)
-      .map(res => { if (res.mapped) return res; else throw { error: 'NOT_MAPPED', status: 500 }; })
+  public map(affiliate: Affiliate) {
+    return this.http.post<{ mapped?: boolean }>(`${this.baseUrl}/${affiliate.sfId}/map`, affiliate)
+      .map(res => {
+        if (!res.mapped) {
+          throw { error: 'NOT_MAPPED', status: 500 };
+        }
+
+        return res as { mapped: true };
+      })
       .catch(this.handleError);
   }
 
