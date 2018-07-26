@@ -8,14 +8,14 @@ import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.servi
 import { SupportPage } from './support.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/take';
+
+
+
+
+
 
 export const DEFAULT_SUPPORT_SEARCH_FIELDS: string[] = ['Id', 'Title__c', 'Category__c', 'Content__c'];
 

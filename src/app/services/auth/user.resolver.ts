@@ -6,7 +6,7 @@ import { User } from '../../shared/models/user.model';
 import { RouterService } from '../../services/router/router.service';
 
 import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/observable/throw';
+
 
 @Injectable()
 export class UserResolver implements Resolve<User> {

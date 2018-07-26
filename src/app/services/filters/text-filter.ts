@@ -1,5 +1,5 @@
 import { Filter } from './filter.abstract';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 export class TextFilter<T> extends Filter {
 

@@ -4,8 +4,8 @@ import { WorkshopService } from './workshop.service';
 import { Workshop } from '../../workshops/workshop.model';
 import { ISFSuccessResult } from '../api/base-api.abstract.service';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { Observable } from 'rxjs';
+
 
 const mockedService: WorkshopService = mock(WorkshopService);
 

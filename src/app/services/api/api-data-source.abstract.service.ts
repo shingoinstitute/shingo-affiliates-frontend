@@ -7,11 +7,11 @@ import { DataProvider } from '../data-provider/data-provider.service';
 import { Filter } from '../filters/filter.abstract';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+
+
 
 export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject> extends DataSource<T> {
 

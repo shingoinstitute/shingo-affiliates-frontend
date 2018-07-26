@@ -5,8 +5,8 @@ import { Facilitator } from '../../facilitators/facilitator.model';
 import { CourseManager } from '../../workshops/course-manager.model';
 import { ISFSuccessResult } from '../api/base-api.abstract.service';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { Observable } from 'rxjs';
+
 
 const mockedService: FacilitatorService = mock(FacilitatorService);
 

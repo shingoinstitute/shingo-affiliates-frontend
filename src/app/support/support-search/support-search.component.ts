@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SupportPage } from '../../services/support/support.model';
 import { SupportService } from '../../services/support/support.service';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject ,  Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

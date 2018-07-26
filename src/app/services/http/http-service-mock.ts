@@ -1,5 +1,5 @@
 import { HttpService } from './http.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // TODO: Move MockHttpService to http folder
 // TODO: Override other functions

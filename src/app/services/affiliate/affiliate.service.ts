@@ -10,8 +10,7 @@ import { CourseManager } from '../../workshops/course-manager.model';
 import { Affiliate } from '../../affiliates/affiliate.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable ,  Subject } from 'rxjs';
 
 export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = ['Id', 'Name', 'Languages__c', 'Logo__c', 'Website', 'Summary__c'];
 
@@ -32,7 +31,7 @@ export class AffiliateService extends BaseAPIService {
   public getById(id: string): Observable<Affiliate> {
     return this.http.get(`${this.baseUrl}/${id}`)
       .map(res => new Affiliate(res))
-      .catch(this.handleError);
+      .catch<Affiliate, Affiliate>(this.handleError);
   }
 
   public create(obj: Affiliate): Observable<ISFSuccessResult> {

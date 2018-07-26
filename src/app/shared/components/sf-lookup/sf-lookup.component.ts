@@ -12,9 +12,7 @@ import { Workshop } from '../../../workshops/workshop.model';
 import { WorkshopService } from '../../../services/workshop/workshop.service';
 import { CourseManager } from '../../../workshops/course-manager.model';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/filter';
-import { Subject } from 'rxjs/Subject';
+import { Observable ,  Subject } from 'rxjs';
 import { ValidationErrors } from '@angular/forms/src/directives/validators';
 
 @Component({

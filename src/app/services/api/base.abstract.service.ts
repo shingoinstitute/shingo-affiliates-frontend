@@ -1,15 +1,16 @@
-import { Observable } from 'rxjs/Observable';
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import 'rxjs/add/observable/throw';
+
 
 export abstract class BaseService {
   protected _baseUrl: string = 'http://localhost';
   protected _basePort: string = '8080';
 
-  /** 
+  /**
    * @description Handles errors from http requests
    */
-  public handleError(error: Response | any): ErrorObservable {
+  public handleError(error: Response | any) {
     if (error.error && typeof error.error === 'string') {
       try {
         error.error = this.parseErrResponse(error);
@@ -20,7 +21,7 @@ export abstract class BaseService {
         console.warn(e);
       }
     }
-    return Observable.throw(error);
+    return observableThrowError(error);
   }
 
   public toCamelCase(s: string): string {
@@ -32,24 +33,24 @@ export abstract class BaseService {
 
   /**
    * parseErrResponse
-   * 
+   *
    * Error responses from the API like to change error objects into JSON strings
    * for some reason. This method attempts to un-stringify the error object
    * so that a useful error code can be extracted from the response.
-   * 
+   *
    * For instance, the below response object:
    * {
    *  error: "\{\"error\":\"something terrible has happened\"\}",
    * }
-   * 
+   *
    * should become:
-   * 
+   *
    * {
    *  error: {
    *    error: "something terrible has happened"
    *  }
    * }
-   * 
+   *
    */
   public parseErrResponse(obj: object): string {
     const key = 'error';

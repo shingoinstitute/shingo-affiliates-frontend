@@ -9,8 +9,8 @@ import { FacilitatorFilterFactory } from '../../services/filters/facilitators/fa
 import { OnInit, AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Filter } from '../../services/filters/filter.abstract';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-admin-facilitator-tab',

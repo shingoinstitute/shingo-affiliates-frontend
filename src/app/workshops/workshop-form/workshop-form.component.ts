@@ -17,18 +17,15 @@ import { Facilitator } from '../../facilitators/facilitator.model';
 import { Affiliate } from '../../affiliates/affiliate.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
+import { Observable ,  Subscription ,  BehaviorSubject ,  Subject } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/onErrorResumeNext';
-import 'rxjs/add/observable/merge';
-import 'rxjs/add/observable/throw';
+
+
+
+
+
+
 
 // Lodash functions
 import { merge } from 'lodash';
@@ -131,7 +128,7 @@ export class WorkshopFormComponent implements OnInit {
       , err => {
         console.error('error submitting workshop', err);
         this.isLoading = false;
-        this.snackbar.open('An error occurred and the requested operation could not be completed.', 'Okay', { extraClasses: ['md-warn'] });
+        this.snackbar.open('An error occurred and the requested operation could not be completed.', 'Okay', { panelClass: ['md-warn'] });
       });
   }
 

@@ -3,8 +3,8 @@ import { HttpRequest, HttpClient, HttpHeaders, HttpErrorResponse } from '@angula
 import { Http, Headers, RequestOptionsArgs } from '@angular/http';
 
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
+import { Observable } from 'rxjs';
+
 
 import { CookieService } from 'ngx-cookie';
 

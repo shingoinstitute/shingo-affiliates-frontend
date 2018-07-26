@@ -87,7 +87,7 @@ export class AdminAffiliateTabComponent {
 
     if (err) {
       console.error('Error in AffiliateTabComponent: ', err);
-      this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay', { extraClasses: ['md-warn'] });
+      this.snackbar.open('An error occurred and your changes could not be saved.', 'Okay', { panelClass: ['md-warn'] });
     }
   }
 

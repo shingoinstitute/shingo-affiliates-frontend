@@ -11,10 +11,15 @@
       <!-- Attendee Upload area -->
       <div fxFlex="50%">
 
-        <div *ngIf="showAttendeeUpload" class="file-dz" ng2FileDrop (ng2FileDropFileAccepted)="uploadAttendeeList($event)" [ng2FileDropSupportedFileTypes]="supportedFileTypes"
-          [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes" (ng2FileDropFileRejected)="rejectedFile($event)">
-          <h2 class="roboto">Drop Attendee List Here</h2>
-        </div>
+        <app-file-drop
+          *ngIf="showAttendeeUpload"
+          (file)="uploadAttendeeList($event)"
+          (error)="rejectedFile($event)"
+          [accept]="supportedFileTypes"
+          [maxFileSize]="maximumFileSizeInBytes"
+        >
+          <h2 class="roboto"><strong>Pick</strong> or drop Attendee List here</h2>
+        </app-file-drop>
 
         <mat-progress-bar *ngIf="uploadAttendeeProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadAttendeeProgress"></mat-progress-bar>
 
@@ -33,12 +38,17 @@
       <!-- Evaluations Upload area -->
       <div fxFlex="50% ">
 
-        <div class="file-dz" *ngIf="showEvalUpload" ng2FileDrop (ng2FileDropFilesDropped)="uploadEvaluations($event)
-          " [ng2FileDropAcceptMultiple]=" 'true' " [ng2FileDropSupportedFileTypes]="supportedFileTypes " [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes">
-          <h2 class="roboto ">Drop Evaluations Here</h2>
-        </div>
+        <app-file-drop
+          *ngIf="showEvalUpload"
+          (file)="uploadEvaluations($event)"
+          [multiple]="true"
+          [accept]="supportedFileTypes"
+          [maxFileSize]="maximumFileSizeInBytes"
+        >
+          <h2 class="roboto"><strong>Pick</strong> or drop Evaluations here</h2>
+        </app-file-drop>
 
-        <mat-progress-bar *ngIf="uploadEvalutationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvalutationsProgress"></mat-progress-bar>
+        <mat-progress-bar *ngIf="uploadEvaluationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvaluationsProgress"></mat-progress-bar>
 
         <div class="files " fxLayout="row " fxLayoutGap="8px">
           <div class="file " *ngFor="let file of evaluations ">

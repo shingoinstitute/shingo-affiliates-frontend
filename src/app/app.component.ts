@@ -12,13 +12,10 @@ import { RouterService } from './services/router/router.service';
 import { MaterialsDialog } from './ui-components/materials/materials-dialog/materials-dialog.component';
 
 // RxJS Modules
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { Subscription } from 'rxjs/Subscription';
+import { Subject ,  Observable ,  Observer ,  Subscription } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/operator/distinctUntilChanged';
+
 import { SupportService } from './services/support/support.service';
 import { SupportPage } from './services/support/support.model';
 import { UserState } from './shared/models/user.model';
@@ -35,8 +32,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
   @ViewChild('sidenav') public sidenav: MatSidenav;
 
-  public isLoading: boolean = true;
-  public isAuthenticated: boolean = false;
+  public isLoading = true;
+  public isAuthenticated = false;
   public activeRoute: string;
   public routeToLoginSubscription: Subscription;
 
@@ -102,10 +99,11 @@ export class AppComponent implements OnDestroy, AfterViewInit {
 
   public getInitialWindowWidth() {
     setTimeout(() => {
-      if (window && window.innerWidth)
+      if (window && window.innerWidth) {
         this.sidenavService.onResize(window.innerWidth);
-      else
+      } else {
         this.getInitialWindowWidth();
+      }
     }, 100);
   }
 
@@ -222,8 +220,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
   }
 
   public getLoggedInInfo(): string {
-    if(this.auth.user)
-    {
+    if (this.auth.user) {
       return `${this.auth.user.name} (${this.auth.user.roleName})`;
     }
     return 'unknown';

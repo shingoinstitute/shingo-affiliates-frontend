@@ -5,7 +5,7 @@ import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Workshop, WorkshopStatusType } from '../../workshops/workshop.model';
 import { WorkshopService } from '../../services/workshop/workshop.service';
 
-import { Ng2FileDropAcceptedFile, Ng2FileDropRejectedFile, Ng2FileDropFiles, Ng2FileDropRejections } from 'ng2-file-drop';
+import { FileFailure } from '../../shared/components/file-drop/file-drop.component';
 
 @Component({
   selector: 'app-workshop-detail',
@@ -19,11 +19,20 @@ export class WorkshopDetailComponent implements OnInit {
   public evaluations: File[] = [];
   public errors: string[] = [];
 
-  public uploadAttendeeProgress: number = 0;
-  public uploadEvaluationsProgress: number = 0;
+  public uploadAttendeeProgress = 0;
+  public uploadEvaluationsProgress = 0;
 
+  public supportedFileTypes: string[] = [
+    '.csv',
+    '.pdf',
+    '.zip',
+    '.xlsx',
+    'text/csv',
+    'application/pdf',
+    'application/zip',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ];
 
-  public supportedFileTypes: string[] = ['text/csv', 'application/pdf', 'application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
   public maximumFileSizeInBytes: number = 1000 * 1000 * 25;
   public fileIcon = {
     'text/csv': 'assets/imgs/icons/spreadsheet_icon.png',
@@ -66,32 +75,31 @@ export class WorkshopDetailComponent implements OnInit {
       });
   }
 
-  public uploadAttendeeList(file: Ng2FileDropAcceptedFile) {
-    this.attendeeFile = file.file;
+  public uploadAttendeeList(file: File) {
+    this.attendeeFile = file;
   }
 
-  public uploadEvaluations(files: Ng2FileDropFiles) {
-    this.errors = [];
-    files.accepted.map(file => {
-      if (this.evaluations.findIndex(f => f.name === file.file.name) === -1)
-        this.evaluations.push(file.file);
-    });
-    for (const file of files.rejected) this.rejectedFile(file);
+  public uploadEvaluations(file: File) {
+    if (this.evaluations.findIndex(f => f.name === file.name) === -1) {
+      this.evaluations.push(file);
+    }
   }
 
   public upload() {
-    if (this.attendeeFile && this.attendeeFile.lastModifiedDate)
+    if (this.attendeeFile && this.attendeeFile.lastModifiedDate) {
       this.uploadAttendeeListFile();
+    }
 
-    if (this.evaluations.length)
+    if (this.evaluations.length) {
       this.uploadEvaluationsFiles();
+    }
   }
 
   public uploadAttendeeListFile() {
     this.uploadAttendeeProgress = 0;
     this._ws.uploadAttendeeFile(this.workshop.sfId, this.attendeeFile).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
-        const percentDone = Math.round(100 * event.loaded / event.total);
+        const percentDone = Math.round(event.loaded * 100 / event.total);
         this.uploadAttendeeProgress = percentDone;
       } else if (event instanceof HttpResponse) {
         this.uploadAttendeeProgress = 0;
@@ -106,7 +114,7 @@ export class WorkshopDetailComponent implements OnInit {
     this.uploadEvaluationsProgress = 0;
     this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
-        const percentDone = Math.round(100 * event.loaded / event.total);
+        const percentDone = Math.round(event.loaded * 100 / event.total);
         this.uploadEvaluationsProgress = percentDone;
       } else if (event instanceof HttpResponse) {
         this.uploadEvaluationsProgress = 0;
@@ -116,21 +124,19 @@ export class WorkshopDetailComponent implements OnInit {
     });
   }
 
-  public rejectedFile(file) {
-    if (file.reason === Ng2FileDropRejections.FileType)
-      this.errors.push(`.${file.file.name.split('.')[1]} is not an accepted file type`);
-    else if (file.reason === Ng2FileDropRejections.FileSize)
-      this.errors.push(`Your file '${file.file.name}' exceeds the maximum size (${this.fileSize(file.file.size)} > 25 MB)`);
+  public rejectedFile(err: FileFailure) {
+    if (err.reason === 'accept') {
+      this.errors.push(`.${err.file.name.split('.')[1]} is not an accepted file type`);
+    } else if (err.reason === 'size') {
+      this.errors.push(`Your file '${err.file.name}' exceeds the maximum size (${this.fileSize(err.file.size)} > 25 MB)`);
+    }
   }
 
   public fileSize(size: number): string {
     const ratio = size / 1000;
-    if (ratio > 1000)
-      return `${ratio / 1000} MB`;
-    else if (ratio > 1)
-      return `${ratio} KB`;
-    else
-      return `${ratio} Bytes`;
+    if (ratio > 1000) return `${ratio / 1000} MB`;
+    if (ratio > 1) return `${ratio} KB`;
+    return `${ratio} Bytes`;
   }
 
 }

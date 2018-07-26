@@ -20,6 +20,7 @@ import {
   MatIconModule,
   MatInputModule
 } from '@angular/material';
+import { FileDropComponent } from './components/file-drop/file-drop.component';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import {
     IconLegendComponent,
     SimpleMessageDialog,
     SfLookupComponent,
-    TextResponseDialogComponent
+    TextResponseDialogComponent,
+    FileDropComponent
   ],
   exports: [
     // MdDialogModule,
@@ -52,12 +54,14 @@ import {
     IconLegendComponent,
     SimpleMessageDialog,
     SfLookupComponent,
-    TextResponseDialogComponent
+    TextResponseDialogComponent,
+    FileDropComponent
   ],
   entryComponents: [
     AlertDialogComponent,
     SimpleMessageDialog,
-    TextResponseDialogComponent
+    TextResponseDialogComponent,
+    FileDropComponent
   ]
 })
 export class SharedModule {

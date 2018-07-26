@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from '../api/base.abstract.service';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // Lodash Functions
 import { without } from 'lodash';

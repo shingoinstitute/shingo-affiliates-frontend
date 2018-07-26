@@ -36,8 +36,8 @@ import { AppComponent } from './app.component';
 import { LoggerInterceptorProvider } from './interceptor.provider';
 
 // Material Design imports
-import { 
-  MatMenuModule, 
+import {
+  MatMenuModule,
   MatButtonModule,
   MatSidenavModule,
   MatToolbarModule,

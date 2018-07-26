@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 import { Announcement } from './announcement.model';

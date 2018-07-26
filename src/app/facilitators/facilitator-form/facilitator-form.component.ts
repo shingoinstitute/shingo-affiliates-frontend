@@ -7,7 +7,7 @@ import { FormGroup, FormControl, Validators, ValidatorFn, FormBuilder } from '@a
 import { Facilitator, FacilitatorRoleType } from '../facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
 import { Affiliate } from '../../affiliates/affiliate.model';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 declare var $: any;
 

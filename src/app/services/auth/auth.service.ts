@@ -8,13 +8,11 @@ import { BaseService } from '../api/base.abstract.service';
 import { User, UserState } from '../../shared/models/user.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable ,  Subject ,  BehaviorSubject } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/observable/from';
+
+
 
 @Injectable()
 export class AuthService extends BaseService {

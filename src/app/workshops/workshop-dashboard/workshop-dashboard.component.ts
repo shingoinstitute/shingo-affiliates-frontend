@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
-import { MatRadioButton, MatDatepicker, MatSort, MatPaginator, MatCheckboxChange, MatCheckbox, MatSelect, MatSelectChange } from '@angular/material';
+import { MatRadioButton, MatDatepicker, MatSort, MatPaginator, MatCheckboxChange, MatCheckbox, MatSelect, MatSelectChange, MatDatepickerInputEvent } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../services/auth/auth.service';
@@ -10,8 +10,8 @@ import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop
 import { WorkshopProperties, WorkshopService } from '../../services/workshop/workshop.service';
 import { WorkshopStatusType } from '../../workshops/workshop.model';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
+import { Observable } from 'rxjs';
+
 
 import { at } from 'lodash';
 
@@ -77,18 +77,22 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.setStatuses();
   }
 
+  public endDateChanged($event: MatDatepickerInputEvent<Date>) {
+    const date = $event.value;
+    const drIndex = this.filters.findIndex(f => f.name === 'by Date');
+    this.dateRange[0] = date;
+    this.filters[drIndex].dataChange.next(this.dateRange);
+  }
+
+  public startDateChanged($event: MatDatepickerInputEvent<Date>) {
+    const date = $event.value;
+    const drIndex = this.filters.findIndex(f => f.name === 'by Date');
+    this.dateRange[1] = date;
+    this.filters[drIndex].dataChange.next(this.dateRange);
+  }
+
   public ngOnInit() {
     this.initFilters();
-    const drIndex = this.filters.findIndex(f => f.name === 'by Date');
-    this.startDFPicker.selectedChanged.subscribe((date: Date) => {
-      this.dateRange[0] = date;
-      this.filters[drIndex].dataChange.next(this.dateRange);
-    });
-
-    this.endDFPicker.selectedChanged.subscribe((date: Date) => {
-      this.dateRange[1] = date;
-      this.filters[drIndex].dataChange.next(this.dateRange);
-    });
 
     const textIndex = this.filters.findIndex(f => f.name === 'by Text');
     Observable.fromEvent(this.textSearchInput.nativeElement, 'keyup')

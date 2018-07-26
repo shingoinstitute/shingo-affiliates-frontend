@@ -6,7 +6,6 @@ import { CustomFormsModule } from 'ng2-validation';
 import { RouterModule } from '@angular/router';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { Ng2FileDropModule } from 'ng2-file-drop';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -23,11 +22,11 @@ import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashbo
 import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.component';
 
 // Material Design imports
-import { 
-  MatTableModule, 
-  MatPaginatorModule, 
-  MatSortModule, 
-  MatFormFieldModule, 
+import {
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatFormFieldModule,
   MatInputModule,
   MatAutocompleteModule,
   MatSelectModule,
@@ -37,7 +36,8 @@ import {
   MatIconModule,
   MatCheckboxModule,
   MatProgressBarModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatCardModule
 } from '@angular/material';
 
 @NgModule({
@@ -46,7 +46,7 @@ import {
     ReactiveFormsModule,
     FormsModule,
     CustomFormsModule,
-    
+
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -61,9 +61,9 @@ import {
     MatCheckboxModule,
     MatProgressBarModule,
     MatSnackBarModule,
+    MatCardModule,
 
     FlexLayoutModule,
-    Ng2FileDropModule,
     SharedModule.forRoot(),
     RouterModule
   ],

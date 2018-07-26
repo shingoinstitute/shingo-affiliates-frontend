@@ -6,11 +6,11 @@ import { HttpService } from '../http/http.service';
 import { BaseService } from './base.abstract.service';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 // RxJS operators
-import 'rxjs/add/observable/throw';
+
 
 import { pick } from 'lodash';
 

@@ -1,6 +1,6 @@
 import { Http, RequestOptionsArgs } from '@angular/http';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export class MockHttp extends Http {
   

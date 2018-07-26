@@ -9,20 +9,29 @@ import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.servi
 import { Facilitator } from '../../facilitators/facilitator.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
 
-export const DEFAULT_FACILITATOR_SEARCH_FIELDS: string[] = ['Id', 'FirstName', 'LastName', 'Name', 'Email', 'AccountId', 'Title', 'Photograph__c'];
+
+
+export const DEFAULT_FACILITATOR_SEARCH_FIELDS: string[] = [
+  'Id',
+  'FirstName',
+  'LastName',
+  'Name',
+  'Email',
+  'AccountId',
+  'Title',
+  'Photograph__c'
+];
 
 @Injectable()
 export class FacilitatorService extends BaseAPIService {
 
   public reloadData$ = new EventEmitter<void>();
 
-  public route: string = 'facilitators';
+  public route = 'facilitators';
   public get baseUrl() { return `${this.APIHost()}/${this.route}`; }
 
   constructor(public http: HttpService) { super(); }

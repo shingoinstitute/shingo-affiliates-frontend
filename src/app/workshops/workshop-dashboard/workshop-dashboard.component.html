@@ -44,13 +44,25 @@
                             <p class="text-md" [style.color]="'#757575'">Date</p>
 
                             <mat-form-field floatPlaceholder="always">
-                                <input matInput [matDatepicker]="startDateFilterPicker" placeholder="From" #startDFInput>
+                                <input
+                                  matInput
+                                  [matDatepicker]="startDateFilterPicker"
+                                  placeholder="From"
+                                  (dateChange)="startDateChanged($event)"
+                                  #startDFInput
+                                >
                                 <mat-datepicker-toggle matSuffix [for]="startDateFilterPicker"></mat-datepicker-toggle>
                                 <mat-datepicker #startDateFilterPicker></mat-datepicker>
                             </mat-form-field>
 
                             <mat-form-field floatPlaceholder="always">
-                                <input matInput [matDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput>
+                                <input
+                                  matInput
+                                  [matDatepicker]="endDateFilterPicker"
+                                  placeholder="To"
+                                  #endDFInput
+                                  (dateChange)="endDateChanged($event)"
+                                  >
                                 <mat-datepicker-toggle matSuffix [for]="endDateFilterPicker"></mat-datepicker-toggle>
                                 <mat-datepicker #endDateFilterPicker></mat-datepicker>
                             </mat-form-field>

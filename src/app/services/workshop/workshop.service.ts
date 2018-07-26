@@ -8,14 +8,14 @@ import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.servi
 import { Workshop } from '../../workshops/workshop.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 // RxJS operators
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/retryWhen';
-import 'rxjs/add/operator/take';
+
+
+
+
+
 
 export { ISFSuccessResult, Workshop };
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = ['Id', 'Start_Date__c', 'End_Date__c', 'Status__c', 'Workshop_Type__c', 'Organizing_Affiliate__c'];
