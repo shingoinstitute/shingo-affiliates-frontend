@@ -1,6 +1,3 @@
-// Angular Modules
-import { Injectable } from '@angular/core';
-
 // App Modules
 import { Filter } from '../filters/filter.abstract';
 import { BaseAPIService } from '../api/base-api.abstract.service';

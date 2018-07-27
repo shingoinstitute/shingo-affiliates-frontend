@@ -1,14 +1,16 @@
 // tslint:disable:variable-name
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpHeaders, HttpRequest, HttpClient } from '@angular/common/http';
 
 // App Modules
-import { APIHttpService } from '../http/http.service';
 import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
 import { SupportPage } from './support.model';
 
 // RxJS Modules
 import { Observable } from 'rxjs';
+import { JWTService } from '../auth/auth.service';
+import { requestOptions } from '../../util/util';
+import { tuple } from '../../util/functional';
 
 // RxJS operators
 
@@ -26,7 +28,7 @@ export class SupportService extends BaseAPIService {
 
   public route = 'support';
 
-  constructor(public http: APIHttpService) { super(); }
+  constructor(public http: HttpClient, public jwt: JWTService) { super(); }
 
   public getAll() {
     return this.http.get<any[]>(this.baseUrl)
@@ -59,15 +61,16 @@ export class SupportService extends BaseAPIService {
   }
 
   public describe() {
-    return super.describe('support', this.http);
+    return super.describe('support', this.http, this.jwt);
   }
 
   public search(query: string, fields: string[] = DEFAULT_SUPPORT_SEARCH_FIELDS) {
-    // Set headers (NOTE: Must include token here if it exists)
-    let headers = new HttpHeaders().set('x-search', query);
-    headers = headers.set('x-retrieve', fields.join());
-    if (this.http.jwt !== null) headers = headers.set('x-jwt', this.http.jwt);
-    return this.http.get<any[]>(this.baseUrl + '/search', { headers, withCredentials: true })
+    const options = requestOptions(this.jwt,
+      tuple('x-search', query),
+      tuple('x-retrieve', fields),
+    );
+
+    return this.http.get<any[]>(this.baseUrl + '/search', options)
       .map(res => res.map(spJSON => new SupportPage(spJSON)))
       .catch(this.handleError);
   }

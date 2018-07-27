@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from '../api/base.abstract.service';
 
 // RxJS Modules
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 // Lodash Functions
 import { without } from 'lodash';
@@ -15,8 +15,8 @@ import { without } from 'lodash';
 @Injectable()
 export class CountriesService extends BaseService {
 
-  protected _baseUrl: string = 'https://restcountries.eu/rest/v2/region';
-  protected _basePort: string = '80';
+  protected _baseUrl = 'https://restcountries.eu/rest/v2/region';
+  protected _basePort = '80';
 
   constructor(public http: HttpClient) { super(); }
 
@@ -25,7 +25,13 @@ export class CountriesService extends BaseService {
       return this.http.get(`${this._baseUrl}/${region}?fields=name`);
     });
 
-    const filterNames = ['United Kingdom of Great Britain and Northern Ireland', 'United States of America', 'United Kingdom', 'United States'];
+    const filterNames = [
+      'United Kingdom of Great Britain and Northern Ireland',
+      'United States of America',
+      'United Kingdom',
+      'United States'
+    ];
+
     return Observable.merge(...countryRequestsByRegion)
       .map((data: any) => {
         let countryNames = data.map(value => value.name).sort();

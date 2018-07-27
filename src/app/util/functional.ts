@@ -81,3 +81,5 @@ export const applyDefaults = (defs: {[pos: number]: any}) =>
     return f(...args);
   } as any as F;
 };
+
+export const tuple = <A, B>(a: A, b: B): [A, B] => [a, b];

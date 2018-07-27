@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { DataProvider } from './data-provider.service';
-import { APIHttpService } from '../http/http.service';
 import { WorkshopService } from '../workshop/workshop.service';
 import { Workshop } from '../../workshops/workshop.model';
 import { AffiliateService } from '../affiliate/affiliate.service';
@@ -15,7 +14,6 @@ import { RouterService } from '../router/router.service';
 export class DataProviderFactory {
 
   constructor(
-    public http: APIHttpService,
     public _ws: WorkshopService,
     public _as: AffiliateService,
     public _fs: FacilitatorService,

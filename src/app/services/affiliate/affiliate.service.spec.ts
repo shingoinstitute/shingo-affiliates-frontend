@@ -3,13 +3,8 @@ import { TestBed, inject, getTestBed } from '@angular/core/testing';
 
 import { AffiliateService } from './affiliate.service';
 
-import { APIHttpService } from '../http/http.service';
-import { Injector } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import { Affiliate } from '../../affiliates/affiliate.model';
-import { HttpEvent } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpServiceMock } from '../http/http-service-mock';
 
 describe('AffiliateService', () => {

@@ -55,7 +55,7 @@ export class SidenavService {
     this._as.authenticationChange$.subscribe((isAuth: boolean) => {
       this.isAuth = isAuth;
     });
-    
+
     this.router.events.subscribe((route) => {
       if (route instanceof NavigationEnd) {
         const url = route.url;

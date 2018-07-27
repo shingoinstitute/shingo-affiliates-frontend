@@ -1,3 +1,19 @@
+import { JWTService } from '../services/auth/auth.service';
+import { HttpHeaders } from '@angular/common/http';
+
+export const requestOptions = (
+  jwt: JWTService,
+  ...headerList: Array<[string, string | string[]]>) => {
+  const headers = headerList.reduce(
+    (h, c) => h.set(c[0], c[1]),
+    new HttpHeaders().set('x-jwt', jwt.jwt || '')
+  );
+
+  return {
+    headers,
+    withCredentials: true
+  };
+};
 
 /**
  * Converts a salesforce field name to a camel case string
@@ -54,4 +70,4 @@ export function parseErrResponse(obj: object): string {
     }
   }
   return '';
-};
+}
