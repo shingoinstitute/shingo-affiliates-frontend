@@ -23,7 +23,7 @@ export class WorkshopDetailComponent implements OnInit {
   public uploadEvaluationsProgress: number = 0;
 
 
-  public supportedFileTypes: string[] = ['text/csv', 'application/pdf', 'application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+  public supportedFileTypes: string[] = ['text/csv', 'application/zip', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
   public maximumFileSizeInBytes: number = 1000 * 1000 * 25;
   public fileIcon = {
     'text/csv': 'assets/imgs/icons/spreadsheet_icon.png',

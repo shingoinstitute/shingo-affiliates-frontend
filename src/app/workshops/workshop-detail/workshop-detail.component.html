@@ -13,7 +13,7 @@
 
         <div *ngIf="showAttendeeUpload" class="file-dz" ng2FileDrop (ng2FileDropFileAccepted)="uploadAttendeeList($event)" [ng2FileDropSupportedFileTypes]="supportedFileTypes"
           [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes" (ng2FileDropFileRejected)="rejectedFile($event)">
-          <h2 class="roboto">Drop Attendee List Here</h2>
+          <h2 class="roboto">Drop Attendee List Here. Supported formats are .csv and .xlsx (Microsoft Excel)</h2>
         </div>
 
         <mat-progress-bar *ngIf="uploadAttendeeProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadAttendeeProgress"></mat-progress-bar>
@@ -35,7 +35,7 @@
 
         <div class="file-dz" *ngIf="showEvalUpload" ng2FileDrop (ng2FileDropFilesDropped)="uploadEvaluations($event)
           " [ng2FileDropAcceptMultiple]=" 'true' " [ng2FileDropSupportedFileTypes]="supportedFileTypes " [ng2FileDropMaximumSizeBytes]="maximumFileSizeInBytes">
-          <h2 class="roboto ">Drop Evaluations Here</h2>
+          <h2 class="roboto ">Drop Evaluations Here. Supported formats are .csv and .xlsx (Microsoft Excel)</h2>
         </div>
 
         <mat-progress-bar *ngIf="uploadEvalutationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvalutationsProgress"></mat-progress-bar>
