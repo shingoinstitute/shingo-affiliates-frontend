@@ -9,6 +9,7 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { Affiliate } from '../../affiliates/affiliate.model';
 import { Observable } from 'rxjs';
 
+// FIXME: remove jquery
 declare var $: any;
 
 @Component({

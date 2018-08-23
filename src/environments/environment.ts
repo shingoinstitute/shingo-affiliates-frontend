@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  authApiUrl: 'http://localhost:8080',
-  apiUrl: 'http://localhost:8080'
+  authApiUrl: 'https://api.shingo.org/v2/affiliates',
+  apiUrl: 'https://api.shingo.org/v2/affiliates'
 };

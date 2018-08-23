@@ -8,13 +8,14 @@ import { Affiliate } from '../affiliate.model';
 import { AffiliateService, DEFAULT_AFFILIATE_SEARCH_FIELDS } from '../../services/affiliate/affiliate.service';
 import { AffiliateFormState, State } from './affiliate-form-state.class';
 
-import { Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 import { CustomValidators } from 'ng2-validation';
 
 
 // Lodash functions
 import { merge } from 'lodash';
 
+// FIXME: Remove jquery
 declare var $: any;
 
 @Component({

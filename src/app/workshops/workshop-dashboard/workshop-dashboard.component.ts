@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
-import { MatRadioButton, MatDatepicker, MatSort, MatPaginator, MatCheckboxChange, MatCheckbox, MatSelect, MatSelectChange, MatDatepickerInputEvent } from '@angular/material';
+import { MatRadioButton, MatDatepicker, MatSort,
+  MatPaginator, MatCheckboxChange, MatCheckbox, MatSelect,
+  MatSelectChange, MatDatepickerInputEvent } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from '../../services/auth/auth.service';
@@ -14,8 +16,6 @@ import { Observable } from 'rxjs';
 
 
 import { at } from 'lodash';
-
-declare var $: any;
 
 @Component({
   selector: 'app-workshop-dashboard',
@@ -42,13 +42,22 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   @ViewChild(WorkshopDataTableComponent) public workshopTable: WorkshopDataTableComponent;
 
-  public _showDateRange: boolean = false;
-  public _showFilters: boolean = false;
-  public _showStatusFilter: boolean = false;
-  public _showTextFilter: boolean = false;
+  public _showDateRange = false;
+  public _showFilters = false;
+  public _showStatusFilter = false;
+  public _showTextFilter = false;
   public dateRange: DateRange = [null, null];
   public deactivated: string[] = [];
-  public displayedColumns: WorkshopProperties[] = ['workshopType', 'startDate', 'endDate', 'location', 'instructors', 'status', 'verified', 'actions'];
+  public displayedColumns: WorkshopProperties[] = [
+    'workshopType',
+    'startDate',
+    'endDate',
+    'location',
+    'instructors',
+    'status',
+    'verified',
+    'actions'
+  ];
   public allDisplayedColumns: WorkshopProperties[] = [
   'workshopType'
   , 'dueDate'
@@ -69,11 +78,15 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public filters: Filter[]; // the list of filter objects used to do the actual filtering
   public selectedStatuses: any[] = [];
   public statuses: string[] = [];
-  public textSearch: string = '';
+  public textSearch = '';
 
   public get user(): User { return this.route.snapshot.data['user']; }
 
-  constructor(public filterFactory: WorkshopFilterFactory, public _ws: WorkshopService, public router: Router, public route: ActivatedRoute, public authService: AuthService) {
+  constructor(public filterFactory: WorkshopFilterFactory,
+              public _ws: WorkshopService,
+              public router: Router,
+              public route: ActivatedRoute,
+              public authService: AuthService) {
     this.setStatuses();
   }
 
@@ -152,11 +165,11 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
    * @todo Put this into a directive named something like [fill-viewport]
    */
   public fillViewPortHeight() {
-    const compView = $('.filter-options-container')[0];
-    if (compView) {
-      const toolbarHeight = window.innerWidth > 600 ? 64 : 56;
-      $(compView).css('min-height', `${window.innerHeight - toolbarHeight}px`);
-    }
+    // const compView = $('.filter-options-container')[0];
+    // if (compView) {
+    //   const toolbarHeight = window.innerWidth > 600 ? 64 : 56;
+    //   $(compView).css('min-height', `${window.innerHeight - toolbarHeight}px`);
+    // }
   }
 
   public filter(cbc: MatCheckboxChange) {
@@ -178,8 +191,15 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
         break;
       case 'by Action Pending': // actions pending
         deactivate = at(indices, ['by Upcoming Workshops', 'by Archived']);
-        if (cbc.checked)
-          payload = { data: { key: 'status', value: ['Action Pending', 'Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice'] }, deactivate };
+        if (cbc.checked) {
+          payload = {
+            data: {
+                    key: 'status',
+                    value: ['Action Pending', 'Invoiced, Not Paid', 'Finished, waiting for attendee list', 'Awaiting Invoice']
+            },
+            deactivate
+          };
+        }
         break;
       case 'by Archived': // archived
         deactivate = at(indices, ['by Upcoming Workshops', 'by Action Pending']);
