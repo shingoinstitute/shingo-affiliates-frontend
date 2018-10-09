@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   authApiUrl: 'https://api.shingo.org/v2/affiliates',
-  apiUrl: 'https://api.shingo.org/v2/affiliates'
-};
+  apiUrl: 'https://api.shingo.org/v2/affiliates',
+}

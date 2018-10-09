@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 
-import { SupportHomeComponent } from './support-home.component';
-import { SupportSearchComponent } from './support-search/support-search.component';
-import { SupportCategoryComponent } from './support-category/support-category.component';
-import { SupportPageComponent } from './support-page/support-page.component';
+import { SupportHomeComponent } from './support-home.component'
+import { SupportSearchComponent } from './support-search/support-search.component'
+import { SupportCategoryComponent } from './support-category/support-category.component'
+import { SupportPageComponent } from './support-page/support-page.component'
 
-import { SupportRoutingModule } from './support-routing.module';
+import { SupportRoutingModule } from './support-routing.module'
 
 import {
   MatButtonModule,
@@ -15,9 +15,9 @@ import {
   MatInputModule,
   MatIconModule,
   MatProgressSpinnerModule,
-  MatListModule
-} from '@angular/material';
-import { FormsModule } from '@angular/forms';
+  MatListModule,
+} from '@angular/material'
+import { FormsModule } from '@angular/forms'
 
 @NgModule({
   imports: [
@@ -30,13 +30,13 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatListModule
+    MatListModule,
   ],
   declarations: [
     SupportHomeComponent,
     SupportPageComponent,
     SupportCategoryComponent,
-    SupportSearchComponent
-  ]
+    SupportSearchComponent,
+  ],
 })
-export class SupportModule { }
+export class SupportModule {}

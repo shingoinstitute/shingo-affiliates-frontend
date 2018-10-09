@@ -1,31 +1,31 @@
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterModule } from '@angular/router'
+import { CommonModule } from '@angular/common'
 
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout'
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../shared/shared.module'
 
-import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component';
-import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component';
-import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component';
+import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component'
+import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component'
+import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component'
 
 // Material Design imports
-import { 
-  MatIconModule, 
-  MatTableModule, 
-  MatPaginatorModule, 
-  MatSortModule, 
-  MatFormFieldModule, 
-  MatAutocompleteModule, 
-  MatDialogModule, 
+import {
+  MatIconModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule,
+  MatFormFieldModule,
+  MatAutocompleteModule,
+  MatDialogModule,
   MatOptionModule,
   MatSnackBarModule,
   MatButtonModule,
   MatInputModule,
-  MatProgressSpinnerModule
-} from '@angular/material';
+  MatProgressSpinnerModule,
+} from '@angular/material'
 
 @NgModule({
   imports: [
@@ -48,29 +48,27 @@ import {
     MatProgressSpinnerModule,
 
     FlexLayoutModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
   ],
   declarations: [
     AdminAffiliateTabComponent,
     AffiliateDataTableComponent,
-    AffiliateFormComponent
+    AffiliateFormComponent,
   ],
   exports: [
     AffiliateDataTableComponent,
     AffiliateFormComponent,
-    AdminAffiliateTabComponent
+    AdminAffiliateTabComponent,
   ],
-  entryComponents: [
-    AffiliateFormComponent
-  ]
+  entryComponents: [AffiliateFormComponent],
 })
-export default class AffiliatesModule { }
+export default class AffiliatesModule {}
 
 export {
   AffiliatesModule,
   AffiliateDataTableComponent,
   AffiliateFormComponent,
-  AdminAffiliateTabComponent
-};
+  AdminAffiliateTabComponent,
+}
 
 // export * from './affiliate.model';

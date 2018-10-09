@@ -1,15 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, inject } from '@angular/core/testing'
 
-import { WorkshopService } from './workshop.service';
+import { WorkshopService } from './workshop.service'
 
 describe('WorkshopService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [WorkshopService]
-    });
-  });
+      providers: [WorkshopService],
+    })
+  })
 
   // it('should be created', inject([WorkshopService], (service: WorkshopService) => {
   //   expect(service).toBeTruthy();
   // }));
-});
+})

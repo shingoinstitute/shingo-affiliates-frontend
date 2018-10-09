@@ -1,21 +1,20 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { WorkshopFormComponent } from './workshop-form.component';
+import { WorkshopFormComponent } from './workshop-form.component'
 
 describe('WorkshopFormComponent', () => {
-  let component: WorkshopFormComponent;
-  let fixture: ComponentFixture<WorkshopFormComponent>;
+  let component: WorkshopFormComponent
+  let fixture: ComponentFixture<WorkshopFormComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WorkshopFormComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [WorkshopFormComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WorkshopFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-});
+    fixture = TestBed.createComponent(WorkshopFormComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
+})

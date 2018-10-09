@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'app-forbidden-page',
   templateUrl: './forbidden-page.component.html',
-  styleUrls: ['./forbidden-page.component.scss']
+  styleUrls: ['./forbidden-page.component.scss'],
 })
-export class ForbiddenPageComponent { }
+export class ForbiddenPageComponent {}

@@ -1,14 +1,14 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule, ModuleWithProviders } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { CKEditorModule } from 'ng2-ckeditor';
+import { CKEditorModule } from 'ng2-ckeditor'
 
-import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component';
-import { IconLegendComponent } from './components/icon-legend/icon-legend.component';
-import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component';
-import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component';
-import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component';
+import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component'
+import { IconLegendComponent } from './components/icon-legend/icon-legend.component'
+import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component'
+import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component'
+import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component'
 
 // Material Design imports
 import {
@@ -18,10 +18,9 @@ import {
   MatProgressSpinnerModule,
   MatButtonModule,
   MatIconModule,
-  MatInputModule
-} from '@angular/material';
-import { FileDropComponent } from './components/file-drop/file-drop.component';
-
+  MatInputModule,
+} from '@angular/material'
+import { FileDropComponent } from './components/file-drop/file-drop.component'
 
 @NgModule({
   imports: [
@@ -37,7 +36,7 @@ import { FileDropComponent } from './components/file-drop/file-drop.component';
     MatIconModule,
     MatInputModule,
 
-    CKEditorModule
+    CKEditorModule,
   ],
   declarations: [
     AlertDialogComponent,
@@ -45,7 +44,7 @@ import { FileDropComponent } from './components/file-drop/file-drop.component';
     SimpleMessageDialog,
     SfLookupComponent,
     TextResponseDialogComponent,
-    FileDropComponent
+    FileDropComponent,
   ],
   exports: [
     // MdDialogModule,
@@ -55,19 +54,19 @@ import { FileDropComponent } from './components/file-drop/file-drop.component';
     SimpleMessageDialog,
     SfLookupComponent,
     TextResponseDialogComponent,
-    FileDropComponent
+    FileDropComponent,
   ],
   entryComponents: [
     AlertDialogComponent,
     SimpleMessageDialog,
     TextResponseDialogComponent,
-    FileDropComponent
-  ]
+    FileDropComponent,
+  ],
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {
     return {
-      ngModule: SharedModule
-    };
+      ngModule: SharedModule,
+    }
   }
 }
