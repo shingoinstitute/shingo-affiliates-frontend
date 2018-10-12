@@ -1,11 +1,11 @@
+import 'hammerjs'
 import { NgModule, isDevMode } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FlexLayoutModule } from '@angular/flex-layout'
-import { HttpModule } from '@angular/http'
 import { CookieModule } from 'ngx-cookie'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-import 'hammerjs'
+import { JwtModule } from '@auth0/angular-jwt'
 
 /** Shared Modules */
 import { SharedModule } from './shared/shared.module'
@@ -46,6 +46,8 @@ import {
   MatProgressSpinnerModule,
   MatExpansionModule,
 } from '@angular/material'
+import { tokenGetter } from './services/auth/auth.service'
+import { environment } from '../environments/environment'
 
 @NgModule({
   declarations: [AppComponent],
@@ -73,6 +75,16 @@ import {
     WorkshopsModule,
     UIComponentsModule,
     SupportModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        whitelistedDomains: [
+          environment.clientDomain,
+          environment.apiDomain,
+          environment.authApiDomain,
+        ],
+      },
+    }),
   ],
   providers: [
     {

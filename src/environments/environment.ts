@@ -5,6 +5,9 @@
 
 export const environment = {
   production: false,
-  authApiUrl: 'https://api.shingo.org/v2/affiliates',
-  apiUrl: 'https://api.shingo.org/v2/affiliates',
+  apiDomain: 'localhost:3000',
+  authApiDomain: 'localhost:3000',
+  clientDomain: 'localhost:4200',
+  apiRoute: '/',
+  authApiRoute: '/',
 }

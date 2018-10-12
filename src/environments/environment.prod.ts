@@ -1,5 +1,8 @@
 export const environment = {
   production: true,
-  authApiUrl: 'https://api.shingo.org/v2/affiliates',
-  apiUrl: 'https://api.shingo.org/v2/affiliates',
+  apiDomain: 'api.shingo.org',
+  authApiDomain: 'api.shingo.org',
+  clientDomain: 'affiliates.shingo.org',
+  apiRoute: '/v2/affiliates',
+  authApiRoute: '/v2/affiliates',
 }

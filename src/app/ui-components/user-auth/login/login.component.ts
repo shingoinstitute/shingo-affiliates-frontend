@@ -1,6 +1,6 @@
 // Angular Modules
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 
 // App Modules
 import { AuthService } from '../../../services/auth/auth.service'
@@ -12,18 +12,20 @@ import { RouterService } from '../../../services/router/router.service'
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public email: string
-  public password: string
+  public email = ''
+  public password = ''
 
   public isLoading = true
   public didLoad = false
 
-  public errBody: string
-  public errMsg: string
+  public errBody = ''
+  public errMsg = ''
+  private returnUrl = '/'
 
   constructor(
     public auth: AuthService,
-    public router: Router,
+    private route: ActivatedRoute,
+    private router: Router,
     public routerService: RouterService,
   ) {}
 
@@ -33,65 +35,42 @@ export class LoginComponent implements OnInit {
    * the root app component.
    */
   public ngOnInit(): void {
-    this.auth.authenticationChange$.subscribe(
-      (auth: boolean) => {
-        this.isLoading = false
-        this.didLoad = true
-      },
-      err => {
-        console.error('error: Login.onLoad():', err)
-        this.isLoading = false
-        this.didLoad = true
-      },
-    )
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
   }
 
   /**
    * @description Handler for submitting login credentials.
    */
   public onSubmit() {
+    if (!this.email || !this.password) {
+      this.handleError({ error: 'INVALID_PASSWORD' })
+      return
+    }
+
     this.isLoading = true
-    this.auth.login({ email: this.email, password: this.password }).subscribe(
-      data => {
+    this.auth
+      .login({ email: this.email, password: this.password })
+      .then(() => {
         this.isLoading = false
-        this.routerService.nextRoute()
-      },
-      err => {
-        console.error(err)
-        this.isLoading = false
-        // const msg = this.findErrorMsg(err);
-        const msg = err.error ? err.error : ''
-        if (msg === 'INVALID_PASSWORD') this.errMsg = 'Invalid password.'
-        else if (msg === 'EMAIL_NOT_FOUND') this.errMsg = 'Email not found.'
-        else if (err.status === 0) {
-          this.errMsg = 'Connection Refused.'
-          this.errBody =
-            'We may be experiencing server difficulties, please try again later.'
-        } else {
-          // this.errMsg = `An unknown error occured. Please try again later.`;
-          this.errBody = JSON.stringify(err.error, null, 3)
-        }
-      },
-    )
+        // this.routerService.nextRoute()
+        this.router.navigateByUrl(this.returnUrl)
+      })
+      .catch(err => this.handleError(err))
   }
 
-  // public findErrorMsg(obj: object, key: string = 'error'): string {
-  //   while (obj.hasOwnProperty(key)) {
-  //     obj = obj[key];
-  //     if (typeof obj === 'string') {
-  //       const message: string = obj;
-  //       if (message.match(/\{.*\}/g)) {
-  //         try {
-  //           obj = JSON.parse(message);
-  //           console.warn(obj);
-  //         } catch (e) {
-  //           return '';
-  //         }
-  //       } else {
-  //         return message;
-  //       }
-  //     }
-  //   }
-  //   return '';
-  // }
+  private handleError(err: any) {
+    this.isLoading = false
+    console.error(err)
+    const msg = err.error ? err.error : ''
+    if (msg === 'INVALID_PASSWORD') this.errMsg = 'Invalid Email or Password'
+    else if (msg === 'EMAIL_NOT_FOUND')
+      this.errMsg = 'Invalid Email or Password'
+    else if (err.status === 0) {
+      this.errMsg = 'Connection Refused.'
+      this.errBody =
+        'We may be experiencing server difficulties, please try again later.'
+    } else {
+      this.errBody = JSON.stringify(err.error, null, 3)
+    }
+  }
 }

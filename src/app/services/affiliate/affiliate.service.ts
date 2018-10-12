@@ -13,8 +13,7 @@ import { Affiliate } from '../../affiliates/affiliate.model'
 
 // RxJS Modules
 import { Observable, Subject } from 'rxjs'
-import { JWTService } from '../auth/auth.service'
-import { requestOptions } from '../../util/util'
+import { requestOptions, getApiHost } from '../../util/util'
 import { tuple } from '../../util/functional'
 
 export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = [
@@ -27,15 +26,13 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = [
 ]
 
 @Injectable()
-export class AffiliateService extends BaseAPIService {
+export class AffiliateService {
   public route = 'affiliates'
   public get baseUrl() {
-    return `${this.APIHost()}/${this.route}`
+    return `${getApiHost()}/${this.route}`
   }
 
-  constructor(public http: HttpClient, private jwt: JWTService) {
-    super()
-  }
+  constructor(public http: HttpClient, private jwt: JWTService) {}
 
   public getAll() {
     return this.http

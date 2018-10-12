@@ -133,3 +133,26 @@ export const applyDefaults = (defs: { [pos: number]: any }) => <
 }
 
 export const tuple = <A, B>(a: A, b: B): [A, B] => [a, b]
+
+export const fst = <A, B>(t: [A, B]) => t[0]
+export const snd = <A, B>(t: [A, B]) => t[1]
+
+// from fp-ts, credit to gcanti
+export const flatten = <A>(ffa: A[][]): A[] => {
+  let flattenedLength = 0
+  const len = ffa.length
+  for (let i = 0; i < len; i++) {
+    flattenedLength += ffa[i].length
+  }
+  const flattened = Array(flattenedLength)
+  let start = 0
+  for (let i = 0; i < len; i++) {
+    const arr = ffa[i]
+    const l = arr.length
+    for (let j = 0; j < l; j++) {
+      flattened[j + start] = arr[j]
+    }
+    start += l
+  }
+  return flattened
+}

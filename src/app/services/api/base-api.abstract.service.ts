@@ -14,6 +14,8 @@ import { sfToCamelCase, requestOptions } from '../../util/util'
 import { environment } from '../../../environments/environment'
 import { JWTService } from '../auth/auth.service'
 import { HttpClient } from '@angular/common/http'
+import { map, catchError } from 'rxjs/operators'
+import { pipe } from 'rxjs/util/pipe'
 
 export interface ISFSuccessResult {
   id: string
@@ -25,7 +27,7 @@ export abstract class BaseAPIService extends BaseService {
   protected _baseUrl = environment.apiUrl
 
   // Contract for all APIServices;
-  public abstract getAll(): Observable<any[]>
+  public abstract getAll<T>(): Observable<T[]>
   public abstract getById(id: string): Observable<any>
   public abstract create(obj: any): Observable<ISFSuccessResult>
   public abstract update(obj: any): Observable<ISFSuccessResult>
@@ -36,25 +38,9 @@ export abstract class BaseAPIService extends BaseService {
     route: 'workshops' | 'facilitators' | 'affiliates' | 'support',
     http: HttpClient,
     jwt: JWTService,
-  ): Observable<any> {
-    return http
-      .get<any>(`${this.APIHost()}/${route}/describe`, requestOptions(jwt))
-      .map(data => {
-        const props = {}
-
-        data.fields
-          .filter(
-            field =>
-              field.inlineHelpText || field.label || field.picklistValues,
-          )
-          .map(field =>
-            pick(field, ['inlineHelpText', 'label', 'name', 'picklistValues']),
-          )
-          .forEach(field => (props[sfToCamelCase(field.name)] = field))
-
-        return props
-      })
-      .catch(err => this.handleError(err))
+  ) {
+      catchError(err => this.handleError(err)),
+    )(http.get<any>(`${this.APIHost()}/${route}/describe`, requestOptions(jwt)))
   }
 
   public sfObjectFactory<T>(
