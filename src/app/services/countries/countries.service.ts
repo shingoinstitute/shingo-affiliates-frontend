@@ -1,3 +1,7 @@
+
+import {merge as observableMerge,  Observable } from 'rxjs';
+
+import {catchError, map} from 'rxjs/operators';
 // Angular Modules
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -5,9 +9,6 @@ import { HttpClient } from '@angular/common/http';
 
 // App Modules
 import { BaseService } from '../api/base.abstract.service';
-
-// RxJS Modules
-import { Observable } from 'rxjs/Observable';
 
 // Lodash Functions
 import { without } from 'lodash';
@@ -32,14 +33,14 @@ export class CountriesService extends BaseService {
       'United States'
     ];
 
-    return Observable.merge(...countryRequestsByRegion)
-      .map((data: any) => {
+    return observableMerge(...countryRequestsByRegion).pipe(
+      map((data: any) => {
         let countryNames = data.map(value => value.name).sort();
         countryNames = without(countryNames, filterNames);
         countryNames = ['United States', 'United Kingdom'].concat(countryNames);
         return countryNames;
-      })
-      .catch(this.handleError);
+      }),
+      catchError(this.handleError),);
   }
 
 }

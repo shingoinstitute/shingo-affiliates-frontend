@@ -1,3 +1,6 @@
+
+import {distinctUntilChanged, debounceTime, filter} from 'rxjs/operators';
+import { Observable ,  Subject } from 'rxjs';
 import { Component, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, FormBuilder, Validators } from '@angular/forms';
 
@@ -12,7 +15,6 @@ import { Workshop } from '../../../workshops/workshop.model';
 import { WorkshopService } from '../../../services/workshop/workshop.service';
 import { CourseManager } from '../../../workshops/course-manager.model';
 
-import { Observable ,  Subject } from 'rxjs';
 import { ValidationErrors } from '@angular/forms/src/directives/validators';
 
 @Component({
@@ -65,7 +67,7 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
   }
 
   public ngOnInit() {
-    
+
     this.lookup = this.fb.group({
       sfObject: [this.sfObject]
     });
@@ -102,13 +104,13 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
     }
 
 
-    this.lookup.controls.sfObject.valueChanges
-      .filter(query => query && query.length > 2)
+    this.lookup.controls.sfObject.valueChanges.pipe(
+      filter(query => query && query.length > 2))
       .subscribe(query => this.queryHandlerSource.next(query));
 
-    this.queryHandler
-      .debounceTime(250)
-      .distinctUntilChanged()
+    this.queryHandler.pipe(
+      debounceTime(250),
+      distinctUntilChanged(),)
       .subscribe(query => {
         this.handleQuery(query);
       });
@@ -180,7 +182,7 @@ export class SfLookupComponent implements OnInit, AfterViewInit, ControlValueAcc
     else if (obj instanceof Affiliate)
       return `<div class="search-holder">
         ${obj.logo !== '' ? '<img class="thumbnail-search" src="' + obj.logo + '" />' : ''}
-        ${obj.name}${obj.summary === null || obj.summary === 'null' || obj.summary === '' 
+        ${obj.name}${obj.summary === null || obj.summary === 'null' || obj.summary === ''
         ? '' : '&nbsp;:<span class="small-light-text">&emsp;' + this.truncate(obj.summary.replace(/(<([^>]+)>)/ig, ''), 25)}</span>
       </div>`;
     else if (obj instanceof CourseManager)

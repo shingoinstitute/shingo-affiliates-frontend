@@ -1,3 +1,7 @@
+
+import {fromEvent as observableFromEvent,  Observable } from 'rxjs';
+
+import {debounceTime} from 'rxjs/operators';
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Facilitator } from '../../facilitators/facilitator.model';
 import { FacilitatorService } from '../../services/facilitator/facilitator.service';
@@ -8,8 +12,6 @@ import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert
 import { FacilitatorFilterFactory } from '../../services/filters/facilitators/facilitator-filter-factory.service';
 import { OnInit, AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Filter } from '../../services/filters/filter.abstract';
-
-import { Observable } from 'rxjs';
 
 
 @Component({
@@ -38,7 +40,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     // Create an observalbe that listens to changes to the `nameFilterInput` input field
-    const nameFilterInputChange = Observable.fromEvent(this.nameFilterInput.nativeElement, 'keyup').debounceTime(250);
+    const nameFilterInputChange = observableFromEvent(this.nameFilterInput.nativeElement, 'keyup').pipe(debounceTime(250));
     // Subscribe to the event listener. When a user types inside the input field, the nameFilter is notified of changes and the data table should update accordingly.
     nameFilterInputChange.subscribe((event) => {
       const nameFilterIndex = this.filters.findIndex(f => f.name === 'Filter By Name');

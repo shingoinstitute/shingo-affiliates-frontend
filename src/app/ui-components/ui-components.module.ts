@@ -22,10 +22,10 @@ import { ChangePasswordDialog } from './user-auth/change-password-dialog/change-
 import { ForbiddenPageComponent } from './forbidden-page/forbidden-page.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialsDialog } from './materials/materials-dialog/materials-dialog.component';
+import { MatMomentDateModule } from '@angular/material-moment-adapter'
 
 // Material Design imports
 import {
-  MatNativeDateModule,
   MatDatepickerModule,
   MatProgressSpinnerModule,
   MatButtonModule,
@@ -44,7 +44,7 @@ import {
     ReactiveFormsModule,
     FormsModule,
 
-    MatNativeDateModule,
+    MatMomentDateModule,
     MatDatepickerModule,
     MatProgressSpinnerModule,
     MatButtonModule,

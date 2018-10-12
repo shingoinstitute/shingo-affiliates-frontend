@@ -1,7 +1,9 @@
+
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { SupportPage } from '../../services/support/support.model';
 import { SupportService } from '../../services/support/support.service';
-import { Subject ,  Observable } from 'rxjs';
+import { Subject ,  Observable } from 'rxjs'
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -32,9 +34,9 @@ export class SupportSearchComponent implements OnInit {
 
   public search() {
     this.isSearching = true;
-    this.supportService.search(this.query)
-      .distinctUntilChanged()
-      .debounceTime(250)
+    this.supportService.search(this.query).pipe(
+      distinctUntilChanged(),
+      debounceTime(250),)
       .subscribe(res => {
         this.isSearching = false;
         if (Array.isArray(res)) {

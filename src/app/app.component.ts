@@ -1,3 +1,5 @@
+
+import {distinctUntilChanged} from 'rxjs/operators';
 // Angular Modules
 import { Component, ViewChild, HostListener, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatIconRegistry, MatSidenav, MatDialog } from '@angular/material';
@@ -115,8 +117,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
    */
   public authenticateOnLoad() {
     // Subscribe to event stream of authentication change events
-    this.auth.authenticationChange$
-      .distinctUntilChanged()
+    this.auth.authenticationChange$.pipe(
+      distinctUntilChanged())
       .subscribe(isValid => {
         this.isAuthenticated = isValid;
         if (!this.isAuthenticated && this.activeRoute !== '/login') {

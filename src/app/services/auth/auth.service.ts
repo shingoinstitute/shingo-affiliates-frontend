@@ -1,3 +1,7 @@
+
+import {from as observableFrom,  Observable,  BehaviorSubject } from 'rxjs';
+
+import {map, catchError} from 'rxjs/operators';
 // Angular Modules
 import { Facilitator } from '../../facilitators/facilitator.model';
 import { Injectable, EventEmitter } from '@angular/core';
@@ -6,9 +10,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { BaseService } from '../api/base.abstract.service';
 import { User, UserState } from '../../shared/models/user.model';
 import { environment } from '../../../environments/environment';
-
-// RxJS Modules
-import { Observable,  BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie';
 import { HttpClient } from '@angular/common/http';
 import { requestOptions } from '../../util/util';
@@ -49,9 +50,9 @@ export class AuthService extends BaseService {
     */
   public login(payload: { email: string, password: string }): Observable<any> {
     const options = { ...requestOptions(this.jwtService), observe: 'response' as 'response' };
-    return this.http.post<{ email: string, password: string }>(`${this.authHost}/login`, payload, options)
-      .map(res => this.handleLogin(res))
-      .catch(err => this.handleError(err));
+    return this.http.post<{ email: string, password: string }>(`${this.authHost}/login`, payload, options).pipe(
+      map(res => this.handleLogin(res)),
+      catchError(err => this.handleError(err)),);
   }
 
   /**
@@ -61,9 +62,9 @@ export class AuthService extends BaseService {
   public logout(): Observable<any> {
     const options = { ...requestOptions(this.jwtService), observe: 'response' as 'response' };
 
-    return this.http.get(`${this.authHost}/logout`, options)
-      .map(data => this.handleLogout(data))
-      .catch(err => this.handleError(err));
+    return this.http.get(`${this.authHost}/logout`, options).pipe(
+      map(data => this.handleLogout(data)),
+      catchError(err => this.handleError(err)),);
   }
 
   /**
@@ -82,17 +83,17 @@ export class AuthService extends BaseService {
     const options = { ...requestOptions(this.jwtService), observe: 'response' as 'response' };
 
     const state = this._user ? this._user.state : UserState.Normal;
-    return this.http.get<User>(`${this.authHost}/valid`, options)
-      .map(res => {
+    return this.http.get<User>(`${this.authHost}/valid`, options).pipe(
+      map(res => {
         this.handleLogin(res, state);
         return true;
-      }).catch(error => {
+      }),catchError(error => {
         // We don't care about HTTP 4XX errors, only HTTP 500 error
         if (error.status && error.status === 500) console.error('Caught error in auth.isValid(): ', error);
         this._user = null;
         this.authenticationChange$.next(false);
-        return Observable.from([false]);
-      });
+        return observableFrom([false]);
+      }),);
   }
 
   /**
@@ -107,19 +108,19 @@ export class AuthService extends BaseService {
       observe: 'response' as 'response'
     };
 
-    return this.http.get<User>(`${this.authHost}/valid`, options)
-      .map(res => {
+    return this.http.get<User>(`${this.authHost}/valid`, options).pipe(
+      map(res => {
         this.handleLogin(res, this._user.state);
         return this._user;
-      });
+      }));
   }
 
   public changeUserPassword(password: string) {
-    return this.http.post<{ jwt: string }>(`${this.authHost}/changepassword`, { password }, requestOptions(this.jwtService))
-      .map(res => {
+    return this.http.post<{ jwt: string }>(`${this.authHost}/changepassword`, { password }, requestOptions(this.jwtService)).pipe(
+      map(res => {
         this.jwtService.jwt = res.jwt;
         return res;
-      });
+      }));
   }
 
   public loginAs(facilitator: Facilitator): any {
@@ -131,12 +132,12 @@ export class AuthService extends BaseService {
     return this.http.post(`${this.authHost}/loginas`, {
       adminId: this._user.authId,
       userId: facilitator._id
-    }, options)
-    .map(res => this.handleLogin(res, UserState.LoggedInAs))
-    .catch(error => {
+    }, options).pipe(
+    map(res => this.handleLogin(res, UserState.LoggedInAs)),
+    catchError(error => {
         this.adminToken = null;
         return this.handleError(error);
-    });
+    }),);
   }
 
   private handleLogin(res: any, state: UserState = UserState.Normal): any {

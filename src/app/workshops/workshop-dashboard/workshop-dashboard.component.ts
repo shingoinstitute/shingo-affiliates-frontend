@@ -1,3 +1,7 @@
+
+import {merge as observableMerge, from as observableFrom, fromEvent as observableFromEvent,  Observable } from 'rxjs';
+
+import {debounceTime} from 'rxjs/operators';
 import { Component, OnInit, ViewChild, ViewChildren, ElementRef, AfterViewInit } from '@angular/core';
 import { MatRadioButton, MatDatepicker, MatSort, MatPaginator, MatCheckboxChange, MatCheckbox, MatSelect, MatSelectChange, MatDatepickerInputEvent } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -9,8 +13,6 @@ import { WorkshopDataTableComponent } from '../../workshops/workshop-data-table/
 import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service';
 import { WorkshopProperties, WorkshopService } from '../../services/workshop/workshop.service';
 import { WorkshopStatusType } from '../../workshops/workshop.model';
-
-import { Observable } from 'rxjs';
 
 
 import { at } from 'lodash';
@@ -95,8 +97,8 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.initFilters();
 
     const textIndex = this.filters.findIndex(f => f.name === 'by Text');
-    Observable.fromEvent(this.textSearchInput.nativeElement, 'keyup')
-      .debounceTime(150)
+    observableFromEvent(this.textSearchInput.nativeElement, 'keyup').pipe(
+      debounceTime(150))
       .subscribe((event) => {
         this.filters[textIndex].dataChange.next(this.textSearch);
       });
@@ -104,8 +106,8 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     this.fillViewPortHeight();
-    const observable: Observable<MatCheckboxChange>[] = this.selectedFilters.map(cbc => Observable.from(cbc.change));
-    Observable.merge(...observable)
+    const observable: Observable<MatCheckboxChange>[] = this.selectedFilters.map(cbc => observableFrom(cbc.change));
+    observableMerge(...observable)
       .subscribe((event) => this.filter(event));
   }
 

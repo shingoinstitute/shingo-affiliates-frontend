@@ -1,3 +1,7 @@
+
+import {merge as observableMerge,  Observable } from 'rxjs';
+
+import {map} from 'rxjs/operators';
 import { DataSource } from '@angular/cdk/table';
 import { MatPaginator, MatSort } from '@angular/material';
 
@@ -5,9 +9,6 @@ import { BaseAPIService } from './base-api.abstract.service';
 import { SFObject } from '../../shared/models/sf-object.abstract.model';
 import { DataProvider } from '../data-provider/data-provider.service';
 import { Filter } from '../filters/filter.abstract';
-
-// RxJS Modules
-import { Observable } from 'rxjs';
 
 // RxJS operators
 
@@ -35,14 +36,14 @@ export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject
       }
     });
 
-    return Observable.merge(...dataChanges).map(() => {
+    return observableMerge(...dataChanges).pipe(map(() => {
       const data = this.getSortedData();
 
       if (this.size <= this.paginator.pageSize) this.paginator.pageIndex = 0;
 
       const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
       return data.splice(startIndex, this.paginator.pageSize);
-    });
+    }));
   }
 
   public addFilters(filters: Filter[]): void {

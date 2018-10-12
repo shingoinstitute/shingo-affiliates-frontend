@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, Router } from
 
 import { AuthService } from './auth.service';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class IsAdminGuard implements CanActivate {

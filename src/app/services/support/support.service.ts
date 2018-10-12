@@ -1,3 +1,6 @@
+
+import {catchError, map} from 'rxjs/operators';
+import { Observable } from 'rxjs';
 // tslint:disable:variable-name
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpRequest, HttpClient } from '@angular/common/http';
@@ -7,7 +10,6 @@ import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.servi
 import { SupportPage } from './support.model';
 
 // RxJS Modules
-import { Observable } from 'rxjs';
 import { JWTService } from '../auth/auth.service';
 import { requestOptions } from '../../util/util';
 import { tuple } from '../../util/functional';
@@ -31,21 +33,21 @@ export class SupportService extends BaseAPIService {
   constructor(public http: HttpClient, public jwt: JWTService) { super(); }
 
   public getAll() {
-    return this.http.get<any[]>(this.baseUrl)
-      .map(res => res.map(spJSON => new SupportPage(spJSON)))
-      .catch(this.handleError);
+    return this.http.get<any[]>(this.baseUrl).pipe(
+      map(res => res.map(spJSON => new SupportPage(spJSON))),
+      catchError(this.handleError),);
   }
 
   public getById(id: string) {
-    return this.http.get<any>(this.baseUrl + `/${id}`)
-      .map(res => new SupportPage(res))
-      .catch(this.handleError);
+    return this.http.get<any>(this.baseUrl + `/${id}`).pipe(
+      map(res => new SupportPage(res)),
+      catchError(this.handleError),);
   }
 
   public getCategory(name: string) {
-    return this.http.get<any[]>(this.baseUrl + `/category/${name}`)
-      .map(res => res.map(spJSON => new SupportPage(spJSON)))
-      .catch(this.handleError);
+    return this.http.get<any[]>(this.baseUrl + `/category/${name}`).pipe(
+      map(res => res.map(spJSON => new SupportPage(spJSON))),
+      catchError(this.handleError),);
   }
 
   public create(obj: any): Observable<ISFSuccessResult> {
@@ -70,14 +72,14 @@ export class SupportService extends BaseAPIService {
       tuple('x-retrieve', fields),
     );
 
-    return this.http.get<any[]>(this.baseUrl + '/search', options)
-      .map(res => res.map(spJSON => new SupportPage(spJSON)))
-      .catch(this.handleError);
+    return this.http.get<any[]>(this.baseUrl + '/search', options).pipe(
+      map(res => res.map(spJSON => new SupportPage(spJSON))),
+      catchError(this.handleError),);
   }
 
   public getCategories(): Observable<any> {
-    return this.describe()
-      .map(desc => {
+    return this.describe().pipe(
+      map(desc => {
         const categories: string[] = [];
         if (desc && desc.category && desc.category.picklistValues) {
           for (const value of desc.category.picklistValues) {
@@ -88,8 +90,8 @@ export class SupportService extends BaseAPIService {
           return categories.sort();
         }
         return categories;
-      })
-      .catch(this.handleError);
+      }),
+      catchError(this.handleError),);
   }
 
 }

@@ -1,3 +1,6 @@
+
+import {catchError, map} from 'rxjs/operators';
+import { Observable } from 'rxjs'
 // Angular Modules
 import { Injectable, EventEmitter } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -7,15 +10,9 @@ import { RequestOptionsArgs, Headers } from '@angular/http';
 import { BaseAPIService, ISFSuccessResult } from '../api/base-api.abstract.service';
 import { Facilitator } from '../../facilitators/facilitator.model';
 
-// RxJS Modules
-import { Observable } from 'rxjs';
 import { JWTService } from '../auth/auth.service';
 import { requestOptions } from '../../util/util';
 import { tuple } from '../../util/functional';
-
-// RxJS operators
-
-
 
 export const DEFAULT_FACILITATOR_SEARCH_FIELDS: string[] = [
   'Id',
@@ -39,51 +36,51 @@ export class FacilitatorService extends BaseAPIService {
   constructor(public http: HttpClient, public jwt: JWTService) { super(); }
 
   public getAll() {
-    return this.http.get<any[]>(this.baseUrl, requestOptions(this.jwt))
-      .map(res => res.map(facJSON => new Facilitator(facJSON)))
-      .catch(err => this.handleError(err));
+    return this.http.get<any[]>(this.baseUrl, requestOptions(this.jwt)).pipe(
+      map(res => res.map(facJSON => new Facilitator(facJSON))),
+      catchError(err => this.handleError(err)),);
   }
 
   public getById(id: string) {
-    return this.http.get(`${this.baseUrl}/${id}`, requestOptions(this.jwt))
-      .map(res => new Facilitator(res))
-      .catch(err => this.handleError(err));
+    return this.http.get(`${this.baseUrl}/${id}`, requestOptions(this.jwt)).pipe(
+      map(res => new Facilitator(res)),
+      catchError(err => this.handleError(err)),);
   }
 
   public create(obj: Facilitator) {
     const { __name, ...rest } = JSON.parse(JSON.stringify(obj));
-    return this.http.post<ISFSuccessResult>(`${this.baseUrl}`, rest, requestOptions(this.jwt))
-      .map(res => res)
-      .catch(err => this.handleError(err));
+    return this.http.post<ISFSuccessResult>(`${this.baseUrl}`, rest, requestOptions(this.jwt)).pipe(
+      map(res => res),
+      catchError(err => this.handleError(err)),);
   }
 
   public map(obj: Facilitator) {
     const { __name, ...rest } = JSON.parse(JSON.stringify(obj));
-    return this.http.post<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, rest, requestOptions(this.jwt))
-      .map(res => res)
-      .catch(err => this.handleError(err));
+    return this.http.post<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, rest, requestOptions(this.jwt)).pipe(
+      map(res => res),
+      catchError(err => this.handleError(err)),);
   }
 
   public update(obj: Facilitator) {
     const { __name, ...rest } = JSON.parse(JSON.stringify(obj));
-    return this.http.put<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, rest, requestOptions(this.jwt))
-      .map(res => res)
-      .catch(err => this.handleError(err));
+    return this.http.put<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, rest, requestOptions(this.jwt)).pipe(
+      map(res => res),
+      catchError(err => this.handleError(err)),);
   }
 
   public delete(obj: Facilitator) {
-    return this.http.delete<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, requestOptions(this.jwt))
-      .map(res => res)
-      .catch(err => this.handleError(err));
+    return this.http.delete<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}`, requestOptions(this.jwt)).pipe(
+      map(res => res),
+      catchError(err => this.handleError(err)),);
   }
 
   /**
   * @description Removes service from a facilitator
   */
   public disable(obj: Facilitator) {
-    return this.http.delete<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}/unmap`, requestOptions(this.jwt))
-      .map(res => res)
-      .catch(err => this.handleError(err));
+    return this.http.delete<ISFSuccessResult>(`${this.baseUrl}/${obj.sfId}/unmap`, requestOptions(this.jwt)).pipe(
+      map(res => res),
+      catchError(err => this.handleError(err)),);
   }
 
   /**
@@ -99,9 +96,9 @@ export class FacilitatorService extends BaseAPIService {
 
     if (!isMapped) headers.push(tuple('x-is-mapped', 'false'));
 
-    return this.http.get<any[]>(this.baseUrl + '/search', requestOptions(this.jwt, ...headers))
-      .map(res => res.map(facJSON => new Facilitator(facJSON)))
-      .catch(err => this.handleError(err));
+    return this.http.get<any[]>(this.baseUrl + '/search', requestOptions(this.jwt, ...headers)).pipe(
+      map(res => res.map(facJSON => new Facilitator(facJSON))),
+      catchError(err => this.handleError(err)),);
   }
 
   public describe(): Observable<Facilitator> {
@@ -113,15 +110,15 @@ export class FacilitatorService extends BaseAPIService {
    * @description Sends a reset password email to facilitator (or something like that...)
    */
   public resetPassword(email: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/resetpassword/${email}`, requestOptions(this.jwt))
-      .map(res => res)
-      .catch(err => this.handleError(err));
+    return this.http.get(`${this.baseUrl}/resetpassword/${email}`, requestOptions(this.jwt)).pipe(
+      map(res => res),
+      catchError(err => this.handleError(err)),);
   }
 
   public changePassword(token: string, password) {
-    return this.http.post(`${this.baseUrl}/resetpassword/token`, { token, password }, requestOptions(this.jwt))
-      .map(res => new Facilitator(res))
-      .catch(err => this.handleError(err));
+    return this.http.post(`${this.baseUrl}/resetpassword/token`, { token, password }, requestOptions(this.jwt)).pipe(
+      map(res => new Facilitator(res)),
+      catchError(err => this.handleError(err)),);
   }
 
 }

@@ -1,11 +1,11 @@
+
+import {catchError, map} from 'rxjs/operators';
+import { Observable } from 'rxjs';
 // Angular Modules
 import { isDevMode } from '@angular/core';
 
 // App Modules
 import { BaseService } from './base.abstract.service';
-
-// RxJS Modules
-import { Observable } from 'rxjs/Observable';
 
 // RxJS operators
 
@@ -35,8 +35,8 @@ export abstract class BaseAPIService extends BaseService {
   public abstract search(query: string): Observable<any[]>;
 
   public describe(route: 'workshops' | 'facilitators' | 'affiliates' | 'support', http: HttpClient, jwt: JWTService): Observable<any> {
-    return http.get<any>(`${this.APIHost()}/${route}/describe`, requestOptions(jwt))
-      .map(data => {
+    return http.get<any>(`${this.APIHost()}/${route}/describe`, requestOptions(jwt)).pipe(
+      map(data => {
         const props = {};
 
         data.fields.filter(field => field.inlineHelpText || field.label || field.picklistValues)
@@ -44,8 +44,8 @@ export abstract class BaseAPIService extends BaseService {
           .forEach(field => props[sfToCamelCase(field.name)] = field);
 
         return props;
-      })
-      .catch(err => this.handleError(err));
+      }),
+      catchError(err => this.handleError(err)),);
   }
 
   public sfObjectFactory<T>(type: { new(...args: any[]): T; }, ...args: any[]): T {

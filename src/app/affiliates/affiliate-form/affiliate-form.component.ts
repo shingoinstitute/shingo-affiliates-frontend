@@ -1,3 +1,5 @@
+
+import {map} from 'rxjs/operators';
 import { Component, OnInit, Input, Inject, Optional, ElementRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -49,7 +51,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
   ) {
 
     this.buildForm();
-    this.languageOptions = this.affForm.controls.langControl.valueChanges.map(val => this.filterLanguages(val));
+    this.languageOptions = this.affForm.controls.langControl.valueChanges.pipe(map(val => this.filterLanguages(val)));
   }
 
   public ngOnInit() {
@@ -121,7 +123,7 @@ export class AffiliateFormComponent implements OnInit, AfterViewInit, OnDestroy 
       });
       this.affForm.controls.affiliate.patchValue({ 'sfObject': this.affiliate });
       this.isLoading = false;
-      this.languageOptions = this.affForm.controls.langControl.valueChanges.map(val => this.filterLanguages(val));
+      this.languageOptions = this.affForm.controls.langControl.valueChanges.pipe(map(val => this.filterLanguages(val)));
     }, err => {
       console.error(err);
       this.isLoading = false;
