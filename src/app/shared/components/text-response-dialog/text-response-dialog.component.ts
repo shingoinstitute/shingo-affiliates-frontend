@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core'
 import { MAT_DIALOG_DATA } from '@angular/material'
 
-// tslint:disable-next-line:interface-name
 export interface TextResponseData {
   title?: string
   message?: string

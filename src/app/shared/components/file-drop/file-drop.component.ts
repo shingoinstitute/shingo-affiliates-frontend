@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { compose } from '../../../util/functional'
 
-// tslint:disable-next-line:interface-name
 export interface FileFailure {
   reason: 'size' | 'accept' | 'multiple' | 'totalSize'
   file: File

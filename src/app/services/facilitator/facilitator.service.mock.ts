@@ -10,8 +10,7 @@ import {
 
 import { FacilitatorService } from './facilitator.service'
 import { Facilitator } from '../../facilitators/facilitator.model'
-import { CourseManager } from '../../workshops/course-manager.model'
-import { ISFSuccessResult } from '../api/base-api.abstract.service'
+import { SFSuccessResult } from '../api/base-api.abstract.service'
 
 const mockedService: FacilitatorService = mock(FacilitatorService)
 
@@ -19,7 +18,7 @@ export const EXPECTED_FACILITATORS: Facilitator[] = [
   new Facilitator({ Id: 'some sf id' }),
   new Facilitator({ Id: 'some other sf id' }),
 ]
-export const EXPECTED_SF_SUCCESS: ISFSuccessResult = {
+export const EXPECTED_SF_SUCCESS: SFSuccessResult = {
   id: 'some sf id',
   success: true,
   errors: [],

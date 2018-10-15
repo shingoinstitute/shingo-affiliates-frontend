@@ -33,7 +33,6 @@ export class Workshop extends SFObject {
   public static get CourseTypes(): WorkshopType[] {
     return ['Discover', 'Enable', 'Improve', 'Align', 'Build']
   }
-  // tslint:disable-next-line:max-line-length
   public static get WorkshopStatusTypes(): WorkshopStatusType[] {
     return [
       'Proposed',
@@ -293,7 +292,6 @@ export class Workshop extends SFObject {
   }
 
   // Utility methods
-  // tslint:disable-next-line:member-ordering
   public toJSON(): object {
     return {
       Id: this.sfId,

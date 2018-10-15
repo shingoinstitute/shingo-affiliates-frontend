@@ -2,12 +2,12 @@ import { Observable } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 // Angular Modules
 import { Injectable } from '@angular/core'
-import { HttpHeaders, HttpRequest, HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 
 // App Modules
 import {
   BaseAPIService,
-  ISFSuccessResult,
+  SFSuccessResult,
 } from '../api/base-api.abstract.service'
 import { Workshop } from '../../workshops/workshop.model'
 
@@ -18,7 +18,7 @@ import { tuple } from '../../util/functional'
 
 // RxJS operators
 
-export { ISFSuccessResult, Workshop }
+export { SFSuccessResult, Workshop }
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
   'Id',
   'Start_Date__c',
@@ -76,13 +76,13 @@ export class WorkshopService extends BaseAPIService {
 
   public create(obj: Workshop) {
     return this.http
-      .post<ISFSuccessResult>(this.baseUrl, obj, requestOptions(this.jwt))
+      .post<SFSuccessResult>(this.baseUrl, obj, requestOptions(this.jwt))
       .pipe(catchError(this.handleError))
   }
 
   public update(obj: Workshop) {
     return this.http
-      .put<ISFSuccessResult>(
+      .put<SFSuccessResult>(
         this.baseUrl + `/${obj.sfId}`,
         obj,
         requestOptions(this.jwt),
@@ -92,7 +92,7 @@ export class WorkshopService extends BaseAPIService {
 
   public delete(obj: Workshop) {
     return this.http
-      .delete<ISFSuccessResult>(
+      .delete<SFSuccessResult>(
         this.baseUrl + `/${obj.sfId}`,
         requestOptions(this.jwt),
       )

@@ -8,7 +8,7 @@ import { RequestOptionsArgs, Headers } from '@angular/http'
 // App Modules
 import {
   BaseAPIService,
-  ISFSuccessResult,
+  SFSuccessResult,
 } from '../api/base-api.abstract.service'
 import { Facilitator } from '../../facilitators/facilitator.model'
 
@@ -59,7 +59,7 @@ export class FacilitatorService extends BaseAPIService {
   public create(obj: Facilitator) {
     const { __name, ...rest } = JSON.parse(JSON.stringify(obj))
     return this.http
-      .post<ISFSuccessResult>(`${this.baseUrl}`, rest, requestOptions(this.jwt))
+      .post<SFSuccessResult>(`${this.baseUrl}`, rest, requestOptions(this.jwt))
       .pipe(
         map(res => res),
         catchError(err => this.handleError(err)),
@@ -69,7 +69,7 @@ export class FacilitatorService extends BaseAPIService {
   public map(obj: Facilitator) {
     const { __name, ...rest } = JSON.parse(JSON.stringify(obj))
     return this.http
-      .post<ISFSuccessResult>(
+      .post<SFSuccessResult>(
         `${this.baseUrl}/${obj.sfId}`,
         rest,
         requestOptions(this.jwt),
@@ -83,7 +83,7 @@ export class FacilitatorService extends BaseAPIService {
   public update(obj: Facilitator) {
     const { __name, ...rest } = JSON.parse(JSON.stringify(obj))
     return this.http
-      .put<ISFSuccessResult>(
+      .put<SFSuccessResult>(
         `${this.baseUrl}/${obj.sfId}`,
         rest,
         requestOptions(this.jwt),
@@ -96,7 +96,7 @@ export class FacilitatorService extends BaseAPIService {
 
   public delete(obj: Facilitator) {
     return this.http
-      .delete<ISFSuccessResult>(
+      .delete<SFSuccessResult>(
         `${this.baseUrl}/${obj.sfId}`,
         requestOptions(this.jwt),
       )
@@ -111,7 +111,7 @@ export class FacilitatorService extends BaseAPIService {
    */
   public disable(obj: Facilitator) {
     return this.http
-      .delete<ISFSuccessResult>(
+      .delete<SFSuccessResult>(
         `${this.baseUrl}/${obj.sfId}/unmap`,
         requestOptions(this.jwt),
       )

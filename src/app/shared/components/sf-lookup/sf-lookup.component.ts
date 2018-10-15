@@ -66,9 +66,9 @@ export class SfLookupComponent
   public isRequired = true
 
   @Output()
-  public onSelect = new EventEmitter<SFObject>()
+  public selected = new EventEmitter<SFObject>()
   @Output()
-  public onChange = new EventEmitter<string>()
+  public changed = new EventEmitter<string>()
 
   public lookup: FormGroup
 
@@ -156,7 +156,7 @@ export class SfLookupComponent
   public handleQuery(query: string) {
     if (query && query.length > 2) {
       this.isSearching = true
-      this.onChange.emit(query)
+      this.changed.emit(query)
 
       // let searchFn: Observable<SFObject[]>;
       let searchFn: Observable<SFObject[]> = this._as.search(
@@ -199,7 +199,7 @@ export class SfLookupComponent
 
   public onSelectChange(sfObject: SFObject) {
     this.sfObject = sfObject
-    this.onSelect.emit(sfObject)
+    this.selected.emit(sfObject)
 
     // If 'sfObject' inside the lookupForm is not required (as determined by `this.isRequired`)
     // then clear the form when an item is selected.

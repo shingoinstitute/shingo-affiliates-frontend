@@ -26,15 +26,15 @@ import { Filter } from '../../services/filters/filter.abstract'
 })
 export class FacilitatorDataTableComponent implements OnInit {
   @Output()
-  public onLoadComplete = new EventEmitter<void>()
+  public loadCompleted = new EventEmitter<void>()
   @Output()
-  public onDelete = new EventEmitter<Facilitator>()
+  public deleted = new EventEmitter<Facilitator>()
   @Output()
-  public onDisable = new EventEmitter<Facilitator>()
+  public disabled = new EventEmitter<Facilitator>()
   @Output()
-  public onReset = new EventEmitter<Facilitator>()
+  public reset = new EventEmitter<Facilitator>()
   @Output()
-  public onSave = new EventEmitter<Facilitator>()
+  public saved = new EventEmitter<Facilitator>()
 
   @Input()
   public displayedColumns = [
@@ -80,7 +80,7 @@ export class FacilitatorDataTableComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.onSave.subscribe(() => {
+    this.saved.subscribe(() => {
       this.selectedId = ''
     })
     // Init dataSource
@@ -106,7 +106,7 @@ export class FacilitatorDataTableComponent implements OnInit {
     // Let parent component know when data has been loaded
     this.facilitatorDataProvider.dataChange.subscribe(() => {
       if (this.facilitatorDataProvider.data.length > 0) {
-        this.onLoadComplete.emit()
+        this.loadCompleted.emit()
       }
     })
 
@@ -140,7 +140,7 @@ export class FacilitatorDataTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((f: Facilitator) => {
       if (f) {
-        this.onSave.emit(f)
+        this.saved.emit(f)
       }
     })
   }

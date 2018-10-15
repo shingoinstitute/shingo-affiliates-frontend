@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core'
 import { MAT_DIALOG_DATA } from '@angular/material'
 import { SFObject } from '../../models/sf-object.abstract.model'
 
-// tslint:disable-next-line:interface-name
 export interface AlertDialogData {
   sfObject?: any
   title?: string

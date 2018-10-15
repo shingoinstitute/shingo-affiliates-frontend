@@ -11,7 +11,7 @@ import {
 import { AffiliateService } from './affiliate.service'
 import { Affiliate } from '../../affiliates/affiliate.model'
 import { CourseManager } from '../../workshops/course-manager.model'
-import { ISFSuccessResult } from '../api/base-api.abstract.service'
+import { SFSuccessResult } from '../api/base-api.abstract.service'
 
 const mockedService: AffiliateService = mock(AffiliateService)
 
@@ -19,7 +19,7 @@ export const EXPECTED_AFFILIATES: Affiliate[] = [
   new Affiliate({ Id: 'some sf id' }),
   new Affiliate({ Id: 'some other sf id' }),
 ]
-export const EXPECTED_SF_SUCCESS: ISFSuccessResult = {
+export const EXPECTED_SF_SUCCESS: SFSuccessResult = {
   id: 'some sf id',
   success: true,
   errors: [],

@@ -33,7 +33,7 @@ import { CountriesService } from '../../services/countries/countries.service'
 import { FacilitatorService } from '../../services/facilitator/facilitator.service'
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
 import { WorkshopService } from '../../services/workshop/workshop.service'
-import { ISFSuccessResult } from '../../services/api/base-api.abstract.service'
+import { SFSuccessResult } from '../../services/api/base-api.abstract.service'
 import { Workshop, WorkshopType } from '../workshop.model'
 import { CourseManager } from '../course-manager.model'
 import { Facilitator } from '../../facilitators/facilitator.model'
@@ -58,7 +58,7 @@ const MILLI_DAY = 1000 * 60 * 60 * 24
 })
 export class WorkshopFormComponent implements OnInit {
   @Input()
-  public submitFunction: (workshop: Workshop) => Observable<ISFSuccessResult>
+  public submitFunction: (workshop: Workshop) => Observable<SFSuccessResult>
   @Input()
   public workshop: Workshop = new Workshop()
   @Input()
@@ -161,7 +161,7 @@ export class WorkshopFormComponent implements OnInit {
     }
 
     this.submitFunction(this.workshop).subscribe(
-      (result: ISFSuccessResult) => {
+      (result: SFSuccessResult) => {
         this.router.navigateByUrl(`/workshops/${result.id}`)
         this.isLoading = false
       },

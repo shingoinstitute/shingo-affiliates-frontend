@@ -56,7 +56,7 @@
     <ng-container matColumnDef="lastLogin">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Last Login </mat-header-cell>
       <mat-cell *matCellDef="let fac" class="dt-last-login-cell">
-          <p class="word-nowrap">{{ fac.lastLogin }}</p>
+        <p class="word-nowrap">{{ fac.lastLogin }}</p>
       </mat-cell>
     </ng-container>
 
@@ -75,7 +75,7 @@
           <button mat-mini-fab (click)="loginAs(fac)">
             <mat-icon class="icon-sm" svgIcon="supervisor_account_white"></mat-icon>
           </button>
-          
+
           <button mat-mini-fab (click)="selectedId = fac.sfId">
             <mat-icon class="icon-sm" svgIcon="edit_mode_white"></mat-icon>
           </button>
@@ -84,15 +84,15 @@
             <mat-icon class="icon-sm" svgIcon="description_white"></mat-icon>
           </a>
 
-          <button mat-mini-fab color="primary" (click)="onReset.emit(fac)">
+          <button mat-mini-fab color="primary" (click)="reset.emit(fac)">
             <mat-icon class="icon-sm" svgIcon="renew_white"></mat-icon>
           </button>
 
-          <button mat-mini-fab color="primary" (click)="onDisable.emit(fac)">
+          <button mat-mini-fab color="primary" (click)="disabled.emit(fac)">
             <mat-icon class="icon-sm" svgIcon="block_white"></mat-icon>
           </button>
 
-          <button mat-mini-fab color="primary" (click)="onDelete.emit(fac)">
+          <button mat-mini-fab color="primary" (click)="deleted.emit(fac)">
             <mat-icon class="icon-sm" svgIcon="delete_white"></mat-icon>
           </button>
         </ng-container>
@@ -103,7 +103,7 @@
             <mat-icon svgIcon="cancel_white"></mat-icon>
           </button>
 
-          <button mat-mini-fab (click)="onSave.emit(fac)">
+          <button mat-mini-fab (click)="saved.emit(fac)">
             <mat-icon svgIcon="save_white"></mat-icon>
           </button>
         </ng-container>
@@ -118,5 +118,6 @@
     <mat-spinner class="mat-accent"></mat-spinner>
   </div>
 
-  <mat-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+  <mat-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
 </div>

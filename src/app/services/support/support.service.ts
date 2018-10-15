@@ -2,12 +2,12 @@ import { catchError, map } from 'rxjs/operators'
 import { Observable } from 'rxjs'
 // tslint:disable:variable-name
 import { Injectable } from '@angular/core'
-import { HttpHeaders, HttpRequest, HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http'
 
 // App Modules
 import {
   BaseAPIService,
-  ISFSuccessResult,
+  SFSuccessResult,
 } from '../api/base-api.abstract.service'
 import { SupportPage } from './support.model'
 
@@ -58,15 +58,15 @@ export class SupportService extends BaseAPIService {
     )
   }
 
-  public create(obj: any): Observable<ISFSuccessResult> {
+  public create(obj: any): Observable<SFSuccessResult> {
     throw new Error('Method not implemented.')
   }
 
-  public update(obj: any): Observable<ISFSuccessResult> {
+  public update(obj: any): Observable<SFSuccessResult> {
     throw new Error('Method not implemented.')
   }
 
-  public delete(obj: any): Observable<ISFSuccessResult> {
+  public delete(obj: any): Observable<SFSuccessResult> {
     throw new Error('Method not implemented.')
   }
 

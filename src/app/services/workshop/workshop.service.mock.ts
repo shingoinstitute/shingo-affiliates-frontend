@@ -10,7 +10,7 @@ import {
 
 import { WorkshopService } from './workshop.service'
 import { Workshop } from '../../workshops/workshop.model'
-import { ISFSuccessResult } from '../api/base-api.abstract.service'
+import { SFSuccessResult } from '../api/base-api.abstract.service'
 
 const mockedService: WorkshopService = mock(WorkshopService)
 
@@ -18,7 +18,7 @@ export const EXPECTED_WORKSHOPS: Workshop[] = [
   new Workshop({ Id: 'some sf id' }),
   new Workshop({ Id: 'some other sf id' }),
 ]
-export const EXPECTED_SF_SUCCESS: ISFSuccessResult = {
+export const EXPECTED_SF_SUCCESS: SFSuccessResult = {
   id: 'some sf id',
   success: true,
   errors: [],

@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, ViewChild } from '@angular/core'
 import { Affiliate } from '../../affiliates/affiliate.model'
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
-import { ISFSuccessResult } from '../../services/api/base-api.abstract.service'
+import { SFSuccessResult } from '../../services/api/base-api.abstract.service'
 import { MatSnackBar, MatDialog } from '@angular/material'
 
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component'
@@ -72,7 +72,7 @@ export class AdminAffiliateTabComponent {
 
   public create(a: Affiliate) {
     this._as.create(a).subscribe(
-      (data: ISFSuccessResult) => {
+      (data: SFSuccessResult) => {
         this.handleCallback(data)
         this.snackbar.open('Affiliate Successfully Created.', null, {
           duration: 1500,
@@ -86,7 +86,7 @@ export class AdminAffiliateTabComponent {
 
   public update(a: Affiliate) {
     this._as.update(a).subscribe(
-      (data: ISFSuccessResult) => {
+      (data: SFSuccessResult) => {
         this.handleCallback(data)
         this.snackbar.open('Affiliate Successfully Updated.', null, {
           duration: 1500,

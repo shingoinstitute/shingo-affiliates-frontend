@@ -14,8 +14,7 @@ import { environment } from '../../../environments/environment'
 import { JWTService } from '../auth/auth.service'
 import { HttpClient } from '@angular/common/http'
 
-// tslint:disable-next-line:interface-name
-export interface ISFSuccessResult {
+export interface SFSuccessResult {
   id: string
   success: boolean
   errors: any[]
@@ -27,9 +26,9 @@ export abstract class BaseAPIService extends BaseService {
   // Contract for all APIServices;
   public abstract getAll(): Observable<any[]>
   public abstract getById(id: string): Observable<any>
-  public abstract create(obj: any): Observable<ISFSuccessResult>
-  public abstract update(obj: any): Observable<ISFSuccessResult>
-  public abstract delete(obj: any): Observable<ISFSuccessResult>
+  public abstract create(obj: any): Observable<SFSuccessResult>
+  public abstract update(obj: any): Observable<SFSuccessResult>
+  public abstract delete(obj: any): Observable<SFSuccessResult>
   public abstract search(query: string): Observable<any[]>
 
   public describe(

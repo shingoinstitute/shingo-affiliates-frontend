@@ -58,7 +58,6 @@ export class PasswordResetComponent implements OnInit {
           if (msg === 'EMAIL_NOT_FOUND' || msg === 'USER_NOT_FOUND') {
             this.errMsg = 'Email not found.'
           } else if (msg === 'RESET_TOKEN_EXPIRED') {
-            // tslint:disable-next-line:max-line-length
             this.errMsg =
               'Password-reset token expired. Password reset links expire 15 minutes after being sent to your email account. Please <a href="/forgotpassword">request a new link</a>.'
           } else if (err.status === 0) {

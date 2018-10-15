@@ -37,11 +37,11 @@ export class AffiliateDataTableComponent implements OnInit {
   public filters: Filter[] = []
 
   @Output()
-  public onSave = new EventEmitter<Affiliate>()
+  public saved = new EventEmitter<Affiliate>()
   @Output()
-  public onDelete = new EventEmitter<Affiliate>()
+  public deleted = new EventEmitter<Affiliate>()
   @Output()
-  public onForm = new EventEmitter<Affiliate>()
+  public formed = new EventEmitter<Affiliate>()
 
   @ViewChild(MatPaginator)
   public paginator: MatPaginator
@@ -72,7 +72,7 @@ export class AffiliateDataTableComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.onSave.subscribe(() => {
+    this.saved.subscribe(() => {
       this.selectedId = ''
     })
     // Init dataSource for data table
@@ -112,7 +112,7 @@ export class AffiliateDataTableComponent implements OnInit {
   }
 
   public delete(affiliate: Affiliate) {
-    this.onDelete.emit(affiliate)
+    this.deleted.emit(affiliate)
   }
 
   /**
@@ -135,7 +135,7 @@ export class AffiliateDataTableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(af => {
       if (af) {
-        this.onSave.emit(af)
+        this.saved.emit(af)
       }
     })
   }
