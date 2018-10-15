@@ -4,16 +4,7 @@
     "outDir": "../out-tsc/app",
     "baseUrl": "./",
     "module": "es2015",
-    "types": [
-      "node",
-      "lodash",
-      "q",
-      "selenium-webdriver",
-      "jasmine"
-    ]
+    "types": ["node", "lodash", "q", "selenium-webdriver", "jasmine"]
   },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["test.ts", "**/*.spec.ts", "**/*.mock.ts"]
 }

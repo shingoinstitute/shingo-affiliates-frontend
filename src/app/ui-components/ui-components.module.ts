@@ -84,6 +84,7 @@ import {
     QuickDetailItemComponent,
     QuickDetailsComponent,
     MaterialsDialog,
+    MatDatepickerModule,
   ],
   entryComponents: [ChangePasswordDialog, MaterialsDialog],
 })

@@ -1,12 +1,14 @@
 <mat-toolbar class="mat-primary" [ngClass]="{'logged-in-as': isLoggedInAs()}">
   <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
-  <span fxFlex><div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <b>{{getLoggedInInfo()}}</b></div></span>
+  <span fxFlex>
+    <div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <b>{{getLoggedInInfo()}}</b></div>
+  </span>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">
     <mat-icon svgIcon="account_circle_white"></mat-icon>
   </button>
 
-  <button mat-icon-button *ngIf="sidenavService.canToggle" (click)="sidenavService.toggleSidenav()">
+  <button fxShow="true" fxHide.gt-sm="true" mat-icon-button (click)="sidenav.toggle()">
     <mat-icon svgIcon="menu_white"></mat-icon>
   </button>
 
@@ -32,31 +34,35 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" [opened]="sidenavService && sidenavService.opened">
+  <mat-sidenav #sidenav [mode]="media.isActive('sm') ? 'over' : 'side'" [opened]="!media.isActive('sm')">
     <mat-nav-list>
       <ng-container *ngIf="isAuthenticated">
         <p class="nav-list-title">Main Menu</p>
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active" (click)="sidenavService.close()">Dashboard</a>
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
         <mat-divider></mat-divider>
-        <a mat-list-item routerLink="/workshops" routerLinkActive="active" (click)="sidenavService.close()">Workshops</a>
+        <a mat-list-item routerLink="/workshops" routerLinkActive="active">Workshops</a>
         <mat-divider></mat-divider>
         <ng-container *ngIf="auth.user && auth.user.isAdmin">
-          <a mat-list-item routerLink="/admin/affiliates" routerLinkActive="active" (click)="sidenavService.close()">Admin Panel</a>
+          <a mat-list-item routerLink="/admin/affiliates" routerLinkActive="active">Admin
+            Panel</a>
           <mat-divider></mat-divider>
         </ng-container>
         <p class="nav-list-title">Affiliate Materials</p>
-        <a mat-list-item nohref (click)="openMaterials('workshops')" (click)="sidenavService.close()">Workshop Materials</a>
+        <a mat-list-item nohref (click)="openMaterials('workshops')">Workshop
+          Materials</a>
         <mat-divider></mat-divider>
-        <a mat-list-item nohref (click)="openMaterials('forms')" (click)="sidenavService.close()">Forms/Evaluations</a>
+        <a mat-list-item nohref (click)="openMaterials('forms')">Forms/Evaluations</a>
         <mat-divider></mat-divider>
-        <a mat-list-item nohref (click)="openMaterials('marketing')" (click)="sidenavService.close()">Marketing Materials</a>
+        <a mat-list-item nohref (click)="openMaterials('marketing')">Marketing
+          Materials</a>
         <mat-divider></mat-divider>
       </ng-container>
 
       <p class="nav-list-title">Support</p>
-      <a mat-list-item routerLink="/support" (click)="sidenavService.close()">Support Home</a>
+      <a mat-list-item routerLink="/support">Support Home</a>
       <mat-divider></mat-divider>
-      <mat-expansion-panel class="mat-elevation-z nav-support-category" *ngFor="let category of supportCategories" [style.border-bottom]="'1px solid lightgrey'">
+      <mat-expansion-panel class="mat-elevation-z nav-support-category" *ngFor="let category of supportCategories"
+        [style.border-bottom]="'1px solid lightgrey'">
         <mat-expansion-panel-header>
           <mat-panel-title class="panel-title">
             {{ category }}
@@ -65,7 +71,8 @@
 
         <mat-list *ngIf="supportCategoryPages[category]">
           <mat-list-item *ngFor="let page of supportCategoryPages[category]" class="nav-support-list-item">
-            <a class="mat-caption" routerLink="/support/{{ page.Id }}" (click)="sidenavService.close()">{{ page.title }}</a>
+            <a class="mat-caption" routerLink="/support/{{ page.Id }}">{{ page.title
+              }}</a>
           </mat-list-item>
         </mat-list>
 

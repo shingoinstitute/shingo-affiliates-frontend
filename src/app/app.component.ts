@@ -14,7 +14,6 @@ import { Router, NavigationEnd, NavigationStart } from '@angular/router'
 // App Modules
 import { AuthService } from './services/auth/auth.service'
 import { WorkshopService } from './services/workshop/workshop.service'
-import { SidenavService } from './services/sidenav/sidenav.service'
 import { RouterService } from './services/router/router.service'
 import { MaterialsDialog } from './ui-components/materials/materials-dialog/materials-dialog.component'
 
@@ -26,13 +25,14 @@ import { Subscription } from 'rxjs'
 import { SupportService } from './services/support/support.service'
 import { SupportPage } from './services/support/support.model'
 import { UserState } from './shared/models/user.model'
+import { ObservableMedia } from '@angular/flex-layout'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnDestroy, AfterViewInit {
+export class AppComponent implements OnDestroy {
   public supportCategories: string[] = []
   public supportCategoryPages: { [key: string]: SupportPage[] } = {}
 
@@ -50,10 +50,10 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     public router: Router,
     public auth: AuthService,
     public ws: WorkshopService,
-    public sidenavService: SidenavService,
     public routerService: RouterService,
     public supportService: SupportService,
     public dialog: MatDialog,
+    public media: ObservableMedia,
   ) {
     this.initIconRegistry()
 
@@ -72,14 +72,6 @@ export class AppComponent implements OnDestroy, AfterViewInit {
           !this.activeRoute.match(/.*support.*/gi)
         ) {
           this.authenticateOnLoad()
-        } else if (
-          this.activeRoute === '/login' ||
-          this.activeRoute.match(/.*password.*/gi)
-        ) {
-          setTimeout(() => {
-            // tslint:disable-next-line:no-non-null-assertion
-            this.sidenavService.sidenav!.close()
-          }, 0)
         }
       }
     })
@@ -93,32 +85,9 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     })
   }
 
-  public ngAfterViewInit() {
-    this.sidenavService.sidenav = this.sidenav
-    this.getInitialWindowWidth()
-  }
-
   public ngOnDestroy() {
     // tslint:disable-next-line:no-unused-expression
     this.routeToLoginSubscription && this.routeToLoginSubscription.unsubscribe()
-  }
-
-  /**
-   * Emits an event whenever the window is resized.
-   */
-  @HostListener('window:resize', ['$event'])
-  public onResize(event: any) {
-    this.sidenavService.onResize(event.target.innerWidth)
-  }
-
-  public getInitialWindowWidth() {
-    setTimeout(() => {
-      if (window && window.innerWidth) {
-        this.sidenavService.onResize(window.innerWidth)
-      } else {
-        this.getInitialWindowWidth()
-      }
-    }, 100)
   }
 
   /**

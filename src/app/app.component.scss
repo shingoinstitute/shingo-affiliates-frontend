@@ -1,27 +1,27 @@
 @import '../assets/sass/_globals';
 
 .toolbar-menu-btn {
-   text-decoration: none;
-   color: black;
-   display: flex;
-   flex-direction: row;
-   align-items: center;
-   padding: $default-margin ($default-margin * 2) $default-margin $default-margin;
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: $default-margin ($default-margin * 2) $default-margin $default-margin;
 }
 a.toolbar-menu-btn:hover {
-   background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 .toolbar-menu-btn > mat-icon {
-   margin-right: $default-margin * 2;
+  margin-right: $default-margin * 2;
 }
 .toolbar-menu-btn > p {
-   margin: 0;
+  margin: 0;
 }
 .menu-btn-container {
-   display: flex;
-   flex-direction: column;
-   justify-content: left;
-   align-content: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-content: left;
 }
 div.spinner-container {
   position: fixed;

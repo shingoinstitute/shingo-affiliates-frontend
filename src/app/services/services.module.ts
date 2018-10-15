@@ -1,17 +1,14 @@
 import { NgModule, ModuleWithProviders, InjectionToken } from '@angular/core'
 import { AffiliateService } from './affiliate/affiliate.service'
 import { AnnouncementService } from './announcement/announcement.service'
-import { Announcement } from './announcement/announcement.model'
 import { AuthService, JWTService } from './auth/auth.service'
 import { CountriesService } from './countries/countries.service'
 import { FacilitatorService } from './facilitator/facilitator.service'
 import { RouterService } from './router/router.service'
-import { SidenavService } from './sidenav/sidenav.service'
 import { SupportService } from './support/support.service'
 import { WorkshopService } from './workshop/workshop.service'
 import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-factory.service'
 import { FacilitatorFilterFactory } from './filters/facilitators/facilitator-filter-factory.service'
-import { Workshop } from '../workshops/workshop.model'
 import { DataProviderFactory } from './data-provider/data-provider-factory.service'
 import { IsValidGuard } from './auth/is-valid.guard'
 import { UserResolver } from './auth/user.resolver'
@@ -29,7 +26,6 @@ export class ServicesModule {
         CountriesService,
         FacilitatorService,
         RouterService,
-        SidenavService,
         SupportService,
         AffiliateService,
         WorkshopService,

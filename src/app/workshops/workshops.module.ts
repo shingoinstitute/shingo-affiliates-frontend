@@ -29,7 +29,6 @@ import {
   MatInputModule,
   MatAutocompleteModule,
   MatSelectModule,
-  MatDatepickerModule,
   MatButtonModule,
   MatProgressSpinnerModule,
   MatIconModule,
@@ -37,7 +36,9 @@ import {
   MatProgressBarModule,
   MatSnackBarModule,
   MatCardModule,
+  MatDatepickerModule,
 } from '@angular/material'
+import { MatMomentDateModule } from '@angular/material-moment-adapter'
 
 @NgModule({
   imports: [
@@ -53,6 +54,7 @@ import {
     MatInputModule,
     MatAutocompleteModule,
     MatSelectModule,
+    MatMomentDateModule,
     MatDatepickerModule,
     MatButtonModule,
     MatProgressSpinnerModule,

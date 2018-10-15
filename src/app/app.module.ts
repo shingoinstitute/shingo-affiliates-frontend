@@ -45,6 +45,10 @@ import {
   MatProgressSpinnerModule,
   MatExpansionModule,
 } from '@angular/material'
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MatMomentDateAdapterOptions,
+} from '@angular/material-moment-adapter'
 
 @NgModule({
   declarations: [AppComponent],
@@ -78,6 +82,10 @@ import {
       provide: HTTP_INTERCEPTORS,
       useFactory: LoggerInterceptorProvider,
       multi: true,
+    },
+    {
+      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+      useValue: { useUtc: true } as MatMomentDateAdapterOptions,
     },
   ],
   bootstrap: [AppComponent],
