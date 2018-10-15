@@ -23,7 +23,9 @@ export class DataProviderFactory {
     return new DataProvider<WorkshopService, Workshop>(this._ws)
   }
 
-  public getAffiliateDataProvider(): DataProvider<AffiliateService, Affiliate> {
+  public getAffiliateDataProvider():
+    | DataProvider<AffiliateService, Affiliate>
+    | undefined {
     try {
       return new DataProvider<AffiliateService, Affiliate>(this._as)
     } catch (error) {

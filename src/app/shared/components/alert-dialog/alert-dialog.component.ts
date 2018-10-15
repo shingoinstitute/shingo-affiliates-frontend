@@ -18,7 +18,7 @@ export interface AlertDialogData {
 export class AlertDialogComponent {
   public sfObj: SFObject
   public message: string
-  public title: string
+  public title: string | null
   public destructive: boolean
   public confirm: string
   public cancel: string

@@ -43,21 +43,21 @@ export class User {
   }
   // SF Properties
   /* tslint:disable:variable-name */
-  private Id: string
-  private Name: string
-  private Email: string
-  private AccountId: string
-  private Title: string
-  private Photograph__c: string
-  private Biography__c: string
+  private Id!: string
+  private Name!: string
+  private Email!: string
+  private AccountId!: string
+  private Title!: string
+  private Photograph__c!: string
+  private Biography__c!: string
   private _state: UserState = UserState.Normal
   /* tslint:enable:variable-name */
 
   // Auth Properties
-  private id: number
-  private role: { id: number; name: string }
+  private id!: number
+  private role!: { id: number; name: string }
 
-  constructor(user?) {
+  constructor(user?: any) {
     if (user) return Object.assign(this, user)
   }
 }

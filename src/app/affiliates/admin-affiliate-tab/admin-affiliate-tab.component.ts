@@ -1,11 +1,11 @@
-import { Component, Output, EventEmitter, ViewChild } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
 import { Affiliate } from '../../affiliates/affiliate.model'
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
 import { SFSuccessResult } from '../../services/api/base-api.abstract.service'
 import { MatSnackBar, MatDialog } from '@angular/material'
 
 import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component'
-import { Router, NavigationExtras } from '@angular/router'
+import { Router } from '@angular/router'
 import { AffiliateDataTableComponent } from '../../affiliates/affiliate-data-table/affiliate-data-table.component'
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component'
 
@@ -16,10 +16,10 @@ import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert
 })
 export class AdminAffiliateTabComponent {
   @ViewChild(AffiliateDataTableComponent)
-  public dataTable: AffiliateDataTableComponent
+  public dataTable!: AffiliateDataTableComponent
 
   public displayedColumns = ['logo', 'name', 'website', 'actions']
-  public selectedAffiliate: Affiliate
+  public selectedAffiliate!: Affiliate
   public isLoading = true
 
   constructor(
@@ -74,7 +74,7 @@ export class AdminAffiliateTabComponent {
     this._as.create(a).subscribe(
       (data: SFSuccessResult) => {
         this.handleCallback(data)
-        this.snackbar.open('Affiliate Successfully Created.', null, {
+        this.snackbar.open('Affiliate Successfully Created.', undefined, {
           duration: 1500,
         })
       },
@@ -88,7 +88,7 @@ export class AdminAffiliateTabComponent {
     this._as.update(a).subscribe(
       (data: SFSuccessResult) => {
         this.handleCallback(data)
-        this.snackbar.open('Affiliate Successfully Updated.', null, {
+        this.snackbar.open('Affiliate Successfully Updated.', undefined, {
           duration: 1500,
         })
       },

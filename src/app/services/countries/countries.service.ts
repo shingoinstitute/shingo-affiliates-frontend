@@ -27,9 +27,11 @@ export class CountriesService extends BaseService {
       'asia',
       'europe',
       'oceania',
-    ].map(region => {
-      return this.http.get(`${this._baseUrl}/${region}?fields=name`)
-    })
+    ].map(region =>
+      this.http.get<Array<{ name: string }>>(
+        `${this._baseUrl}/${region}?fields=name`,
+      ),
+    )
 
     const filterNames = [
       'United Kingdom of Great Britain and Northern Ireland',
@@ -39,11 +41,11 @@ export class CountriesService extends BaseService {
     ]
 
     return observableMerge(...countryRequestsByRegion).pipe(
-      map((data: any) => {
-        let countryNames = data.map(value => value.name).sort()
-        countryNames = without(countryNames, filterNames)
-        countryNames = ['United States', 'United Kingdom'].concat(countryNames)
-        return countryNames
+      map(data => {
+        const countryNames = data.map(value => value.name).sort()
+        return ['United States', 'United Kingdom'].concat(
+          without(countryNames, ...filterNames),
+        )
       }),
       catchError(this.handleError),
     )

@@ -1,6 +1,13 @@
 import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
 
+export const notUndefined = <T>(v: T): v is Exclude<T, undefined> =>
+  typeof v !== 'undefined'
+
+export const truthy = <T>(
+  v: T,
+): v is Exclude<T, false | 0 | '' | null | undefined> => Boolean(v)
+
 export const requestOptions = (
   jwt: JWTService,
   ...headerList: Array<[string, string | string[]]>
@@ -62,7 +69,7 @@ export function parseErrResponse(obj: object): string {
   // tslint:disable:no-parameter-reassignment
   const key = 'error'
   while (obj.hasOwnProperty(key)) {
-    obj = obj[key]
+    obj = (obj as any)[key]
     if (typeof obj === 'string') {
       const message: string = obj
       if (message.match(/\{.*\}/g)) {

@@ -13,7 +13,7 @@ import { FileFailure } from '../../shared/components/file-drop/file-drop.compone
   styleUrls: ['./workshop-detail.component.scss'],
 })
 export class WorkshopDetailComponent implements OnInit {
-  public workshop: Workshop
+  public workshop!: Workshop
   public attendeeFile: any
   public evaluations: File[] = []
   public errors: string[] = []

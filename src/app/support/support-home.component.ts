@@ -15,7 +15,7 @@ export class SupportHomeComponent {
 
   public categories: string[] = []
 
-  public query: string
+  public query: string | undefined
 
   constructor(public supportService: SupportService, public router: Router) {
     supportService.describe().subscribe(desc => {

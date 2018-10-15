@@ -35,12 +35,15 @@ export abstract class BaseAPIService extends BaseService {
     route: 'workshops' | 'facilitators' | 'affiliates' | 'support',
     http: HttpClient,
     jwt: JWTService,
-  ): Observable<any> {
+  ) {
     return http
-      .get<any>(`${this.APIHost()}/${route}/describe`, requestOptions(jwt))
+      .get<{ fields: any[] }>(
+        `${this.APIHost()}/${route}/describe`,
+        requestOptions(jwt),
+      )
       .pipe(
         map(data => {
-          const props = {}
+          const props: { [k: string]: any } = {}
 
           data.fields
             .filter(

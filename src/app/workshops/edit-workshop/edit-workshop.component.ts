@@ -21,7 +21,7 @@ export class EditWorkshopComponent implements OnInit {
     this.workshop = this.route.snapshot.data['workshop']
   }
 
-  public save(data) {
+  public save(data: Workshop) {
     return this._ws.update(data)
   }
 }

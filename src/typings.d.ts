@@ -1,12 +1,12 @@
 /* SystemJS module definition */
-declare var module: NodeModule;
+declare var module: NodeModule
 interface NodeModule {
-  id: string;
+  id: string
 }
 
-type DateRange = [Date, Date] & { 2?: void };
+type DateRange = [Date, Date] & { 2?: void }
 
 // Declare `withoutTime` function to Date prototype (defined in main.ts)
 interface Date {
-  withoutTime(): Date;
+  withoutTime(): Date
 }

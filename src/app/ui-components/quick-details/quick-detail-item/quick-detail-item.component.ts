@@ -8,5 +8,5 @@ import { Announcement } from '../../../services/announcement/announcement.model'
 })
 export class QuickDetailItemComponent {
   @Input()
-  public announcement: Announcement
+  public announcement!: Announcement
 }

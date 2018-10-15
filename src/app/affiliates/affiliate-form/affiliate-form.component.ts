@@ -41,7 +41,7 @@ export class AffiliateFormComponent
   public affiliate: Affiliate = new Affiliate()
 
   @ViewChild('formContainer')
-  public formContainer: ElementRef
+  public formContainer!: ElementRef
 
   public extraFields: string[] = [
     'Public_Contact__c',
@@ -49,14 +49,14 @@ export class AffiliateFormComponent
     'Public_Contact_Phone__c',
   ].concat(DEFAULT_AFFILIATE_SEARCH_FIELDS)
 
-  public state: AffiliateFormState
+  public state!: AffiliateFormState
   public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS
   public languageOptions: any
-  public isLoading: boolean
-  public isDialog: boolean
-  public routeSubscription: Subscription
-  public affForm: FormGroup
-  public affiliateSummary: string
+  public isLoading = false
+  public isDialog!: boolean
+  public routeSubscription!: Subscription
+  public affForm!: FormGroup
+  public affiliateSummary!: string
 
   constructor(
     @Optional()
@@ -190,7 +190,7 @@ export class AffiliateFormComponent
   public map() {
     this._as.map(this.affiliate).subscribe(
       data => {
-        this.snackbar.open('Successfully mapped a new Affiliate', null, {
+        this.snackbar.open('Successfully mapped a new Affiliate', undefined, {
           duration: 2000,
         })
         if (!this.isDialog) {
@@ -206,7 +206,7 @@ export class AffiliateFormComponent
   public create() {
     this._as.create(this.affiliate).subscribe(
       data => {
-        this.snackbar.open('Successfully created new Affiliate', null, {
+        this.snackbar.open('Successfully created new Affiliate', undefined, {
           duration: 2000,
         })
         if (!this.isDialog) {
@@ -222,7 +222,7 @@ export class AffiliateFormComponent
   public update() {
     this._as.update(this.affiliate).subscribe(
       data => {
-        this.snackbar.open('Update Successful', null, { duration: 2000 })
+        this.snackbar.open('Update Successful', undefined, { duration: 2000 })
         if (!this.isDialog) {
           this.location.back()
         }

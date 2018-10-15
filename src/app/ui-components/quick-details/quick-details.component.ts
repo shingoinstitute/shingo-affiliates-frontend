@@ -11,7 +11,7 @@ import { MaterialsDialog } from '../materials/materials-dialog/materials-dialog.
   providers: [AnnouncementService],
 })
 export class QuickDetailsComponent implements OnInit {
-  public announcements: Announcement[]
+  public announcements: Announcement[] = []
 
   constructor(
     public announcement: AnnouncementService,

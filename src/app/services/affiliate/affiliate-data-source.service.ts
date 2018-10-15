@@ -13,7 +13,7 @@ export class AffiliateDataSource extends APIDataSource<
 > {
   constructor(
     public _adp: DataProvider<AffiliateService, Affiliate>,
-    public paginator?: MatPaginator,
+    public paginator: MatPaginator,
     public sort?: MatSort,
   ) {
     super(_adp, paginator, sort)
@@ -21,6 +21,8 @@ export class AffiliateDataSource extends APIDataSource<
 
   protected getSortedData(): Affiliate[] {
     const data = this._adp.data.slice()
+    if (!this.sort) return data
+    const sort = this.sort
 
     if (!this.sort.active || this.sort.direction === '') {
       return data
@@ -30,7 +32,7 @@ export class AffiliateDataSource extends APIDataSource<
       let propA: number | string = ''
       let propB: number | string = ''
 
-      switch (this.sort.active) {
+      switch (sort.active) {
         case 'name':
           ;[propA, propB] = [a.name, b.name]
           break
@@ -44,9 +46,7 @@ export class AffiliateDataSource extends APIDataSource<
       const valueA = isNaN(+propA) ? propA : +propA
       const valueB = isNaN(+propB) ? propB : +propB
 
-      return (
-        (valueA < valueB ? -1 : 1) * (this.sort.direction === 'asc' ? 1 : -1)
-      )
+      return (valueA < valueB ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1)
     })
   }
 }

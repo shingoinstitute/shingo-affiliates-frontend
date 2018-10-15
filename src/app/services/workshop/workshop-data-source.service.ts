@@ -13,8 +13,8 @@ export class WorkshopDataSource extends APIDataSource<
 > {
   constructor(
     public _wdp: DataProvider<WorkshopService, Workshop>,
-    public paginator?: MatPaginator,
-    public sort?: MatSort,
+    public paginator: MatPaginator,
+    public sort: MatSort,
   ) {
     super(_wdp, paginator, sort)
   }

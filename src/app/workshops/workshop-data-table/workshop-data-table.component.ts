@@ -23,7 +23,7 @@ import {
   MatDialog,
   MatDatepickerInputEvent,
 } from '@angular/material'
-import { Workshop, WorkshopStatusType } from '../workshop.model'
+import { Workshop } from '../workshop.model'
 import { Filter } from '../../services/filters/filter.abstract'
 import {
   AlertDialogComponent,
@@ -48,18 +48,18 @@ export class WorkshopDataTableComponent implements OnInit {
     'actions',
   ]
   @Input()
-  public dataSource: WorkshopDataSource | null
+  public dataSource!: WorkshopDataSource | null
   @Input()
   public filters: Filter[] = []
   @Output()
   public editClick: EventEmitter<string> = new EventEmitter<string>()
 
   @ViewChild(MatSort)
-  public sort: MatSort
+  public sort!: MatSort
   @ViewChild(MatPaginator)
-  public paginator: MatPaginator
+  public paginator!: MatPaginator
 
-  public selectedWorkshop: Workshop
+  public selectedWorkshop: Workshop | undefined
   public get selectedSfId() {
     return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''
   }

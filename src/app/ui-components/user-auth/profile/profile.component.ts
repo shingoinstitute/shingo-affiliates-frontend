@@ -12,7 +12,7 @@ import { SimpleMessageDialog } from '../../../shared/components/simple-message-d
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  public user: User
+  public user!: User
 
   constructor(public route: ActivatedRoute, public dialog: MatDialog) {}
 

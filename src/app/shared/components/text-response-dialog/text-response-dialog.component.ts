@@ -18,7 +18,7 @@ export class TextResponseDialogComponent {
   public message: string
   public acceptText: string
   public cancelText: string
-  public reason: string
+  public reason: string | undefined
   public destructive: boolean
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: TextResponseData) {

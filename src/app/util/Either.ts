@@ -12,9 +12,7 @@ const mapEither = <L, R, RR = R, LL = L>(
 ) => (either: Either<L, R>): Either<LL, RR> => {
   if (isRight(either)) {
     return right(mright(either[1]))
-  }
-
-  if (isLeft(either)) {
+  } else {
     return typeof mleft === 'function'
       ? left(mleft(either[1]))
       : ((either as any) as Left<LL>)

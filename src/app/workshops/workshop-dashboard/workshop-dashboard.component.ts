@@ -36,7 +36,6 @@ import {
   WorkshopProperties,
   WorkshopService,
 } from '../../services/workshop/workshop.service'
-import { WorkshopStatusType } from '../../workshops/workshop.model'
 
 import { at } from 'lodash'
 
@@ -62,31 +61,31 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   }
 
   @ViewChildren(MatCheckbox)
-  public selectedFilters: MatCheckbox[]
+  public selectedFilters: MatCheckbox[] = []
 
   @ViewChild('startDateFilterPicker')
-  public startDFPicker: MatDatepicker<Date>
+  public startDFPicker!: MatDatepicker<Date>
   @ViewChild('endDateFilterPicker')
-  public endDFPicker: MatDatepicker<Date>
+  public endDFPicker!: MatDatepicker<Date>
 
   @ViewChild('startDFInput')
-  public startDFInput: ElementRef
+  public startDFInput!: ElementRef
   @ViewChild('endDFInput')
-  public endDFInput: ElementRef
+  public endDFInput!: ElementRef
 
   @ViewChild(MatSelect)
-  public statusSelect: MatSelect
+  public statusSelect!: MatSelect
   @ViewChild('textSearchInput')
-  public textSearchInput: ElementRef
+  public textSearchInput!: ElementRef
 
   @ViewChild(WorkshopDataTableComponent)
-  public workshopTable: WorkshopDataTableComponent
+  public workshopTable!: WorkshopDataTableComponent
 
   public _showDateRange = false
   public _showFilters = false
   public _showStatusFilter = false
   public _showTextFilter = false
-  public dateRange: DateRange = [null, null]
+  public dateRange: DateRange | [null, null] = [null, null]
   public deactivated: string[] = []
   public displayedColumns: WorkshopProperties[] = [
     'workshopType',
@@ -113,9 +112,9 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     'edit',
     'actions',
   ]
-  public filterOption: string
+  public filterOption!: string
   public filterOptions: string[] = [] // the list of available filter options shown to the user
-  public filters: Filter[] // the list of filter objects used to do the actual filtering
+  public filters: Filter[] = [] // the list of filter objects used to do the actual filtering
   public selectedStatuses: any[] = []
   public statuses: string[] = []
   public textSearch = ''
@@ -241,7 +240,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       'by Text': this.filters.findIndex(f => f.name === 'by Text'),
       'by Date': this.filters.findIndex(f => f.name === 'by Date'),
     }
-    let deactivate = []
+    let deactivate: any[] = []
     switch (value) {
       case 'by Upcoming Workshops': // upcoming
         deactivate = at(indices, [
@@ -292,10 +291,12 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
         if (cbc.checked) payload = { data: this.dateRange, deactivate }
     }
 
-    if (cbc.checked) this.applyFilter(indices[cbc.source.value], payload)
+    if (cbc.checked)
+      // tslint:disable-next-line:no-non-null-assertion
+      this.applyFilter((indices as any)[cbc.source.value], payload!)
     else {
       this.removeDeactivated(at(this.filterOptions, deactivate))
-      this.applyFilter(indices[cbc.source.value], {
+      this.applyFilter((indices as any)[cbc.source.value], {
         data: undefined,
         deactivate: [],
       })
@@ -303,7 +304,10 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.deactivateFilters()
   }
 
-  public applyFilter(index: number, { data, deactivate }) {
+  public applyFilter(
+    index: number,
+    { data, deactivate }: { data: any; deactivate: string[] | number[] },
+  ) {
     this.filters[index].dataChange.next(data)
     this.deactivated = this.deactivated.concat(
       at(this.filterOptions, deactivate),
@@ -348,9 +352,11 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
       .subscribe(describe => this.getWorkshopStatuses(describe))
   }
 
-  public getWorkshopStatuses(describe) {
+  public getWorkshopStatuses(describe: { [k: string]: any }) {
     try {
-      this.statuses = describe.status.picklistValues.map(option => option.label)
+      this.statuses = describe.status.picklistValues.map(
+        (option: { label: string }) => option.label,
+      )
     } catch (e) {
       console.warn(
         'Failed to get workshop statuses from `this.describe.status.picklistValues`. Using default values.',

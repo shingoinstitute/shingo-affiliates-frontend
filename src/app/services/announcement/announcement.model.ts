@@ -15,11 +15,15 @@ export class Announcement implements AnnouncementInterface {
     this.priority = priority
   }
 
-  public static create(obj) {
+  public static create(obj: {
+    title?: string
+    message?: string
+    priority?: number
+  }) {
     return new Announcement(
       obj.title || '',
       obj.message || '',
-      obj.priority || -1,
+      typeof obj.priority === 'number' ? obj.priority : -1,
     )
   }
 }

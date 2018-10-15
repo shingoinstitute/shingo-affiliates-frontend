@@ -2,11 +2,11 @@ import { SFObject } from '../../shared/models/sf-object.abstract.model'
 
 export class SupportPage extends SFObject {
   /* tslint:disable:variable-name */
-  public Id: string
-  public Name: string
-  public Category__c: string
-  public Content__c: string
-  public Title__c: string
+  public Id!: string
+  public Name!: string
+  public Category__c!: string
+  public Content__c!: string
+  public Title__c!: string
   /* tslint:enable:variable-name */
 
   public get name(): string {

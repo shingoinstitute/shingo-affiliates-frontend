@@ -8,6 +8,7 @@ import { BaseAPIService } from './base-api.abstract.service'
 import { SFObject } from '../../shared/models/sf-object.abstract.model'
 import { DataProvider } from '../data-provider/data-provider.service'
 import { Filter } from '../filters/filter.abstract'
+import { truthy } from '../../util/util'
 
 // RxJS operators
 
@@ -21,7 +22,7 @@ export abstract class APIDataSource<
 
   constructor(
     public _dp: DataProvider<S, T>,
-    public paginator?: MatPaginator,
+    public paginator: MatPaginator,
     public sort?: MatSort,
   ) {
     super()
@@ -34,7 +35,7 @@ export abstract class APIDataSource<
       this.sort,
       ...this._dp.filters,
     ].filter(change => !!change)
-    const dataChanges = changes.map(change => {
+    const dataChanges = changes.filter(truthy).map(change => {
       if (change instanceof DataProvider || change instanceof Filter) {
         return change.dataChange
       } else if (change instanceof MatPaginator) {
@@ -42,6 +43,8 @@ export abstract class APIDataSource<
       } else if (change instanceof MatSort) {
         return change.sortChange
       }
+      const _exhaustiveCheck: never = change
+      return _exhaustiveCheck
     })
 
     return observableMerge(...dataChanges).pipe(

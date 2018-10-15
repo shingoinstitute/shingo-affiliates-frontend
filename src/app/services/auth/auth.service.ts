@@ -21,7 +21,12 @@ export class JWTService {
   public get jwt(): string | null {
     return this.cs.get('x-jwt') || null
   }
-  public set jwt(token: string) {
+  public set jwt(token: string | null) {
+    if (token == null) {
+      this.cs.remove('x-jwt')
+      return
+    }
+
     this.cs.put('x-jwt', token)
   }
   public removeToken() {
@@ -37,7 +42,7 @@ export class AuthService extends BaseService {
   public get user() {
     return this._user
   }
-  public _user: User
+  public _user: User | null = null
 
   public get authHost(): string {
     return `${this._baseUrl}/auth`
@@ -45,7 +50,7 @@ export class AuthService extends BaseService {
 
   protected _baseUrl = environment.authApiUrl
 
-  private adminToken: string
+  private adminToken: string | null = null
 
   constructor(public http: HttpClient, private jwtService: JWTService) {
     super()
@@ -139,8 +144,11 @@ export class AuthService extends BaseService {
 
     return this.http.get<User>(`${this.authHost}/valid`, options).pipe(
       map(res => {
-        this.handleLogin(res, this._user.state)
-        return this._user
+        this.handleLogin(
+          res,
+          (this._user && this._user.state) || UserState.Normal,
+        )
+        return this._user as User
       }),
     )
   }
@@ -160,12 +168,14 @@ export class AuthService extends BaseService {
       )
   }
 
-  public loginAs(facilitator: Facilitator): any {
+  public loginAs(facilitator: Facilitator) {
     const options = {
       ...requestOptions(this.jwtService),
       observe: 'response' as 'response',
     }
-    if (!this._user.isAdmin) throw Error('Cannot loginAs if not Admin')
+
+    if (!this._user || !this._user.isAdmin)
+      throw Error('Cannot loginAs if not Admin')
 
     this.adminToken = this.jwtService.jwt
 
@@ -187,7 +197,7 @@ export class AuthService extends BaseService {
       )
   }
 
-  private handleLogin(res: any, state: UserState = UserState.Normal): any {
+  private handleLogin(res: any, state: UserState = UserState.Normal) {
     const data = res.body
     this._user = new User(data)
     this._user.state = state
@@ -200,10 +210,10 @@ export class AuthService extends BaseService {
     return data
   }
 
-  private handleLogout(data: any): UserState {
-    const prevState = this._user.state || UserState.Normal
-    if (this._user.state === UserState.LoggedInAs) {
-      this.user.state = UserState.Normal
+  private handleLogout(_data: any): UserState {
+    const prevState = (this._user && this._user.state) || UserState.Normal
+    if (this._user && this._user.state === UserState.LoggedInAs) {
+      this._user.state = UserState.Normal
       this.jwtService.jwt = this.adminToken
       this.adminToken = null
     } else {

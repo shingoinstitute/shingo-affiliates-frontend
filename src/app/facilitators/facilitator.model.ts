@@ -1,4 +1,4 @@
-import * as dateFormat from 'dateformat'
+import moment from 'moment'
 
 import { Affiliate } from '../affiliates/affiliate.model'
 import { SFObject } from '../shared/models/sf-object.abstract.model'
@@ -100,10 +100,11 @@ export class Facilitator extends SFObject {
     if (names.length === 0) {
       this.firstName = this.lastName = ''
     } else if (names.length === 1) {
-      this.firstName = names.pop()
+      this.firstName = names[names.length - 1]
       this.lastName = ''
     } else if (names.length > 1) {
-      this.lastName = names.pop()
+      // tslint:disable-next-line:no-non-null-assertion
+      this.lastName = names.pop()!
       this.firstName = names.join(' ')
     }
   }
@@ -114,7 +115,7 @@ export class Facilitator extends SFObject {
 
   public get lastLogin() {
     if (this._lastLogin === '') return null
-    return dateFormat(new Date(this._lastLogin), 'dd mmm, yyyy @ hh:mm:ss')
+    return moment(this._lastLogin).format('DD MMM, YYYY @ hh:mm:ss')
   }
 
   // SF Properties
@@ -132,9 +133,9 @@ export class Facilitator extends SFObject {
   /* tslint:enable:variable-name */
 
   // Auth Properties
-  public _id: number
+  public _id!: number
   public _role: { name: string } = { name: 'Facilitator' }
-  public _lastLogin: string
+  public _lastLogin = ''
 
   constructor(facilitator?: any) {
     super()

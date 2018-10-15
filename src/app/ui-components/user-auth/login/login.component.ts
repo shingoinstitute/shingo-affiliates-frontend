@@ -12,14 +12,14 @@ import { RouterService } from '../../../services/router/router.service'
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  public email: string
-  public password: string
+  public email!: string
+  public password!: string
 
   public isLoading = true
   public didLoad = false
 
-  public errBody: string
-  public errMsg: string
+  public errBody!: string
+  public errMsg!: string
 
   constructor(
     public auth: AuthService,

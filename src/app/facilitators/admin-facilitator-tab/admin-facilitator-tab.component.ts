@@ -22,11 +22,11 @@ import { Filter } from '../../services/filters/filter.abstract'
 })
 export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
   @ViewChild('nameFilterInput')
-  public nameFilterInput: ElementRef
+  public nameFilterInput!: ElementRef
 
   public isLoading = true
   public displayedColumns: string[] = ['name']
-  public newFacilitator: Facilitator
+  public newFacilitator!: Facilitator
   public filters: Filter[] = []
   public nameFilterText = ''
 
@@ -138,7 +138,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
     this._fs.resetPassword(fac.email).subscribe(
       data => {
         this.apiCallbackHandler(data)
-        this.snackbar.open('Password reset email has been sent.', null, {
+        this.snackbar.open('Password reset email has been sent.', undefined, {
           duration: 2000,
         })
       },
@@ -152,7 +152,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
     this._fs.update(fac).subscribe(
       data => {
         this.apiCallbackHandler(data)
-        this.snackbar.open('Facilitator Successfully Updated', null, {
+        this.snackbar.open('Facilitator Successfully Updated', undefined, {
           duration: 2000,
         })
       },
@@ -166,7 +166,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
     this._fs.create(facilitator).subscribe(
       data => {
         this.apiCallbackHandler(data)
-        this.snackbar.open('Facilitator Succesfully Created', null, {
+        this.snackbar.open('Facilitator Succesfully Created', undefined, {
           duration: 2000,
         })
       },
@@ -182,7 +182,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
     this._fs.delete(fac).subscribe(
       data => {
         this.apiCallbackHandler(data)
-        this.snackbar.open('Facilitator Successfully Deleted.', null, {
+        this.snackbar.open('Facilitator Successfully Deleted.', undefined, {
           duration: 2000,
         })
       },

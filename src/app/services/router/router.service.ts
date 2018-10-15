@@ -10,7 +10,8 @@ export class RouterService {
 
   public nextRoute() {
     if (this.routeStack.length > 0) {
-      this.router.navigateByUrl(this.routeStack.shift())
+      // tslint:disable-next-line:no-non-null-assertion
+      this.router.navigateByUrl(this.routeStack.shift()!)
     } else {
       this.router.navigateByUrl(this.defaultRoute)
     }
@@ -19,7 +20,8 @@ export class RouterService {
   public navigateRoutes(routes: string[]) {
     this.routeStack = Array.from(new Set(routes))
     if (this.routeStack.length > 0) {
-      this.router.navigateByUrl(this.routeStack.shift())
+      // tslint:disable-next-line:no-non-null-assertion
+      this.router.navigateByUrl(this.routeStack.shift()!)
     }
   }
 }

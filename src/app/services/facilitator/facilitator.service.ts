@@ -146,7 +146,7 @@ export class FacilitatorService extends BaseAPIService {
       )
   }
 
-  public describe(): Observable<Facilitator> {
+  public describe() {
     return super.describe('facilitators', this.http, this.jwt)
   }
 
@@ -163,7 +163,7 @@ export class FacilitatorService extends BaseAPIService {
       )
   }
 
-  public changePassword(token: string, password) {
+  public changePassword(token: string, password: string) {
     return this.http
       .post(
         `${this.baseUrl}/resetpassword/token`,

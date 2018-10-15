@@ -46,20 +46,20 @@ import { ValidationErrors } from '@angular/forms/src/directives/validators'
 export class SfLookupComponent
   implements OnInit, AfterViewInit, ControlValueAccessor {
   @Input()
-  public sfObject:
+  public sfObject!:
     | SFObject
     | 'facilitator'
     | 'affiliate'
     | 'workshop'
     | 'courseManager'
   @Input()
-  public placeholder: string
+  public placeholder!: string
   @Input()
-  public fields: string[]
+  public fields!: string[]
   @Input()
   public extraArgs: any
   @Input()
-  public displayFn: (o: SFObject) => string
+  public displayFn!: (o: SFObject) => string
 
   // Should the lookup component input field be required?
   @Input()
@@ -70,7 +70,7 @@ export class SfLookupComponent
   @Output()
   public changed = new EventEmitter<string>()
 
-  public lookup: FormGroup
+  public lookup!: FormGroup
 
   public objects: SFObject[] = []
   public isSearching = false
@@ -136,7 +136,8 @@ export class SfLookupComponent
       // Get the FormControl object
       const sfObjectFormControl = this.lookup.get('sfObject')
       // Add the validator to the FormControl
-      sfObjectFormControl.setValidators([Validators.required])
+      if (sfObjectFormControl)
+        sfObjectFormControl.setValidators([Validators.required])
     }
 
     this.lookup.controls.sfObject.valueChanges
@@ -207,14 +208,15 @@ export class SfLookupComponent
       // Get the FormControl from the lookup FormGroup
       const sfObjectFormControl = this.lookup.get('sfObject')
       // Set the FormControl value to '' to clear it
-      sfObjectFormControl.setValue('')
+      if (sfObjectFormControl) sfObjectFormControl.setValue('')
     }
   }
 
   public reduceErrors() {
     return Object.keys(this.lookup.controls).reduce(
       (errors: any, name: string) => {
-        errors[name] = this.lookup.get(name).errors
+        const gotten = this.lookup.get(name)
+        if (gotten) errors[name] = gotten.errors
         return errors
       },
       {},

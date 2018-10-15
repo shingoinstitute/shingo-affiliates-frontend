@@ -46,14 +46,14 @@ export class FacilitatorDataTableComponent implements OnInit {
     'actions',
   ]
   @Input()
-  public dataSource: FacilitatorDataSource | null
+  public dataSource: FacilitatorDataSource | null = null
   @Input()
   public filters: Filter[] = []
 
   @ViewChild(MatPaginator)
-  public paginator: MatPaginator
+  public paginator!: MatPaginator
   @ViewChild(MatSort)
-  public sort: MatSort
+  public sort!: MatSort
 
   public facilitatorDataProvider: DataProvider<FacilitatorService, Facilitator>
   public selectedId = ''
@@ -67,7 +67,7 @@ export class FacilitatorDataTableComponent implements OnInit {
     'refresh',
     'loginAs',
   ]
-  public isLoading: boolean
+  public isLoading = false
 
   constructor(
     public dialog: MatDialog,

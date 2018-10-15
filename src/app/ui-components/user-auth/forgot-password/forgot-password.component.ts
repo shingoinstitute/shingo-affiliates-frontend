@@ -11,9 +11,9 @@ import { FacilitatorService } from '../../../services/facilitator/facilitator.se
   styleUrls: ['./forgot-password.component.scss'],
 })
 export class ForgotPasswordComponent implements OnInit {
-  public email: string
-  public errMsg: string
-  public errBody: string
+  public email!: string
+  public errMsg!: string
+  public errBody!: string
   public isLoading = false
 
   constructor(
@@ -37,7 +37,7 @@ export class ForgotPasswordComponent implements OnInit {
 
     this.isLoading = true
     this._fs.resetPassword(this.email).subscribe(
-      data => {
+      _data => {
         this.isLoading = false
         const dialogRef = this.dialog.open(SimpleMessageDialog, {
           data: `An email has been sent to ${

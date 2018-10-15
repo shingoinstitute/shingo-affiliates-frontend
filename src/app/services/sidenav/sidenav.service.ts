@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core'
 import { MatSidenav } from '@angular/material'
 import { AuthService } from '../auth/auth.service'
-import { AppComponent } from '../../app.component'
 import { Router, NavigationEnd } from '@angular/router'
-import { RouterService } from '../router/router.service'
 
 @Injectable()
 export class SidenavService {
-  public _sidenav: MatSidenav
+  public _sidenav: MatSidenav | undefined
   public get sidenav() {
     return this._sidenav
   }
-  public set sidenav(s: MatSidenav) {
+
+  public set sidenav(s: MatSidenav | undefined) {
     this._sidenav = s
     setTimeout(() => {
       if (!this._isMobile && this._sidenav) {
@@ -22,7 +21,7 @@ export class SidenavService {
     }, 0)
   }
 
-  public _isMobile: boolean
+  public _isMobile = false
   public get isMobile() {
     return this._isMobile
   }
@@ -37,15 +36,15 @@ export class SidenavService {
     }
   }
 
-  public _isAuth: boolean
+  public _isAuth = false
   public get isAuth() {
     return this._isAuth
   }
   public set isAuth(auth: boolean) {
     this._isAuth = auth
-    if (this.sidenav && !this.isMobile) {
+    if (this._sidenav && !this.isMobile) {
       this._sidenav.open()
-    } else if (this.sidenav) {
+    } else if (this._sidenav) {
       this._sidenav.close()
     }
   }
@@ -67,7 +66,8 @@ export class SidenavService {
       if (route instanceof NavigationEnd) {
         const url = route.url
         if (url.match(/.*password.*/gi) || url === '/login') {
-          this.sidenav.close()
+          // tslint:disable-next-line:no-unused-expression
+          this.sidenav && this.sidenav.close()
         } else {
           this.open()
         }
@@ -83,7 +83,7 @@ export class SidenavService {
 
   public toggleSidenav() {
     if (this.canToggle) {
-      return this.sidenav.toggle()
+      return this.sidenav && this.sidenav.toggle()
     }
   }
 

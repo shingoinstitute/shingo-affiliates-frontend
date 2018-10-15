@@ -30,7 +30,7 @@ import { RouterService } from '../../services/router/router.service'
 })
 export class AffiliateDataTableComponent implements OnInit {
   @Input()
-  public dataSource: AffiliateDataSource | null
+  public dataSource: AffiliateDataSource | null = null
   @Input()
   public displayedColumns: string[] = ['logo', 'name', 'website']
   @Input()
@@ -44,9 +44,9 @@ export class AffiliateDataTableComponent implements OnInit {
   public formed = new EventEmitter<Affiliate>()
 
   @ViewChild(MatPaginator)
-  public paginator: MatPaginator
+  public paginator!: MatPaginator
   @ViewChild(MatSort)
-  public sort: MatSort
+  public sort!: MatSort
 
   public affiliateDataProvider: DataProvider<AffiliateService, Affiliate>
   public isLoading = true
@@ -65,7 +65,10 @@ export class AffiliateDataTableComponent implements OnInit {
     public _as: AffiliateService,
     public router: RouterService,
   ) {
-    this.affiliateDataProvider = providerFactory.getAffiliateDataProvider()
+    // getAffiliateDataProvider reroutes if any error occurs in method
+    // therefore the returned undefined value should never be used, but it is necessary because of the try catch statement
+    // tslint:disable-next-line:no-non-null-assertion
+    this.affiliateDataProvider = providerFactory.getAffiliateDataProvider()!
     this.affiliateDataProvider.dataLoading.subscribe(
       loading => (this.isLoading = loading),
     )
@@ -107,7 +110,7 @@ export class AffiliateDataTableComponent implements OnInit {
     }
   }
 
-  public trackByIndex(index, item) {
+  public trackByIndex(_index: number, item: any) {
     return item.sfId
   }
 
@@ -122,7 +125,8 @@ export class AffiliateDataTableComponent implements OnInit {
   public openFormDialog(affiliate: Affiliate) {
     // determine height and width value of dialog
     const height = window.innerWidth < 960 ? '100vh' : '90vh'
-    const width = window.innerWidth < 960 ? String(window.innerWidth) : null
+    const width =
+      window.innerWidth < 960 ? String(window.innerWidth) : undefined
 
     const dialogRef = this.dialog.open(AffiliateFormComponent, {
       data: {

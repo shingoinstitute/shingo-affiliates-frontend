@@ -3,41 +3,37 @@ import { BehaviorSubject } from 'rxjs'
 import { Workshop } from '../../../workshops/workshop.model'
 
 export class WorkshopDateRangeFilter extends Filter {
-  public _range: DateRange
+  public _range: DateRange | null = null
 
-  protected dataChangeSource: BehaviorSubject<DateRange>
+  protected dataChangeSource: BehaviorSubject<DateRange | null>
 
   constructor(name: string) {
     super(name)
-    this.dataChangeSource = new BehaviorSubject<DateRange>(null)
-    this.dataChangeSource.subscribe(range => (this._range = range))
+    this.dataChangeSource = new BehaviorSubject<DateRange | null>(null)
+    this.dataChangeSource.subscribe(range => {
+      this._range = range
+    })
   }
 
   public applyFilter(workshops: Workshop[]): Workshop[] {
     if (!this._range) return workshops
-    else if (this._range[0] && this._range[1]) {
-      return workshops.filter(w => {
-        return (
+    const range = this._range
+    if (range[0] && range[1]) {
+      return workshops.filter(
+        w =>
           this.greaterThanWithoutTime(
             new Date(w.startDate),
-            new Date(this._range[0]),
+            new Date(range[0]),
           ) &&
-          this.lessThanWithoutTime(
-            new Date(w.endDate),
-            new Date(this._range[1]),
-          )
-        )
-      })
-    } else if (this._range[0]) {
-      return workshops.filter(w =>
-        this.greaterThanWithoutTime(
-          new Date(w.startDate),
-          new Date(this._range[0]),
-        ),
+          this.lessThanWithoutTime(new Date(w.endDate), new Date(range[1])),
       )
-    } else if (this._range[1]) {
+    } else if (range[0]) {
       return workshops.filter(w =>
-        this.lessThanWithoutTime(new Date(w.endDate), new Date(this._range[1])),
+        this.greaterThanWithoutTime(new Date(w.startDate), new Date(range[0])),
+      )
+    } else if (range[1]) {
+      return workshops.filter(w =>
+        this.lessThanWithoutTime(new Date(w.endDate), new Date(range[1])),
       )
     } else {
       return workshops

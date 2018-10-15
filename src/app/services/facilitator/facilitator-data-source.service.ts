@@ -13,8 +13,8 @@ export class FacilitatorDataSource extends APIDataSource<
 > {
   constructor(
     public _fdp: DataProvider<FacilitatorService, Facilitator>,
-    public paginator?: MatPaginator,
-    public sort?: MatSort,
+    public paginator: MatPaginator,
+    public sort: MatSort,
   ) {
     super(_fdp, paginator, sort)
   }
@@ -41,7 +41,7 @@ export class FacilitatorDataSource extends APIDataSource<
           ;[propA, propB] = [a.role as string, b.role as string]
           break
         case 'lastLogin':
-          ;[propA, propB] = [a.lastLogin, b.lastLogin]
+          ;[propA, propB] = [a.lastLogin as string, b.lastLogin as string]
           break
         case 'organization':
           ;[propA, propB] = [a.affiliate.name, b.affiliate.name]

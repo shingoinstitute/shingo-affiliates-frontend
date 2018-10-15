@@ -1,31 +1,8 @@
 // Angular Modules
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  QueryList,
-  Input,
-  OnInit,
-} from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import {
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-  FormArray,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms'
-import {
-  MatCheckbox,
-  MatAutocomplete,
-  MatAutocompleteTrigger,
-  MatOption,
-  MatOptionSelectionChange,
-  MatSnackBar,
-} from '@angular/material'
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
+import { MatSnackBar } from '@angular/material'
 
 // App Modules
 import { AuthService } from '../../services/auth/auth.service'
@@ -34,13 +11,13 @@ import { FacilitatorService } from '../../services/facilitator/facilitator.servi
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
 import { WorkshopService } from '../../services/workshop/workshop.service'
 import { SFSuccessResult } from '../../services/api/base-api.abstract.service'
-import { Workshop, WorkshopType } from '../workshop.model'
+import { Workshop } from '../workshop.model'
 import { CourseManager } from '../course-manager.model'
 import { Facilitator } from '../../facilitators/facilitator.model'
 import { Affiliate } from '../../affiliates/affiliate.model'
 
 // RxJS Modules
-import { Observable, Subscription, BehaviorSubject, Subject } from 'rxjs'
+import { Observable } from 'rxjs'
 
 // RxJS operators
 
@@ -58,11 +35,11 @@ const MILLI_DAY = 1000 * 60 * 60 * 24
 })
 export class WorkshopFormComponent implements OnInit {
   @Input()
-  public submitFunction: (workshop: Workshop) => Observable<SFSuccessResult>
+  public submitFunction!: (workshop: Workshop) => Observable<SFSuccessResult>
   @Input()
   public workshop: Workshop = new Workshop()
   @Input()
-  public isNewWorkshop: boolean
+  public isNewWorkshop!: boolean
 
   public isLoading = false
 
@@ -72,7 +49,7 @@ export class WorkshopFormComponent implements OnInit {
 
   public countries: string[] = []
   public countryOptions: string[] = []
-  public workshopForm: FormGroup
+  public workshopForm!: FormGroup
   public courseManagers: CourseManager[] = []
   public facilitatorOpts: Facilitator[] = []
   public affiliates: Affiliate[] = []
@@ -156,6 +133,7 @@ export class WorkshopFormComponent implements OnInit {
   public onSubmit() {
     this.isLoading = true
     this.workshop = this.mergeWorkshopData()
+    if (!this.auth.user) return
     if (!this.auth.user.isAdmin) {
       this.workshop.affiliateId = this.auth.user.affiliate
     }
@@ -185,7 +163,7 @@ export class WorkshopFormComponent implements OnInit {
     return merge(this.workshop, form)
   }
 
-  public contactDisplayWith(value) {
+  public contactDisplayWith(value: null | undefined | { name: string }) {
     return value ? value.name : ''
   }
 
@@ -202,13 +180,18 @@ export class WorkshopFormComponent implements OnInit {
     this.workshop.courseManager = courseManager
   }
 
-  public checkValidSFObject(control): void {
+  public checkValidSFObject(control: FormControl): void {
     if (control.value && !control.value.sfId) {
       control.setValue(undefined)
     }
   }
 
   public getAffiliate(): string {
+    if (!this.auth.user) {
+      throw new Error(
+        'Dont know how this happened, but the user is not logged in',
+      )
+    }
     if (this.workshopForm.value.affiliate.sfObject)
       return this.workshopForm.value.affiliate.sfObject.sfId
     else return this.auth.user.affiliate
@@ -220,6 +203,7 @@ export class WorkshopFormComponent implements OnInit {
    */
   public subscribeToCountry() {
     const countryFC = this.workshopForm.get('country')
+    if (!countryFC) return
     countryFC.valueChanges.subscribe(
       q =>
         (this.countryOptions = q
@@ -291,7 +275,7 @@ export class WorkshopFormComponent implements OnInit {
   public getWorkshopTypes() {
     try {
       this.workshopTypes = this.describe.workshopType.picklistValues.map(
-        option => option.label,
+        (option: { label: string }) => option.label,
       )
     } catch (e) {
       console.warn(
@@ -303,7 +287,7 @@ export class WorkshopFormComponent implements OnInit {
   public getWorkshopStatuses() {
     try {
       this.statuses = this.describe.status.picklistValues.map(
-        option => option.label,
+        (option: { label: string }) => option.label,
       )
     } catch (e) {
       console.warn(

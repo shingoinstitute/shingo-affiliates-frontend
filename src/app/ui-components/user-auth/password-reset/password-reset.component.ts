@@ -11,11 +11,11 @@ import { FacilitatorService } from '../../../services/facilitator/facilitator.se
   styleUrls: ['./password-reset.component.scss'],
 })
 export class PasswordResetComponent implements OnInit {
-  public password: string
-  public passwordConfirm: string
+  public password!: string
+  public passwordConfirm!: string
   // public errMsg: string;
-  public errMsg: string
-  public errBody: string
+  public errMsg!: string
+  public errBody!: string
   public isLoading = false
 
   constructor(

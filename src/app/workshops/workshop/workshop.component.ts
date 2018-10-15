@@ -19,7 +19,7 @@ import {
 })
 export class WorkshopComponent {
   @Input()
-  public workshop: Workshop
+  public workshop!: Workshop
 
   constructor(
     public router: Router,

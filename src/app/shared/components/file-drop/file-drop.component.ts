@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { compose } from '../../../util/functional'
+import { truthy } from '../../../util/util'
 
 export interface FileFailure {
   reason: 'size' | 'accept' | 'multiple' | 'totalSize'
@@ -25,11 +26,11 @@ const testGlob = (accept: string[]) => (type: string) => {
 
 const fileAcceptable = (accept: string[]) => (file: File): boolean => {
   const splitted = file.name.split('.')
-  const extension = splitted.length && '.' + splitted[splitted.length - 1]
+  const extension = splitted.length > 0 && '.' + splitted[splitted.length - 1]
 
   return (
     accept.includes(file.type) ||
-    accept.includes(extension) ||
+    (extension && accept.includes(extension)) ||
     testGlob(accept)(file.type)
   )
 }
@@ -55,7 +56,7 @@ function convertFileList(fl: FileList): File[] {
     files.push(fl.item(i))
   }
 
-  return files
+  return files.filter(truthy)
 }
 
 const supportsFileUpload = () => 'FormData' in window && 'FileReader' in window

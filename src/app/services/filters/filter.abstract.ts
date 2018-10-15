@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from 'rxjs'
+import { BehaviorSubject } from 'rxjs'
 
 export abstract class Filter {
   public get name(): string {
@@ -8,7 +8,7 @@ export abstract class Filter {
     return this.dataChangeSource
   }
 
-  protected dataChangeSource: BehaviorSubject<any>
+  protected dataChangeSource!: BehaviorSubject<any>
 
   constructor(protected _name: string) {}
 

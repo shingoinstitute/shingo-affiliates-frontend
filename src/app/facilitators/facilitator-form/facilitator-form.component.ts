@@ -23,7 +23,7 @@ import {
 import { Facilitator, FacilitatorRoleType } from '../facilitator.model'
 import { FacilitatorService } from '../../services/facilitator/facilitator.service'
 import { Affiliate } from '../../affiliates/affiliate.model'
-import { Observable } from 'rxjs'
+import { Observable, Subscription } from 'rxjs'
 
 declare var $: any
 
@@ -37,20 +37,20 @@ export class FacilitatorFormComponent
   @Input()
   public facilitator: Facilitator = new Facilitator()
   @Input()
-  public isDialog: boolean
+  public isDialog = false
 
   @ViewChild('formContainer')
-  public formContainer: ElementRef
+  public formContainer!: ElementRef
 
-  public formGroup: FormGroup
+  public formGroup!: FormGroup
   public isValid = false
-  public isLoading: boolean
-  public isSearching: boolean
+  public isLoading = false
+  public isSearching = false
   public facilitatorsOpts: Facilitator[] = []
   public roles: FacilitatorRoleType[] = Facilitator.DEFAULT_ROLE_OPTIONS
-  public didSelectExistingSFContact: boolean
+  public didSelectExistingSFContact = false
 
-  public routeSubscription
+  public routeSubscription!: Subscription
 
   constructor(
     @Optional()
@@ -174,7 +174,7 @@ export class FacilitatorFormComponent
     this._fs.update(this.facilitator).subscribe(
       data => {
         this.isLoading = false
-        this.snackbar.open('Update Successful', null, { duration: 2000 })
+        this.snackbar.open('Update Successful', undefined, { duration: 2000 })
         this.location.back()
       },
       err => {
@@ -189,7 +189,7 @@ export class FacilitatorFormComponent
     this._fs.create(this.facilitator).subscribe(
       data => {
         this.isLoading = false
-        this.snackbar.open('Successfully Created New Facilitator.', null, {
+        this.snackbar.open('Successfully Created New Facilitator.', undefined, {
           duration: 2000,
         })
         this.location.back()
@@ -210,7 +210,7 @@ export class FacilitatorFormComponent
     this._fs.map(this.facilitator).subscribe(
       data => {
         this.isLoading = false
-        this.snackbar.open('Successfully Created New Facilitator.', null, {
+        this.snackbar.open('Successfully Created New Facilitator.', undefined, {
           duration: 2000,
         })
         this.location.back()

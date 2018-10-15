@@ -4,21 +4,12 @@ import {
   Component,
   ViewChild,
   HostListener,
-  ElementRef,
   AfterViewInit,
   OnDestroy,
 } from '@angular/core'
 import { MatIconRegistry, MatSidenav, MatDialog } from '@angular/material'
 import { DomSanitizer } from '@angular/platform-browser'
-import {
-  Router,
-  NavigationEnd,
-  RouteConfigLoadEnd,
-  NavigationStart,
-  RouteConfigLoadStart,
-  RoutesRecognized,
-  NavigationCancel,
-} from '@angular/router'
+import { Router, NavigationEnd, NavigationStart } from '@angular/router'
 
 // App Modules
 import { AuthService } from './services/auth/auth.service'
@@ -28,7 +19,7 @@ import { RouterService } from './services/router/router.service'
 import { MaterialsDialog } from './ui-components/materials/materials-dialog/materials-dialog.component'
 
 // RxJS Modules
-import { Subject, Observable, Observer, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 
 // RxJS operators
 
@@ -46,11 +37,11 @@ export class AppComponent implements OnDestroy, AfterViewInit {
   public supportCategoryPages: { [key: string]: SupportPage[] } = {}
 
   @ViewChild('sidenav')
-  public sidenav: MatSidenav
+  public sidenav!: MatSidenav
 
   public isLoading = true
   public isAuthenticated = false
-  public activeRoute: string
+  public activeRoute = '/'
   public routeToLoginSubscription: Subscription
 
   constructor(
@@ -86,7 +77,8 @@ export class AppComponent implements OnDestroy, AfterViewInit {
           this.activeRoute.match(/.*password.*/gi)
         ) {
           setTimeout(() => {
-            this.sidenavService.sidenav.close()
+            // tslint:disable-next-line:no-non-null-assertion
+            this.sidenavService.sidenav!.close()
           }, 0)
         }
       }
@@ -115,7 +107,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
    * Emits an event whenever the window is resized.
    */
   @HostListener('window:resize', ['$event'])
-  public onResize(event) {
+  public onResize(event: any) {
     this.sidenavService.onResize(event.target.innerWidth)
   }
 
@@ -171,7 +163,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
     )
   }
 
-  public openMaterials(folder: string) {
+  public openMaterials(folder: 'workshops' | 'forms' | 'marketing') {
     const folders = { workshops: false, marketing: false, forms: false }
     folders[folder] = true
     this.dialog.open(MaterialsDialog, {
@@ -435,7 +427,7 @@ export class AppComponent implements OnDestroy, AfterViewInit {
   }
 
   public isLoggedInAs(): boolean {
-    return this.auth.user && this.auth.user.state === UserState.LoggedInAs
+    return !!(this.auth.user && this.auth.user.state === UserState.LoggedInAs)
   }
 
   public getLoggedInInfo(): string {

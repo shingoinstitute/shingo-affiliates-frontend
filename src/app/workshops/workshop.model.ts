@@ -1,17 +1,11 @@
+import moment from 'moment'
 import { Affiliate } from '../affiliates/affiliate.model'
 import { Facilitator } from '../facilitators/facilitator.model'
 import { CourseManager } from './course-manager.model'
 import { SFObject } from '../shared/models/sf-object.abstract.model'
-import * as dateFormat from 'dateformat'
 
-export type WorkshopType =
-  | 'Discover'
-  | 'Enable'
-  | 'Improve'
-  | 'Align'
-  | 'Build'
-  | ''
-  | undefined
+export type WorkshopType = 'Discover' | 'Enable' | 'Improve' | 'Align' | 'Build'
+
 export type WorkshopStatusType =
   | 'Proposed'
   | 'Verified'
@@ -20,8 +14,6 @@ export type WorkshopStatusType =
   | 'Invoiced, Not Paid'
   | 'Archived'
   | 'Cancelled'
-  | ''
-  | undefined
 
 /**
  * @desc Defines the interface to work with Workshops. Also provides a 'Facade' of the Salesforce API Naming conventions.
@@ -243,7 +235,7 @@ export class Workshop extends SFObject {
       workshop.Course_Manager__r = new CourseManager(workshop.Course_Manager__r)
       if (workshop.facilitators && workshop.facilitators instanceof Array) {
         workshop.facilitators = workshop.facilitators.map(
-          fac => new Facilitator(fac),
+          (fac: any) => new Facilitator(fac),
         )
       }
       return Object.assign(this, workshop)
@@ -252,7 +244,7 @@ export class Workshop extends SFObject {
 
   public static formatDate(d: string | number | Date) {
     try {
-      return dateFormat(new Date(d as any), 'dd mmm, yyyy')
+      return moment(new Date(d)).format('DD MMM, YYYY')
     } catch (e) {
       return ''
     }

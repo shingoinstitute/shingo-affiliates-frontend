@@ -2,12 +2,12 @@ import { SFObject } from '../shared/models/sf-object.abstract.model'
 
 export class CourseManager extends SFObject {
   /* tslint:disable:variable-name */
-  public Id: string
-  public Name: string
-  public Email: string
+  public Id!: string
+  public Name!: string
+  public Email!: string
   /* tslint:enable:variable-name */
 
-  constructor(courseManager?) {
+  constructor(courseManager?: any) {
     super()
     if (courseManager) return Object.assign(this, courseManager)
   }
