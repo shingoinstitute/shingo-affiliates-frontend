@@ -1,30 +1,37 @@
-import { JWTService } from '../services/auth/auth.service';
-import { HttpHeaders } from '@angular/common/http';
+import { JWTService } from '../services/auth/auth.service'
+import { HttpHeaders } from '@angular/common/http'
 
 export const requestOptions = (
   jwt: JWTService,
-  ...headerList: Array<[string, string | string[]]>) => {
+  ...headerList: Array<[string, string | string[]]>
+) => {
   const headers = headerList.reduce(
     (h, c) => h.set(c[0], c[1]),
-    new HttpHeaders().set('x-jwt', jwt.jwt || '')
-  );
+    new HttpHeaders().set('x-jwt', jwt.jwt || ''),
+  )
 
   return {
     headers,
-    withCredentials: true
-  };
-};
+    withCredentials: true,
+  }
+}
 
 /**
  * Converts a salesforce field name to a camel case string
  * @param s The salesforce field name (often ends in __c)
  */
-export const sfToCamelCase = (s: string): string => {
-  s = s.split('__c').join('').split('_').join(' ');
-  return s.replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
-    return index === 0 ? letter.toLowerCase() : letter.toUpperCase();
-  }).replace(/\s+/g, '');
-};
+export const sfToCamelCase = (s: string): string =>
+  s
+    .split('__c')
+    .join('')
+    .split('_')
+    .join(' ')
+    .replace(
+      /(?:^\w|[A-Z]|\b\w)/g,
+      (letter, index) =>
+        index === 0 ? letter.toLowerCase() : letter.toUpperCase(),
+    )
+    .replace(/\s+/g, '')
 
 /**
  * Error responses from the API like to change error objects into JSON strings
@@ -52,22 +59,24 @@ export const sfToCamelCase = (s: string): string => {
  * @param obj The error object
  */
 export function parseErrResponse(obj: object): string {
-  const key = 'error';
+  // tslint:disable:no-parameter-reassignment
+  const key = 'error'
   while (obj.hasOwnProperty(key)) {
-    obj = obj[key];
+    obj = obj[key]
     if (typeof obj === 'string') {
-      const message: string = obj;
+      const message: string = obj
       if (message.match(/\{.*\}/g)) {
         try {
-          obj = JSON.parse(message);
-          console.warn(obj);
+          obj = JSON.parse(message)
+          console.warn(obj)
         } catch (e) {
-          return '';
+          return ''
         }
       } else {
-        return message;
+        return message
       }
     }
   }
-  return '';
+  return ''
+  // tslint:enable:no-parameter-reassignment
 }

@@ -1,21 +1,20 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { ActionPendingComponent } from './action-pending.component';
+import { ActionPendingComponent } from './action-pending.component'
 
 describe('ActionPendingComponent', () => {
-  let component: ActionPendingComponent;
-  let fixture: ComponentFixture<ActionPendingComponent>;
+  let component: ActionPendingComponent
+  let fixture: ComponentFixture<ActionPendingComponent>
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ActionPendingComponent ]
-    })
-    .compileComponents();
-  }));
+      declarations: [ActionPendingComponent],
+    }).compileComponents()
+  }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ActionPendingComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-});
+    fixture = TestBed.createComponent(ActionPendingComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
+})
