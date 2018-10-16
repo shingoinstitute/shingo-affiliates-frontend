@@ -3,11 +3,17 @@
     <img class="profile-img" [src]="user.photo">
     <div fxLayout="column">
       <h1 class="mat-title">{{ user.name }}</h1>
-      <b>{{user.title}}</b>
+      <strong>{{user.title}}</strong>
       <br>
-      <i>{{user.email}}</i>
-      <h3>Biography</h3>
-      <div class="bio" [innerHtml]="user.bio || '<i>Please contact the Shingo Coordinator with a draft biography...</i>'"></div>
+      <em>{{user.email}}</em>
+      <form [formGroup]="profileForm" novalidate>
+        <h3>Biography</h3>
+        <div class="bio" [innerHtml]="user.bio || '<em>Please contact the Shingo Coordinator with a draft biography...</em>'"></div>
+        <h3>Language/Locale</h3>
+        <mat-form-field>
+          <input matInput placeholder="Language code" formControlName="locale" (blur)="saveLocale()">
+        </mat-form-field>
+      </form>
       <div class="profile-actions" fxLayout>
         <button mat-raised-button (click)="changePassword()">Change Password</button>
       </div>

@@ -109,3 +109,5 @@ export function compose(...fns: Function[]) {
 }
 
 export const tuple = <A, B>(a: A, b: B): [A, B] => [a, b]
+export const fst = <A, B>(t: [A, B]) => t[0]
+export const snd = <A, B>(t: [A, B]) => t[1]

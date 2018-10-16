@@ -1,7 +1,7 @@
 <mat-toolbar class="mat-primary" [ngClass]="{'logged-in-as': isLoggedInAs()}">
   <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
   <span fxFlex>
-    <div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <b>{{getLoggedInInfo()}}</b></div>
+    <div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <strong>{{getLoggedInInfo()}}</strong></div>
   </span>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">

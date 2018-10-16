@@ -3,11 +3,16 @@ import { distinctUntilChanged } from 'rxjs/operators'
 import {
   Component,
   ViewChild,
-  HostListener,
-  AfterViewInit,
   OnDestroy,
+  LOCALE_ID,
+  Inject,
 } from '@angular/core'
-import { MatIconRegistry, MatSidenav, MatDialog } from '@angular/material'
+import {
+  MatIconRegistry,
+  MatSidenav,
+  MatDialog,
+  DateAdapter,
+} from '@angular/material'
 import { DomSanitizer } from '@angular/platform-browser'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
 
@@ -26,6 +31,7 @@ import { SupportService } from './services/support/support.service'
 import { SupportPage } from './services/support/support.model'
 import { UserState } from './shared/models/user.model'
 import { ObservableMedia } from '@angular/flex-layout'
+import { LocaleService } from './services/locale/locale.service'
 
 @Component({
   selector: 'app-root',
@@ -54,6 +60,9 @@ export class AppComponent implements OnDestroy {
     public supportService: SupportService,
     public dialog: MatDialog,
     public media: ObservableMedia,
+    public localeService: LocaleService,
+    @Inject(LOCALE_ID) public locale: string,
+    private dateAdapter: DateAdapter<any>,
   ) {
     this.initIconRegistry()
 
@@ -82,6 +91,10 @@ export class AppComponent implements OnDestroy {
       } else if (route instanceof NavigationEnd) {
         this.isLoading = false
       }
+    })
+
+    this.localeService.languageChange$.subscribe(lang => {
+      this.dateAdapter.setLocale(lang)
     })
   }
 

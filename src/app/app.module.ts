@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core'
+import { NgModule, isDevMode, LOCALE_ID } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FlexLayoutModule } from '@angular/flex-layout'
