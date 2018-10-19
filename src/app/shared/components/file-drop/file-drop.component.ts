@@ -132,7 +132,7 @@ export class FileDropComponent {
 
   public onDrop($event: DragEvent) {
     stopEvent($event)
-    if (!this.disabled) {
+    if (!this.disabled && $event.dataTransfer) {
       this.handleFiles(convertFileList($event.dataTransfer.files))
     }
   }

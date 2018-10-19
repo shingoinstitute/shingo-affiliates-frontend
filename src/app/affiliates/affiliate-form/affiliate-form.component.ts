@@ -96,9 +96,9 @@ export class AffiliateFormComponent
 
   public ngAfterViewInit() {
     // center element if it's not a dialog box
-    if (!this.isDialog) {
-      $(this.formContainer.nativeElement).css('margin', '0 auto')
-    }
+    // if (!this.isDialog) {
+    //   $(this.formContainer.nativeElement).css('margin', '0 auto')
+    // }
   }
 
   public ngOnDestroy() {

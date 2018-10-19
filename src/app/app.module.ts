@@ -1,10 +1,9 @@
-import { NgModule, isDevMode, LOCALE_ID } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { CookieModule } from 'ngx-cookie'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-import 'hammerjs'
 
 /** Shared Modules */
 import { SharedModule } from './shared/shared.module'
@@ -49,6 +48,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
   MatMomentDateAdapterOptions,
 } from '@angular/material-moment-adapter'
+import { LayoutModule } from '@angular/cdk/layout'
 
 @NgModule({
   declarations: [AppComponent],
@@ -76,6 +76,7 @@ import {
     WorkshopsModule,
     UIComponentsModule,
     SupportModule,
+    LayoutModule,
   ],
   providers: [
     {

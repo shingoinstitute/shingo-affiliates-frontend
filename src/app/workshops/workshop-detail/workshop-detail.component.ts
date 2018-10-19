@@ -122,7 +122,7 @@ export class WorkshopDetailComponent implements OnInit {
   }
 
   public uploadEvaluationsFiles() {
-    const files = this.evaluations.filter(f => f.lastModifiedDate)
+    const files = this.evaluations
     this.uploadEvaluationsProgress = 0
     this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {

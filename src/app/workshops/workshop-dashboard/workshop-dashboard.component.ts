@@ -218,11 +218,11 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
    * @todo Put this into a directive named something like [fill-viewport]
    */
   public fillViewPortHeight() {
-    const compView = $('.filter-options-container')[0]
-    if (compView) {
-      const toolbarHeight = window.innerWidth > 600 ? 64 : 56
-      $(compView).css('min-height', `${window.innerHeight - toolbarHeight}px`)
-    }
+    // const compView = $('.filter-options-container')[0]
+    // if (compView) {
+    //   const toolbarHeight = window.innerWidth > 600 ? 64 : 56
+    //   $(compView).css('min-height', `${window.innerHeight - toolbarHeight}px`)
+    // }
   }
 
   public filter(cbc: MatCheckboxChange) {

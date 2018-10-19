@@ -82,10 +82,10 @@ export class FacilitatorFormComponent
 
   public ngAfterViewInit() {
     // center element in container if it's not a dialog box
-    if (!this.isDialog) {
-      $(this.formContainer.nativeElement).css('margin', '0 auto')
-      $(this.formContainer.nativeElement).css('margin-bottom', '48px')
-    }
+    // if (!this.isDialog) {
+    //   $(this.formContainer.nativeElement).css('margin', '0 auto')
+    //   $(this.formContainer.nativeElement).css('margin-bottom', '48px')
+    // }
   }
 
   public ngOnDestroy() {
