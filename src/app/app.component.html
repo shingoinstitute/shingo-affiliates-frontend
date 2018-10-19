@@ -34,7 +34,7 @@
 </mat-toolbar>
 
 <mat-sidenav-container>
-  <mat-sidenav #sidenav [mode]="media.isActive('sm') ? 'over' : 'side'" [opened]="!media.isActive('sm')">
+  <mat-sidenav #sidenav [mode]="media.isActive('lt-md') ? 'over' : 'side'" [opened]="!media.isActive('lt-md')">
     <mat-nav-list>
       <ng-container *ngIf="isAuthenticated">
         <p class="nav-list-title">Main Menu</p>

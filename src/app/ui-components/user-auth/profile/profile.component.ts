@@ -7,6 +7,7 @@ import { ChangePasswordDialog } from '../change-password-dialog/change-password-
 import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component'
 import { LocaleService } from '../../../services/locale/locale.service'
 import { FormGroup, FormControl } from '@angular/forms'
+import { bcp47Validator } from '../../../services/locale/bcp47validator'
 
 @Component({
   selector: 'app-profile',
@@ -26,13 +27,17 @@ export class ProfileComponent implements OnInit {
   public ngOnInit() {
     this.user = this.route.snapshot.data['user']
     this.profileForm = new FormGroup({
-      locale: new FormControl(this.localeService.locale),
+      locale: new FormControl(this.localeService.locale, {
+        updateOn: 'blur',
+        validators: [bcp47Validator(true)],
+      }),
     })
   }
 
   public saveLocale() {
     const localeControl = this.profileForm.get('locale')
     if (!localeControl) return
+    if (localeControl.invalid) return
     const locale = localeControl.value as string
     this.localeService.locale = locale
     if (locale === '') {
