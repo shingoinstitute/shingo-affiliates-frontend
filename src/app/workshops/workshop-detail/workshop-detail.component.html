@@ -11,13 +11,8 @@
       <!-- Attendee Upload area -->
       <div fxFlex="50%">
 
-        <app-file-drop
-          *ngIf="showAttendeeUpload"
-          (file)="uploadAttendeeList($event)"
-          (error)="rejectedFile($event)"
-          [accept]="supportedFileTypes"
-          [maxFileSize]="maximumFileSizeInBytes"
-        >
+        <app-file-drop *ngIf="showAttendeeUpload" (file)="uploadAttendeeList($event)" (error)="rejectedFile($event)"
+          [accept]="supportedFileTypes" [maxFileSize]="maximumFileSizeInBytes">
           <h2 class="roboto"><strong>Pick</strong> or drop Attendee List here</h2>
         </app-file-drop>
 
@@ -38,14 +33,9 @@
       <!-- Evaluations Upload area -->
       <div fxFlex="50% ">
 
-        <app-file-drop
-          *ngIf="showEvalUpload"
-          (file)="uploadEvaluations($event)"
-          [multiple]="true"
-          [accept]="supportedFileTypes"
-          [maxFileSize]="maximumFileSizeInBytes"
-        >
-          <h2 class="roboto"><strong>Pick</strong> or drop Evaluations here</h2>
+        <app-file-drop *ngIf="showEvalUpload" (file)="uploadEvaluations($event)" [multiple]="true" [accept]="supportedFileTypes"
+          [maxFileSize]="maximumFileSizeInBytes">
+          <h2 class="mat-h2"><strong>Pick</strong> or drop Evaluations here</h2>
         </app-file-drop>
 
         <mat-progress-bar *ngIf="uploadEvaluationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvaluationsProgress"></mat-progress-bar>
@@ -64,6 +54,7 @@
 
     </div>
 
-    <button *ngIf="showAttendeeUpload || showEvalUpload" mat-raised-button class="mat-primary " (click)="upload() " [disabled]="!attendeeFile && !evaluations.length ">Upload Files</button>
+    <button *ngIf="showAttendeeUpload || showEvalUpload" mat-raised-button class="mat-primary " (click)="upload() "
+      [disabled]="!attendeeFile && !evaluations.length ">Upload Files</button>
   </div>
 </div>

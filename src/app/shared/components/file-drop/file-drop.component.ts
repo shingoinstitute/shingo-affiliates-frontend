@@ -1,6 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core'
 import { compose } from '../../../util/functional'
 import { truthy } from '../../../util/util'
+import {
+  mapEither,
+  chainEither,
+  left,
+  Either,
+  right,
+} from '../../../util/Either'
 
 export interface FileFailure {
   reason: 'size' | 'accept' | 'multiple' | 'totalSize'

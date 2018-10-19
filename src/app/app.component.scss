@@ -6,8 +6,12 @@
   top: 0;
 }
 
+.sidenav-container-lt-sm {
+  height: calc(100vh - #{$navbar-height-sm});
+}
+
 .sidenav-container {
-  height: 100%;
+  height: calc(100vh - #{$navbar-height});
 }
 
 .elevated {
@@ -16,29 +20,6 @@
   @include mat-elevation(6);
 }
 
-.toolbar-menu-btn {
-  text-decoration: none;
-  color: black;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: $default-margin ($default-margin * 2) $default-margin $default-margin;
-}
-a.toolbar-menu-btn:hover {
-  background-color: #e0e0e0;
-}
-.toolbar-menu-btn > mat-icon {
-  margin-right: $default-margin * 2;
-}
-.toolbar-menu-btn > p {
-  margin: 0;
-}
-.menu-btn-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  align-content: left;
-}
 div.spinner-container {
   position: fixed;
   left: 250px;

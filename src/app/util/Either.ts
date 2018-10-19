@@ -1,12 +1,14 @@
-type Left<L> = [false, L]
-type Right<R> = [true, R]
-type Either<L, R> = Left<L> | Right<R>
-const left = <L>(L: L): Left<L> => [false, L]
-const right = <R>(R: R): Right<R> => [true, R]
-const isLeft = <L, R>(either: Either<L, R>): either is Left<L> => !either[0]
-const isRight = <L, R>(either: Either<L, R>): either is Right<R> => either[0]
+export type Left<L> = [false, L]
+export type Right<R> = [true, R]
+export type Either<L, R> = Left<L> | Right<R>
+export const left = <L>(L: L): Left<L> => [false, L]
+export const right = <R>(R: R): Right<R> => [true, R]
+export const isLeft = <L, R>(either: Either<L, R>): either is Left<L> =>
+  !either[0]
+export const isRight = <L, R>(either: Either<L, R>): either is Right<R> =>
+  either[0]
 
-const mapEither = <L, R, RR = R, LL = L>(
+export const mapEither = <L, R, RR = R, LL = L>(
   mright: ((v: R) => RR),
   mleft?: ((v: L) => LL),
 ) => (either: Either<L, R>): Either<LL, RR> => {
@@ -19,7 +21,7 @@ const mapEither = <L, R, RR = R, LL = L>(
   }
 }
 
-const chainEither = <L, R, RR = R>(fr: ((v: R) => Either<L, RR>)) => (
+export const chainEither = <L, R, RR = R>(fr: ((v: R) => Either<L, RR>)) => (
   either: Either<L, R>,
 ): Either<L, RR> => {
   if (isRight(either)) {

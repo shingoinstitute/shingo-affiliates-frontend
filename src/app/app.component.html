@@ -5,7 +5,7 @@
   </span>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">
-    <mat-icon svgIcon="account_circle_white"></mat-icon>
+    <mat-icon>account_circle</mat-icon>
   </button>
 
   <button aria-label="Toggle sidenav" *ngIf="media.isActive('lt-md')" mat-icon-button (click)="sidenav.toggle()">
@@ -14,25 +14,19 @@
 
   <a mat-button *ngIf="!isAuthenticated" routerLink="/login">Login</a>
 
-  <mat-menu #menu="matMenu">
-    <div class="menu-btn-container">
-      <a class="toolbar-menu-btn" routerLink="/profile">
-        <mat-icon svgIcon="person_black"></mat-icon>
-        <p>Profile</p>
-      </a>
-      <!-- <a class="toolbar-menu-btn" routerLink="/support">
-        <mat-icon svgIcon="support_black"></mat-icon>
-        <p>Support</p>
-      </a> -->
-      <a class="toolbar-menu-btn" (click)="logoutHandler()">
-        <mat-icon svgIcon="logout_black"></mat-icon>
-        <p>Logout</p>
-      </a>
-    </div>
+  <mat-menu style="color: black" #menu="matMenu">
+    <a mat-menu-item routerLink="/profile">
+      <mat-icon>person_outline</mat-icon>
+      <span>Profile</span>
+    </a>
+    <button mat-menu-item (click)="logoutHandler()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Logout</span>
+    </button>
   </mat-menu>
 
 </mat-toolbar>
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container ngClass="sidenav-container" [ngClass.lt-sm]="{ 'sidenav-container-lt-sm': true, 'sidenav-container': false }">
   <mat-sidenav #sidenav fixedInViewport="true" fixedTopGap="64" [attr.role]="media.isActive('lt-md') ? 'dialog' : 'navigation'"
     [mode]="media.isActive('lt-md') ? 'over' : 'side'" [opened]="!media.isActive('lt-md')">
     <mat-nav-list>

@@ -247,18 +247,6 @@ export class AppComponent implements OnDestroy {
       ),
     )
     this.iconRegistry.addSvgIcon(
-      'logout_black',
-      this.sanitizer.bypassSecurityTrustResourceUrl(
-        'assets/imgs/icons/ic_exit_to_app_black_24px.svg',
-      ),
-    )
-    this.iconRegistry.addSvgIcon(
-      'person_black',
-      this.sanitizer.bypassSecurityTrustResourceUrl(
-        'assets/imgs/icons/ic_person_outline_black_24px.svg',
-      ),
-    )
-    this.iconRegistry.addSvgIcon(
       'label_outline',
       this.sanitizer.bypassSecurityTrustResourceUrl(
         'assets/imgs/icons/ic_label_outline_black_24px.svg',
@@ -364,12 +352,6 @@ export class AppComponent implements OnDestroy {
       'insert_drive_file',
       this.sanitizer.bypassSecurityTrustResourceUrl(
         'assets/imgs/icons/ic_insert_drive_file_grey_18px.svg',
-      ),
-    )
-    this.iconRegistry.addSvgIcon(
-      'menu_white',
-      this.sanitizer.bypassSecurityTrustResourceUrl(
-        'assets/imgs/icons/ic_menu_white_18px.svg',
       ),
     )
     this.iconRegistry.addSvgIcon(
