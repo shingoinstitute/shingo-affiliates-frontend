@@ -1,7 +1,7 @@
 <form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer id="disable-lastpass-search">
 
-  <div class="spinner-container">
-    <mat-spinner class="mat-accent" *ngIf="isLoading"></mat-spinner>
+  <div class="spinner-container" fxLayout fxLayoutAlign="center center">
+    <mat-spinner diameter="48" color="accent" *ngIf="isLoading"></mat-spinner>
   </div>
 
   <div class="form-actions">

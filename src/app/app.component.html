@@ -1,4 +1,4 @@
-<mat-toolbar class="mat-primary" [ngClass]="{'logged-in-as': isLoggedInAs()}">
+<mat-toolbar color="primary" class="elevated" [ngClass]="{'logged-in-as': isLoggedInAs()}">
   <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
   <span fxFlex>
     <div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <strong>{{getLoggedInInfo()}}</strong></div>
@@ -8,8 +8,8 @@
     <mat-icon svgIcon="account_circle_white"></mat-icon>
   </button>
 
-  <button fxShow="true" fxHide.gt-sm="true" mat-icon-button (click)="sidenav.toggle()">
-    <mat-icon svgIcon="menu_white"></mat-icon>
+  <button aria-label="Toggle sidenav" *ngIf="media.isActive('lt-md')" mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon aria-label="Sidenav toggle icon">menu</mat-icon>
   </button>
 
   <a mat-button *ngIf="!isAuthenticated" routerLink="/login">Login</a>
@@ -32,9 +32,9 @@
   </mat-menu>
 
 </mat-toolbar>
-
-<mat-sidenav-container>
-  <mat-sidenav #sidenav [mode]="media.isActive('lt-md') ? 'over' : 'side'" [opened]="!media.isActive('lt-md')">
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav fixedInViewport="true" fixedTopGap="64" [attr.role]="media.isActive('lt-md') ? 'dialog' : 'navigation'"
+    [mode]="media.isActive('lt-md') ? 'over' : 'side'" [opened]="!media.isActive('lt-md')">
     <mat-nav-list>
       <ng-container *ngIf="isAuthenticated">
         <p class="nav-list-title">Main Menu</p>
@@ -79,9 +79,9 @@
       </mat-expansion-panel>
     </mat-nav-list>
   </mat-sidenav>
-
-  <router-outlet class="main-content"></router-outlet>
-
+  <mat-sidenav-content>
+    <router-outlet class="main-content"></router-outlet>
+  </mat-sidenav-content>
 </mat-sidenav-container>
 <div class="spinner-container" *ngIf="isLoading">
   <mat-spinner></mat-spinner>

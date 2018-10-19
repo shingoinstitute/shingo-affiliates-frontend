@@ -1,4 +1,4 @@
-@import '../node_modules/@angular/material/theming';
+@import '~@angular/material/theming';
 @import './assets/sass/_globals';
 // Plus imports for other components in your app.
 
@@ -8,69 +8,69 @@
 @include mat-core();
 
 $affiliate-brand-red: (
-    50 : #ece1e4,
-    100 : #d1b5bc,
-    200 : #b28490,
-    300 : #935364,
-    400 : #7b2e42,
-    500 : #640921,
-    600 : #5c081d,
-    700 : #520618,
-    800 : #480514,
-    900 : #36020b,
-    A100 : #ff6e7d,
-    A200 : #ff3b4f,
-    A400 : #ff0821,
-    A700 : #ed0018,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #ffffff,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #ffffff,
-        A400 : #ffffff,
-        A700 : #ffffff,
-    )
+  50: #ece1e4,
+  100: #d1b5bc,
+  200: #b28490,
+  300: #935364,
+  400: #7b2e42,
+  500: #640921,
+  600: #5c081d,
+  700: #520618,
+  800: #480514,
+  900: #36020b,
+  A100: #ff6e7d,
+  A200: #ff3b4f,
+  A400: #ff0821,
+  A700: #ed0018,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
 );
 
 $affiliate-brand-blue: (
-    50 : #e0e7ed,
-    100 : #b3c3d2,
-    200 : #809bb4,
-    300 : #4d7395,
-    400 : #26557f,
-    500 : #003768,
-    600 : #003160,
-    700 : #002a55,
-    800 : #00234b,
-    900 : #00163a,
-    A100 : #7096ff,
-    A200 : #3d70ff,
-    A400 : #0a4aff,
-    A700 : #003ff0,
-    contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #ffffff,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #ffffff,
-        A400 : #ffffff,
-        A700 : #ffffff,
-    )
+  50: #e0e7ed,
+  100: #b3c3d2,
+  200: #809bb4,
+  300: #4d7395,
+  400: #26557f,
+  500: #003768,
+  600: #003160,
+  700: #002a55,
+  800: #00234b,
+  900: #00163a,
+  A100: #7096ff,
+  A200: #3d70ff,
+  A400: #0a4aff,
+  A700: #003ff0,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
 );
 
 $primary-color: #003768;
@@ -78,7 +78,7 @@ $primary-color-lighten-1: #26557f;
 $primary-color-lighten-2: #4d7395;
 $accent-color: #640921;
 $warn-color: #f44336;
-$success-color: #4CAF50;
+$success-color: #4caf50;
 $grey-color: #757575;
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
@@ -87,66 +87,70 @@ $grey-color: #757575;
 // $affiliate-app-primary: mat-palette($mat-indigo);
 // $affiliate-app-accent:  mat-palette($mat-red, 900, A100, A700);
 $affiliate-app-primary: mat-palette($affiliate-brand-red);
-$affiliate-app-accent:  mat-palette($affiliate-brand-blue);
+$affiliate-app-accent: mat-palette($affiliate-brand-blue);
 
 // The warn palette is optional (defaults to red).
-$affiliate-app-warn:    mat-palette($mat-red);
+$affiliate-app-warn: mat-palette($mat-red);
 .warn {
-    color: $warn-color;
+  color: $warn-color;
 }
 .mat-success,
 .success {
-    background-color: $success-color;
+  background-color: $success-color;
 }
 
 // Create the theme object (a Sass map containing all of the palettes).
-$affiliate-app-theme: mat-light-theme($affiliate-app-primary, $affiliate-app-accent, $affiliate-app-warn);
+$affiliate-app-theme: mat-light-theme(
+  $affiliate-app-primary,
+  $affiliate-app-accent,
+  $affiliate-app-warn
+);
 
 // CSS height fix for mat-sidenav-container
-.mat-drawer-content {
-    min-height: calc(100vh - 64px);
-}
-@media only screen and (max-height: 600px) {
-    .mat-drawer-content {
-        min-height: calc(100vh - 56px);
-    }
-}
+// .mat-drawer-content {
+//   min-height: calc(100vh - 64px);
+// }
+// @media only screen and (max-height: 600px) {
+//   .mat-drawer-content {
+//     min-height: calc(100vh - 56px);
+//   }
+// }
 
 // Custom button stylings
 @mixin button($affiliate-app-theme) {
-   .mat-raised-button.mat-primary,
-   .mat-raised-button.mat-accent,
-   .mat-raised-button.mat-success,
-   .mat-raised-button.mat-warn {
-      font-weight: 400;
-   }
-   .mat-raised-button.mat-success {
-       background-color: $success-color;
-       color: white;
-   }
-   .mat-button.mat-success {
-       color: $success-color;
-   }
+  .mat-raised-button.mat-primary,
+  .mat-raised-button.mat-accent,
+  .mat-raised-button.mat-success,
+  .mat-raised-button.mat-warn {
+    font-weight: 400;
+  }
+  .mat-raised-button.mat-success {
+    background-color: $success-color;
+    color: white;
+  }
+  .mat-button.mat-success {
+    color: $success-color;
+  }
 }
 
 // CSS fixes for issues in workshop-data-table.component.html
 mat-form-field.workshop-date-picker-form-field {
-    width: 100%;
+  width: 100%;
 
-    .mat-input-wrapper.mat-form-field-wrapper {
-        padding-bottom: 0;
+  .mat-input-wrapper.mat-form-field-wrapper {
+    padding-bottom: 0;
 
-        .mat-input-underline.mat-form-field-underline {
-            position: initial;
-        }
-    }  
+    .mat-input-underline.mat-form-field-underline {
+      position: initial;
+    }
+  }
 }
 
 // Hack to get stems of the sort direction indicator arrows on data tables to appear vertical.
 // As of angular material version beta.12, the stems of the arrows are tilted by 45 degrees.
-.mat-sort-header-stem {
-    transform: rotate(0deg);
-}
+// .mat-sort-header-stem {
+//   transform: rotate(0deg);
+// }
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component

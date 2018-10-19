@@ -1,4 +1,20 @@
 @import '../assets/sass/_globals';
+@import '~@angular/material/theming';
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+}
+
+.sidenav-container {
+  height: 100%;
+}
+
+.elevated {
+  position: relative;
+  z-index: 2;
+  @include mat-elevation(6);
+}
 
 .toolbar-menu-btn {
   text-decoration: none;

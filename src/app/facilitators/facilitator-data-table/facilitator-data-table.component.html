@@ -114,8 +114,8 @@
     <mat-row *matRowDef="let fac; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <div class="spinner-container" *ngIf="isLoading">
-    <mat-spinner class="mat-accent"></mat-spinner>
+  <div class="spinner-container" fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+    <mat-spinner diameter="48" color="accent"></mat-spinner>
   </div>
 
   <mat-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10"

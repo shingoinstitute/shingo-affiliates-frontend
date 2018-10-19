@@ -7,7 +7,7 @@
       <ng-container *ngIf="selectedSfId != workshop.sfId">
         <img src="{{ workshop.image }}">
       </ng-container>
-      
+
       <ng-container *ngIf="selectedSfId == workshop.sfId">
         <mat-select floatPlaceholder="never" placeholder="Course Type" [(ngModel)]="workshop.type">
           <mat-option *ngFor="let type of CourseTypes" [value]="type">{{ type }}</mat-option>
@@ -41,7 +41,8 @@
 
       <div *ngIf="selectedSfId == workshop.sfId">
         <mat-form-field class="workshop-date-picker-form-field">
-          <input matInput [matDatepicker]="startDatePicker" (dateChange)="startDateChange($event, workshop)" [value]="workshop.startDate" [max]="workshop.endDate"> 
+          <input matInput [matDatepicker]="startDatePicker" (dateChange)="startDateChange($event, workshop)" [value]="workshop.startDate"
+            [max]="workshop.endDate">
           <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #startDatePicker [startAt]="workshop.startDate"></mat-datepicker>
         </mat-form-field>
@@ -54,12 +55,13 @@
     <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
       <ng-container *ngIf="selectedSfId != workshop.sfId">
-          {{ workshop.endDateFormatted }}
+        {{ workshop.endDateFormatted }}
       </ng-container>
-        
+
       <ng-container *ngIf="selectedSfId == workshop.sfId">
         <mat-form-field class="workshop-date-picker-form-field">
-          <input matInput [matDatepicker]="endDatePicker" (dateChange)="endDateChange($event, workshop)" [value]="workshop.endDate" [min]="workshop.startDate"> 
+          <input matInput [matDatepicker]="endDatePicker" (dateChange)="endDateChange($event, workshop)" [value]="workshop.endDate"
+            [min]="workshop.startDate">
           <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker [startAt]="workshop.endDate"></mat-datepicker>
         </mat-form-field>
@@ -111,7 +113,9 @@
   <!-- Edit Button Column -->
   <ng-container matColumnDef="edit">
     <mat-header-cell *matHeaderCellDef> Edit &emsp;&emsp;&emsp;&emsp;
-      <button class="refresh-button" mat-button (click)="refresh()"><mat-icon svgIcon="refresh_grey"></mat-icon></button>
+      <button class="refresh-button" mat-button (click)="refresh()">
+        <mat-icon svgIcon="refresh_grey"></mat-icon>
+      </button>
     </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
       <button (click)="onEdit(workshop.sfId)" mat-raised-button> Edit &ensp;<mat-icon svgIcon="edit_grey"></mat-icon></button>
@@ -146,7 +150,7 @@
         <button mat-mini-fab color="accent" (click)="selectedWorkshop = workshop">
           <mat-icon svgIcon="edit_mode_white"></mat-icon>
         </button>
-        
+
         <button mat-mini-fab color="accent" (click)="onSelectWorkshop(workshop)">
           <mat-icon svgIcon="description_white"></mat-icon>
         </button>
@@ -174,8 +178,8 @@
   <mat-row [id]="workshop.sfId" *matRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></mat-row>
 </mat-table>
 
-<div class="spinner-container" *ngIf="isLoading">
-  <mat-spinner></mat-spinner>
+<div class="spinner-container" fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+  <mat-spinner diameter="48"></mat-spinner>
 </div>
 
 <mat-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>

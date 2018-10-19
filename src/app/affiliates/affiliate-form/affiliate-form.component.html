@@ -1,7 +1,7 @@
 <div class="form-container" [formGroup]="affForm" [class.loading-active]="isLoading" #formContainer>
 
-  <div class="spinner-container">
-    <mat-spinner class="mat-accent" *ngIf="isLoading"></mat-spinner>
+  <div class="spinner-container" fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+    <mat-spinner diameter="48" class="mat-accent"></mat-spinner>
   </div>
 
   <div class="form-actions">
