@@ -1,6 +1,7 @@
-<div style="width: 100%; height: 100%;" id="dropzone" (dragenter)="onDragEnter($event)" (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)">
-  <input id="upload" type="file" [accept]="accept" [multiple]="multiple" style='display: none' (change)="onInputChange($event)" [disabled]="disabled">
-  <label for="upload">
+<div class="container">
+  <input class="upload" [id]="inputId" type="file" [accept]="accept" [multiple]="multiple" style='display: none'
+    (change)="onInputChange($event)" [disabled]="disabled">
+  <label class="upload-label" [for]="inputId">
     <ng-content></ng-content>
   </label>
 </div>

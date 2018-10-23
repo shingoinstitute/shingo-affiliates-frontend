@@ -21,6 +21,8 @@ import {
   MatInputModule,
 } from '@angular/material'
 import { FileDropComponent } from './components/file-drop/file-drop.component'
+import { FileDisplayComponent } from './components/file-display/file-display.component'
+import { FlexLayoutModule } from '@angular/flex-layout'
 
 @NgModule({
   imports: [
@@ -37,6 +39,7 @@ import { FileDropComponent } from './components/file-drop/file-drop.component'
     MatInputModule,
 
     CKEditorModule,
+    FlexLayoutModule,
   ],
   declarations: [
     AlertDialogComponent,
@@ -45,6 +48,7 @@ import { FileDropComponent } from './components/file-drop/file-drop.component'
     SfLookupComponent,
     TextResponseDialogComponent,
     FileDropComponent,
+    FileDisplayComponent,
   ],
   exports: [
     // MdDialogModule,
@@ -55,6 +59,7 @@ import { FileDropComponent } from './components/file-drop/file-drop.component'
     SfLookupComponent,
     TextResponseDialogComponent,
     FileDropComponent,
+    FileDisplayComponent,
   ],
   entryComponents: [
     AlertDialogComponent,

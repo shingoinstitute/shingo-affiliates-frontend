@@ -1,5 +1,6 @@
 import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
+import { tuple } from './functional'
 
 export const notUndefined = <T>(v: T): v is Exclude<T, undefined> =>
   typeof v !== 'undefined'
@@ -86,4 +87,29 @@ export function parseErrResponse(obj: object): string {
   }
   return ''
   // tslint:enable:no-parameter-reassignment
+}
+
+const decimalUnits = ['B', 'kB', 'MB', 'GB', 'TB', 'PB']
+const binaryUnits = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB']
+
+export const getSizeUnit = (power: 0 | 1 | 2 | 3 | 4 | 5, binary = false) => {
+  const baseVal = binary ? 1024 : 1000
+  const units = binary ? binaryUnits : decimalUnits
+  return tuple(baseVal ** power, units[power])
+}
+
+// if typescript had macros, this could be a compiletime calculation
+const log1000 = 6.907755278982137 // Math.log(1000)
+
+export const between = (lower: number, upper: number) => (num: number) =>
+  num > upper ? upper : num < lower ? lower : num
+
+/**
+ * Returns the size in the nearest data unit
+ * @param size Size in bytes
+ */
+export const withUnit = (size: number, binary = false) => {
+  const power = between(0, 5)(Math.trunc(Math.log(size) / log1000))
+  const [multiplier, unit] = getSizeUnit(power as 0 | 1 | 2 | 3 | 4 | 5, binary)
+  return `${(size / multiplier).toFixed(2)} ${unit === 'B' ? 'Bytes' : unit}`
 }

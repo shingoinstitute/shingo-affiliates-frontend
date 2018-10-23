@@ -1,5 +1,11 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core'
-import { compose } from '../../../util/functional'
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  HostListener,
+} from '@angular/core'
+import { pipe } from '../../../util/functional'
 import { truthy } from '../../../util/util'
 import {
   mapEither,
@@ -9,17 +15,44 @@ import {
   right,
 } from '../../../util/Either'
 
-export interface FileFailure {
-  reason: 'size' | 'accept' | 'multiple' | 'totalSize'
+export interface MultipleFailure {
+  reason: 'multiple'
   file: File
+  count: number
+  multiple: number
 }
+
+export interface SizeFailure {
+  reason: 'size'
+  file: File
+  maxSize: number
+}
+
+export interface TotalSizeFailure {
+  reason: 'totalSize'
+  file: File
+  accumSize: number
+  totalSize: number
+}
+
+export interface AcceptFailure {
+  reason: 'accept'
+  file: File
+  accept: ReadonlyArray<string>
+}
+
+export type FileFailure =
+  | SizeFailure
+  | MultipleFailure
+  | TotalSizeFailure
+  | AcceptFailure
 
 const stopEvent = ($event: Event) => {
-  $event.stopPropagation()
   $event.preventDefault()
+  $event.stopPropagation()
 }
 
-const testGlob = (accept: string[]) => (type: string) => {
+const testGlob = (accept: ReadonlyArray<string>) => (type: string) => {
   if (accept.includes('image/*')) {
     return /image\/.*/.test(type)
   } else if (accept.includes('video/*')) {
@@ -31,7 +64,9 @@ const testGlob = (accept: string[]) => (type: string) => {
   return false
 }
 
-const fileAcceptable = (accept: string[]) => (file: File): boolean => {
+const fileAcceptable = (accept: ReadonlyArray<string>) => (
+  file: File,
+): boolean => {
   const splitted = file.name.split('.')
   const extension = splitted.length > 0 && '.' + splitted[splitted.length - 1]
 
@@ -42,43 +77,69 @@ const fileAcceptable = (accept: string[]) => (file: File): boolean => {
   )
 }
 
-const validateFile = (accept: string[], maxSize: number) => (
+const validateFile = (accept: ReadonlyArray<string>, maxSize: number) => (
   file: File,
 ): Either<FileFailure, File> => {
   if (file.size > maxSize) {
-    return left({ reason: 'size' as 'size', file })
+    return left({ reason: 'size' as 'size', file, maxSize })
   }
 
   if (accept.length > 0 && !fileAcceptable(accept)(file)) {
-    return left({ reason: 'accept' as 'accept', file })
+    return left({ reason: 'accept' as 'accept', file, accept })
   }
 
   return right(file)
 }
 
-function convertFileList(fl: FileList): File[] {
-  const files = []
-
-  for (let i = 0; i < fl.length; i++) {
-    files.push(fl.item(i))
+function getDataTransferFiles(dataTransfer: DataTransfer) {
+  if (dataTransfer.items) {
+    return Array.from(dataTransfer.items)
+      .filter(v => v.kind === 'file')
+      .map(v => v.getAsFile() as File)
+  } else {
+    return getFiles(dataTransfer.files)
   }
-
-  return files.filter(truthy)
 }
+
+const getFiles = (fs: FileList) => Array.from(fs).filter(truthy)
 
 const supportsFileUpload = () => 'FormData' in window && 'FileReader' in window
 const supportsDnD = () => {
   const div = document.createElement('div')
   const supported =
     'draggable' in div || ('ondragstart' in div && 'ondrop' in div)
+  document.removeChild(div)
   return supported
 }
 
 export const supportsDnDUpload = () => supportsFileUpload() && supportsDnD()
 
+let inputId = 0
+
 @Component({
   selector: 'app-file-drop',
   templateUrl: './file-drop.component.html',
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+      .container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        align-items: center;
+      }
+      .upload {
+        display: none;
+      }
+      .upload-label {
+        cursor: pointer;
+      }
+    `,
+  ],
 })
 export class FileDropComponent {
   /**
@@ -100,16 +161,23 @@ export class FileDropComponent {
   public disabled = false
 
   @Output()
-  public fileover: EventEmitter<void> = new EventEmitter()
+  public fileover: EventEmitter<DragEvent> = new EventEmitter()
   @Output()
-  public fileenter: EventEmitter<void> = new EventEmitter()
+  public fileenter: EventEmitter<DragEvent> = new EventEmitter()
   @Output()
-  public fileleave: EventEmitter<void> = new EventEmitter()
+  public fileleave: EventEmitter<DragEvent> = new EventEmitter()
+  @Output()
+  public filedrop: EventEmitter<DragEvent> = new EventEmitter()
   // tslint:disable-next-line:no-output-rename
   @Output('file')
   public fileEmitter: EventEmitter<File> = new EventEmitter()
   @Output()
   public error: EventEmitter<FileFailure> = new EventEmitter()
+
+  // angular does not mangle id in templates,
+  // so we have to have some kind of mutating state to make them work
+  public inputId = `app-file-drop/input-${inputId++}`
+
   private _supportsDragAndDropChecked = false
   private _supportsDragAndDrop = false
 
@@ -122,31 +190,42 @@ export class FileDropComponent {
     return this._supportsDragAndDrop
   }
 
+  @HostListener('dragenter', ['$event'])
   public onDragEnter($event: DragEvent) {
     stopEvent($event)
     this.fileenter.emit()
   }
 
+  @HostListener('dragover', ['$event'])
   public onDragOver($event: DragEvent) {
     stopEvent($event)
     this.fileover.emit()
   }
 
+  @HostListener('dragleave', ['$event'])
   public onDragLeave($event: DragEvent) {
     stopEvent($event)
     this.fileleave.emit()
   }
 
+  @HostListener('drop', ['$event'])
   public onDrop($event: DragEvent) {
     stopEvent($event)
+    this.filedrop.emit($event)
     if (!this.disabled && $event.dataTransfer) {
-      this.handleFiles(convertFileList($event.dataTransfer.files))
+      this.handleFiles(getDataTransferFiles($event.dataTransfer))
     }
   }
 
-  public onInputChange($event: any) {
+  public onInputChange(
+    $event: Event & {
+      target: null | HTMLInputElement & { files?: FileList | null }
+    },
+  ) {
     stopEvent($event)
-    this.handleFiles(convertFileList($event.target.files))
+    if ($event.target && $event.target.files) {
+      this.handleFiles(getFiles($event.target.files))
+    }
   }
 
   private handleFile(file: File) {
@@ -168,28 +247,35 @@ export class FileDropComponent {
           : 1
         : this.multiple
 
-    const fn = compose(
-      mapEither(
-        (file: File) => this.handleFile(file),
-        (err: FileFailure) => this.handleError(err),
-      ),
+    const fn = pipe(
+      validateFile(this.accept, this.maxFileSize),
       chainEither(
-        (file: File): Either<FileFailure, File> => {
+        (file): Either<FileFailure, File> => {
           count++
           size += file.size
 
           if (count > multiple) {
-            return left({ reason: 'multiple' as 'multiple', file })
+            return left({
+              reason: 'multiple' as 'multiple',
+              file,
+              multiple,
+              count,
+            })
           }
 
           if (size > this.maxTotalSize) {
-            return left({ reason: 'totalSize' as 'totalSize', file })
+            return left({
+              reason: 'totalSize' as 'totalSize',
+              file,
+              accumSize: size,
+              totalSize: this.maxTotalSize,
+            })
           }
 
           return right(file)
         },
       ),
-      validateFile(this.accept, this.maxFileSize),
+      mapEither(file => this.handleFile(file), err => this.handleError(err)),
     )
 
     files.map(fn)

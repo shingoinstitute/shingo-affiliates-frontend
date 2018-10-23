@@ -1,60 +1,46 @@
-<div fxLayout="row" fxLayoutGap="24px" class="container" fxFlex #pageRoot>
+<div fxLayout="row" fxLayout.lt-lg="column" fxLayoutAlign.lt-lg="start center" fxLayoutGap.gt-md="24px" class="container"
+  fxFlex #pageRoot>
   <app-workshop [workshop]="workshop"></app-workshop>
 
   <div fxLayout="column" fxFlex *ngIf="showFiles">
 
     <div class="errors" fxLayout="column">
-      <div class="error" *ngFor="let error of errors">{{error}}</div>
+      <div class="error" *ngFor="let error of errors">{{error.data}}</div>
     </div>
 
-    <div class="fileUploads" fxLayout="row" fxLayoutGap="16px">
-      <!-- Attendee Upload area -->
-      <div fxFlex="50%">
+    <div class="fileUploads" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
+      <div fxFlex.gt-sm="50%" *ngIf="showAttendeeUpload">
 
-        <app-file-drop *ngIf="showAttendeeUpload" (file)="uploadAttendeeList($event)" (error)="rejectedFile($event)"
+        <app-file-drop (file)="addAttendeeList($event)" (error)="rejectedFile($event, 'attendee')" class="file-dz"
           [accept]="supportedFileTypes" [maxFileSize]="maximumFileSizeInBytes">
-          <h2 class="roboto"><strong>Pick</strong> or drop Attendee List here</h2>
+          <h2 class="mat-h2"><strong>Pick</strong> or drop Attendee List here</h2>
         </app-file-drop>
 
-        <mat-progress-bar *ngIf="uploadAttendeeProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadAttendeeProgress"></mat-progress-bar>
+        <mat-progress-bar *ngIf="uploadAttendeeProgress > 0" color="accent" mode="determinate" [value]="uploadAttendeeProgress"></mat-progress-bar>
 
         <div class="files">
-          <div class="file" *ngIf="attendeeFile">
-            <img [src]="fileIcon[attendeeFile.type]" />
-            <div class="file-detail" fxLayout="column">
-              <b>{{attendeeFile.name}}</b>
-              <i>{{fileSize(attendeeFile.size)}}</i>
-            </div>
-          </div>
+          <app-file-display *ngIf="attendeeFile" [file]="attendeeFile"></app-file-display>
         </div>
 
       </div>
 
-      <!-- Evaluations Upload area -->
-      <div fxFlex="50% ">
+      <div fxFlex.gt-sm="50%" *ngIf="showEvalUpload">
 
-        <app-file-drop *ngIf="showEvalUpload" (file)="uploadEvaluations($event)" [multiple]="true" [accept]="supportedFileTypes"
-          [maxFileSize]="maximumFileSizeInBytes">
+        <app-file-drop (file)="addEvaluation($event)" (error)="rejectedFile($event, 'eval')" [multiple]="true" [accept]="supportedFileTypes"
+          class="file-dz" [maxFileSize]="maximumFileSizeInBytes">
           <h2 class="mat-h2"><strong>Pick</strong> or drop Evaluations here</h2>
         </app-file-drop>
 
-        <mat-progress-bar *ngIf="uploadEvaluationsProgress > 0" [color]=" 'accent' " mode="determinate " [value]="uploadEvaluationsProgress"></mat-progress-bar>
+        <mat-progress-bar *ngIf="uploadEvaluationsProgress > 0" [color]="accent" mode="determinate" [value]="uploadEvaluationsProgress"></mat-progress-bar>
 
-        <div class="files " fxLayout="row " fxLayoutGap="8px">
-          <div class="file " *ngFor="let file of evaluations ">
-            <img [src]="fileIcon[file.type] " />
-            <div class="file-detail " fxLayout="column ">
-              <b>{{file.name}}</b>
-              <i>{{fileSize(file.size)}}</i>
-            </div>
-          </div>
+        <div class="files" fxLayout="row" fxLayoutGap="8px">
+          <app-file-display *ngFor="let file of evaluations" [file]="file"></app-file-display>
         </div>
 
       </div>
-
     </div>
 
     <button *ngIf="showAttendeeUpload || showEvalUpload" mat-raised-button class="mat-primary " (click)="upload() "
-      [disabled]="!attendeeFile && !evaluations.length ">Upload Files</button>
+      [disabled]="!attendeeModified && !evaluationsModified">Upload Files</button>
   </div>
 </div>

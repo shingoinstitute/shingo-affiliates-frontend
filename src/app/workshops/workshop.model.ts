@@ -201,7 +201,11 @@ export class Workshop extends SFObject {
   public get location(): string {
     return `${this.city}, ${this.country}`
   }
-  public files: any[] = []
+  public files: Array<{
+    Name: string
+    ContentType: string
+    BodyLength: number
+  }> = []
 
   // public members
   /* tslint:disable:variable-name */

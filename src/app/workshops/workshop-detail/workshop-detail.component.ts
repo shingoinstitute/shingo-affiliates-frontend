@@ -6,6 +6,19 @@ import { Workshop, WorkshopStatusType } from '../../workshops/workshop.model'
 import { WorkshopService } from '../../services/workshop/workshop.service'
 
 import { FileFailure } from '../../shared/components/file-drop/file-drop.component'
+import { withUnit } from '../../util/util'
+import { not } from '../../util/functional'
+
+const syntheticFile = Symbol()
+interface SyntheticFile {
+  [syntheticFile]: true
+  name: string
+  size: number
+  type: string
+}
+
+const isSyntheticFile = (f: File | SyntheticFile): f is SyntheticFile =>
+  !!(f as SyntheticFile)[syntheticFile]
 
 @Component({
   selector: 'app-workshop-detail',
@@ -14,9 +27,11 @@ import { FileFailure } from '../../shared/components/file-drop/file-drop.compone
 })
 export class WorkshopDetailComponent implements OnInit {
   public workshop!: Workshop
-  public attendeeFile: any
-  public evaluations: File[] = []
-  public errors: string[] = []
+  public attendeeFile: File | SyntheticFile | undefined
+  public evaluations: Array<File | SyntheticFile> = []
+  public attendeeModified = false
+  public evaluationsModified = false
+  public errors: Array<{ from: 'attendee' | 'eval'; data: string }> = []
 
   public uploadAttendeeProgress = 0
   public uploadEvaluationsProgress = 0
@@ -33,13 +48,6 @@ export class WorkshopDetailComponent implements OnInit {
   ]
 
   public maximumFileSizeInBytes: number = 1000 * 1000 * 25
-  public fileIcon = {
-    'text/csv': 'assets/imgs/icons/spreadsheet_icon.png',
-    'application/pdf': 'assets/imgs/icons/pdf_icon.png',
-    'application/zip': 'assets/imgs/icons/file_icon.png',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-      'assets/imgs/icons/spreadsheet_icon.png',
-  }
 
   public get showFiles(): boolean {
     return (
@@ -62,50 +70,58 @@ export class WorkshopDetailComponent implements OnInit {
 
   public ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop']
-    const attendeeIndex = this.workshop.files.findIndex(file => {
-      return file.Name.match(/attendee_list/)
-    })
-    if (attendeeIndex !== -1) {
-      const file = this.workshop.files[attendeeIndex]
+    const file = this.workshop.files.find(
+      f => !!(f.Name || '').match(/attendee_list/),
+    )
+    if (file) {
       this.attendeeFile = {
+        [syntheticFile]: true,
         name: file.Name,
         type: file.ContentType,
         size: file.BodyLength,
-      } as File
+      } as SyntheticFile
     }
     this.evaluations = this.workshop.files
-      .filter(file => file.Name.match(/evaluation/))
+      .filter(f => f.Name.match(/evaluation/))
       .map(
-        file =>
+        f =>
           ({
-            name: file.Name,
-            type: file.ContentType,
-            size: file.BodyLength,
-          } as File),
+            [syntheticFile]: true,
+            name: f.Name,
+            type: f.ContentType,
+            size: f.BodyLength,
+          } as SyntheticFile),
       )
   }
 
-  public uploadAttendeeList(file: File) {
+  public addAttendeeList(file: File) {
+    this.attendeeModified = true
     this.attendeeFile = file
+    this.errors = this.errors.filter(e => e.from !== 'attendee')
   }
 
-  public uploadEvaluations(file: File) {
-    if (this.evaluations.findIndex(f => f.name === file.name) === -1) {
+  public addEvaluation(file: File) {
+    if (!this.evaluations.find(f => f.name === file.name)) {
+      this.evaluationsModified = true
       this.evaluations.push(file)
     }
+    this.errors = this.errors.filter(e => e.from !== 'eval')
   }
 
   public upload() {
-    if (this.attendeeFile && this.attendeeFile.lastModifiedDate) {
+    if (this.attendeeFile && this.attendeeModified) {
       this.uploadAttendeeListFile()
     }
 
-    if (this.evaluations.length) {
+    if (this.evaluations.length && this.evaluationsModified) {
       this.uploadEvaluationsFiles()
     }
+
+    this.errors = []
   }
 
   public uploadAttendeeListFile() {
+    if (!this.attendeeFile || isSyntheticFile(this.attendeeFile)) return
     this.uploadAttendeeProgress = 0
     this._ws
       .uploadAttendeeFile(this.workshop.sfId, this.attendeeFile)
@@ -113,47 +129,50 @@ export class WorkshopDetailComponent implements OnInit {
         if (event.type === HttpEventType.UploadProgress) {
           const percentDone = Math.round((event.loaded * 100) / event.total)
           this.uploadAttendeeProgress = percentDone
-        } else if (event instanceof HttpResponse) {
-          this.uploadAttendeeProgress = 0
         } else {
           this.uploadAttendeeProgress = 0
+          this.attendeeModified = false
         }
       })
   }
 
   public uploadEvaluationsFiles() {
-    const files = this.evaluations
+    const files = this.evaluations.filter(not(isSyntheticFile))
+    if (files.length === 0) return
     this.uploadEvaluationsProgress = 0
     this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
         const percentDone = Math.round((event.loaded * 100) / event.total)
         this.uploadEvaluationsProgress = percentDone
-      } else if (event instanceof HttpResponse) {
-        this.uploadEvaluationsProgress = 0
       } else {
-        this.uploadAttendeeProgress = 0
+        this.uploadEvaluationsProgress = 0
+        this.evaluationsModified = false
       }
     })
   }
 
-  public rejectedFile(err: FileFailure) {
+  public rejectedFile(err: FileFailure, from: 'attendee' | 'eval') {
     if (err.reason === 'accept') {
-      this.errors.push(
-        `.${err.file.name.split('.')[1]} is not an accepted file type`,
-      )
+      this.errors.push({
+        from,
+        data: `.${
+          err.file.name.split('.')[1]
+        } is not an accepted file type (${err.accept.join(', ')})`,
+      })
     } else if (err.reason === 'size') {
-      this.errors.push(
-        `Your file '${err.file.name}' exceeds the maximum size (${this.fileSize(
+      this.errors.push({
+        from,
+        data: `File '${err.file.name}' exceeds the maximum size (${withUnit(
           err.file.size,
-        )} > 25 MB)`,
-      )
+        )} > ${withUnit(err.maxSize)})`,
+      })
+    } else if (err.reason === 'multiple') {
+      this.errors.push({
+        from,
+        data: `No more than ${err.multiple} file(s) allowed, ${
+          err.count
+        } provided`,
+      })
     }
-  }
-
-  public fileSize(size: number): string {
-    const ratio = size / 1000
-    if (ratio > 1000) return `${ratio / 1000} MB`
-    if (ratio > 1) return `${ratio} KB`
-    return `${ratio} Bytes`
   }
 }
