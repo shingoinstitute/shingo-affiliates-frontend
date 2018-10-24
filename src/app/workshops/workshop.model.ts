@@ -48,14 +48,7 @@ export class Workshop extends SFObject {
   }
 
   public get startDate(): Date {
-    const date =
-      this.Start_Date__c instanceof Date
-        ? this.Start_Date__c // we have already set the start date
-        : this.offsetUTCDate(new Date(this.Start_Date__c))
-    // we are getting the start date from a iso string from salesforce so we must
-    // account for their truncation
-
-    return date
+    return this.handleDate(this.Start_Date__c)
   }
   public set startDate(date: Date) {
     this.Start_Date__c = date
@@ -66,11 +59,7 @@ export class Workshop extends SFObject {
   }
 
   public get endDate(): Date {
-    const date =
-      this.End_Date__c instanceof Date
-        ? this.End_Date__c
-        : this.offsetUTCDate(new Date(this.End_Date__c))
-    return date
+    return this.handleDate(this.End_Date__c)
   }
   public set endDate(date: Date) {
     this.End_Date__c = date
@@ -271,6 +260,14 @@ export class Workshop extends SFObject {
 
   private offsetLocalDate(d: Date) {
     return new Date(d.valueOf() - d.getTimezoneOffset() * 60 * 1000)
+  }
+
+  private handleDate(date: Date | string) {
+    return date instanceof Date
+      ? date // we have already set the start date
+      : this.offsetUTCDate(new Date(date))
+    // we are getting the start date from a iso string from salesforce so we must
+    // account for their truncation
   }
 
   private offsetUTCDate(d: Date) {

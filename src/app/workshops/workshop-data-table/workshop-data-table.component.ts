@@ -30,6 +30,7 @@ import {
   AlertDialogData,
 } from '../../shared/components/alert-dialog/alert-dialog.component'
 import { AuthService } from '../../services/auth/auth.service'
+import { Moment } from 'moment'
 
 @Component({
   selector: 'app-workshop-data-table',
@@ -233,21 +234,18 @@ export class WorkshopDataTableComponent implements OnInit {
     })
   }
 
-  public startDateChange(event: MatDatepickerInputEvent<any>, w: Workshop) {
+  public dateChange(
+    event: MatDatepickerInputEvent<Moment>,
+    w: Workshop,
+    type: 'startDate' | 'endDate',
+  ) {
     const date = event.value
-    if (date instanceof Date) {
-      w.startDate = date
+    if (date && date.toDate) {
+      w[type] = date.toDate()
+    } else if (date instanceof Date) {
+      w[type] = date
     } else if (typeof date === 'string') {
-      w.startDate = new Date(date)
-    }
-  }
-
-  public endDateChange(event: MatDatepickerInputEvent<any>, w: Workshop) {
-    const date = event.value
-    if (date instanceof Date) {
-      w.endDate = date
-    } else if (typeof date === 'string') {
-      w.endDate = new Date(date)
+      w[type] = new Date(date)
     }
   }
 }

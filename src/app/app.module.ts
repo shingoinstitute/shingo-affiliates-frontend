@@ -84,10 +84,6 @@ import { LayoutModule } from '@angular/cdk/layout'
       useFactory: LoggerInterceptorProvider,
       multi: true,
     },
-    {
-      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-      useValue: { useUtc: true } as MatMomentDateAdapterOptions,
-    },
   ],
   bootstrap: [AppComponent],
 })

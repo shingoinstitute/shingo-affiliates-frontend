@@ -3,7 +3,7 @@
   <!-- Workshop Type Column -->
   <ng-container matColumnDef="workshopType">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Course Type </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="course-type">
+    <mat-cell *matCellDef="let workshop">
       <ng-container *ngIf="selectedSfId != workshop.sfId">
         <img src="{{ workshop.image }}">
       </ng-container>
@@ -18,14 +18,14 @@
 
   <!-- Action Type Column -->
   <ng-container matColumnDef="actionType">
-    <mat-header-cell *matHeaderCellDef mat-sort-header class="action-type-header-cell"> Action Type </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="action-type-cell"> {{ workshop.status }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Action Type </mat-header-cell>
+    <mat-cell *matCellDef="let workshop"> {{ workshop.status }} </mat-cell>
   </ng-container>
 
   <!-- Location Column -->
   <ng-container matColumnDef="location">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
-    <mat-cell *matCellDef="let workshop">
+    <mat-cell *matCellDef="let workshop" fxLayout="column" fxLayoutAlign="center start" class="location-cell">
       <p>{{ workshop.city }}</p>
       <p *ngIf="workshop.country !== ''" [style.font-size]="'12px'">{{ workshop.country }}</p>
     </mat-cell>
@@ -39,14 +39,14 @@
         {{ workshop.startDateFormatted }}
       </ng-container>
 
-      <div *ngIf="selectedSfId == workshop.sfId">
+      <ng-container *ngIf="selectedSfId == workshop.sfId">
         <mat-form-field class="workshop-date-picker-form-field">
-          <input matInput [matDatepicker]="startDatePicker" (dateChange)="startDateChange($event, workshop)" [value]="workshop.startDate"
-            [max]="workshop.endDate">
-          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+          <input matInput [matDatepicker]="startDatePicker" (dateChange)="dateChange($event, workshop, 'startDate')"
+            [value]="workshop.startDate" [max]="workshop.endDate">
           <mat-datepicker #startDatePicker [startAt]="workshop.startDate"></mat-datepicker>
+          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
         </mat-form-field>
-      </div>
+      </ng-container>
     </mat-cell>
   </ng-container>
 
@@ -60,8 +60,8 @@
 
       <ng-container *ngIf="selectedSfId == workshop.sfId">
         <mat-form-field class="workshop-date-picker-form-field">
-          <input matInput [matDatepicker]="endDatePicker" (dateChange)="endDateChange($event, workshop)" [value]="workshop.endDate"
-            [min]="workshop.startDate">
+          <input matInput [matDatepicker]="endDatePicker" (dateChange)="dateChange($event, workshop, 'endDate')"
+            [value]="workshop.endDate" [min]="workshop.startDate">
           <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker [startAt]="workshop.endDate"></mat-datepicker>
         </mat-form-field>
@@ -71,15 +71,15 @@
 
   <!-- Days Late Column -->
   <ng-container matColumnDef="daysLate">
-    <mat-header-cell *matHeaderCellDef class="days-late-header-cell"> Days Late </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="days-late-cell"> Due: {{ formatDaysLate(workshop) }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef> Days Late </mat-header-cell>
+    <mat-cell *matCellDef="let workshop"> Due: {{ formatDaysLate(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Instructors Column -->
   <ng-container matColumnDef="instructors">
     <mat-header-cell *matHeaderCellDef> Instructor(s) </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="instructors-cell">
-      <i *ngIf="!workshop.instructors.length">No Instructors</i>
+    <mat-cell *matCellDef="let workshop">
+      <em *ngIf="!workshop.instructors.length">No Instructors</em>
       <p [style.margin]="'0'">{{ workshop.instructors.join(', ') }}</p>
     </mat-cell>
   </ng-container>
@@ -105,69 +105,69 @@
   <ng-container matColumnDef="verified">
     <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="center"> Verified? </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <mat-icon svgIcon="checkmark_green" *ngIf="workshop.isVerified"></mat-icon>
-      <mat-icon svgIcon="cancel_red" *ngIf="!workshop.isVerified"></mat-icon>
+      <mat-icon style="color: #4bae4f" *ngIf="workshop.isVerified">check_circle</mat-icon>
+      <mat-icon style="color: #f44336" *ngIf="!workshop.isVerified">cancel</mat-icon>
     </mat-cell>
   </ng-container>
 
   <!-- Edit Button Column -->
   <ng-container matColumnDef="edit">
-    <mat-header-cell *matHeaderCellDef> Edit &emsp;&emsp;&emsp;&emsp;
+    <mat-header-cell *matHeaderCellDef> Edit
       <button class="refresh-button" mat-button (click)="refresh()">
-        <mat-icon svgIcon="refresh_grey"></mat-icon>
+        <mat-icon style="color: #757575">refresh</mat-icon>
       </button>
     </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <button (click)="onEdit(workshop.sfId)" mat-raised-button> Edit &ensp;<mat-icon svgIcon="edit_grey"></mat-icon></button>
+      <button (click)="onEdit(workshop.sfId)" mat-raised-button> Edit &ensp;<mat-icon>edit</mat-icon></button>
     </mat-cell>
   </ng-container>
 
   <!-- Due Date Column -->
   <ng-container matColumnDef="dueDate">
-    <mat-header-cell *matHeaderCellDef mat-sort-header class="due-date-header-cell"> Due Date </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.dueDate }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Due Date </mat-header-cell>
+    <mat-cell *matCellDef="let workshop"> {{ workshop.dueDate }} </mat-cell>
   </ng-container>
 
   <!-- Host City Column -->
   <ng-container matColumnDef="hostCity">
-    <mat-header-cell *matHeaderCellDef mat-sort-header class="due-date-header-cell"> Host City </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.city }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Host City </mat-header-cell>
+    <mat-cell *matCellDef="let workshop"> {{ workshop.city }} </mat-cell>
   </ng-container>
 
   <!-- Host Country Column -->
   <ng-container matColumnDef="hostCountry">
-    <mat-header-cell *matHeaderCellDef mat-sort-header class="due-date-header-cell"> Host Country </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" class="due-date-cell"> {{ workshop.country }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Host Country </mat-header-cell>
+    <mat-cell *matCellDef="let workshop">{{ workshop.country }} </mat-cell>
   </ng-container>
 
   <!-- Actions Column -->
   <ng-container matColumnDef="actions">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
-    <mat-cell *matCellDef="let workshop" fxLayout="row" fxLayoutGap="2px">
+    <mat-cell *matCellDef="let workshop" class="actions">
 
       <!-- Non Editing Mode -->
       <ng-container *ngIf="selectedSfId != workshop.sfId">
         <button mat-mini-fab color="accent" (click)="selectedWorkshop = workshop">
-          <mat-icon svgIcon="edit_mode_white"></mat-icon>
+          <mat-icon>edit</mat-icon>
         </button>
 
         <button mat-mini-fab color="accent" (click)="onSelectWorkshop(workshop)">
-          <mat-icon svgIcon="description_white"></mat-icon>
+          <mat-icon>description</mat-icon>
         </button>
 
-        <button mat-mini-fab color="primary" (click)="delete(workshop)" *ngIf="authService.user && authService.user.isAdmin">
-          <mat-icon svgIcon="delete_white"></mat-icon>
+        <button mat-mini-fab color="warn" (click)="delete(workshop)" *ngIf="authService.user && authService.user.isAdmin">
+          <mat-icon>delete</mat-icon>
         </button>
       </ng-container>
 
       <!-- Edit Mode -->
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <button mat-mini-fab color="primary" (click)="selectedWorkshop = null">
-          <mat-icon svgIcon="cancel_white"></mat-icon>
+        <button mat-mini-fab color="warn" (click)="selectedWorkshop = null">
+          <mat-icon>cancel</mat-icon>
         </button>
 
         <button mat-mini-fab color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
-          <mat-icon svgIcon="save_white"></mat-icon>
+          <mat-icon>save</mat-icon>
         </button>
       </ng-container>
 

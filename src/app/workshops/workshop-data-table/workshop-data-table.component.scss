@@ -1,53 +1,41 @@
-.add-workshop {
-  font-weight: 300;
-  margin: 0 0 0 12px;
-}
-.course-type {
-  display: flex;
-}
-.course-type img {
-  margin-left: 12px;
-}
-@media only screen and (max-width: 480px) {
-  .course-type img {
-    margin: 0 auto;
-  }
-}
 .past-due {
   background-color: #ffd8c9;
 }
+
 .in-grace-period {
   background-color: #c3cfdc;
 }
-mat-row {
-  cursor: pointer;
-}
+
 mat-row.past-due:hover {
   background-color: #ddc4bc;
 }
 mat-row.in-grace-period:hover {
   background-color: #b7bfc7;
 }
-.action-type-header-cell,
-.action-type-cell {
-  flex: 1 0;
-}
-.workshop-type-header-cell,
-.workshop-type-cell {
-  flex: 2 0;
-}
-.due-date-header-cell,
-.due-date-cell {
-  flex: 1 0;
-}
-.days-late-header-cell,
-.days-late-cell {
-  flex: 1 0;
-}
-.instructors-header-cell,
-.instructors-cell {
-  flex: 1 0;
-}
+
 button.refresh-button {
   margin-left: 15%;
+}
+
+.location-cell > p {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+mat-cell:not(:last-of-type) {
+  padding-right: 10px;
+}
+
+// CSS fixes for issues in workshop-data-table.component.html
+mat-cell > mat-form-field {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.actions > button {
+  margin: 4px;
 }

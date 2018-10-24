@@ -1,4 +1,4 @@
-@import '~@angular/material/theming';
+@import '../node_modules/@angular/material/theming';
 @import './assets/sass/_globals';
 // Plus imports for other components in your app.
 
@@ -130,19 +130,6 @@ $affiliate-app-theme: mat-light-theme(
   }
   .mat-button.mat-success {
     color: $success-color;
-  }
-}
-
-// CSS fixes for issues in workshop-data-table.component.html
-mat-form-field.workshop-date-picker-form-field {
-  width: 100%;
-
-  .mat-input-wrapper.mat-form-field-wrapper {
-    padding-bottom: 0;
-
-    .mat-input-underline.mat-form-field-underline {
-      position: initial;
-    }
   }
 }
 
