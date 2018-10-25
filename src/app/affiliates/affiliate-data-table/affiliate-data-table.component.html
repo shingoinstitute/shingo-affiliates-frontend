@@ -43,7 +43,7 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header> Website </mat-header-cell>
       <mat-cell *matCellDef="let aff">
         <ng-container *ngIf="selectedId != aff.sfId">
-          <a [href]="aff.website" target="_blank">{{aff.website}}</a>
+          <a class="word-wrap" [href]="aff.website" target="_blank">{{aff.website}}</a>
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
@@ -63,27 +63,27 @@
           <mat-icon style="color: #757575">refresh</mat-icon>
         </button>
       </mat-header-cell>
-      <mat-cell *matCellDef="let aff" fxLayout fxLayoutGap="2px" class="dt-actions-cell">
+      <mat-cell *matCellDef="let aff" class="actions">
         <ng-container *ngIf="selectedId != aff.sfId">
-          <button mat-mini-fab matTooltip="Edit" aria-label="Edit Affiliate" (click)="selectedId = aff.sfId">
+          <button mat-mini-fab matTooltip="Edit" aria-label="Edit affiliate inline" (click)="selectedId = aff.sfId">
             <mat-icon>edit</mat-icon>
           </button>
 
-          <a mat-mini-fab matTooltip="View Affiliate Detail" aria-label="View Affiliate Detail" routerLink="/admin/affiliates/form/{{ aff.sfId }}">
+          <a mat-mini-fab matTooltip="View Detail" aria-label="View affiliate detail" routerLink="/admin/affiliates/form/{{ aff.sfId }}">
             <mat-icon>description</mat-icon>
           </a>
 
-          <button mat-mini-fab matTooltip="Delete" aria-label="Delete Affiliate" color="warn" (click)="delete(aff)">
+          <button mat-mini-fab matTooltip="Delete" aria-label="Delete affiliate" color="warn" (click)="delete(aff)">
             <mat-icon>delete</mat-icon>
           </button>
         </ng-container>
 
         <ng-container *ngIf="selectedId == aff.sfId">
-          <button mat-mini-fab matTooltip="Cancel" aria-label="Cancel Editing" color="warn" (click)="selectedId = ''">
+          <button mat-mini-fab matTooltip="Discard Changes" aria-label="Discard changes" color="warn" (click)="selectedId = ''">
             <mat-icon>cancel</mat-icon>
           </button>
 
-          <button mat-mini-fab matTooltip="Save" aria-label="Save Changes" (click)="saved.emit(aff)">
+          <button mat-mini-fab matTooltip="Save" aria-label="Save changes" (click)="saved.emit(aff)">
             <mat-icon>save</mat-icon>
           </button>
         </ng-container>

@@ -25,6 +25,7 @@ import {
   MatSnackBarModule,
   MatButtonModule,
   MatInputModule,
+  MatTooltipModule,
   MatProgressSpinnerModule,
 } from '@angular/material'
 
@@ -44,6 +45,7 @@ import {
     MatButtonModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
 
     FlexLayoutModule,
     FormsModule,

@@ -22,7 +22,8 @@ button.refresh-button {
   margin-bottom: 4px;
 }
 
-mat-cell:not(:last-of-type) {
+mat-cell:not(:last-of-type),
+mat-header-cell:not(:last-of-type) {
   padding-right: 10px;
 }
 
@@ -36,6 +37,7 @@ mat-cell > mat-form-field {
   flex-flow: row wrap;
 }
 
-.actions > button {
-  margin: 4px;
+.actions > button,
+.actions > a {
+  margin: 2px;
 }

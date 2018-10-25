@@ -147,26 +147,27 @@
 
       <!-- Non Editing Mode -->
       <ng-container *ngIf="selectedSfId != workshop.sfId">
-        <button mat-mini-fab color="accent" (click)="selectedWorkshop = workshop">
+        <button mat-mini-fab matTooltip="Edit" aria-label="Edit workshop inline" color="accent" (click)="selectedWorkshop = workshop">
           <mat-icon>edit</mat-icon>
         </button>
 
-        <button mat-mini-fab color="accent" (click)="onSelectWorkshop(workshop)">
+        <button mat-mini-fab matTooltip="View Detail" aria-label="View workshop detail" color="accent" (click)="onSelectWorkshop(workshop)">
           <mat-icon>description</mat-icon>
         </button>
 
-        <button mat-mini-fab color="warn" (click)="delete(workshop)" *ngIf="authService.user && authService.user.isAdmin">
+        <button mat-mini-fab matTooltip="Delete" aria-label="Delete workshop" color="warn" (click)="delete(workshop)"
+          *ngIf="authService.user && authService.user.isAdmin">
           <mat-icon>delete</mat-icon>
         </button>
       </ng-container>
 
       <!-- Edit Mode -->
       <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <button mat-mini-fab color="warn" (click)="selectedWorkshop = null">
+        <button mat-mini-fab matTooltip="Discard Changes" aria-label="Discard changes" color="warn" (click)="selectedWorkshop = null">
           <mat-icon>cancel</mat-icon>
         </button>
 
-        <button mat-mini-fab color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
+        <button mat-mini-fab matTooltip="Save" aria-label="Save changes" color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
           <mat-icon>save</mat-icon>
         </button>
       </ng-container>

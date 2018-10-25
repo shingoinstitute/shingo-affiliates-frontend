@@ -25,15 +25,33 @@ a {
 .shingo-bg {
   background: radial-gradient($primary-color-lighten-1, $primary-color);
 }
-// .md-primary { background-color: $primary-color; }
-// .md-primary-text { color: $primary-color; }
-// .md-accent { background-color: $accent-color; }
-// .md-accent-text { color: $accent-color; }
-// .md-warn { background-color: $warn-color; }
-// snack-bar-container.md-warn { background-color: $warn-color !important; }
-// .md-warn-text { color: $warn-color; }
-// .md-success { background-color: $success-color; }
-// .md-success-text { color: $success-color; }
+.md-primary {
+  background-color: $primary-color;
+}
+.md-primary-text {
+  color: $primary-color;
+}
+.md-accent {
+  background-color: $accent-color;
+}
+.md-accent-text {
+  color: $accent-color;
+}
+.md-warn {
+  background-color: $warn-color;
+}
+snack-bar-container.md-warn {
+  background-color: $warn-color !important;
+}
+.md-warn-text {
+  color: $warn-color;
+}
+.md-success {
+  background-color: $success-color;
+}
+.md-success-text {
+  color: $success-color;
+}
 .md-grey,
 .grey {
   color: $grey-color;
@@ -47,9 +65,6 @@ a {
 }
 
 /* Sidenav */
-// .mat-sidenav-content {
-//   min-height: calc(100vh - $navbar-height);
-// }
 mat-sidenav {
   margin-right: 4px;
   box-shadow: 1px 0 3px rgba(0, 0, 0, 0.24);
@@ -82,6 +97,10 @@ mat-nav-list p {
 }
 .word-nowrap {
   white-space: nowrap;
+}
+.word-wrap {
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 /* Cards (because sometimes `mat-card` is just too annoying) */

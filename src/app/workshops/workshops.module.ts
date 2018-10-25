@@ -37,6 +37,7 @@ import {
   MatSnackBarModule,
   MatCardModule,
   MatDatepickerModule,
+  MatTooltipModule,
 } from '@angular/material'
 import { MatMomentDateModule } from '@angular/material-moment-adapter'
 
@@ -63,6 +64,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter'
     MatProgressBarModule,
     MatSnackBarModule,
     MatCardModule,
+    MatTooltipModule,
 
     FlexLayoutModule,
     SharedModule.forRoot(),
