@@ -178,7 +178,7 @@
   <mat-row [id]="workshop.sfId" *matRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></mat-row>
 </mat-table>
 
-<div class="spinner-container" fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+<div fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
   <mat-spinner diameter="48"></mat-spinner>
 </div>
 
