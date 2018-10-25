@@ -34,7 +34,9 @@ import {
   MatToolbarModule,
   MatDialogModule,
   MatCardModule,
+  MatTreeModule,
 } from '@angular/material'
+import { FileTreeComponent } from './file-tree/file-tree.component'
 
 @NgModule({
   imports: [
@@ -53,6 +55,7 @@ import {
     MatToolbarModule,
     MatDialogModule,
     MatCardModule,
+    MatTreeModule,
 
     FlexLayoutModule,
     WorkshopsModule,
@@ -73,6 +76,7 @@ import {
     ChangePasswordDialog,
     ForbiddenPageComponent,
     PageNotFoundComponent,
+    FileTreeComponent,
   ],
   exports: [
     DashboardComponent,
@@ -85,6 +89,7 @@ import {
     QuickDetailsComponent,
     MaterialsDialog,
     MatDatepickerModule,
+    FileTreeComponent,
   ],
   entryComponents: [ChangePasswordDialog, MaterialsDialog],
 })

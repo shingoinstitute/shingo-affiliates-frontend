@@ -88,7 +88,7 @@
             <input required matInput [matDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
               formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate').value"></mat-datepicker>
+            <mat-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate')!.value"></mat-datepicker>
           </mat-form-field>
         </div>
 
@@ -99,7 +99,7 @@
             <input required matInput [matDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
               formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate').value"></mat-datepicker>
+            <mat-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate')!.value"></mat-datepicker>
           </mat-form-field>
         </div>
       </div>

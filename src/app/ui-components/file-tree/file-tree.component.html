@@ -1,0 +1,40 @@
+<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+    <ng-template #innerData>
+      <mat-icon>{{ node.icon }}</mat-icon>
+      {{ node.name }}
+    </ng-template>
+    <ng-container [ngSwitch]="node.action?.kind">
+      <a *ngSwitchCase="'href'" mat-button color="primary" [href]="node.action.target" target="_blank" rel="noopener noreferrer">
+        <ng-container *ngTemplateOutlet="innerData"></ng-container>
+      </a>
+      <button *ngSwitchCase="'callback'" mat-button color="primary" (click)="node.action.target($event, node)">
+        <ng-container *ngTemplateOutlet="innerData"></ng-container>
+      </button>
+      <ng-container *ngSwitchDefault>
+        <ng-container *ngTemplateOutlet="innerData"></ng-container>
+      </ng-container>
+    </ng-container>
+  </mat-tree-node>
+
+  <mat-tree-node *matTreeNodeDef="let node; when: isFolder" matTreeNodePadding>
+    <div fxLayout="row">
+      <button mat-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+        </mat-icon>
+        {{node.name}}
+      </button>
+      <ng-container *ngIf="node.action">
+        <ng-container [ngSwitch]="node.action.kind">
+          <a *ngSwitchCase="'href'" mat-icon-button color="primary" [href]="node.action.target" target="_blank" rel="noopener noreferrer">
+            <mat-icon>link</mat-icon>
+          </a>
+          <button *ngSwitchCase="'callback'" mat-icon-button color="primary" (click)="node.action.target($event, node)">
+            <mat-icon>{{ node.action.icon || 'play_arrow' }}</mat-icon>
+          </button>
+        </ng-container>
+      </ng-container>
+    </div>
+  </mat-tree-node>
+</mat-tree>

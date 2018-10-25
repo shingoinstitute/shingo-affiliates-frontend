@@ -1,14 +1,12 @@
 <!-- All folders and files that deall with workshops go here -->
 <mat-card style="overflow-y: scroll;" class="md-whiteframe-3dp">
   <mat-card-title>
-
     <span class="md-headline">Workshops</span>
-
   </mat-card-title>
   <mat-card-content>
-    <div fxLayout="column" fxLayoutGap="8px">
-      <!-- Discover Workshop -->
-      <span class="clickable" (click)="folder['Discover']=!folder['Discover']">
+    <app-file-tree [data]="TREE_DATA"></app-file-tree>
+    <!-- Discover Workshop -->
+    <!-- <span class="clickable" (click)="folder['Discover']=!folder['Discover']">
         <mat-icon svgIcon="folder" aria-label="Open Discover Folder"></mat-icon>
         <b>Discover Excellence</b>
       </span>
@@ -37,10 +35,10 @@
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/abzo82llmun6d6ndihr6m9xcx8wks0tk">
             <mat-icon svgIcon="insert_drive_file" aria-label="Open Videos"></mat-icon> Videos</a>
         </li>
-      </ul>
+      </ul> -->
 
-      <!-- Enable Workshop -->
-      <span class="clickable" (click)="folder['Enable']=!folder['Enable']">
+    <!-- Enable Workshop -->
+    <!-- <span class="clickable" (click)="folder['Enable']=!folder['Enable']">
         <mat-icon svgIcon="folder" aria-label="Open Enable Folder"></mat-icon>
         <b>Cultural Enablers</b>
       </span>
@@ -69,10 +67,10 @@
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/tnlrn0lhtwqnaf7cvsrml5j0fq2vkq2d">
             <mat-icon svgIcon="insert_drive_file" aria-label="Open Videos"></mat-icon> Videos</a>
         </li>
-      </ul>
+      </ul> -->
 
-      <!-- Improve Workshop -->
-      <span class="clickable" (click)="folder['Improve']=!folder['Improve']">
+    <!-- Improve Workshop -->
+    <!-- <span class="clickable" (click)="folder['Improve']=!folder['Improve']">
         <mat-icon svgIcon="folder" aria-label="Open Improve Folder"></mat-icon>
         <b>Continuous Improvement</b>
       </span>
@@ -97,10 +95,10 @@
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/k5w7lhrhu1e473rcyha5s2j4fxft9n8a">
             <mat-icon svgIcon="insert_drive_file" aria-label="Open Slide Presentations"></mat-icon> Slide Presentations</a>
         </li>
-      </ul>
+      </ul> -->
 
-      <!-- Align Workshop -->
-      <span class="clickable" (click)="folder['Align']=!folder['Align']">
+    <!-- Align Workshop -->
+    <!-- <span class="clickable" (click)="folder['Align']=!folder['Align']">
         <mat-icon svgIcon="folder" aria-label="Open Align Folder"></mat-icon>
         <b>Enterprise Alignment</b>
       </span>
@@ -129,10 +127,10 @@
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/hrbhsrhe3zmgc8cfed27sghsfcfmdscy">
             <mat-icon svgIcon="insert_drive_file" aria-label="Open Videos"></mat-icon> Videos</a>
         </li>
-      </ul>
+      </ul> -->
 
-      <!-- Build Workshop -->
-      <span class="clickable" (click)="folder['Build']=!folder['Build']">
+    <!-- Build Workshop -->
+    <!-- <span class="clickable" (click)="folder['Build']=!folder['Build']">
         <mat-icon svgIcon="folder" aria-label="Open Build Folder"></mat-icon>
         <b>Build Excellence</b>
       </span>
@@ -161,10 +159,9 @@
           <a class="mat-primary" target="_blank" href="https://usu.box.com/s/9gqriwt5yz174pt4043dmckbp1kcuv3k">
             <mat-icon svgIcon="insert_drive_file" aria-label="Open Videos"></mat-icon> Videos</a>
         </li>
-      </ul>
+      </ul> -->
 
-      <a class="mat-primary" target="_blank" href="https://usu.box.com/s/v6pm8c6e3tasm3di6izd9p7kstscvshp">
-        <mat-icon svgIcon="link" aria-label="General Workshop Graphics">link</mat-icon> General Workshop Graphics</a>
-    </div>
+    <!-- <a class="mat-primary" target="_blank" href="https://usu.box.com/s/v6pm8c6e3tasm3di6izd9p7kstscvshp">
+        <mat-icon svgIcon="link" aria-label="General Workshop Graphics">link</mat-icon> General Workshop Graphics</a> -->
   </mat-card-content>
 </mat-card>
