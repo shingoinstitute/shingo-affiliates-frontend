@@ -47,10 +47,10 @@ export class ProfileComponent implements OnInit {
 
   public changePassword() {
     const dialogRef = this.dialog.open(ChangePasswordDialog)
-    dialogRef
-      .afterClosed()
-      .subscribe(message =>
-        this.dialog.open(SimpleMessageDialog, { data: message }),
-      )
+    dialogRef.afterClosed().subscribe(message => {
+      if (message) {
+        this.dialog.open(SimpleMessageDialog, { data: message })
+      }
+    })
   }
 }
