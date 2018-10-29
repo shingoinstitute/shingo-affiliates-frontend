@@ -6,10 +6,11 @@ import { FlatTreeControl } from '@angular/cdk/tree'
 export type FileSystemNode = FolderNode | FileNode
 
 export type NodeAction =
-  | { kind: 'href'; target: string }
+  | { kind: 'href'; icon?: string; description?: string; target: string }
   | {
       kind: 'callback'
       icon?: string
+      description?: string
       target: (click: Event, f: FileNode) => void
     }
 

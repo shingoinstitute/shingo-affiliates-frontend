@@ -27,10 +27,12 @@
       </button>
       <ng-container *ngIf="node.action">
         <ng-container [ngSwitch]="node.action.kind">
-          <a *ngSwitchCase="'href'" mat-icon-button color="primary" [href]="node.action.target" target="_blank" rel="noopener noreferrer">
-            <mat-icon>link</mat-icon>
+          <a *ngSwitchCase="'href'" mat-icon-button [attr.aria-label]="node.action.description || 'secondary action for ' + node.name"
+            color="primary" [href]="node.action.target" target="_blank" rel="noopener noreferrer">
+            <mat-icon>{{ node.action.icon || 'link' }}</mat-icon>
           </a>
-          <button *ngSwitchCase="'callback'" mat-icon-button color="primary" (click)="node.action.target($event, node)">
+          <button *ngSwitchCase="'callback'" mat-icon-button [attr.aria-label]="node.action.description || 'secondary action for ' + node.name"
+            color="primary" (click)="node.action.target($event, node)">
             <mat-icon>{{ node.action.icon || 'play_arrow' }}</mat-icon>
           </button>
         </ng-container>
