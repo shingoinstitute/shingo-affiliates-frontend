@@ -150,7 +150,6 @@ export class AppComponent implements OnDestroy {
     folders[folder] = true
     this.dialog.open(MaterialsDialog, {
       width: '80%',
-      height: '100%',
       data: folders,
     })
   }

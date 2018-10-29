@@ -30,6 +30,6 @@ export class QuickDetailsComponent implements OnInit {
   }
 
   public displayAfMaterials() {
-    this.dialog.open(MaterialsDialog, { width: '80%', height: '100%' })
+    this.dialog.open(MaterialsDialog, { width: '80%' })
   }
 }
