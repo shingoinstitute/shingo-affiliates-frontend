@@ -88,9 +88,9 @@
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button mat-raised-button class="mat-accent" [matDialogClose]="affiliate" [disabled]="!affForm.valid"> Save
+      <button mat-raised-button class="mat-accent" [mat-dialog-close]="affiliate" [disabled]="!affForm.valid"> Save
       </button>
-      <button mat-raised-button [matDialogClose]="false"> Cancel </button>
+      <button mat-raised-button [mat-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">

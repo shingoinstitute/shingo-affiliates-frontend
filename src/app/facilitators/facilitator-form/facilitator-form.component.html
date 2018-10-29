@@ -6,9 +6,9 @@
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button mat-raised-button type="button" class="mat-accent" [matDialogClose]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
+      <button mat-raised-button type="button" class="mat-accent" [mat-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
         Save </button>
-      <button mat-raised-button type="button" [matDialogClose]="false"> Cancel </button>
+      <button mat-raised-button type="button" [mat-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
@@ -69,9 +69,9 @@
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button mat-raised-button type="button" class="mat-accent" [matDialogClose]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
+      <button mat-raised-button type="button" class="mat-accent" [mat-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
         Save </button>
-      <button mat-raised-button type="button" [matDialogClose]="false"> Cancel </button>
+      <button mat-raised-button type="button" [mat-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
