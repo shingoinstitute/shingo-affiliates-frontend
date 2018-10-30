@@ -13,7 +13,7 @@ import {
   left,
   Either,
   right,
-} from '../../../util/Either'
+} from '../../../util/functional/Either'
 
 export interface MultipleFailure {
   reason: 'multiple'

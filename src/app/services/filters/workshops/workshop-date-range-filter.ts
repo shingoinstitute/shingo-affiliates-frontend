@@ -1,43 +1,34 @@
 import { Filter } from '../filter.abstract'
-import { BehaviorSubject } from 'rxjs'
 import { Workshop } from '../../../workshops/workshop.model'
+import { and, constant } from '../../../util/functional'
 
-export class WorkshopDateRangeFilter extends Filter {
-  public _range: DateRange | null = null
+// tslint:disable-next-line:prettier
+// prettier-ignore
+type DateRange = [(Date | null)?, (Date | null)?]
 
-  protected dataChangeSource: BehaviorSubject<DateRange | null>
-
+export class WorkshopDateRangeFilter extends Filter<Workshop, DateRange> {
   constructor(name: string) {
     super(name)
-    this.dataChangeSource = new BehaviorSubject<DateRange | null>(null)
-    this.dataChangeSource.subscribe(range => {
-      this._range = range
-    })
   }
 
-  public applyFilter(workshops: Workshop[]): Workshop[] {
-    if (!this._range) return workshops
-    const range = this._range
-    if (range[0] && range[1]) {
-      return workshops.filter(
-        w =>
-          this.greaterThanWithoutTime(
-            new Date(w.startDate),
-            new Date(range[0]),
-          ) &&
-          this.lessThanWithoutTime(new Date(w.endDate), new Date(range[1])),
-      )
-    } else if (range[0]) {
-      return workshops.filter(w =>
-        this.greaterThanWithoutTime(new Date(w.startDate), new Date(range[0])),
-      )
-    } else if (range[1]) {
-      return workshops.filter(w =>
-        this.lessThanWithoutTime(new Date(w.endDate), new Date(range[1])),
-      )
-    } else {
-      return workshops
+  private _endsBefore = (d: Date) => (w: Workshop) =>
+    this.lessThanWithoutTime(new Date(w.endDate), new Date(d))
+
+  private _startsAfter = (d: Date) => (w: Workshop) =>
+    this.greaterThanWithoutTime(new Date(w.startDate), new Date(d))
+
+  protected _filter = (range: DateRange) => {
+    const startsAfter = range[0]
+    const endsBefore = range[1]
+
+    if (startsAfter && endsBefore) {
+      return and(this._startsAfter(startsAfter), this._endsBefore(endsBefore))
+    } else if (startsAfter) {
+      return this._startsAfter(startsAfter)
+    } else if (endsBefore) {
+      return this._endsBefore(endsBefore)
     }
+    return constant(true)
   }
 
   public greaterThanWithoutTime(a: Date, b: Date): boolean {
