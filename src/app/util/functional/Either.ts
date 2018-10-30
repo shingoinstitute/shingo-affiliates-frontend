@@ -4,9 +4,9 @@ export type Either<L, R> = Left<L> | Right<R>
 export const left = <L>(L: L): Left<L> => [false, L]
 export const right = <R>(R: R): Right<R> => [true, R]
 export const isLeft = <L, R>(either: Either<L, R>): either is Left<L> =>
-  !either[0]
+  either.length === 2 && !either[0]
 export const isRight = <L, R>(either: Either<L, R>): either is Right<R> =>
-  either[0]
+  either.length === 2 && either[0]
 
 export const mapEither = <L, R, RR = R, LL = L>(
   mright: ((v: R) => RR),
