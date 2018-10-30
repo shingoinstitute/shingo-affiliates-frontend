@@ -4,7 +4,7 @@ import { and, constant } from '../../../util/functional'
 
 // tslint:disable-next-line:prettier
 // prettier-ignore
-type DateRange = [(Date | null)?, (Date | null)?]
+export type DateRange = [(Date | null)?, (Date | null)?]
 
 export class WorkshopDateRangeFilter extends Filter<Workshop, DateRange> {
   constructor(name: string) {

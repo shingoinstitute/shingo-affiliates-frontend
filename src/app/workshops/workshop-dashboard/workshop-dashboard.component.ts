@@ -15,10 +15,7 @@ import {
   AfterViewInit,
 } from '@angular/core'
 import {
-  MatRadioButton,
   MatDatepicker,
-  MatSort,
-  MatPaginator,
   MatCheckboxChange,
   MatCheckbox,
   MatSelect,
@@ -35,11 +32,22 @@ import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop
 import {
   WorkshopProperties,
   WorkshopService,
+  Workshop,
 } from '../../services/workshop/workshop.service'
 
 import { at } from 'lodash'
-
-declare var $: any
+import { Moment } from 'moment'
+import { FormControl } from '@angular/forms'
+import {
+  just,
+  nothing,
+  Maybe,
+  map as mapMaybe,
+  justs,
+} from '../../util/functional/Maybe'
+import { PropertyFilter } from '../../services/filters/property-filter'
+import { snd } from '../../util/functional'
+import { DateRange } from '../../services/filters/workshops/workshop-date-range-filter'
 
 @Component({
   selector: 'app-workshop-dashboard',
@@ -75,8 +83,6 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSelect)
   public statusSelect!: MatSelect
-  @ViewChild('textSearchInput')
-  public textSearchInput!: ElementRef
 
   @ViewChild(WorkshopDataTableComponent)
   public workshopTable!: WorkshopDataTableComponent
@@ -85,8 +91,8 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public _showFilters = false
   public _showStatusFilter = false
   public _showTextFilter = false
-  public dateRange: DateRange | [null, null] = [null, null]
-  public deactivated: string[] = []
+  public dateRange: DateRange = [null, null]
+  public deactivated: Set<string> = new Set()
   public displayedColumns: WorkshopProperties[] = [
     'workshopType',
     'startDate',
@@ -114,10 +120,10 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   ]
   public filterOption!: string
   public filterOptions: string[] = [] // the list of available filter options shown to the user
-  public filters: Filter[] = [] // the list of filter objects used to do the actual filtering
+  public filters: Array<Filter<Workshop, any>> = [] // the list of filter objects used to do the actual filtering
   public selectedStatuses: any[] = []
   public statuses: string[] = []
-  public textSearch = ''
+  public textSearchControl = new FormControl('')
 
   public get user(): User {
     return this.route.snapshot.data['user']
@@ -133,126 +139,110 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.setStatuses()
   }
 
-  public endDateChanged($event: MatDatepickerInputEvent<Date>) {
+  public endDateChanged($event: MatDatepickerInputEvent<Moment>) {
     const date = $event.value
     const drIndex = this.filters.findIndex(f => f.name === 'by Date')
-    this.dateRange[0] = date
-    this.filters[drIndex].dataChange.next(this.dateRange)
+    this.dateRange[1] = date && date.toDate()
+    this.filters[drIndex].criteria = this.dateRange
   }
 
-  public startDateChanged($event: MatDatepickerInputEvent<Date>) {
+  public startDateChanged($event: MatDatepickerInputEvent<Moment>) {
     const date = $event.value
     const drIndex = this.filters.findIndex(f => f.name === 'by Date')
-    this.dateRange[1] = date
-    this.filters[drIndex].dataChange.next(this.dateRange)
+    this.dateRange[0] = date && date.toDate()
+    this.filters[drIndex].criteria = this.dateRange
   }
 
   public ngOnInit() {
     this.initFilters()
 
     const textIndex = this.filters.findIndex(f => f.name === 'by Text')
-    observableFromEvent(this.textSearchInput.nativeElement, 'keyup')
+    this.textSearchControl.valueChanges
       .pipe(debounceTime(150))
       .subscribe(event => {
-        this.filters[textIndex].dataChange.next(this.textSearch)
+        console.log('got searchEvent', event)
+        this.filters[textIndex].criteria = this.textSearchControl.value
       })
   }
 
   public ngAfterViewInit() {
-    this.fillViewPortHeight()
     const observable: Array<
       Observable<MatCheckboxChange>
     > = this.selectedFilters.map(cbc => observableFrom(cbc.change))
     observableMerge(...observable).subscribe(event => this.filter(event))
   }
 
+  private addFilters(...fs: Array<Filter<Workshop, any>>) {
+    const names = fs.map(f => f.name)
+    this.filterOptions.push(...names)
+    this.filters.push(...fs)
+  }
+
   public initFilters() {
-    this.filterOptions = ['by Upcoming Workshops']
-    this.filters = [
+    this.addFilters(
       this.filterFactory.createDateRangeFilter(
         'by Upcoming Workshops',
       ) /* Upcoming */,
-    ]
+    )
 
     if (this.user.isAdmin) {
-      this.filterOptions.push('by Status')
-      this.filters.push(this.filterFactory.createPropertyFilter('by Status')) // By Status (for admin)
+      this.addFilters(this.filterFactory.createPropertyFilter('by Status')) // By Status (for admin)
     } else {
-      this.filterOptions = this.filterOptions.concat([
-        'by Action Pending',
-        'by Archived',
-      ])
-      this.filters = this.filters.concat([
+      this.addFilters(
         this.filterFactory.createPropertyFilter('by Action Pending'), // Action Pending Property
         this.filterFactory.createPropertyFilter('by Archived'), // Archived Workshops
-      ])
+      )
     }
-    this.filterOptions = this.filterOptions.concat(['by Text', 'by Date'])
-    this.filters = this.filters.concat([
+
+    this.addFilters(
       this.filterFactory.createTextFilter('by Text'), // Text Search
       this.filterFactory.createDateRangeFilter('by Date'), // Date range
-    ])
+    )
+  }
+
+  private findFilter(name: string): Maybe<Filter<Workshop, any>> {
+    const filter = this.filters.find(f => f.name === name)
+    return typeof filter !== 'undefined' ? just(filter) : nothing
   }
 
   public goToWorkshopEdit(sfId: string) {
     this.router.navigateByUrl(`/workshops/${sfId}/edit`)
   }
 
-  public selectedStatusChanged(event: MatSelectChange) {
-    const index = this.filters.findIndex(f => f.name === 'by Status')
-    this.filters[index].dataChange.next({
-      key: 'status',
-      value: this.selectedStatuses,
-    })
+  public selectedStatusChanged(_event: MatSelectChange) {
+    mapMaybe(
+      this.findFilter('by Status') as Maybe<PropertyFilter<Workshop>>,
+      (f: PropertyFilter<Workshop>) =>
+        (f.criteria = {
+          key: 'status',
+          value: this.selectedStatuses,
+        }),
+    )
   }
 
   public removeDeactivated(items: string[]) {
     for (const item of items) {
-      const index = this.deactivated.findIndex(d => d === item)
-      this.deactivated.splice(index, 1)
+      this.deactivated.delete(item)
     }
-  }
-
-  /**
-   * @desc Hack to get component to fill full height of view
-   * @todo Put this into a directive named something like [fill-viewport]
-   */
-  public fillViewPortHeight() {
-    // const compView = $('.filter-options-container')[0]
-    // if (compView) {
-    //   const toolbarHeight = window.innerWidth > 600 ? 64 : 56
-    //   $(compView).css('min-height', `${window.innerHeight - toolbarHeight}px`)
-    // }
   }
 
   public filter(cbc: MatCheckboxChange) {
     const value = cbc.source.value
-    let payload: { data: any; deactivate: number[] }
-    const indices = {
-      'by Upcoming Workshops': this.filters.findIndex(
-        f => f.name === 'by Upcoming Workshops',
-      ),
-      'by Action Pending': this.filters.findIndex(
-        f => f.name === 'by Action Pending',
-      ),
-      'by Archived': this.filters.findIndex(f => f.name === 'by Archived'),
-      'by Status': this.filters.findIndex(f => f.name === 'by Status'),
-      'by Text': this.filters.findIndex(f => f.name === 'by Text'),
-      'by Date': this.filters.findIndex(f => f.name === 'by Date'),
-    }
-    let deactivate: any[] = []
+    let payload: { data: any; deactivate: Array<Maybe<Filter<Workshop, any>>> }
+
+    let deactivate: Array<Maybe<Filter<Workshop, any>>> = []
     switch (value) {
       case 'by Upcoming Workshops': // upcoming
-        deactivate = at(indices, [
-          'by Action Pending',
-          'by Archived',
-          'by Date',
-        ])
+        deactivate = ['by Action Pending', 'by Archived', 'by Date'].map(n =>
+          this.findFilter(n),
+        )
         if (cbc.checked)
           payload = { data: [new Date().withoutTime(), null], deactivate }
         break
       case 'by Action Pending': // actions pending
-        deactivate = at(indices, ['by Upcoming Workshops', 'by Archived'])
+        deactivate = ['by Upcoming Workshops', 'by Archived'].map(n =>
+          this.findFilter(n),
+        )
         if (cbc.checked) {
           payload = {
             data: {
@@ -269,7 +259,9 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
         }
         break
       case 'by Archived': // archived
-        deactivate = at(indices, ['by Upcoming Workshops', 'by Action Pending'])
+        deactivate = ['by Upcoming Workshops', 'by Action Pending'].map(n =>
+          this.findFilter(n),
+        )
         if (cbc.checked)
           payload = { data: { key: 'status', value: 'Archived' }, deactivate }
         break
@@ -283,52 +275,64 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
         break
       case 'by Text': // text
         this._showTextFilter = cbc.checked
-        if (cbc.checked) payload = { data: this.textSearch, deactivate }
+        if (cbc.checked && this.textSearchControl.value)
+          payload = { data: this.textSearchControl.value, deactivate }
         break
       case 'by Date': // date range
-        deactivate = at(indices, ['by Upcoming Workshops'])
+        deactivate = [this.findFilter('by Upcoming Workshops')]
         this._showDateRange = cbc.checked
         if (cbc.checked) payload = { data: this.dateRange, deactivate }
     }
 
-    if (cbc.checked)
-      // tslint:disable-next-line:no-non-null-assertion
-      this.applyFilter((indices as any)[cbc.source.value], payload!)
-    else {
-      this.removeDeactivated(at(this.filterOptions, deactivate))
-      this.applyFilter((indices as any)[cbc.source.value], {
-        data: undefined,
-        deactivate: [],
+    if (cbc.checked) {
+      mapMaybe(
+        this.findFilter(cbc.source.value),
+        // tslint:disable:no-non-null-assertion
+        f =>
+          this.applyFilter(f, {
+            ...payload!,
+            deactivate: justs(payload!.deactivate).map(snd),
+          }),
+        // tslint:enable:no-non-null-assertion
+      )
+    } else {
+      this.removeDeactivated(justs(deactivate).map(j => j[1].name))
+      mapMaybe(this.findFilter(cbc.source.value), f => {
+        f.active = false
       })
     }
+
     this.deactivateFilters()
   }
 
   public applyFilter(
-    index: number,
-    { data, deactivate }: { data: any; deactivate: string[] | number[] },
+    filter: Filter<Workshop, any>,
+    {
+      data,
+      deactivate,
+    }: { data: any; deactivate: Array<Filter<Workshop, any>> },
   ) {
-    this.filters[index].dataChange.next(data)
-    this.deactivated = this.deactivated.concat(
-      at(this.filterOptions, deactivate),
-    )
+    filter.criteria = data
+    const names = deactivate.map(v => v.name)
+    names.forEach(n => this.deactivated.add(n))
   }
 
   public deactivateFilters() {
-    const values = new Set(this.deactivated)
     this.selectedFilters.map(cb => {
-      cb.disabled = values.has(cb.value)
+      cb.disabled = this.deactivated.has(cb.value)
     })
   }
 
   public clearFilters() {
     this.dateRange = [null, null]
-    this.textSearch = ''
+    this.textSearchControl.setValue('')
     this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null
     this.startDFPicker._selected = this.endDFPicker._selected = null
     this._showDateRange = this._showTextFilter = this._showStatusFilter = false
-    this.filters.map(f => f.dataChange.next(undefined))
-    this.deactivated = []
+    this.filters.map(f => {
+      f.active = false
+    })
+    this.deactivated.clear()
     this.selectedFilters.map(cb => (cb.checked = false))
     this.selectedStatuses = []
     this.deactivateFilters()
@@ -339,7 +343,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null
     this.startDFPicker._selected = this.endDFPicker._selected = null
     const index = this.filters.findIndex(f => f.name === 'by Date')
-    this.filters[index].dataChange.next(undefined)
+    this.filters[index].active = false
   }
 
   public toggleFilters() {
