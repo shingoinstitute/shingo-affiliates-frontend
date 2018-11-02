@@ -3,9 +3,10 @@ import {
   from as observableFrom,
   fromEvent as observableFromEvent,
   Observable,
+  of,
 } from 'rxjs'
 
-import { debounceTime } from 'rxjs/operators'
+import { debounceTime, map } from 'rxjs/operators'
 import {
   Component,
   OnInit,
@@ -35,7 +36,6 @@ import {
   Workshop,
 } from '../../services/workshop/workshop.service'
 
-import { at } from 'lodash'
 import { Moment } from 'moment'
 import { FormControl } from '@angular/forms'
 import {
@@ -43,11 +43,10 @@ import {
   nothing,
   Maybe,
   map as mapMaybe,
-  justs,
 } from '../../util/functional/Maybe'
 import { PropertyFilter } from '../../services/filters/property-filter'
-import { snd } from '../../util/functional'
 import { DateRange } from '../../services/filters/workshops/workshop-date-range-filter'
+import { catMaybes } from '../../util/functional/Array'
 
 @Component({
   selector: 'app-workshop-dashboard',
@@ -70,22 +69,6 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   @ViewChildren(MatCheckbox)
   public selectedFilters: MatCheckbox[] = []
-
-  @ViewChild('startDateFilterPicker')
-  public startDFPicker!: MatDatepicker<Date>
-  @ViewChild('endDateFilterPicker')
-  public endDFPicker!: MatDatepicker<Date>
-
-  @ViewChild('startDFInput')
-  public startDFInput!: ElementRef
-  @ViewChild('endDFInput')
-  public endDFInput!: ElementRef
-
-  @ViewChild(MatSelect)
-  public statusSelect!: MatSelect
-
-  @ViewChild(WorkshopDataTableComponent)
-  public workshopTable!: WorkshopDataTableComponent
 
   public _showDateRange = false
   public _showFilters = false
@@ -121,9 +104,11 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   public filterOption!: string
   public filterOptions: string[] = [] // the list of available filter options shown to the user
   public filters: Array<Filter<Workshop, any>> = [] // the list of filter objects used to do the actual filtering
-  public selectedStatuses: any[] = []
-  public statuses: string[] = []
+  public statuses: Observable<string[]> = of([])
   public textSearchControl = new FormControl('')
+  public statusControl = new FormControl()
+  public startDateControl = new FormControl()
+  public endDateControl = new FormControl()
 
   public get user(): User {
     return this.route.snapshot.data['user']
@@ -139,30 +124,40 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.setStatuses()
   }
 
-  public endDateChanged($event: MatDatepickerInputEvent<Moment>) {
-    const date = $event.value
-    const drIndex = this.filters.findIndex(f => f.name === 'by Date')
-    this.dateRange[1] = date && date.toDate()
-    this.filters[drIndex].criteria = this.dateRange
-  }
-
-  public startDateChanged($event: MatDatepickerInputEvent<Moment>) {
-    const date = $event.value
-    const drIndex = this.filters.findIndex(f => f.name === 'by Date')
-    this.dateRange[0] = date && date.toDate()
-    this.filters[drIndex].criteria = this.dateRange
-  }
-
   public ngOnInit() {
     this.initFilters()
 
-    const textIndex = this.filters.findIndex(f => f.name === 'by Text')
-    this.textSearchControl.valueChanges
-      .pipe(debounceTime(150))
-      .subscribe(event => {
-        console.log('got searchEvent', event)
-        this.filters[textIndex].criteria = this.textSearchControl.value
+    this.textSearchControl.valueChanges.pipe(debounceTime(150)).subscribe(() =>
+      mapMaybe(this.findFilter('by Text'), f => {
+        f.criteria = this.textSearchControl.value
+      }),
+    )
+    this.statusControl.valueChanges.subscribe(value =>
+      mapMaybe(
+        this.findFilter('by Status') as Maybe<PropertyFilter<Workshop>>,
+        f => {
+          f.criteria = {
+            key: 'status',
+            value,
+          }
+        },
+      ),
+    )
+    this.startDateControl.valueChanges.subscribe(value =>
+      this.changeDateFilter(value, 0),
+    )
+    this.endDateControl.valueChanges.subscribe(value =>
+      this.changeDateFilter(value, 1),
+    )
+  }
+
+  private changeDateFilter(date: Moment, idx: 0 | 1 = 0) {
+    if (date && date.isValid) {
+      this.dateRange[idx] = date && date.toDate()
+      mapMaybe(this.findFilter('by Date'), f => {
+        f.criteria = this.dateRange
       })
+    }
   }
 
   public ngAfterViewInit() {
@@ -209,17 +204,6 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/workshops/${sfId}/edit`)
   }
 
-  public selectedStatusChanged(_event: MatSelectChange) {
-    mapMaybe(
-      this.findFilter('by Status') as Maybe<PropertyFilter<Workshop>>,
-      (f: PropertyFilter<Workshop>) =>
-        (f.criteria = {
-          key: 'status',
-          value: this.selectedStatuses,
-        }),
-    )
-  }
-
   public removeDeactivated(items: string[]) {
     for (const item of items) {
       this.deactivated.delete(item)
@@ -228,7 +212,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   public filter(cbc: MatCheckboxChange) {
     const value = cbc.source.value
-    let payload: { data: any; deactivate: Array<Maybe<Filter<Workshop, any>>> }
+    let payload: { data?: any; deactivate: Array<Maybe<Filter<Workshop, any>>> }
 
     let deactivate: Array<Maybe<Filter<Workshop, any>>> = []
     switch (value) {
@@ -267,36 +251,28 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
         break
       case 'by Status': // status
         this._showStatusFilter = cbc.checked
-        if (cbc.checked)
-          payload = {
-            data: { key: 'status', value: this.selectedStatuses },
-            deactivate,
-          }
         break
       case 'by Text': // text
         this._showTextFilter = cbc.checked
-        if (cbc.checked && this.textSearchControl.value)
-          payload = { data: this.textSearchControl.value, deactivate }
         break
       case 'by Date': // date range
         deactivate = [this.findFilter('by Upcoming Workshops')]
         this._showDateRange = cbc.checked
-        if (cbc.checked) payload = { data: this.dateRange, deactivate }
+        if (cbc.checked) payload = { deactivate }
     }
 
     if (cbc.checked) {
-      mapMaybe(
-        this.findFilter(cbc.source.value),
-        // tslint:disable:no-non-null-assertion
-        f =>
-          this.applyFilter(f, {
-            ...payload!,
-            deactivate: justs(payload!.deactivate).map(snd),
-          }),
-        // tslint:enable:no-non-null-assertion
+      mapMaybe(this.findFilter(cbc.source.value), f =>
+        this.applyFilter(
+          f,
+          payload && {
+            ...payload,
+            deactivate: catMaybes(payload.deactivate),
+          },
+        ),
       )
     } else {
-      this.removeDeactivated(justs(deactivate).map(j => j[1].name))
+      this.removeDeactivated(catMaybes(deactivate).map(j => j.name))
       mapMaybe(this.findFilter(cbc.source.value), f => {
         f.active = false
       })
@@ -307,43 +283,49 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
 
   public applyFilter(
     filter: Filter<Workshop, any>,
-    {
-      data,
-      deactivate,
-    }: { data: any; deactivate: Array<Filter<Workshop, any>> },
+    payload?: null | { data?: any; deactivate: Array<Filter<Workshop, any>> },
   ) {
-    filter.criteria = data
-    const names = deactivate.map(v => v.name)
-    names.forEach(n => this.deactivated.add(n))
+    filter.active = true
+    if (payload) {
+      if (payload.data) {
+        filter.criteria = payload.data
+      }
+      const names = payload.deactivate.map(v => v.name)
+      names.forEach(n => this.deactivated.add(n))
+    }
   }
 
   public deactivateFilters() {
     this.selectedFilters.map(cb => {
       cb.disabled = this.deactivated.has(cb.value)
     })
+    this.deactivated.forEach(name =>
+      mapMaybe(this.findFilter(name), f => {
+        f.active = false
+      }),
+    )
   }
 
   public clearFilters() {
-    this.dateRange = [null, null]
+    this.clearDateFilter()
     this.textSearchControl.setValue('')
-    this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null
-    this.startDFPicker._selected = this.endDFPicker._selected = null
     this._showDateRange = this._showTextFilter = this._showStatusFilter = false
     this.filters.map(f => {
       f.active = false
     })
     this.deactivated.clear()
     this.selectedFilters.map(cb => (cb.checked = false))
-    this.selectedStatuses = []
     this.deactivateFilters()
   }
 
   public clearDateFilter() {
     this.dateRange = [null, null]
-    this.startDFInput.nativeElement.value = this.endDFInput.nativeElement.value = null
-    this.startDFPicker._selected = this.endDFPicker._selected = null
-    const index = this.filters.findIndex(f => f.name === 'by Date')
-    this.filters[index].active = false
+    this.startDateControl.patchValue(null)
+    this.endDateControl.patchValue(null)
+    mapMaybe(this.findFilter('by Date'), f => {
+      f.active = false
+      f.criteria = this.dateRange
+    })
   }
 
   public toggleFilters() {
@@ -351,14 +333,14 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
   }
 
   public setStatuses() {
-    this._ws
+    this.statuses = this._ws
       .describe()
-      .subscribe(describe => this.getWorkshopStatuses(describe))
+      .pipe(map(describe => this.getWorkshopStatuses(describe)))
   }
 
-  public getWorkshopStatuses(describe: { [k: string]: any }) {
+  public getWorkshopStatuses(describe: { [k: string]: any }): string[] {
     try {
-      this.statuses = describe.status.picklistValues.map(
+      return describe.status.picklistValues.map(
         (option: { label: string }) => option.label,
       )
     } catch (e) {
@@ -366,6 +348,7 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
         'Failed to get workshop statuses from `this.describe.status.picklistValues`. Using default values.',
         describe,
       )
+      return []
     }
   }
 }

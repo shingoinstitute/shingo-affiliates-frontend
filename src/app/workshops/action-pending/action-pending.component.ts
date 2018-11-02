@@ -1,6 +1,9 @@
 import { Component } from '@angular/core'
 
-import { WorkshopProperties } from '../../services/workshop/workshop.service'
+import {
+  WorkshopProperties,
+  Workshop,
+} from '../../services/workshop/workshop.service'
 import { Filter } from '../../services/filters/filter.abstract'
 import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service'
 
@@ -11,7 +14,7 @@ import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop
 })
 export class ActionPendingComponent {
   public displayedColumns: WorkshopProperties[] = []
-  public filters: Filter[]
+  public filters: Array<Filter<Workshop, any>>
 
   constructor(public filterFactory: WorkshopFilterFactory) {
     this.displayedColumns = [
@@ -23,7 +26,7 @@ export class ActionPendingComponent {
       'actions',
     ]
     const propFilter = filterFactory.createPropertyFilter()
-    propFilter.dataChange.next({
+    propFilter.criteria = {
       key: 'status',
       value: [
         'Action Pending',
@@ -31,7 +34,8 @@ export class ActionPendingComponent {
         'Finished, waiting for attendee list',
         'Awaiting Invoice',
       ],
-    })
+    }
+    propFilter.active = true
 
     this.filters = [propFilter]
   }

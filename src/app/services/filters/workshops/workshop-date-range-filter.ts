@@ -17,7 +17,7 @@ export class WorkshopDateRangeFilter extends Filter<Workshop, DateRange> {
   private _startsAfter = (d: Date) => (w: Workshop) =>
     this.greaterThanWithoutTime(new Date(w.startDate), new Date(d))
 
-  protected _filter = (range: DateRange) => {
+  _filter = (range: DateRange) => {
     const startsAfter = range[0]
     const endsBefore = range[1]
 

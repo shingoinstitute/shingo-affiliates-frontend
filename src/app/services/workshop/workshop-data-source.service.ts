@@ -12,16 +12,14 @@ export class WorkshopDataSource extends APIDataSource<
   Workshop
 > {
   constructor(
-    public _wdp: DataProvider<WorkshopService, Workshop>,
-    public paginator: MatPaginator,
+    _wdp: DataProvider<WorkshopService, Workshop>,
+    paginator: MatPaginator,
     public sort: MatSort,
   ) {
     super(_wdp, paginator, sort)
   }
 
-  protected getSortedData(): Workshop[] {
-    const data = this._wdp.data.slice()
-
+  protected _sortFn(data: Workshop[]): Workshop[] {
     if (!this.sort.active || this.sort.direction === '') {
       return data
     }

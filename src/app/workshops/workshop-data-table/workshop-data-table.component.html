@@ -77,7 +77,7 @@
 
   <!-- Instructors Column -->
   <ng-container matColumnDef="instructors">
-    <mat-header-cell *matHeaderCellDef> Instructor(s) </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Instructor(s) </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
       <em *ngIf="!workshop.instructors.length">No Instructors</em>
       <p [style.margin]="'0'">{{ workshop.instructors.join(', ') }}</p>
@@ -142,7 +142,7 @@
 
   <!-- Actions Column -->
   <ng-container matColumnDef="actions">
-    <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
     <mat-cell *matCellDef="let workshop" class="actions">
 
       <!-- Non Editing Mode -->
@@ -183,4 +183,5 @@
   <mat-spinner diameter="48"></mat-spinner>
 </div>
 
-<mat-paginator #paginator [length]="_workshopDataProvider.data.length" [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+<mat-paginator #paginator [length]="_workshopDataProvider.size | async" [pageIndex]="0" [pageSize]="5"
+  [pageSizeOptions]="[5, 10, 25]"></mat-paginator>

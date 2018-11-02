@@ -1,4 +1,5 @@
-import { Function1, Lazy } from './types'
+// tslint:disable:no-shadowed-variable
+import { Function1, Lazy, Function2, Curried2 } from './types'
 // many functions here are from gcanti/fp-ts. All credit to them
 
 export function compose<A, B, C>(
@@ -143,11 +144,84 @@ export function pipe(...fns: Function[]): Function {
 }
 
 /**
- * The identity function
+ * The I combinator aka the identity function
+ *
+ * Takes an argument and returns it
  * @param a a value
  */
 export const id = <A>(a: A) => a
-export const constant = <A>(a: A): Lazy<A> => () => a
+export { id as I }
+
+/**
+ * The K combinator
+ *
+ * Takes two values and returns the first
+ */
+export const K = <A>(a: A) => <B>(_b: B) => a
+export const constant: <A>(a: A) => Lazy<A> = K as any
+/**
+ * The T (thrush) combinator
+ *
+ * Takes a value and a function and applies the function to the value
+ */
+export const T = <A>(a: A) => <B>(fn: (v: A) => B) => fn(a)
+
+export function flip<R>(fn: <A, B>(a: A, b: B) => R): <A, B>(b: B, a: A) => R
+export function flip<R>(fn: <A>(a: A, b: A) => R): <A>(b: A, a: A) => R
+export function flip<Fixed, R>(
+  fn: <A>(a: A, b: Fixed) => R,
+): <A>(b: Fixed, a: A) => R
+export function flip<Fixed, R>(
+  fn: <B>(a: Fixed, b: B) => R,
+): <B>(b: B, a: Fixed) => R
+export function flip<Fixed1, Fixed2, R>(
+  fn: Function2<Fixed1, Fixed2, R>,
+): Function2<Fixed2, Fixed1, R>
+export function flip<A, B, C>(fn: Function2<A, B, C>): (b: B, a: A) => C {
+  return (b, a) => fn(a, b)
+}
+/*
+declare function fn1<A>(a: A, b: A): boolean
+declare function fn2<A>(a: A, b: number): boolean
+declare function fn3<A>(a: number, b: A): boolean
+declare function fn4<A, B>(a: A, b: B): boolean
+declare function fn5(a: string, b: number): boolean
+flip(fn1)
+flip(fn2)
+flip(fn3)
+flip(fn4)
+flip(fn5)
+*/
+
+export function flipC<R>(
+  fn: <A>(a: A) => <B>(b: B) => R,
+): <B>(b: B) => <A>(a: A) => R
+export function flipC<R>(fn: <A>(a: A) => (b: A) => R): <A>(b: A) => (a: A) => R
+export function flipC<Fixed, R>(
+  fn: <A>(a: A) => (b: Fixed) => R,
+): (b: Fixed) => <A>(a: A) => R
+export function flipC<Fixed, R>(
+  fn: (a: Fixed) => <B>(b: B) => R,
+): <B>(b: B) => (a: Fixed) => R
+export function flipC<Fixed1, Fixed2, R>(
+  fn: Curried2<Fixed1, Fixed2, R>,
+): Curried2<Fixed2, Fixed1, R>
+export function flipC<A, B, C>(fn: Curried2<A, B, C>): Curried2<B, A, C> {
+  return b => a => fn(a)(b)
+}
+
+/*
+declare function fn1(a: number): (b: string) => boolean
+declare function fn2<A>(a: A): (b: string) => boolean
+declare function fn3(a: number): <B>(b: B) => boolean
+declare function fn4<A>(a: A): (b: A) => boolean
+declare function fn5<A>(a: A): <B>(b: B) => boolean
+flipC(fn1)
+flipC(fn2)
+flipC(fn3)
+flipC(fn4)
+flipC(fn5)
+*/
 
 export const tuple = <T extends any[]>(...args: T): T => args
 export const fst = <A>(t: [A, ...any[]]) => t[0]

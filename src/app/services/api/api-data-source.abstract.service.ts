@@ -1,6 +1,11 @@
-import { merge as observableMerge, Observable } from 'rxjs'
+import {
+  merge as observableMerge,
+  Observable,
+  empty,
+  combineLatest,
+} from 'rxjs'
 
-import { map } from 'rxjs/operators'
+import { map, mergeMap, startWith, withLatestFrom } from 'rxjs/operators'
 import { DataSource } from '@angular/cdk/table'
 import { MatPaginator, MatSort } from '@angular/material'
 
@@ -8,7 +13,6 @@ import { BaseAPIService } from './base-api.abstract.service'
 import { SFObject } from '../../shared/models/sf-object.abstract.model'
 import { DataProvider } from '../data-provider/data-provider.service'
 import { Filter } from '../filters/filter.abstract'
-import { truthy } from '../../util/util'
 
 // RxJS operators
 
@@ -16,10 +20,6 @@ export abstract class APIDataSource<
   S extends BaseAPIService,
   T extends SFObject
 > extends DataSource<T> {
-  public get size(): number {
-    return this._dp.data.length
-  }
-
   constructor(
     public _dp: DataProvider<S, T>,
     public paginator: MatPaginator,
@@ -29,29 +29,17 @@ export abstract class APIDataSource<
   }
 
   public connect(): Observable<T[]> {
-    const changes = [
-      this._dp,
-      this.paginator,
-      this.sort,
-      ...this._dp.filters,
-    ].filter(change => !!change)
-    const dataChanges = changes.filter(truthy).map(change => {
-      if (change instanceof DataProvider || change instanceof Filter) {
-        return change.dataChange
-      } else if (change instanceof MatPaginator) {
-        return change.page
-      } else if (change instanceof MatSort) {
-        return change.sortChange
-      }
-      const _exhaustiveCheck: never = change
-      return _exhaustiveCheck
-    })
+    const viewChanges$ = observableMerge(
+      this.paginator.page.asObservable(),
+      (this.sort && this.sort.sortChange.asObservable()) || empty(),
+    ).pipe(startWith(null))
 
-    return observableMerge(...dataChanges).pipe(
-      map(() => {
-        const data = this.getSortedData()
+    const latest$ = combineLatest(this._dp.data, viewChanges$)
 
-        if (this.size <= this.paginator.pageSize) this.paginator.pageIndex = 0
+    return latest$.pipe(
+      map(([data]) => this._sortFn(data.slice())),
+      map(data => {
+        if (data.length <= this.paginator.pageSize) this.paginator.pageIndex = 0
 
         const startIndex = this.paginator.pageIndex * this.paginator.pageSize
         return data.splice(startIndex, this.paginator.pageSize)
@@ -59,15 +47,13 @@ export abstract class APIDataSource<
     )
   }
 
-  public addFilters(filters: Filter[]): void {
-    for (const filter of filters) {
-      this._dp.addFilter(filter)
-    }
+  public addFilters(filters: Array<Filter<T, any>>): void {
+    this._dp.addFilter(...filters)
   }
 
   public disconnect(): void {
     /* do nothing */
   }
 
-  protected abstract getSortedData(): T[]
+  protected abstract _sortFn(data: T[]): T[]
 }

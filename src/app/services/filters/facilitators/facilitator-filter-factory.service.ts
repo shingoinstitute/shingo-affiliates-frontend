@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core'
-import { FilterFactory } from '../filter-factory.abstract.service'
 import { TextFilter } from '../text-filter'
 import { Facilitator } from '../../../facilitators/facilitator.model'
 

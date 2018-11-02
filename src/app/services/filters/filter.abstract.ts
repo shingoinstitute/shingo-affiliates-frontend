@@ -1,49 +1,69 @@
-import { Observable, BehaviorSubject, of } from 'rxjs'
-import { map, mergeMap, filter, combineLatest } from 'rxjs/operators'
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs'
+import { map, mergeMap, filter } from 'rxjs/operators'
 import { Maybe, nothing, just, isNothing } from '../../util/functional/Maybe'
-import { URIS, Type } from '../../util/functional/HKT'
+import { constant } from '../../util/functional'
 
-export const arrayFilter = <T, C>(
-  fn: (criteria: C) => (data: T) => boolean,
-) => (criteria: C) => (data: T[]) => data.filter(fn(criteria))
-
-export const observableFilter = <T, C>(
-  fn: (criteria: C) => (data: T) => boolean,
-) => (criteria: C) => (data: Observable<T>) => data.pipe(filter(fn(criteria)))
-
-export const applyFilter = <URI extends URIS, T, C>(
-  data: Type<URI, T>,
-  filterFn: (criteria: C) => (data: Type<URI, T>) => Type<URI, T>,
+export const applyCriteria = <T, C>(
+  filterFn: (criteria: C) => (data: T) => boolean,
 ) => ([criteria, active]: [Maybe<C>, boolean]) =>
-  isNothing(criteria) || !active ? data : filterFn(criteria[1])(data)
+  isNothing(criteria) || !active ? constant(true) : filterFn(criteria.value)
 
 export interface FilterBase<T, C> {
   readonly name: string
-  criteria: C
+  criteria: C | undefined
   filter(data: Observable<T>): Observable<T>
   filter(data: T[]): Observable<T[]>
 }
 
 export abstract class Filter<T, C> implements FilterBase<T, C> {
+  protected activeSource: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  protected criteriaSource: BehaviorSubject<Maybe<C>> = new BehaviorSubject(
+    nothing as Maybe<C>,
+  )
+
+  abstract _filter: (criteria: C) => (data: T) => boolean
+
   public get name(): string {
     return this._name
   }
 
-  public set criteria(v: C) {
-    this.criteriaSource.next(just(v))
+  public set criteria(v: C | undefined) {
+    if (v) {
+      this.criteriaSource.next(just(v))
+    } else {
+      this.criteriaSource.next(nothing)
+    }
+  }
+
+  public getCriteria() {
+    return this.criteriaSource.value
+  }
+
+  public get criteria$() {
+    return this.criteriaSource.asObservable()
   }
 
   public set active(v: boolean) {
     this.activeSource.next(v)
   }
 
-  protected activeSource: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  protected criteriaSource: BehaviorSubject<Maybe<C>> = new BehaviorSubject(
-    nothing as Maybe<C>,
-  )
-  protected abstract _filter: (criteria: C) => (data: T) => boolean
+  public getActive() {
+    return this.activeSource.value
+  }
 
-  constructor(protected _name: string) {}
+  public get active$() {
+    return this.activeSource.asObservable()
+  }
+
+  constructor(protected _name: string, criteria?: C) {
+    if (typeof criteria !== 'undefined') {
+      this.criteria = criteria
+    }
+  }
+
+  public dependencies$() {
+    return combineLatest(this.criteria$, this.active$)
+  }
 
   /**
    * Accepts an array or observable of data, and returns an observable of filtered data
@@ -52,18 +72,9 @@ export abstract class Filter<T, C> implements FilterBase<T, C> {
   public filter(data: Observable<T>): Observable<T>
   public filter(data: T[]): Observable<T[]>
   public filter(data: T[] | Observable<T>): Observable<T[]> | Observable<T> {
-    const source = this.criteriaSource.pipe(combineLatest(this.activeSource))
+    const deps = this.dependencies$()
     return Array.isArray(data)
-      ? source.pipe(
-          map(applyFilter<'Array', T, C>(data, arrayFilter(this._filter))),
-        )
-      : source.pipe(
-          mergeMap(
-            applyFilter<'Observable', T, C>(
-              data,
-              observableFilter(this._filter),
-            ),
-          ),
-        )
+      ? deps.pipe(map(c => data.filter(applyCriteria(this._filter)(c))))
+      : deps.pipe(mergeMap(c => filter(applyCriteria(this._filter)(c))(data)))
   }
 }

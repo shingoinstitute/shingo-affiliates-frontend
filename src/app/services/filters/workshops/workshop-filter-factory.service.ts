@@ -6,7 +6,7 @@ import { WorkshopDateRangeFilter } from './workshop-date-range-filter'
 import { Workshop } from '../../../workshops/workshop.model'
 
 @Injectable()
-export class WorkshopFilterFactory extends FilterFactory {
+export class WorkshopFilterFactory extends FilterFactory<Workshop> {
   public static id = 0
 
   constructor() {

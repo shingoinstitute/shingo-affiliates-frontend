@@ -6,21 +6,22 @@ import { AffiliateService } from './affiliate.service'
 import { DataProvider } from '../data-provider/data-provider.service'
 import { APIDataSource } from '../api/api-data-source.abstract.service'
 import { Affiliate } from '../../affiliates/affiliate.model'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 export class AffiliateDataSource extends APIDataSource<
   AffiliateService,
   Affiliate
 > {
   constructor(
-    public _adp: DataProvider<AffiliateService, Affiliate>,
-    public paginator: MatPaginator,
+    _adp: DataProvider<AffiliateService, Affiliate>,
+    paginator: MatPaginator,
     public sort?: MatSort,
   ) {
     super(_adp, paginator, sort)
   }
 
-  protected getSortedData(): Affiliate[] {
-    const data = this._adp.data.slice()
+  protected _sortFn(data: Affiliate[]): Affiliate[] {
     if (!this.sort) return data
     const sort = this.sort
 

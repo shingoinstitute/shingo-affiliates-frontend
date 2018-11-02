@@ -23,36 +23,35 @@
       <div fxLayout="column" fxFlex="80%" fxLayoutGap="16px">
         <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
 
-        <div fxLayout="row" fxLayoutGap="8px" [style.display]="showStatusFilter ? 'flex' : 'none'">
+        <div fxLayout="row" fxLayoutGap="8px" *ngIf="showStatusFilter">
           <mat-form-field>
-            <mat-select [style.width]="'100%'" #statusSelect="matSelect" placeholder="Status" [(ngModel)]="selectedStatuses"
-              (change)="selectedStatusChanged($event)" multiple="true" floatPlaceholder="auto">
-              <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+            <mat-select [style.width]="'100%'" [formControl]="statusControl" placeholder="Status" multiple="true"
+              floatPlaceholder="auto">
+              <mat-option *ngFor="let status of statuses | async" [value]="status">{{status}}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
-        <div fxLayout="row" fxLayoutGap="8px" [style.display]="showTextFilter ? 'flex' : 'none'">
+        <div fxLayout="row" fxLayoutGap="8px" *ngIf="showTextFilter">
           <mat-form-field>
             <input matInput placeholder="Search..." [formControl]="textSearchControl">
             <mat-icon matSuffix svgIcon="search_grey"></mat-icon>
           </mat-form-field>
         </div>
 
-        <div fxLayout="row" fxLayoutGap="8px" [style.display]="showDateRange ? 'flex' : 'none'">
+        <div fxLayout="row" fxLayoutGap="8px" *ngIf="showDateRange">
           <div fxLayout="column">
             <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
               <p [style.color]="'#757575'">Date</p>
 
               <mat-form-field floatPlaceholder="always">
-                <input matInput [matDatepicker]="startDateFilterPicker" placeholder="From" (dateChange)="startDateChanged($event)"
-                  #startDFInput>
+                <input matInput [formControl]="startDateControl" [matDatepicker]="startDateFilterPicker" placeholder="From">
                 <mat-datepicker-toggle matSuffix [for]="startDateFilterPicker"></mat-datepicker-toggle>
                 <mat-datepicker #startDateFilterPicker></mat-datepicker>
               </mat-form-field>
 
               <mat-form-field floatPlaceholder="always">
-                <input matInput [matDatepicker]="endDateFilterPicker" placeholder="To" #endDFInput (dateChange)="endDateChanged($event)">
+                <input matInput [formControl]="endDateControl" [matDatepicker]="endDateFilterPicker" placeholder="To">
                 <mat-datepicker-toggle matSuffix [for]="endDateFilterPicker"></mat-datepicker-toggle>
                 <mat-datepicker #endDateFilterPicker></mat-datepicker>
               </mat-form-field>

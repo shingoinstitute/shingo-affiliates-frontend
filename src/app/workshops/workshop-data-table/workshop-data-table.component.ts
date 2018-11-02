@@ -49,9 +49,9 @@ export class WorkshopDataTableComponent implements OnInit {
     'actions',
   ]
   @Input()
-  public dataSource!: WorkshopDataSource | null
+  public dataSource: WorkshopDataSource | null = null
   @Input()
-  public filters: Filter[] = []
+  public filters: Array<Filter<Workshop, any>> = []
   @Output()
   public editClick: EventEmitter<string> = new EventEmitter<string>()
 

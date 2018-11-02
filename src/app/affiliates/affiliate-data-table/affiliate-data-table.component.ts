@@ -6,12 +6,7 @@ import {
   EventEmitter,
   OnInit,
 } from '@angular/core'
-import {
-  MatPaginator,
-  MatSort,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material'
+import { MatPaginator, MatSort, MatDialog } from '@angular/material'
 
 import { DataProvider } from '../../services/data-provider/data-provider.service'
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
@@ -34,7 +29,7 @@ export class AffiliateDataTableComponent implements OnInit {
   @Input()
   public displayedColumns: string[] = ['logo', 'name', 'website']
   @Input()
-  public filters: Filter[] = []
+  public filters: Array<Filter<Affiliate, any>> = []
 
   @Output()
   public saved = new EventEmitter<Affiliate>()

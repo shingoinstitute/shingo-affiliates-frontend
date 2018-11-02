@@ -48,7 +48,7 @@ export class FacilitatorDataTableComponent implements OnInit {
   @Input()
   public dataSource: FacilitatorDataSource | null = null
   @Input()
-  public filters: Filter[] = []
+  public filters: Array<Filter<Facilitator, any>> = []
 
   @ViewChild(MatPaginator)
   public paginator!: MatPaginator
@@ -104,8 +104,8 @@ export class FacilitatorDataTableComponent implements OnInit {
     })
 
     // Let parent component know when data has been loaded
-    this.facilitatorDataProvider.dataChange.subscribe(() => {
-      if (this.facilitatorDataProvider.data.length > 0) {
+    this.facilitatorDataProvider.data.subscribe(d => {
+      if (d.length > 0) {
         this.loadCompleted.emit()
       }
     })

@@ -12,16 +12,14 @@ export class FacilitatorDataSource extends APIDataSource<
   Facilitator
 > {
   constructor(
-    public _fdp: DataProvider<FacilitatorService, Facilitator>,
-    public paginator: MatPaginator,
+    _fdp: DataProvider<FacilitatorService, Facilitator>,
+    paginator: MatPaginator,
     public sort: MatSort,
   ) {
     super(_fdp, paginator, sort)
   }
 
-  protected getSortedData(): Facilitator[] {
-    const data = this._fdp.data.slice()
-
+  protected _sortFn(data: Facilitator[]): Facilitator[] {
     if (!this.sort.active || this.sort.direction === '') {
       return data
     }

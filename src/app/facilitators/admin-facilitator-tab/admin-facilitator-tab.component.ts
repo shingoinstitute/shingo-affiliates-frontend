@@ -27,7 +27,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
   public isLoading = true
   public displayedColumns: string[] = ['name']
   public newFacilitator!: Facilitator
-  public filters: Filter[] = []
+  public filters: Array<Filter<Facilitator, any>> = []
   public nameFilterText = ''
 
   constructor(
@@ -57,7 +57,7 @@ export class AdminFacilitatorTabComponent implements OnInit, AfterViewInit {
         f => f.name === 'Filter By Name',
       )
       const nameFilter = this.filters[nameFilterIndex]
-      nameFilter.dataChange.next(this.nameFilterText)
+      nameFilter.criteria = this.nameFilterText
     })
   }
 

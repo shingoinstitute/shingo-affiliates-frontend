@@ -1,17 +1,12 @@
 import { Filter } from './filter.abstract'
-import { BehaviorSubject } from 'rxjs'
 
-interface PropertyDef {
+export interface PropertyDef {
   key: string
   value: any
 }
 
 export class PropertyFilter<T> extends Filter<T, PropertyDef> {
-  constructor(name: string) {
-    super(name)
-  }
-
-  protected _filter = (criteria: PropertyDef) => (d: T): boolean => {
+  _filter = (criteria: PropertyDef) => (d: T): boolean => {
     if (typeof d !== 'object' || d === null) return false
 
     if (criteria.value instanceof Array) {
