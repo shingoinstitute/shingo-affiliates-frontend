@@ -10,7 +10,7 @@
 
     <div class="fileUploads" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
       <div fxFlex.gt-sm="50%" *ngIf="showAttendeeUpload">
-
+        
         <app-file-drop (file)="addAttendeeList($event)" (error)="rejectedFile($event, 'attendee')" class="file-dz"
           [accept]="supportedFileTypes" [maxFileSize]="maximumFileSizeInBytes">
           <h2 class="mat-h2"><strong>Pick</strong> or drop Attendee List here</h2>
