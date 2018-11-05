@@ -9,7 +9,8 @@
   </div>
 
   <!-- Data Table -->
-  <app-affiliate-data-table [displayedColumns]="displayedColumns" (onDelete)="onDelete($event)" (onSave)="onSave($event)" (onForm)="openForm($event)">
+  <app-affiliate-data-table [displayedColumns]="displayedColumns" (deleted)="onDelete($event)" (saved)="onSave($event)"
+    (formed)="openForm($event)">
   </app-affiliate-data-table>
 
 </div>

@@ -1,15 +1,13 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
 /** Interface Components */
-import { SupportHomeComponent } from './support-home.component';
-import { SupportSearchComponent } from './support-search/support-search.component';
-import { SupportCategoryComponent } from './support-category/support-category.component';
-import { SupportPageComponent } from './support-page/support-page.component';
+import { SupportHomeComponent } from './support-home.component'
+import { SupportSearchComponent } from './support-search/support-search.component'
+import { SupportCategoryComponent } from './support-category/support-category.component'
+import { SupportPageComponent } from './support-page/support-page.component'
 
-const supportRoutes: Routes = [
-
-];
+const supportRoutes: Routes = []
 
 @NgModule({
   imports: [
@@ -17,15 +15,13 @@ const supportRoutes: Routes = [
       {
         path: '',
         component: SupportHomeComponent,
-        children: []
+        children: [],
       },
       { path: 'search', component: SupportSearchComponent },
       { path: 'category/:name', component: SupportCategoryComponent },
-      { path: ':id', component: SupportPageComponent }
-    ])
+      { path: ':id', component: SupportPageComponent },
+    ]),
   ],
-  exports: [
-    RouterModule
-  ]
+  exports: [RouterModule],
 })
-export class SupportRoutingModule { }
+export class SupportRoutingModule {}

@@ -1,43 +1,30 @@
 div.container {
-    margin: 24px;
+  margin: 24px;
 }
 
-.file-dz { 
-    border: dotted 3px #939393;
-    color: grey;
-    background: rgba(128, 128, 128, 0.45);
-    padding: 50px;
-    text-align: center;
-    border-radius: 3px;
+.file-dz {
+  border: dotted 3px #939393;
+  color: grey;
+  background: rgba(128, 128, 128, 0.45);
+  padding: 50px;
+  border-radius: 3px;
 }
 
 .file-dz h2 {
-    margin: 0;
-    z-index: -1;
+  margin: 0;
+  z-index: -1;
 }
 
-.file-over { 
-    border: dotted 3px #105810;
-    background: rgba(16, 88, 16, 0.45);
-    color: darkgreen;
+.file-over {
+  border: dotted 3px #105810;
+  background: rgba(16, 88, 16, 0.45);
+  color: darkgreen;
 }
 
 .files {
-    margin: 16px 0;
+  margin: 16px 0;
 }
 
-.file {
-    width: fit-content;
-    text-align: center;
-}
-
-.file img {
-    width: 75px;
-}
-
-div.file-detail {
-    margin: 0;
-}
 .error {
-    color: red;
+  color: red;
 }

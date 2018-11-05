@@ -1,0 +1,7 @@
+<div class="file">
+  <img style="width: 75px" [src]="fileIcon(file.type)" />
+  <div fxLayout="column" fxLayoutAlign="start center">
+    <strong>{{ truncatePipe(file.name) }}</strong>
+    <em>{{ bytesPipe(file.size) }}</em>
+  </div>
+</div>

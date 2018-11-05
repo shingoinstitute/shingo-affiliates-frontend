@@ -7,6 +7,10 @@ mat-toolbar {
   color: white;
 }
 
+mat-dialog-content > * {
+  padding-bottom: 5px;
+}
+
 ul {
   list-style-type: none;
 }

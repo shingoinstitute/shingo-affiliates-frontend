@@ -1,25 +1,27 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Injectable } from '@angular/core'
+import { Router } from '@angular/router'
 
 @Injectable()
 export class RouterService {
+  public routeStack: string[] = []
+  public defaultRoute = '/dashboard'
 
-  public routeStack: string[] = [];
-  public defaultRoute: string = '/dashboard';
-
-  constructor(public router: Router) { }
+  constructor(public router: Router) {}
 
   public nextRoute() {
-    if (this.routeStack.length > 0)
-      this.router.navigateByUrl(this.routeStack.shift());
-    else
-      this.router.navigateByUrl(this.defaultRoute);
+    if (this.routeStack.length > 0) {
+      // tslint:disable-next-line:no-non-null-assertion
+      this.router.navigateByUrl(this.routeStack.shift()!)
+    } else {
+      this.router.navigateByUrl(this.defaultRoute)
+    }
   }
 
   public navigateRoutes(routes: string[]) {
-    this.routeStack = Array.from(new Set(routes));
-    if (this.routeStack.length > 0)
-      this.router.navigateByUrl(this.routeStack.shift());
+    this.routeStack = Array.from(new Set(routes))
+    if (this.routeStack.length > 0) {
+      // tslint:disable-next-line:no-non-null-assertion
+      this.router.navigateByUrl(this.routeStack.shift()!)
+    }
   }
-
 }

@@ -1,58 +1,59 @@
-import { DataSource } from '@angular/cdk/table';
-import { MatPaginator, MatSort } from '@angular/material';
+import {
+  merge as observableMerge,
+  Observable,
+  empty,
+  combineLatest,
+} from 'rxjs'
 
-import { BaseAPIService } from './base-api.abstract.service';
-import { SFObject } from '../../shared/models/sf-object.abstract.model';
-import { DataProvider } from '../data-provider/data-provider.service';
-import { Filter } from '../filters/filter.abstract';
+import { map, mergeMap, startWith, withLatestFrom } from 'rxjs/operators'
+import { DataSource } from '@angular/cdk/table'
+import { MatPaginator, MatSort } from '@angular/material'
 
-// RxJS Modules
-import { Observable } from 'rxjs/Observable';
+import { BaseAPIService } from './base-api.abstract.service'
+import { SFObject } from '../../shared/models/sf-object.abstract.model'
+import { DataProvider } from '../data-provider/data-provider.service'
+import { Filter } from '../filters/filter.abstract'
 
 // RxJS operators
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
 
-export abstract class APIDataSource<S extends BaseAPIService, T extends SFObject> extends DataSource<T> {
-
-  public get size(): number { return this._dp.data.length; }
-
+export abstract class APIDataSource<
+  S extends BaseAPIService,
+  T extends SFObject
+> extends DataSource<T> {
   constructor(
     public _dp: DataProvider<S, T>,
-    public paginator?: MatPaginator,
-    public sort?: MatSort
-  ) { super(); }
+    public paginator: MatPaginator,
+    public sort?: MatSort,
+  ) {
+    super()
+  }
 
   public connect(): Observable<T[]> {
-    const changes = [this._dp, this.paginator, this.sort, ...this._dp.filters].filter(change => !!change);
-    const dataChanges = changes.map(change => {
-      if (change instanceof DataProvider || change instanceof Filter) {
-        return change.dataChange;
-      } else if (change instanceof MatPaginator) {
-        return change.page;
-      } else if (change instanceof MatSort) {
-        return change.sortChange;
-      }
-    });
+    const viewChanges$ = observableMerge(
+      this.paginator.page.asObservable(),
+      (this.sort && this.sort.sortChange.asObservable()) || empty(),
+    ).pipe(startWith(null))
 
-    return Observable.merge(...dataChanges).map(() => {
-      const data = this.getSortedData();
+    const latest$ = combineLatest(this._dp.data, viewChanges$)
 
-      if (this.size <= this.paginator.pageSize) this.paginator.pageIndex = 0;
+    return latest$.pipe(
+      map(([data]) => this._sortFn(data.slice())),
+      map(data => {
+        if (data.length <= this.paginator.pageSize) this.paginator.pageIndex = 0
 
-      const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-      return data.splice(startIndex, this.paginator.pageSize);
-    });
+        const startIndex = this.paginator.pageIndex * this.paginator.pageSize
+        return data.splice(startIndex, this.paginator.pageSize)
+      }),
+    )
   }
 
-  public addFilters(filters: Filter[]): void {
-    for (const filter of filters) {
-      this._dp.addFilter(filter);
-    }
+  public addFilters(filters: Array<Filter<T, any>>): void {
+    this._dp.addFilter(...filters)
   }
 
-  public disconnect(): void { /* do nothing */ }
+  public disconnect(): void {
+    /* do nothing */
+  }
 
-  protected abstract getSortedData(): T[];
-
+  protected abstract _sortFn(data: T[]): T[]
 }

@@ -5,15 +5,15 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Facilitator </mat-header-cell>
-      <mat-cell *matCellDef="let fac" class="dt-name-cell">
+      <mat-cell *matCellDef="let fac">
 
-        <span [class.hidden]="selectedId == fac.sfId">
-          <p class="margin-none word-nowrap"> {{ fac.lastName }}, {{ fac.firstName }} </p>
-          <p class="mat-caption word-nowrap grey-text margin-none"> {{ fac.title }} </p>
+        <span *ngIf="selectedId != fac.sfId">
+          <p class="margin-none"> {{ fac.lastName }}, {{ fac.firstName }} </p>
+          <p class="mat-caption grey-text margin-none"> {{ fac.title }} </p>
         </span>
 
-        <mat-form-field [class.hidden]="selectedId != fac.sfId">
-          <input matInput class="fac-input" [(ngModel)]="fac.name">
+        <mat-form-field *ngIf="selectedId == fac.sfId">
+          <input matInput [(ngModel)]="fac.name">
         </mat-form-field>
 
       </mat-cell>
@@ -22,12 +22,13 @@
     <!-- Email Column -->
     <ng-container matColumnDef="email">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
-      <mat-cell *matCellDef="let fac" class="dt-email-cell">
+      <mat-cell *matCellDef="let fac">
 
-        <span [class.hidden]="selectedId == fac.sfId">{{ fac.email }}</span>
+        <!-- Email doesn't have spaces. allow arbitrary wrapping -->
+        <p class="word-wrap" *ngIf="selectedId != fac.sfId">{{ fac.email }}</p>
 
-        <mat-form-field [class.hidden]="selectedId != fac.sfId">
-          <input matInput class="fac-input" [(ngModel)]="fac.email">
+        <mat-form-field *ngIf="selectedId == fac.sfId">
+          <input matInput [(ngModel)]="fac.email">
         </mat-form-field>
 
       </mat-cell>
@@ -43,9 +44,9 @@
     <ng-container matColumnDef="role">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Role </mat-header-cell>
       <mat-cell *matCellDef="let fac">
-        <span [class.hidden]="selectedId == fac.sfId"> {{ fac.role }} </span>
+        <p *ngIf="selectedId != fac.sfId"> {{ fac.role }} </p>
 
-        <mat-select [class.hidden]="selectedId != fac.sfId" [(ngModel)]="fac.role">
+        <mat-select *ngIf="selectedId == fac.sfId" [(ngModel)]="fac.role">
           <mat-option *ngFor="let role of roles" [value]="role"> {{ role }}</mat-option>
         </mat-select>
 
@@ -55,8 +56,8 @@
     <!-- Last Login Column -->
     <ng-container matColumnDef="lastLogin">
       <mat-header-cell *matHeaderCellDef mat-sort-header> Last Login </mat-header-cell>
-      <mat-cell *matCellDef="let fac" class="dt-last-login-cell">
-          <p class="word-nowrap">{{ fac.lastLogin }}</p>
+      <mat-cell *matCellDef="let fac">
+        <p>{{ fac.lastLogin }}</p>
       </mat-cell>
     </ng-container>
 
@@ -65,46 +66,53 @@
       <mat-header-cell *matHeaderCellDef [style.align-items]="'center'">
         <span> Actions </span>
         <span fxFlex></span>
-        <button class="refresh-button" mat-icon-button (click)="refresh()">
-          <mat-icon svgIcon="refresh_grey"></mat-icon>
+        <button mat-icon-button matTooltip="Refresh" aria-label="Refresh table" (click)="refresh()">
+          <mat-icon style="color: #757575">refresh</mat-icon>
         </button>
       </mat-header-cell>
-      <mat-cell *matCellDef="let fac" fxLayout fxLayoutGap="2px" class="dt-actions-cell">
+      <mat-cell *matCellDef="let fac" class="actions">
         <!-- Action Buttons -->
         <ng-container *ngIf="selectedId != fac.sfId">
-          <button mat-mini-fab (click)="loginAs(fac)">
-            <mat-icon class="icon-sm" svgIcon="supervisor_account_white"></mat-icon>
-          </button>
-          
-          <button mat-mini-fab (click)="selectedId = fac.sfId">
-            <mat-icon class="icon-sm" svgIcon="edit_mode_white"></mat-icon>
-          </button>
+          <div>
+            <button mat-mini-fab matTooltip="Login As" aria-label="Login as facilitator" (click)="loginAs(fac)">
+              <mat-icon>supervisor_account</mat-icon>
+            </button>
 
-          <a mat-mini-fab routerLink="/admin/facilitators/form/{{ fac.sfId }}">
-            <mat-icon class="icon-sm" svgIcon="description_white"></mat-icon>
-          </a>
+            <button mat-mini-fab matTooltip="Edit" aria-label="Edit facilitator inline" (click)="selectedId = fac.sfId">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
 
-          <button mat-mini-fab color="primary" (click)="onReset.emit(fac)">
-            <mat-icon class="icon-sm" svgIcon="renew_white"></mat-icon>
-          </button>
+          <div>
+            <a mat-mini-fab matTooltip="View Detail" aria-label="View facilitator detail" routerLink="/admin/facilitators/form/{{ fac.sfId }}">
+              <mat-icon>description</mat-icon>
+            </a>
 
-          <button mat-mini-fab color="primary" (click)="onDisable.emit(fac)">
-            <mat-icon class="icon-sm" svgIcon="block_white"></mat-icon>
-          </button>
+            <button mat-mini-fab matTooltip="Reset Password" aria-label="Reset account password" color="warn" (click)="reset.emit(fac)">
+              <mat-icon>autorenew</mat-icon>
+            </button>
+          </div>
 
-          <button mat-mini-fab color="primary" (click)="onDelete.emit(fac)">
-            <mat-icon class="icon-sm" svgIcon="delete_white"></mat-icon>
-          </button>
+          <div>
+            <button mat-mini-fab matTooltip="Disable Account" aria-label="Disable facilitator account" color="warn"
+              (click)="disabled.emit(fac)">
+              <mat-icon>block</mat-icon>
+            </button>
+
+            <button mat-mini-fab matTooltip="Delete" aria-label="Delete facilitator" color="warn" (click)="deleted.emit(fac)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </ng-container>
 
         <!-- Edit Row Actions -->
         <ng-container *ngIf="selectedId == fac.sfId">
-          <button mat-mini-fab color="primary" (click)="selectedId = ''">
-            <mat-icon svgIcon="cancel_white"></mat-icon>
+          <button mat-mini-fab matTooltip="Discard Changes" aria-label="Discard changes" color="warn" (click)="selectedId = ''">
+            <mat-icon>cancel</mat-icon>
           </button>
 
-          <button mat-mini-fab (click)="onSave.emit(fac)">
-            <mat-icon svgIcon="save_white"></mat-icon>
+          <button mat-mini-fab matTooltip="Save" aria-label="Save changes" (click)="saved.emit(fac)">
+            <mat-icon>save</mat-icon>
           </button>
         </ng-container>
       </mat-cell>
@@ -114,9 +122,10 @@
     <mat-row *matRowDef="let fac; columns: displayedColumns;"></mat-row>
   </mat-table>
 
-  <div class="spinner-container" *ngIf="isLoading">
-    <mat-spinner class="mat-accent"></mat-spinner>
+  <div fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+    <mat-spinner diameter="48"></mat-spinner>
   </div>
 
-  <mat-paginator #paginator [length]="facilitatorDataProvider.data.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+  <mat-paginator #paginator [length]="facilitatorDataProvider.size | async" [pageIndex]="0" [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
 </div>

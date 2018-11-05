@@ -1,12 +1,12 @@
 <mat-toolbar color="primary">
-  <h3>Affiliate Materials</h3>
+  <h2 mat-dialog-title>Affiliate Materials</h2>
   <div fxFlex></div>
-  <button mat-button [matDialogClose]="undefined">
+  <button mat-icon-button mat-dialog-close>
     <mat-icon svgIcon="cancel_white"></mat-icon>
   </button>
 </mat-toolbar>
-<div fxLayout="column" fxLayoutGap="16px">
+<mat-dialog-content fxLayout="column" fxLayoutGap="16px">
   <app-workshop-materials *ngIf="!filter || filter['workshops']"></app-workshop-materials>
   <app-marketing-materials *ngIf="!filter || filter['marketing']"></app-marketing-materials>
   <app-forms-evals *ngIf="!filter || filter['forms']"></app-forms-evals>
-</div>
+</mat-dialog-content>

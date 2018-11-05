@@ -1,4 +1,4 @@
-<h2 matDialogTitle>{{ title }}</h2>
+<h2 mat-dialog-title>{{ title }}</h2>
 <mat-dialog-content>
   <div [innerHTML]="message"></div>
   <mat-form-field [style.width]="'100%'">
@@ -7,11 +7,11 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <div *ngIf='destructive'>
-    <button mat-button [matDialogClose]="undefined">{{ cancelText }}</button>
-    <button mat-button class="mat-accent" [matDialogClose]="reason" color="warn">{{ acceptText }}</button>
+    <button mat-button mat-dialog-close>{{ cancelText }}</button>
+    <button mat-button class="mat-accent" [mat-dialog-close]="reason" color="warn">{{ acceptText }}</button>
   </div>
   <div *ngIf='!destructive'>
-    <button mat-button [matDialogClose]="undefined">{{ cancelText }}</button>
-    <button mat-button class="mat-accent" [matDialogClose]="reason">{{ acceptText }}</button>
+    <button mat-button mat-dialog-close>{{ cancelText }}</button>
+    <button mat-button class="mat-accent" [mat-dialog-close]="reason">{{ acceptText }}</button>
   </div>
 </mat-dialog-actions>

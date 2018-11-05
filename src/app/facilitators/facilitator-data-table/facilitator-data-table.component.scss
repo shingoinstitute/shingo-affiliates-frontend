@@ -1,15 +1,20 @@
 @import '../../../app-theme';
 
-mat-form-field { width: 100%; }
-
-.fac-input {
-   background-color: #efefef;
-   padding: 3px;
-   border-radius: 2px;
-   width: 97%;
-   font-weight: 300;
+mat-cell > mat-form-field {
+  width: 100%;
 }
-mat-icon.icon-sm {
-  height: 18px;
-  width: 18px;
+
+mat-cell:not(:last-of-type),
+mat-header-cell:not(:last-of-type) {
+  padding-right: 10px;
+}
+
+.actions {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.actions button,
+.actions a {
+  margin: 2px;
 }

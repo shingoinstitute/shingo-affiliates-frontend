@@ -1,25 +1,18 @@
-import { Filter } from './filter.abstract';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Filter } from './filter.abstract'
 
-export class PropertyFilter<T> extends Filter {
+export interface PropertyDef {
+  key: string
+  value: any
+}
 
-  public _filter: { key: string, value: any };
+export class PropertyFilter<T> extends Filter<T, PropertyDef> {
+  _filter = (criteria: PropertyDef) => (d: T): boolean => {
+    if (typeof d !== 'object' || d === null) return false
 
-  protected dataChangeSource: BehaviorSubject<{ key: string, value: any }>;
+    if (criteria.value instanceof Array) {
+      return new Set(criteria.value).has((d as any)[criteria.key])
+    }
 
-  constructor(name: string) {
-    super(name);
-    this.dataChangeSource = new BehaviorSubject<{ key: string, value: any }>(null);
-    this.dataChangeSource.subscribe(filter => this._filter = filter);
+    return (d as any)[criteria.key] === criteria.value
   }
-
-  public applyFilter(data: T[]): T[] {
-    if (!this._filter) return data;
-    return data.filter(d => {
-      if (this._filter.value instanceof Array) 
-        return new Set(this._filter.value).has(d[this._filter.key]);
-      return d[this._filter.key] === this._filter.value;
-    });
-  }
-
 }

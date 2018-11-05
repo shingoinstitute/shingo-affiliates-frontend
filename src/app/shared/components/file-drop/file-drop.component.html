@@ -1,0 +1,7 @@
+<div class="container">
+  <input class="upload" [id]="inputId" type="file" [accept]="accept" [multiple]="multiple" style='display: none'
+    (change)="onInputChange($event)" [disabled]="disabled">
+  <label class="upload-label" [for]="inputId">
+    <ng-content></ng-content>
+  </label>
+</div>

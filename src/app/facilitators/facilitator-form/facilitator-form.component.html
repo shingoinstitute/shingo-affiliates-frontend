@@ -1,17 +1,19 @@
 <form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer id="disable-lastpass-search">
 
-  <div class="spinner-container">
-    <mat-spinner class="mat-accent" *ngIf="isLoading"></mat-spinner>
+  <div class="spinner-container" fxLayout fxLayoutAlign="center center">
+    <mat-spinner diameter="48" color="accent" *ngIf="isLoading"></mat-spinner>
   </div>
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button mat-raised-button type="button" class="mat-accent" [matDialogClose]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
-      <button mat-raised-button type="button" [matDialogClose]="false"> Cancel </button>
+      <button mat-raised-button type="button" class="mat-accent" [mat-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
+        Save </button>
+      <button mat-raised-button type="button" [mat-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
+      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
+        Save </button>
       <button mat-raised-button type="button" (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>
@@ -21,8 +23,8 @@
   </div>
 
   <div class="input-item">
-    <app-sf-lookup placeholder="Email" [sfObject]="facilitator" formControlName="email" [displayFn]="displayFn.bind(this)" [extraArgs]="false"
-      (onSelect)="onSelectFacilitator($event)" (onChange)="facilitator.email = $event"></app-sf-lookup>
+    <app-sf-lookup placeholder="Email" [sfObject]="facilitator" formControlName="email" [displayFn]="displayFn.bind(this)"
+      [extraArgs]="false" (selected)="onSelectFacilitator($event)" (changed)="facilitator.email = $event"></app-sf-lookup>
   </div>
 
   <div class="input-item">
@@ -54,8 +56,8 @@
   </div>
 
   <div class="input-item">
-    <app-sf-lookup formControlName="affiliate" (onSelect)="onSelectAffiliate($event)" [sfObject]="facilitator.affiliate" [displayFn]="displayFn.bind(this)"
-      placeholder="Affiliate"></app-sf-lookup>
+    <app-sf-lookup formControlName="affiliate" (selected)="onSelectAffiliate($event)" [sfObject]="facilitator.affiliate"
+      [displayFn]="displayFn.bind(this)" placeholder="Affiliate"></app-sf-lookup>
   </div>
 
   <div class="input-item">
@@ -67,12 +69,14 @@
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button mat-raised-button type="button" class="mat-accent" [matDialogClose]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
-      <button mat-raised-button type="button" [matDialogClose]="false"> Cancel </button>
+      <button mat-raised-button type="button" class="mat-accent" [mat-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
+        Save </button>
+      <button mat-raised-button type="button" [mat-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">
-      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''"> Save </button>
+      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
+        Save </button>
       <button mat-raised-button type="button" (click)="location.back()"> Cancel </button>
     </ng-container>
   </div>

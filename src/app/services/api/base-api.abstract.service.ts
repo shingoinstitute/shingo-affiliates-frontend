@@ -1,55 +1,79 @@
+import { catchError, map } from 'rxjs/operators'
+import { Observable } from 'rxjs'
 // Angular Modules
-import { isDevMode } from '@angular/core';
+import { isDevMode } from '@angular/core'
 
 // App Modules
-import { HttpService } from '../http/http.service';
-import { BaseService } from './base.abstract.service';
-
-// RxJS Modules
-import { Observable } from 'rxjs/Observable';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { BaseService } from './base.abstract.service'
 
 // RxJS operators
-import 'rxjs/add/observable/throw';
 
-import { pick } from 'lodash';
+import { pick } from 'lodash'
+import { sfToCamelCase, requestOptions } from '../../util/util'
+import { environment } from '../../../environments/environment'
+import { JWTService } from '../auth/auth.service'
+import { HttpClient } from '@angular/common/http'
 
-export interface ISFSuccessResult {
-  id: string;
-  success: boolean;
-  errors: any[];
+export interface SFSuccessResult {
+  id: string
+  success: boolean
+  errors: any[]
 }
 
 export abstract class BaseAPIService extends BaseService {
-
-  protected _baseUrl: string = (isDevMode() ? 'http://localhost' : 'https://api.shingo.org/v2/affiliates');
-  protected _basePort: string = (isDevMode() ? '8080' : '');
+  protected _baseUrl = environment.apiUrl
 
   // Contract for all APIServices;
-  public abstract getAll(): Observable<any[]>;
-  public abstract getById(id: string): Observable<any>;
-  public abstract create(obj: any): Observable<ISFSuccessResult>;
-  public abstract update(obj: any): Observable<ISFSuccessResult>;
-  public abstract delete(obj: any): Observable<ISFSuccessResult>;
-  public abstract search(query: string): Observable<any[]>;
+  public abstract getAll(): Observable<any[]>
+  public abstract getById(id: string): Observable<any>
+  public abstract create(obj: any): Observable<SFSuccessResult>
+  public abstract update(obj: any): Observable<SFSuccessResult>
+  public abstract delete(obj: any): Observable<SFSuccessResult>
+  public abstract search(query: string): Observable<any[]>
 
-  public describe(route: 'workshops' | 'facilitators' | 'affiliates' | 'support', http: HttpService): Observable<any> {
-    return http.get(`${this.APIHost()}/${route}/describe`)
-      .map(data => {
-        const props = {};
+  public describe(
+    route: 'workshops' | 'facilitators' | 'affiliates' | 'support',
+    http: HttpClient,
+    jwt: JWTService,
+  ) {
+    return http
+      .get<{ fields: any[] }>(
+        `${this.APIHost()}/${route}/describe`,
+        requestOptions(jwt),
+      )
+      .pipe(
+        map(data => {
+          const props: { [k: string]: any } = {}
 
-        data.fields.filter(field => field.inlineHelpText || field.label || field.picklistValues)
-          .map(field => pick(field, ['inlineHelpText', 'label', 'name', 'picklistValues']))
-          .forEach(field => props[this.toCamelCase(field.name)] = field);
+          data.fields
+            .filter(
+              field =>
+                field.inlineHelpText || field.label || field.picklistValues,
+            )
+            .map(field =>
+              pick(field, [
+                'inlineHelpText',
+                'label',
+                'name',
+                'picklistValues',
+              ]),
+            )
+            .forEach(field => (props[sfToCamelCase(field.name)] = field))
 
-        return props;
-      })
-      .catch(err => this.handleError(err));
+          return props
+        }),
+        catchError(err => this.handleError(err)),
+      )
   }
 
-  public sfObjectFactory<T>(type: { new(...args: any[]): T; }, ...args: any[]): T {
-    return new type(args);
+  public sfObjectFactory<T>(
+    type: { new (...args: any[]): T },
+    ...args: any[]
+  ): T {
+    return new type(args)
   }
 
-  protected APIHost() { return `${this._baseUrl}${this._basePort ? ':' + this._basePort : ''}`; }
+  protected APIHost() {
+    return this._baseUrl
+  }
 }

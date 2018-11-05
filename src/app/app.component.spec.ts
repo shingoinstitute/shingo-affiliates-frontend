@@ -1,17 +1,16 @@
-import { TestBed, async } from '@angular/core/testing';
+import { TestBed, async } from '@angular/core/testing'
 
-import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router'
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './app.component'
 
-import { 
-  MatIconRegistry, 
-  MatSidenavModule, 
-  MatDialogModule, 
+import {
+  MatIconRegistry,
+  MatSidenavModule,
+  MatDialogModule,
   MatMenuModule,
-  MatExpansionModule
-} from '@angular/material';
-
+  MatExpansionModule,
+} from '@angular/material'
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -23,13 +22,12 @@ describe('AppComponent', () => {
         MatMenuModule,
         MatSidenavModule,
         MatDialogModule,
-        RouterModule
-      ]
-    }).compileComponents();
-  }));
+        RouterModule,
+      ],
+    }).compileComponents()
+  }))
 
   describe('proof of concept test', () => {
-    it('true is true', () => expect(true).toBe(true));
-  });
-
-});
+    it('true is true', () => expect(true).toBe(true))
+  })
+})

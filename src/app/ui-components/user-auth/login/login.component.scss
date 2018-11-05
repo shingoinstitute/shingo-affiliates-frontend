@@ -21,7 +21,8 @@ $login-form-width: 400px;
 .login-form-container {
   margin-top: $default-margin * 4;
   background: white;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(0, 0, 0, 0.12);
   padding: $default-margin * 2;
   width: $login-form-width;
 }
@@ -40,7 +41,8 @@ $login-form-width: 400px;
   flex-direction: row;
   align-items: center;
 
-  img, h1 {
+  img,
+  h1 {
     margin: $default-margin;
   }
 }
@@ -48,18 +50,6 @@ $login-form-width: 400px;
   min-height: 19px;
   margin-top: $default-margin * 2;
   margin-bottom: $default-margin * 2;
-}
-.mat-spinner-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 42px;
-  margin-bottom: -42px;
-
-  mat-spinner {
-    height: 42px;
-  }
 }
 form.login-form {
   display: flex;
@@ -70,15 +60,15 @@ form.login-form {
   }
 }
 .login-actions {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-   * {
-     margin: $default-margin;
-   }
+  * {
+    margin: $default-margin;
+  }
 
-   a {
-     text-decoration-line: none;
-   }
+  a {
+    text-decoration-line: none;
+  }
 }

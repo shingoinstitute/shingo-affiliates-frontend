@@ -1,7 +1,7 @@
 <div class="form-container" [formGroup]="affForm" [class.loading-active]="isLoading" #formContainer>
 
-  <div class="spinner-container">
-    <mat-spinner class="mat-accent" *ngIf="isLoading"></mat-spinner>
+  <div class="spinner-container" fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+    <mat-spinner diameter="48" class="mat-accent"></mat-spinner>
   </div>
 
   <div class="form-actions">
@@ -20,7 +20,7 @@
 
     <div class="input-item">
       <app-sf-lookup #afLookup formControlName="affiliate" [sfObject]="affiliate" [fields]="extraFields" [displayFn]="displayFn.bind(this)"
-        placeholder="Name" (onSelect)="selectedAffiliate($event)" (onChange)="affiliate.name = $event"></app-sf-lookup>
+        placeholder="Name" (selected)="selectedAffiliate($event)" (changed)="affiliate.name = $event"></app-sf-lookup>
     </div>
 
     <div class="input-item">
@@ -88,8 +88,9 @@
 
   <div class="form-actions">
     <ng-container *ngIf="isDialog">
-      <button mat-raised-button class="mat-accent" [matDialogClose]="affiliate" [disabled]="!affForm.valid"> Save </button>
-      <button mat-raised-button [matDialogClose]="false"> Cancel </button>
+      <button mat-raised-button class="mat-accent" [mat-dialog-close]="affiliate" [disabled]="!affForm.valid"> Save
+      </button>
+      <button mat-raised-button [mat-dialog-close]="false"> Cancel </button>
     </ng-container>
 
     <ng-container *ngIf="!isDialog">

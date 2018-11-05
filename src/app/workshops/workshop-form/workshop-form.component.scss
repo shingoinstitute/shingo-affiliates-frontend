@@ -1,66 +1,46 @@
 @import '../../../assets/sass/_globals';
 
 .form-group-container {
-   max-width: $break-medium;
-   margin-bottom: 142px;
+  max-width: $break-medium;
+  margin-bottom: 142px;
 }
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 form .input-item:nth-child(even) {
-   background-color: $row-background-color;
+  background-color: $row-background-color;
 }
 .form-actions {
-   margin: ($default-margin * 2) 0 ($default-margin * 2) 0;
+  margin: ($default-margin * 2) 0 ($default-margin * 2) 0;
 }
 .input-item {
-   margin-top: 8px;
-   margin-bottom: 8px;
-   padding: 8px;
-   display: flex;
-   flex-direction: column;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
 }
 .input-item > p {
-   margin: 0;
+  margin: 0;
 }
 form {
-    .facilitator-list {
-        display: flex;
-        flex-direction: row;
+  .facilitator-list {
+    display: flex;
+    flex-direction: row;
 
-        .facilitator-item {
-            margin-left: $default-margin * 2;
-            margin-bottom: $default-margin;
-            margin-top: $default-margin;
-        }
+    .facilitator-item {
+      margin-left: $default-margin * 2;
+      margin-bottom: $default-margin;
+      margin-top: $default-margin;
     }
-    .facilitator-list:nth-child(even) {
-        background-color: $row-background-color;
-    }
+  }
+  .facilitator-list:nth-child(even) {
+    background-color: $row-background-color;
+  }
 }
 form mat-form-field input.autoComplete {
-    width: fit-content;
+  width: fit-content;
 }
 form mat-form-field mat-hint.error {
   color: #ff0000;
 }
-div.search-spinner-wrapper {
-  display: block;
-  height: 36px;
-  right: -36px;
-  top: 6px;
-}
-div.search-spinner-wrapper {
-  mat-spinner {
-   position: absolute;
-   top: 0;
-   right: 0;
-   height: 24px !important;
-   width: 24px !important;
- 
-   svg {
-     width: 24px !important;
-     height: 24px !important;
-   }
-  }
- }
