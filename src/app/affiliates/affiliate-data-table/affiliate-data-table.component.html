@@ -99,7 +99,7 @@
     <mat-spinner diameter="48"></mat-spinner>
   </div>
 
-  <mat-paginator #paginator [length]="affiliateDataProvider.data.length" [pageIndex]="0" [pageSize]="10"
+  <mat-paginator #paginator [length]="affiliateDataProvider.size | async" [pageIndex]="0" [pageSize]="10"
     [pageSizeOptions]="[5, 10, 25]">
   </mat-paginator>
 </div>

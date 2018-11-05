@@ -13,7 +13,7 @@
 
   <!-- Facilitator Search Filter -->
   <mat-form-field floatPlaceholder="auto">
-    <input matInput placeholder="Search..." [(ngModel)]="nameFilterText" #nameFilterInput>
+    <input matInput placeholder="Search..." [formControl]="nameFilterControl">
   </mat-form-field>
 
   <!-- Data Table -->

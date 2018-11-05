@@ -1,12 +1,12 @@
 <div class="card">
-    <div class="card-header">
-        <span [style.margin-right]="'8px'">Upcoming Workshops</span>
-        <a mat-raised-button class="mat-primary" routerLink="/workshops/new">
-            <mat-icon svgIcon="edit_white"></mat-icon>
-            <span>Add Workshop</span>
-        </a>
-    </div>
-    <div class="card-content">
-        <app-workshop-data-table [filters]="filters" [displayedColumns]="displayedColumns"></app-workshop-data-table>
-    </div>
+  <div class="card-header">
+    <span [style.margin-right]="'8px'">Upcoming Workshops</span>
+    <a mat-raised-button class="mat-primary" routerLink="/workshops/new">
+      <mat-icon svgIcon="edit_white"></mat-icon>
+      Add Workshop
+    </a>
+  </div>
+  <div class="card-content" style="padding: 0">
+    <app-workshop-data-table [filters]="filters" [displayedColumns]="displayedColumns"></app-workshop-data-table>
+  </div>
 </div>

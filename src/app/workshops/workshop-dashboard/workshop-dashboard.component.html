@@ -1,47 +1,44 @@
-<div class="filter-options-container" fxLayout="column">
+<div class="filter-options-container" fxLayout="column" fxLayoutGap="5px">
   <div fxLayout="row" fxLayoutGap="16px">
-    <a mat-raised-button class="mat-primary" routerLink="/workshops/new">
+    <a mat-raised-button color="primary" routerLink="/workshops/new">
       <mat-icon>edit</mat-icon>
       <span>Add Workshop</span>
     </a>
-    <div class="filter-options-header">
-      <button mat-raised-button (click)="toggleFilters()">Advanced Filter Options &ensp;<mat-icon>{{ showFilters ?
-          'expand_less' : 'expand_more' }}</mat-icon></button>
-    </div>
   </div>
-  <div #filterBox class="filter-options-body" fxLayout="column" fxLayoutGap="36px" [style.opacity]="showFilters ? '1' : '0'"
-    [style.height]="showFilters ? '275px' : '0'">
-    <div fxLayout="row">
-      <div fxLayout="column" fxFlex="20%">
-        <h4 class="mat-subheading">Filter:
-          <button mat-raised-button type="button" (click)="clearFilters()">
-            Clear <mat-icon svgIcon="x_red"></mat-icon>
-          </button>
-        </h4>
-        <mat-checkbox *ngFor="let filter of filterOptions; let i = index" [value]="filter" [id]="i">{{ filter }}</mat-checkbox>
-      </div>
-      <div fxLayout="column" fxFlex="80%" fxLayoutGap="16px">
-        <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Advanced Filter Options
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-        <div fxLayout="row" fxLayoutGap="8px" *ngIf="showStatusFilter">
-          <mat-form-field>
-            <mat-select [style.width]="'100%'" [formControl]="statusControl" placeholder="Status" multiple="true"
-              floatPlaceholder="auto">
-              <mat-option *ngFor="let status of statuses | async" [value]="status">{{status}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-
-        <div fxLayout="row" fxLayoutGap="8px" *ngIf="showTextFilter">
-          <mat-form-field>
-            <input matInput placeholder="Search..." [formControl]="textSearchControl">
-            <mat-icon matSuffix svgIcon="search_grey"></mat-icon>
-          </mat-form-field>
-        </div>
-
-        <div fxLayout="row" fxLayoutGap="8px" *ngIf="showDateRange">
+      <div #filterBox fxLayout="column" fxLayoutGap="36px">
+        <div fxLayout="row" fxLayoutGap="10px">
           <div fxLayout="column">
-            <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center">
+            <h4 class="mat-subheading">Filter:
+              <button mat-raised-button type="button" (click)="clearFilters()">
+                Clear <mat-icon svgIcon="x_red"></mat-icon>
+              </button>
+            </h4>
+            <mat-checkbox *ngFor="let filter of filterOptions; let i = index" [value]="filter" [id]="i">{{ filter }}</mat-checkbox>
+          </div>
+          <div fxLayout="column" fxFlex fxLayoutGap="16px">
+            <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
+
+            <mat-form-field *ngIf="showStatusFilter">
+              <mat-select [style.width]="'100%'" [formControl]="statusControl" placeholder="Status" multiple="true"
+                floatPlaceholder="auto">
+                <mat-option *ngFor="let status of statuses | async" [value]="status">{{status}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="showTextFilter">
+              <input matInput placeholder="Search..." [formControl]="textSearchControl">
+              <mat-icon matSuffix style="color: #757575">search</mat-icon>
+            </mat-form-field>
+
+            <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="showDateRange">
               <p [style.color]="'#757575'">Date</p>
 
               <mat-form-field floatPlaceholder="always">
@@ -59,18 +56,19 @@
                 <mat-icon>close</mat-icon>
               </button>
             </div>
+
           </div>
         </div>
+        <mat-form-field>
+          <mat-select placeholder="Table Fields" [(ngModel)]="displayedColumns" multiple="true" floatPlaceholder="auto">
+            <mat-option *ngFor="let column of allDisplayedColumns" [value]="column">{{column}}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
       </div>
-    </div>
-    <mat-form-field>
-      <mat-select placeholder="Table Fields" [(ngModel)]="displayedColumns" multiple="true" floatPlaceholder="auto">
-        <mat-option *ngFor="let column of allDisplayedColumns" [value]="column">{{column}}</mat-option>
-      </mat-select>
-    </mat-form-field>
+    </mat-expansion-panel>
+  </mat-accordion>
 
-  </div>
-
-  <app-workshop-data-table [filters]="filters" [displayedColumns]="displayedColumns" (editClick)="goToWorkshopEdit($event)"></app-workshop-data-table>
+  <app-workshop-data-table class="mat-elevation-z2" [filters]="filters" [displayedColumns]="displayedColumns"
+    (editClick)="goToWorkshopEdit($event)"></app-workshop-data-table>
 </div>
