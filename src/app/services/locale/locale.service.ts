@@ -14,6 +14,7 @@ export class LocaleService {
 
   private _languageChange$: BehaviorSubject<string>
   private _browserLanguageChange$: Observable<string>
+
   private getFromLocalStorage() {
     return localStorage.getItem(LOCALE_KEY)
   }
@@ -62,5 +63,9 @@ export class LocaleService {
     return navigator.languages && navigator.languages.length > 0
       ? navigator.languages
       : ['en-US']
+  }
+
+  public get primarySubtag() {
+    return this.locale.split('-')[0]
   }
 }

@@ -38,6 +38,7 @@
     "ng2-ckeditor": "^1.2.2",
     "ng2-validation": "^4.2.0",
     "ngx-cookie": "^4.0.2",
+    "ngx-mat-select-search": "^1.4.2",
     "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },

@@ -19,6 +19,7 @@ import { EditWorkshopComponent } from './edit-workshop/edit-workshop.component'
 import { UpcomingWorkshopsComponent } from './upcoming-workshops/upcoming-workshops.component'
 import { WorkshopDashboardComponent } from './workshop-dashboard/workshop-dashboard.component'
 import { WorkshopDetailComponent } from './workshop-detail/workshop-detail.component'
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search'
 
 // Material Design imports
 import {
@@ -67,6 +68,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter'
     MatCardModule,
     MatTooltipModule,
     MatExpansionModule,
+    NgxMatSelectSearchModule,
 
     FlexLayoutModule,
     SharedModule.forRoot(),

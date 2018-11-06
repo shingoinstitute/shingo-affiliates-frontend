@@ -1,79 +1,78 @@
 <mat-card class="form-group-container">
   <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
-    <div class="input-item" *ngIf="auth.user && auth.user.isAdmin">
-      <p class="mat-caption"> {{ describe.organizingAffiliate && describe.organizingAffiliate.inlineHelpText }} </p>
+    <div class="input-item" *ngIf="auth.user?.isAdmin">
+      <p class="mat-caption"> {{ describe.organizingAffiliate?.inlineHelpText }} </p>
       <app-sf-lookup #afLookup formControlName="affiliate" (focusout)="checkValidSFObject(afLookup.lookup.controls.sfObject)"
         [sfObject]="workshop.affiliate" [displayFn]="contactDisplayWith.bind(this)" (selected)="onSelectAffiliate($event)"
-        placeholder="{{ describe.organizingAffiliate && describe.organizingAffiliate.label || 'Affiliate'}}"></app-sf-lookup>
+        placeholder="{{ describe.organizingAffiliate?.label || 'Affiliate'}}"></app-sf-lookup>
     </div>
     <div class="input-item">
-      <p class="mat-caption"> {{ describe.public && describe.public.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.public?.inlineHelpText }} </p>
       <mat-checkbox formControlName="isPublic"> Yes, publish to web. </mat-checkbox>
     </div>
 
     <div class="input-item">
-      <p class="mat-caption"> {{ describe.workshopType && describe.workshopType.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.workshopType?.inlineHelpText }} </p>
       <mat-form-field>
-        <mat-select placeholder="{{ describe.workshopType && describe.workshopType.label || 'Type' }}" floatPlaceholder="auto"
-          formControlName="type" required>
+        <mat-select placeholder="{{ describe.workshopType?.label || 'Type' }}" floatPlaceholder="auto" formControlName="type"
+          required>
           <mat-option *ngFor="let type of workshopTypes" [value]="type"> {{ type }} </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <div class="input-item">
-      <p class="mat-caption"> {{ describe.language && describe.language.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.language?.inlineHelpText }} </p>
       <mat-form-field>
-        <mat-select placeholder="{{ describe.language && describe.language.label || 'Language' }}" floatPlaceholder="auto"
-          required formControlName="language">
+        <mat-select placeholder="{{ describe.language?.label || 'Language' }}" floatPlaceholder="auto" required
+          formControlName="language">
           <mat-option *ngFor="let lang of languages" [value]="lang">{{ lang }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <div class="input-item" *ngIf="auth.user && auth.user.isAdmin && !isNewWorkshop">
-      <p class="mat-caption"> {{ describe.status && describe.status.inlineHelpText }} </p>
+    <div class="input-item" *ngIf="auth.user?.isAdmin && !isNewWorkshop">
+      <p class="mat-caption"> {{ describe.status?.inlineHelpText }} </p>
       <mat-form-field>
-        <mat-select placeholder="{{ describe.status && describe.status.label || 'Workshop Status'}}" floatPlaceholder="auto"
-          required formControlName="status">
+        <mat-select placeholder="{{ describe.status?.label || 'Workshop Status'}}" floatPlaceholder="auto" required
+          formControlName="status">
           <mat-option *ngFor="let status of statuses" [value]="status">{{ status }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <div class="input-item">
-      <p class="mat-caption"> {{ describe.eventCity && describe.eventCity.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.eventCity?.inlineHelpText }} </p>
       <mat-form-field>
-        <input matInput placeholder="{{ describe.eventCity && describe.eventCity.label || 'City' }}" required
-          formControlName="city">
+        <input matInput placeholder="{{ describe.eventCity?.label || 'City' }}" required formControlName="city">
       </mat-form-field>
     </div>
 
     <div class="input-item">
-      <p class="mat-caption"> {{ describe.eventCountry && describe.eventCountry.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.eventCountry?.inlineHelpText }} </p>
       <mat-form-field>
-        <input matInput [matAutocomplete]="autoEventCountry" placeholder="Event Country" formControlName="country"
-          required>
-      </mat-form-field>
-
-      <mat-autocomplete #autoEventCountry="matAutocomplete">
-        <mat-option *ngFor="let country of countryOptions" [value]="country"> {{ country }} </mat-option>
-      </mat-autocomplete>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption"> {{ describe.hostSite && describe.hostSite.inlineHelpText }} </p>
-      <mat-form-field>
-        <input matInput placeholder="{{ describe.hostSite && describe.hostSite.label || 'Host Site' }}" required
-          formControlName="hostSite">
+        <mat-select placeholder="Event Country" formControlName="country">
+          <ngx-mat-select-search [formControl]="countryFilterControl" placeholderLabel="Search countries..."
+            noEntriesFoundLabel="Country not found"></ngx-mat-select-search>
+          <mat-option *ngFor="let country of countryOptions | async" [value]="country.name"> {{
+            getLocalizedName(country) }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </div>
 
     <div class="input-item">
-      <p class="mat-caption"> {{ describe.billingContact && describe.billingContact.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.hostSite?.inlineHelpText }} </p>
       <mat-form-field>
-        <input matInput placeholder="{{ describe.billingContact && describe.billingContact.label || 'Billing Contact' }}"
-          required formControlName="billing">
+        <input matInput placeholder="{{ describe.hostSite?.label || 'Host Site' }}" required formControlName="hostSite">
+      </mat-form-field>
+    </div>
+
+    <div class="input-item">
+      <p class="mat-caption"> {{ describe.billingContact?.inlineHelpText }} </p>
+      <mat-form-field>
+        <input matInput placeholder="{{ describe.billingContact?.label || 'Billing Contact' }}" required
+          formControlName="billing">
       </mat-form-field>
     </div>
 
@@ -82,10 +81,10 @@
         dateFormGroup.errors['invalid date'] }} </p>
       <div fxLayout="row" fxLayoutGap="8px">
         <div fxLayout="column">
-          <p class="mat-caption"> {{ describe.startDate && describe.startDate.inlineHelpText }} </p>
+          <p class="mat-caption"> {{ describe.startDate?.inlineHelpText }} </p>
           <!-- Start Date Picker -->
           <mat-form-field>
-            <input required matInput [matDatepicker]="startDatePicker" placeholder="{{ describe.startDate && describe.startDate.label || 'Start Date' }}"
+            <input required matInput [matDatepicker]="startDatePicker" placeholder="{{ describe.startDate?.label || 'Start Date' }}"
               formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #startDatePicker [startAt]="dateFormGroup.get('startDate')!.value"></mat-datepicker>
@@ -94,9 +93,9 @@
 
         <!-- End Date Picker -->
         <div fxLayout="column">
-          <p class="mat-caption"> {{ describe.endDate && describe.endDate.inlineHelpText }} </p>
+          <p class="mat-caption"> {{ describe.endDate?.inlineHelpText }} </p>
           <mat-form-field>
-            <input required matInput [matDatepicker]="endDatePicker" placeholder="{{ describe.endDate && describe.endDate.label || 'End Date' }}"
+            <input required matInput [matDatepicker]="endDatePicker" placeholder="{{ describe.endDate?.label || 'End Date' }}"
               formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #endDatePicker [startAt]="dateFormGroup.get('endDate')!.value"></mat-datepicker>
@@ -113,10 +112,9 @@
     </div>
 
     <div class="input-item" [style.display]="workshopForm.value.isPublic ? 'flex' : 'none'">
-      <p class="mat-caption"> {{ describe.registrationWebsite && describe.registrationWebsite.inlineHelpText }} </p>
+      <p class="mat-caption"> {{ describe.registrationWebsite?.inlineHelpText }} </p>
       <mat-form-field>
-        <input matInput placeholder="{{ describe.registrationWebsite && describe.registrationWebsite.label || 'Registration URL' }}"
-          formControlName="website">
+        <input matInput placeholder="{{ describe.registrationWebsite?.label || 'Registration URL' }}" formControlName="website">
         <mat-hint align="start" *ngIf="workshopForm.controls.website.errors?.required" class="error">A registration
           website is required if the workshop is public</mat-hint>
         <mat-hint align="start" *ngIf="workshopForm.controls.website.errors?.url" class="error">'{{workshopForm.controls.website.value}}'
@@ -126,7 +124,7 @@
 
     <div class="input-item">
       <app-sf-lookup formControlName="facilitator" [sfObject]="'facilitator'" [displayFn]="contactDisplayWith.bind(this)"
-        (selected)="onFacilitatorSelected($event)" [isRequired]="false" placeholder="{{ describe.facilitator && describe.facilitator.label || 'Find Instructors' }}"></app-sf-lookup>
+        (selected)="onFacilitatorSelected($event)" [isRequired]="false" placeholder="{{ describe.facilitator?.label || 'Find Instructors' }}"></app-sf-lookup>
 
       <div>
         <h4 class="mat-subheading-1 warn" *ngIf="!workshop.instructors.length">* Need to Add an Instructor</h4>

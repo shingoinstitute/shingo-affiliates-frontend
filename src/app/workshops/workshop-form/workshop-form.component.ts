@@ -6,7 +6,10 @@ import { MatSnackBar } from '@angular/material'
 
 // App Modules
 import { AuthService } from '../../services/auth/auth.service'
-import { CountriesService } from '../../services/countries/countries.service'
+import {
+  CountriesService,
+  CountryItem,
+} from '../../services/countries/countries.service'
 import { FacilitatorService } from '../../services/facilitator/facilitator.service'
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
 import { WorkshopService } from '../../services/workshop/workshop.service'
@@ -17,7 +20,7 @@ import { Facilitator } from '../../facilitators/facilitator.model'
 import { Affiliate } from '../../affiliates/affiliate.model'
 
 // RxJS Modules
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
 
 // RxJS operators
 
@@ -25,8 +28,14 @@ import { Observable } from 'rxjs'
 import { merge } from 'lodash'
 
 import { CustomValidators } from 'ng2-validation'
+import { LocaleService } from '../../services/locale/locale.service'
+import { mergeMap, map, startWith } from 'rxjs/operators'
 
 const MILLI_DAY = 1000 * 60 * 60 * 24
+
+// see https://thread.engineering/2018-08-29-searching-and-sorting-text-with-diacritical-marks-in-javascript/
+const normalizeString = (value: string) =>
+  value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
 @Component({
   selector: 'app-workshop-form',
@@ -47,9 +56,11 @@ export class WorkshopFormComponent implements OnInit {
     return this.workshopForm.get('dates') as FormGroup
   }
 
-  public countries: string[] = []
-  public countryOptions: string[] = []
+  public countryOptions: Observable<
+    Array<{ name: string; translations: Record<string, string> }>
+  > = of([])
   public workshopForm!: FormGroup
+  public countryFilterControl = new FormControl()
   public courseManagers: CourseManager[] = []
   public facilitatorOpts: Facilitator[] = []
   public affiliates: Affiliate[] = []
@@ -78,7 +89,8 @@ export class WorkshopFormComponent implements OnInit {
     public fb: FormBuilder,
     public router: Router,
     public auth: AuthService,
-    public _cs: CountriesService,
+    private _cs: CountriesService,
+    private locale: LocaleService,
     public _fs: FacilitatorService,
     public _as: AffiliateService,
     public _ws: WorkshopService,
@@ -90,6 +102,69 @@ export class WorkshopFormComponent implements OnInit {
     this.subscribeToCountry()
     this.subscribeToIsPublic()
     this.getWorkshopDescription()
+  }
+
+  /**
+   * @description Retrieves a list of countries from {@link CountriesService} to pick from for the eventCountry FormControl.
+   * Listens to value changes of the country FormControl and displays filtered results in the auto-complete.
+   */
+  private subscribeToCountry() {
+    const countryList = this._cs.get()
+    this.countryOptions = this.countryFilterControl.valueChanges.pipe(
+      startWith(''),
+      map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
+      mergeMap(value =>
+        countryList.pipe(
+          map(countries => {
+            return countries.filter(v =>
+              normalizeString(this.getLocalizedName(v)).startsWith(
+                normalizeString(value),
+              ),
+            )
+          }),
+        ),
+      ),
+    )
+  }
+
+  private subscribeToIsPublic() {
+    const publicChanges$ = this.workshopForm.controls.isPublic.valueChanges
+    publicChanges$.subscribe(isPublic => {
+      const websiteControl = this.workshopForm.controls.website
+
+      if (isPublic) {
+        websiteControl.setValidators([
+          Validators.required,
+          CustomValidators.url,
+        ])
+      } else {
+        websiteControl.clearValidators()
+      }
+
+      websiteControl.setValue('https://')
+      websiteControl.updateValueAndValidity()
+    })
+  }
+
+  /**
+   * @description Gets an object (`this.describe`) from the api that is used to set helper text, labels, and picklist values
+   */
+  private getWorkshopDescription() {
+    this._ws.describe().subscribe(
+      data => {
+        this.describe = data
+        this.getWorkshopTypes()
+        this.getWorkshopStatuses()
+      },
+      err => {
+        console.error(err)
+      },
+    )
+  }
+
+  public getLocalizedName(item: CountryItem) {
+    const subtag = this.locale.primarySubtag
+    return item.translations[subtag] || item.name
   }
 
   public createForm() {
@@ -197,49 +272,6 @@ export class WorkshopFormComponent implements OnInit {
     else return this.auth.user.affiliate
   }
 
-  /**
-   * @description Retrieves a list of countries from {@link CountriesService} to pick from for the eventCountry FormControl.
-   * Listens to value changes of the country FormControl and displays filtered results in the auto-complete.
-   */
-  public subscribeToCountry() {
-    const countryFC = this.workshopForm.get('country')
-    if (!countryFC) return
-    countryFC.valueChanges.subscribe(
-      q =>
-        (this.countryOptions = q
-          ? this.countries.filter(option =>
-              new RegExp(`${q}`, 'gi').test(option),
-            )
-          : this.countries),
-    )
-
-    this._cs
-      .get()
-      .subscribe(
-        countries => (this.countries = countries),
-        err => console.error(err),
-      )
-  }
-
-  public subscribeToIsPublic() {
-    const publicChanges$ = this.workshopForm.controls.isPublic.valueChanges
-    publicChanges$.subscribe(isPublic => {
-      const websiteControl = this.workshopForm.controls.website
-
-      if (isPublic) {
-        websiteControl.setValidators([
-          Validators.required,
-          CustomValidators.url,
-        ])
-      } else {
-        websiteControl.clearValidators()
-      }
-
-      websiteControl.setValue('https://')
-      websiteControl.updateValueAndValidity()
-    })
-  }
-
   public prefixWebsite() {
     const websiteControl = this.workshopForm.controls.website
     let value: string = websiteControl.value
@@ -251,22 +283,6 @@ export class WorkshopFormComponent implements OnInit {
     websiteControl.setValue(value)
 
     websiteControl.updateValueAndValidity()
-  }
-
-  /**
-   * @description Gets an object (`this.describe`) from the api that is used to set helper text, labels, and picklist values
-   */
-  public getWorkshopDescription() {
-    this._ws.describe().subscribe(
-      data => {
-        this.describe = data
-        this.getWorkshopTypes()
-        this.getWorkshopStatuses()
-      },
-      err => {
-        console.error(err)
-      },
-    )
   }
 
   /**
