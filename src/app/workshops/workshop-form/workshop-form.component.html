@@ -51,7 +51,7 @@
     <div class="input-item">
       <p class="mat-caption"> {{ describe.eventCountry?.inlineHelpText }} </p>
       <mat-form-field>
-        <mat-select placeholder="Event Country" formControlName="country">
+        <mat-select placeholder="Event Country" formControlName="country" required>
           <ngx-mat-select-search [formControl]="countryFilterControl" placeholderLabel="Search countries..."
             noEntriesFoundLabel="Country not found"></ngx-mat-select-search>
           <mat-option *ngFor="let country of countryOptions | async" [value]="country.name"> {{
