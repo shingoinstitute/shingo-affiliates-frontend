@@ -1,7 +1,8 @@
 FROM node:8-alpine as build
 WORKDIR /usr/src/app
-COPY . .
+COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install --silent
+COPY . .
 ENV NODE_ENV production
 RUN npx ng build --prod --aot --base-href=/ --output-hashing=all
 
