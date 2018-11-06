@@ -1,34 +1,17 @@
+import { Observable, of, OperatorFunction } from 'rxjs'
 import {
-  merge as observableMerge,
-  from as observableFrom,
-  fromEvent as observableFromEvent,
-  Observable,
-  of,
-} from 'rxjs'
-
-import { debounceTime, map } from 'rxjs/operators'
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  ViewChildren,
-  ElementRef,
-  AfterViewInit,
-} from '@angular/core'
-import {
-  MatDatepicker,
-  MatCheckboxChange,
-  MatCheckbox,
-  MatSelect,
-  MatSelectChange,
-  MatDatepickerInputEvent,
-} from '@angular/material'
+  debounceTime,
+  map,
+  mergeMap,
+  bufferCount,
+  startWith,
+} from 'rxjs/operators'
+import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
 import { AuthService } from '../../services/auth/auth.service'
 import { Filter } from '../../services/filters/filter.abstract'
 import { User } from '../../shared/models/user.model'
-import { WorkshopDataTableComponent } from '../../workshops/workshop-data-table/workshop-data-table.component'
 import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service'
 import {
   WorkshopProperties,
@@ -37,45 +20,42 @@ import {
 } from '../../services/workshop/workshop.service'
 
 import { Moment } from 'moment'
-import { FormControl } from '@angular/forms'
-import {
-  just,
-  nothing,
-  Maybe,
-  map as mapMaybe,
-} from '../../util/functional/Maybe'
-import { PropertyFilter } from '../../services/filters/property-filter'
+import { FormControl, FormArray } from '@angular/forms'
+import { just, nothing, map as mapMaybe } from '../../util/functional/Maybe'
 import { DateRange } from '../../services/filters/workshops/workshop-date-range-filter'
-import { catMaybes } from '../../util/functional/Array'
+import { tuple, fst, constant } from '../../util/functional'
+import { filterMap, XOR } from '../../util/util'
+
+const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
+  f.criteria = criteria
+  f.active = active
+  return f
+}
+
+const noop = () => {}
+
+type FilterCB = (change: boolean, filter: Filter<Workshop, any>) => void
 
 @Component({
   selector: 'app-workshop-dashboard',
   templateUrl: './workshop-dashboard.component.html',
   styleUrls: ['./workshop-dashboard.component.scss'],
 })
-export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
+export class WorkshopDashboardComponent implements OnInit {
   public get showDateRange(): boolean {
-    return this._showDateRange
-  }
-  public get showFilters(): boolean {
-    return this._showFilters
+    const idx = this.filters.findIndex(v => v[0].name === 'by Date')
+    return idx > 0 && this.filterControls.at(idx).value
   }
   public get showStatusFilter(): boolean {
-    return this._showStatusFilter
+    const idx = this.filters.findIndex(v => v[0].name === 'by Status')
+    return idx > 0 && this.filterControls.at(idx).value
   }
   public get showTextFilter(): boolean {
-    return this._showTextFilter
+    const idx = this.filters.findIndex(v => v[0].name === 'by Text')
+    return idx > 0 && this.filterControls.at(idx).value
   }
 
-  @ViewChildren(MatCheckbox)
-  public selectedFilters: MatCheckbox[] = []
-
-  public _showDateRange = false
-  public _showFilters = false
-  public _showStatusFilter = false
-  public _showTextFilter = false
   public dateRange: DateRange = [null, null]
-  public deactivated: Set<string> = new Set()
   public displayedColumns: WorkshopProperties[] = [
     'workshopType',
     'startDate',
@@ -101,10 +81,12 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     'edit',
     'actions',
   ]
-  public filterOption!: string
-  public filterOptions: string[] = [] // the list of available filter options shown to the user
-  public filters: Array<Filter<Workshop, any>> = [] // the list of filter objects used to do the actual filtering
+  public filters: Array<[Filter<Workshop, any>, FilterCB]> = [] // list of (filter object, change callback) pairs
+  public get filterFns(): Array<Filter<Workshop, any>> {
+    return this.filters.map(fst)
+  }
   public statuses: Observable<string[]> = of([])
+  public filterControls = new FormArray([])
   public textSearchControl = new FormControl('')
   public statusControl = new FormControl()
   public startDateControl = new FormControl()
@@ -121,27 +103,29 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     public route: ActivatedRoute,
     public authService: AuthService,
   ) {
-    this.setStatuses()
+    this.statuses = this._ws
+      .describe()
+      .pipe(map(describe => this.getWorkshopStatuses(describe)))
   }
 
   public ngOnInit() {
     this.initFilters()
 
-    this.textSearchControl.valueChanges.pipe(debounceTime(150)).subscribe(() =>
-      mapMaybe(this.findFilter('by Text'), f => {
-        f.criteria = this.textSearchControl.value
-      }),
-    )
+    // here we set up mappings between the filters criteria and form control values
+    this.textSearchControl.valueChanges
+      .pipe(debounceTime(150))
+      .subscribe(value =>
+        mapMaybe(this.findFilter('by Text'), ([f]) => {
+          f.criteria = value
+        }),
+      )
     this.statusControl.valueChanges.subscribe(value =>
-      mapMaybe(
-        this.findFilter('by Status') as Maybe<PropertyFilter<Workshop>>,
-        f => {
-          f.criteria = {
-            key: 'status',
-            value,
-          }
-        },
-      ),
+      mapMaybe(this.findFilter('by Status'), ([f]) => {
+        f.criteria = {
+          key: 'status',
+          value,
+        }
+      }),
     )
     this.startDateControl.valueChanges.subscribe(value =>
       this.changeDateFilter(value, 0),
@@ -149,87 +133,76 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
     this.endDateControl.valueChanges.subscribe(value =>
       this.changeDateFilter(value, 1),
     )
+    ;(this.filterControls.valueChanges as Observable<boolean[]>)
+      .pipe(
+        startWith(0), // start with some value, doesn't matter since we map it anyway
+        // valueChanges only emits enabled controls, which breaks things because indexes change
+        map(() => this.filterControls.getRawValue() as boolean[]),
+        // buffer pairwise so that we recieve a stream of overlapping pairs
+        bufferCount(2, 1) as OperatorFunction<
+          boolean[],
+          [boolean[], boolean[]]
+        >,
+        mergeMap(([prev, next]) =>
+          filterMap(
+            next,
+            // if new value differs from previous value
+            (v, i) => XOR(v, prev[i]),
+            // then map to pair (value, filter)
+            (v, i) => tuple(v, this.filters[i]),
+          ),
+        ),
+      )
+      .subscribe(([change, [filter, cb]]) => {
+        filter.active = change
+        cb(change, filter)
+      })
   }
 
-  private changeDateFilter(date: Moment, idx: 0 | 1 = 0) {
-    if (date && date.isValid) {
+  private changeDateFilter(date: Moment | null, idx: 0 | 1 = 0) {
+    if ((date && date.isValid) || date === null) {
       this.dateRange[idx] = date && date.toDate()
-      mapMaybe(this.findFilter('by Date'), f => {
+      mapMaybe(this.findFilter('by Date'), ([f]) => {
         f.criteria = this.dateRange
       })
     }
   }
 
-  public ngAfterViewInit() {
-    const observable: Array<
-      Observable<MatCheckboxChange>
-    > = this.selectedFilters.map(cbc => observableFrom(cbc.change))
-    observableMerge(...observable).subscribe(event => this.filter(event))
-  }
-
-  private addFilters(...fs: Array<Filter<Workshop, any>>) {
-    const names = fs.map(f => f.name)
-    this.filterOptions.push(...names)
+  private addFilters(...fs: Array<[Filter<Workshop, any>, FilterCB]>) {
+    fs.forEach(([f]) => {
+      const control = new FormControl(f.getActive())
+      this.filterControls.push(control)
+    })
     this.filters.push(...fs)
   }
 
-  public initFilters() {
-    this.addFilters(
-      this.filterFactory.createDateRangeFilter(
-        'by Upcoming Workshops',
+  private initFilters() {
+    const filters: Array<[Filter<Workshop, any>, FilterCB]> = [
+      tuple(
+        setFilterState(
+          this.filterFactory.createDateRangeFilter('by Upcoming Workshops'),
+          [new Date().withoutTime(), null],
+          true,
+        ),
+        this.toggleDisabled('by Action Pending', 'by Archived', 'by Date'),
       ) /* Upcoming */,
-    )
+      tuple(this.filterFactory.createTextFilter('by Text'), noop), // Text Search
+      tuple(
+        this.filterFactory.createDateRangeFilter('by Date'),
+        this.toggleDisabled('by Upcoming Workshops'),
+      ), // Date range
+    ]
 
     if (this.user.isAdmin) {
-      this.addFilters(this.filterFactory.createPropertyFilter('by Status')) // By Status (for admin)
+      filters.push(
+        tuple(this.filterFactory.createPropertyFilter('by Status'), noop),
+      ) // By Status (for admin)
     } else {
-      this.addFilters(
-        this.filterFactory.createPropertyFilter('by Action Pending'), // Action Pending Property
-        this.filterFactory.createPropertyFilter('by Archived'), // Archived Workshops
-      )
-    }
-
-    this.addFilters(
-      this.filterFactory.createTextFilter('by Text'), // Text Search
-      this.filterFactory.createDateRangeFilter('by Date'), // Date range
-    )
-  }
-
-  private findFilter(name: string): Maybe<Filter<Workshop, any>> {
-    const filter = this.filters.find(f => f.name === name)
-    return typeof filter !== 'undefined' ? just(filter) : nothing
-  }
-
-  public goToWorkshopEdit(sfId: string) {
-    this.router.navigateByUrl(`/workshops/${sfId}/edit`)
-  }
-
-  public removeDeactivated(items: string[]) {
-    for (const item of items) {
-      this.deactivated.delete(item)
-    }
-  }
-
-  public filter(cbc: MatCheckboxChange) {
-    const value = cbc.source.value
-    let payload: { data?: any; deactivate: Array<Maybe<Filter<Workshop, any>>> }
-
-    let deactivate: Array<Maybe<Filter<Workshop, any>>> = []
-    switch (value) {
-      case 'by Upcoming Workshops': // upcoming
-        deactivate = ['by Action Pending', 'by Archived', 'by Date'].map(n =>
-          this.findFilter(n),
-        )
-        if (cbc.checked)
-          payload = { data: [new Date().withoutTime(), null], deactivate }
-        break
-      case 'by Action Pending': // actions pending
-        deactivate = ['by Upcoming Workshops', 'by Archived'].map(n =>
-          this.findFilter(n),
-        )
-        if (cbc.checked) {
-          payload = {
-            data: {
+      filters.push(
+        tuple(
+          setFilterState(
+            this.filterFactory.createPropertyFilter('by Action Pending'),
+            {
               key: 'status',
               value: [
                 'Action Pending',
@@ -238,107 +211,64 @@ export class WorkshopDashboardComponent implements OnInit, AfterViewInit {
                 'Awaiting Invoice',
               ],
             },
-            deactivate,
+          ),
+          this.toggleDisabled('by Upcoming Workshops', 'by Archived'),
+        ), // Action Pending Property
+        tuple(
+          setFilterState(
+            this.filterFactory.createPropertyFilter('by Archived'),
+            {
+              key: 'status',
+              value: 'Archived',
+            },
+          ),
+          this.toggleDisabled('by Upcoming Workshops', 'by Action Pending'),
+        ), // Archived Workshops
+      )
+    }
+
+    this.addFilters(...filters)
+
+    // run the intial callbacks for all filters with their initial state
+    filters.forEach(([f, cb]) => cb(f.getActive(), f))
+  }
+
+  private toggleDisabled(...toDisable: string[]): FilterCB {
+    return (state: boolean) => {
+      this.filters.forEach(([f], idx) => {
+        if (toDisable.includes(f.name)) {
+          const control = this.filterControls.at(idx)
+          if (state) {
+            control.disable({ emitEvent: false, onlySelf: true })
+          } else {
+            control.enable({ emitEvent: false, onlySelf: true })
           }
         }
-        break
-      case 'by Archived': // archived
-        deactivate = ['by Upcoming Workshops', 'by Action Pending'].map(n =>
-          this.findFilter(n),
-        )
-        if (cbc.checked)
-          payload = { data: { key: 'status', value: 'Archived' }, deactivate }
-        break
-      case 'by Status': // status
-        this._showStatusFilter = cbc.checked
-        break
-      case 'by Text': // text
-        this._showTextFilter = cbc.checked
-        break
-      case 'by Date': // date range
-        deactivate = [this.findFilter('by Upcoming Workshops')]
-        this._showDateRange = cbc.checked
-        if (cbc.checked) payload = { deactivate }
-    }
-
-    if (cbc.checked) {
-      mapMaybe(this.findFilter(cbc.source.value), f =>
-        this.applyFilter(
-          f,
-          payload && {
-            ...payload,
-            deactivate: catMaybes(payload.deactivate),
-          },
-        ),
-      )
-    } else {
-      this.removeDeactivated(catMaybes(deactivate).map(j => j.name))
-      mapMaybe(this.findFilter(cbc.source.value), f => {
-        f.active = false
       })
     }
-
-    this.deactivateFilters()
   }
 
-  public applyFilter(
-    filter: Filter<Workshop, any>,
-    payload?: null | { data?: any; deactivate: Array<Filter<Workshop, any>> },
-  ) {
-    filter.active = true
-    if (payload) {
-      if (payload.data) {
-        filter.criteria = payload.data
-      }
-      const names = payload.deactivate.map(v => v.name)
-      names.forEach(n => this.deactivated.add(n))
-    }
+  private findFilter(name: string) {
+    const filter = this.filters.find(([f]) => f.name === name)
+    return typeof filter !== 'undefined' ? just(filter) : nothing
   }
 
-  public deactivateFilters() {
-    this.selectedFilters.map(cb => {
-      cb.disabled = this.deactivated.has(cb.value)
-    })
-    this.deactivated.forEach(name =>
-      mapMaybe(this.findFilter(name), f => {
-        f.active = false
-      }),
-    )
+  public goToWorkshopEdit(sfId: string) {
+    this.router.navigateByUrl(`/workshops/${sfId}/edit`)
   }
 
   public clearFilters() {
+    this.filterControls.patchValue(this.filters.map(constant(false)))
     this.clearDateFilter()
     this.textSearchControl.setValue('')
-    this._showDateRange = this._showTextFilter = this._showStatusFilter = false
-    this.filters.map(f => {
-      f.active = false
-    })
-    this.deactivated.clear()
-    this.selectedFilters.map(cb => (cb.checked = false))
-    this.deactivateFilters()
   }
 
   public clearDateFilter() {
-    this.dateRange = [null, null]
-    this.startDateControl.patchValue(null)
-    this.endDateControl.patchValue(null)
-    mapMaybe(this.findFilter('by Date'), f => {
-      f.active = false
-      f.criteria = this.dateRange
-    })
+    this.startDateControl.setValue(null)
+    this.endDateControl.setValue(null)
   }
 
-  public toggleFilters() {
-    this._showFilters = !this._showFilters
-  }
-
-  public setStatuses() {
-    this.statuses = this._ws
-      .describe()
-      .pipe(map(describe => this.getWorkshopStatuses(describe)))
-  }
-
-  public getWorkshopStatuses(describe: { [k: string]: any }): string[] {
+  private getWorkshopStatuses(describe: { [k: string]: any }): string[] {
     try {
       return describe.status.picklistValues.map(
         (option: { label: string }) => option.label,

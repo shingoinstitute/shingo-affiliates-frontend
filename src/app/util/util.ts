@@ -1,6 +1,5 @@
 import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
-import { tuple } from './functional'
 
 export const notUndefined = <T>(v: T): v is Exclude<T, undefined> =>
   typeof v !== 'undefined'
@@ -24,6 +23,25 @@ export const requestOptions = (
   }
 }
 
+export const XOR = (a: boolean, b: boolean) => (a || b) && (!a || !b)
+
+export const filterMapC = <A, B>(
+  filter: (v: A, i: number, arr: A[]) => boolean,
+  map: (v: A, i: number, arr: A[]) => B,
+) => (xs: A[]) => filterMap(xs, filter, map)
+
+export const filterMap = <A, B>(
+  xs: A[],
+  filter: (v: A, i: number, arr: A[]) => boolean,
+  map: (v: A, i: number, arr: A[]) => B,
+) =>
+  xs.reduce(
+    (acc, c, idx, arr) => {
+      if (filter(c, idx, arr)) acc.push(map(c, idx, arr))
+      return acc
+    },
+    [] as B[],
+  )
 /**
  * Converts a salesforce field name to a camel case string
  * @param s The salesforce field name (often ends in __c)
@@ -95,7 +113,7 @@ const binaryUnits = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB']
 export const getSizeUnit = (power: 0 | 1 | 2 | 3 | 4 | 5, binary = false) => {
   const baseVal = binary ? 1024 : 1000
   const units = binary ? binaryUnits : decimalUnits
-  return tuple(baseVal ** power, units[power])
+  return [baseVal ** power, units[power]] as [number, string]
 }
 
 // if typescript had macros, this could be a compiletime calculation
