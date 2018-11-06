@@ -19,6 +19,9 @@ export class Affiliate extends SFObject {
     'Italian',
     'Japanese',
     'Mandarin',
+    'Arabic',
+    'Russian',
+    'Polish',
   ]
 
   public get sfId() {

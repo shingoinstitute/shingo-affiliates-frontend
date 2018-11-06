@@ -61,6 +61,7 @@ export class WorkshopFormComponent implements OnInit {
   > = of([])
   public workshopForm!: FormGroup
   public countryFilterControl = new FormControl()
+  public languageFilterControl = new FormControl()
   public courseManagers: CourseManager[] = []
   public facilitatorOpts: Facilitator[] = []
   public affiliates: Affiliate[] = []
@@ -73,7 +74,9 @@ export class WorkshopFormComponent implements OnInit {
     'Align',
     'Build',
   ]
-  public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS
+  public languages: Observable<string[]> = of(
+    Affiliate.DEFAULT_LANGUAGE_OPTIONS,
+  )
   public statuses: string[] = [
     'Invoiced, Not Paid',
     'Finished, waiting for attendee list',
@@ -102,6 +105,17 @@ export class WorkshopFormComponent implements OnInit {
     this.subscribeToCountry()
     this.subscribeToIsPublic()
     this.getWorkshopDescription()
+    this.languages = this.languageFilterControl.valueChanges.pipe(
+      startWith(''),
+      map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
+      map(value =>
+        Affiliate.DEFAULT_LANGUAGE_OPTIONS.filter(l =>
+          normalizeString(l)
+            .toLocaleLowerCase()
+            .startsWith(normalizeString(value).toLocaleLowerCase()),
+        ),
+      ),
+    )
   }
 
   /**
@@ -117,9 +131,9 @@ export class WorkshopFormComponent implements OnInit {
         countryList.pipe(
           map(countries => {
             return countries.filter(v =>
-              normalizeString(this.getLocalizedName(v)).startsWith(
-                normalizeString(value),
-              ),
+              normalizeString(
+                this.getLocalizedName(v).toLocaleLowerCase(),
+              ).startsWith(normalizeString(value.toLocaleLowerCase())),
             )
           }),
         ),
