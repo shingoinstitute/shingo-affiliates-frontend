@@ -1,3 +1,5 @@
+import { XOR } from '../util'
+
 export type Predicate<A> = (a: A) => boolean
 export type Refinement<A, B extends A> = (a: A) => a is B
 
@@ -53,3 +55,6 @@ export function and<A>(p1: Predicate<A>, p2: Predicate<A>): Predicate<A>
 export function and<A>(p1: Predicate<A>, p2: Predicate<A>): Predicate<A> {
   return a => p1(a) && p2(a)
 }
+
+export const xor = <A>(p1: Predicate<A>, p2: Predicate<A>): Predicate<A> => a =>
+  XOR(p1(a), p2(a))

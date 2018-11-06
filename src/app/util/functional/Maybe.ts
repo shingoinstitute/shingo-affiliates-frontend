@@ -17,24 +17,53 @@ declare module './HKT' {
 
 export const URI = 'Maybe'
 export type URI = typeof URI
-export type Maybe<A> = Nothing | Just<A>
-
-export class Nothing {
-  readonly _URI!: URI
-  readonly _A!: never
+export interface MaybeBase<A> {
+  match<B>(m: { Just: (a: A) => B; Nothing: () => B }): B
+  isJust(): boolean
+  isNothing(): boolean
 }
 
-export class Just<A> {
+export type Maybe<A> = Nothing | Just<A>
+export type MaybeValue<M> = M extends Maybe<infer A> ? A : never
+export type ToMaybeBase<M extends Maybe<any>> = MaybeBase<MaybeValue<M>>
+
+export class Nothing implements MaybeBase<never> {
+  readonly _URI!: URI
+  readonly _A!: never
+
+  match<B>(m: { Just: (a: never) => B; Nothing: () => B }): B {
+    return m.Nothing()
+  }
+  isJust(): boolean {
+    return false
+  }
+  isNothing(): boolean {
+    return true
+  }
+}
+
+export class Just<A> implements MaybeBase<A> {
   readonly _URI!: URI
   readonly _A!: A
   constructor(readonly value: A) {}
+
+  match<B>(m: { Just: (a: A) => B; Nothing: () => B }) {
+    return m.Just(this.value)
+  }
+
+  isJust(): boolean {
+    return true
+  }
+  isNothing(): boolean {
+    return false
+  }
 }
 
 export const nothing: Maybe<never> = new Nothing()
 export const just = <A>(a: A): Maybe<A> => new Just(a)
-export const isNothing = <A>(m: Maybe<A>): m is Nothing => m instanceof Nothing
+export const isNothing = <A>(m: Maybe<A>): m is Nothing => m.isNothing()
 
-export const isJust = <A>(m: Maybe<A>): m is Just<A> => m instanceof Just
+export const isJust = <A>(m: Maybe<A>): m is Just<A> => m.isJust()
 
 export const map = <A, B>(maybe: Maybe<A>, fn: ((v: A) => B)): Maybe<B> =>
   isJust(maybe) ? just(fn(maybe.value)) : maybe
@@ -79,7 +108,7 @@ export const match = <A, B>(
     Just: (a: A) => B
     Nothing: () => B
   },
-) => (isJust(m) ? fns.Just(m.value) : fns.Nothing())
+) => (m as MaybeBase<A>).match(fns)
 
 export const matchC = <A, B>(fns: { Just: (a: A) => B; Nothing: () => B }) => (
   m: Maybe<A>,

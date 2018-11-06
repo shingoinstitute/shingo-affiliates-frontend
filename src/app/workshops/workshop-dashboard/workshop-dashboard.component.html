@@ -21,7 +21,8 @@
                 Clear <mat-icon svgIcon="x_red"></mat-icon>
               </button>
             </h4>
-            <mat-checkbox *ngFor="let filter of filterOptions; let i = index" [value]="filter" [id]="i">{{ filter }}</mat-checkbox>
+            <mat-checkbox *ngFor="let filter of filterFns; let i = index" [value]="filter.name" [formControl]="filterControls.at(i)">{{
+              filter.name }}</mat-checkbox>
           </div>
           <div fxLayout="column" fxFlex fxLayoutGap="16px">
             <h3 class="mat-subheading" *ngIf="showTextFilter || showDateRange || showStatusFilter">Special Filters</h3>
@@ -38,7 +39,7 @@
               <mat-icon matSuffix style="color: #757575">search</mat-icon>
             </mat-form-field>
 
-            <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="showDateRange">
+            <div fxLayout="row wrap" fxLayoutGap="8px" fxLayoutAlign="start center" *ngIf="showDateRange">
               <p [style.color]="'#757575'">Date</p>
 
               <mat-form-field floatPlaceholder="always">
@@ -69,6 +70,6 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <app-workshop-data-table class="mat-elevation-z2" [filters]="filters" [displayedColumns]="displayedColumns"
+  <app-workshop-data-table class="mat-elevation-z2" [filters]="filterFns" [displayedColumns]="displayedColumns"
     (editClick)="goToWorkshopEdit($event)"></app-workshop-data-table>
 </div>
