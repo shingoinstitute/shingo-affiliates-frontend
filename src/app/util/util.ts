@@ -1,27 +1,9 @@
-import { JWTService } from '../services/auth/auth.service'
-import { HttpHeaders } from '@angular/common/http'
-
 export const notUndefined = <T>(v: T): v is Exclude<T, undefined> =>
   typeof v !== 'undefined'
 
 export const truthy = <T>(
   v: T,
 ): v is Exclude<T, false | 0 | '' | null | undefined> => Boolean(v)
-
-export const requestOptions = (
-  jwt: JWTService,
-  ...headerList: Array<[string, string | string[]]>
-) => {
-  const headers = headerList.reduce(
-    (h, c) => h.set(c[0], c[1]),
-    new HttpHeaders().set('x-jwt', jwt.jwt || ''),
-  )
-
-  return {
-    headers,
-    withCredentials: true,
-  }
-}
 
 export const XOR = (a: boolean, b: boolean) => (a || b) && (!a || !b)
 

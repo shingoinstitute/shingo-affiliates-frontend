@@ -1,0 +1,134 @@
+<mat-toolbar
+  color="primary"
+  class="elevated"
+  [ngClass]="{ 'logged-in-as': isLoggedInAs() }"
+>
+  <img
+    [style.height]="'150px'"
+    src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png"
+  />
+  <span fxFlex>
+    <div
+      style="font-family: monospace; text-align: center;"
+      *ngIf="isLoggedInAs()"
+    >
+      Logged in as <strong>{{ loggedInInfo$ | async }}</strong>
+    </div>
+  </span>
+
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    *ngIf="(loggedIn$ | async)"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  <button
+    aria-label="Toggle sidenav"
+    *ngIf="media.isActive('lt-md')"
+    mat-icon-button
+    (click)="sidenav.toggle()"
+  >
+    <mat-icon aria-label="Sidenav toggle icon">menu</mat-icon>
+  </button>
+
+  <a mat-button *ngIf="!(loggedIn$ | async)" routerLink="/login">Login</a>
+
+  <mat-menu style="color: black" #menu="matMenu">
+    <a mat-menu-item routerLink="/profile">
+      <mat-icon>person_outline</mat-icon>
+      <span>Profile</span>
+    </a>
+    <button mat-menu-item (click)="logoutHandler()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<mat-sidenav-container
+  ngClass="sidenav-container"
+  [ngClass.lt-sm]="{
+    'sidenav-container-lt-sm': true,
+    'sidenav-container': false
+  }"
+>
+  <mat-sidenav
+    #sidenav
+    fixedInViewport="true"
+    fixedTopGap="64"
+    [attr.role]="media.isActive('lt-md') ? 'dialog' : 'navigation'"
+    [mode]="media.isActive('lt-md') ? 'over' : 'side'"
+    [opened]="!media.isActive('lt-md')"
+  >
+    <mat-nav-list>
+      <ng-container *ngIf="(loggedIn$ | async)">
+        <p class="nav-list-title">Main Menu</p>
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
+          >Dashboard</a
+        >
+        <mat-divider></mat-divider>
+        <a mat-list-item routerLink="/workshops" routerLinkActive="active"
+          >Workshops</a
+        >
+        <mat-divider></mat-divider>
+        <ng-container *ngIf="(isAdmin$ | async)">
+          <a
+            mat-list-item
+            routerLink="/admin/affiliates"
+            routerLinkActive="active"
+            >Admin Panel</a
+          >
+          <mat-divider></mat-divider>
+        </ng-container>
+        <p class="nav-list-title">Affiliate Materials</p>
+        <a mat-list-item nohref (click)="openMaterials('workshops')"
+          >Workshop Materials</a
+        >
+        <mat-divider></mat-divider>
+        <a mat-list-item nohref (click)="openMaterials('forms')"
+          >Forms/Evaluations</a
+        >
+        <mat-divider></mat-divider>
+        <a mat-list-item nohref (click)="openMaterials('marketing')"
+          >Marketing Materials</a
+        >
+        <mat-divider></mat-divider>
+      </ng-container>
+
+      <p class="nav-list-title">Support</p>
+      <a mat-list-item routerLink="/support">Support Home</a>
+      <mat-divider></mat-divider>
+      <mat-expansion-panel
+        class="mat-elevation-z nav-support-category"
+        *ngFor="let category of supportCategories"
+        [style.border-bottom]="'1px solid lightgrey'"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            {{ category }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <!--
+          <mat-list *ngIf="supportCategoryPages[category]">
+            <mat-list-item
+              *ngFor="let page of supportCategoryPages[category]"
+              class="nav-support-list-item"
+            >
+              <a class="mat-caption" routerLink="/support/{{ page.Id }}">{{
+                page.title
+              }}</a>
+            </mat-list-item>
+          </mat-list>
+        -->
+      </mat-expansion-panel>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet class="main-content"></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<div class="spinner-container" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
+</div>

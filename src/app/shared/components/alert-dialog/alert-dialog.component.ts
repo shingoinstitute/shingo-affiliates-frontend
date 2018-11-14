@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core'
 import { MAT_DIALOG_DATA } from '@angular/material'
-import { SFObject } from '../../models/sf-object.abstract.model'
+// import { SFObject } from '../../models/sf-object.abstract.model'
 
 export interface AlertDialogData {
   sfObject?: any
@@ -16,7 +16,7 @@ export interface AlertDialogData {
   templateUrl: './alert-dialog.component.html',
 })
 export class AlertDialogComponent {
-  public sfObj: SFObject
+  public sfObj: any
   public message: string
   public title: string | null
   public destructive: boolean
@@ -24,7 +24,7 @@ export class AlertDialogComponent {
   public cancel: string
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: AlertDialogData) {
-    this.sfObj = data.sfObject as SFObject
+    this.sfObj = data.sfObject
     this.title = data.title ? data.title : null
     this.message = data.message ? data.message : ''
     this.confirm = data.confirmText ? data.confirmText : 'Confirm'

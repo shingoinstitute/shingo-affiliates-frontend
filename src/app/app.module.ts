@@ -1,89 +1,48 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { FlexLayoutModule } from '@angular/flex-layout'
-import { CookieModule } from 'ngx-cookie'
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
-
-/** Shared Modules */
-import { SharedModule } from './shared/shared.module'
-import { ServicesModule } from './services/services.module'
-
-/** Facilitators */
-import { FacilitatorsModule } from './facilitators/facilitators.module'
-
-/** Affiliates */
-import { AffiliatesModule } from './affiliates/affiliates.module'
-
-/** Workshops */
-import { WorkshopsModule } from './workshops/workshops.module'
-
-/** Support */
-import { SupportModule } from './support/support.module'
-
-/** Interface Components */
-import { UIComponentsModule } from './ui-components/ui-components.module'
-
-// App Routing Module
 import { AppRoutingModule } from './app-routing.module'
-
-// App Components
-import { AppComponent } from './app.component'
-
-// Providers
-import { LoggerInterceptorProvider } from './interceptor.provider'
-
-// Material Design imports
-import {
-  MatMenuModule,
-  MatButtonModule,
-  MatSidenavModule,
-  MatToolbarModule,
-  MatListModule,
-  MatIconModule,
-  MatProgressSpinnerModule,
-  MatExpansionModule,
-} from '@angular/material'
-import {
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MatMomentDateAdapterOptions,
-} from '@angular/material-moment-adapter'
-import { LayoutModule } from '@angular/cdk/layout'
+import { AppComponent } from './core/pages/main/app.component'
+import { StoreModule } from '@ngrx/store'
+import { reducers, metaReducers } from './reducers'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { environment } from '../environments/environment'
+import { EffectsModule } from '@ngrx/effects'
+import { AuthModule } from './auth/auth.module'
+import { SuccessComponent } from './success.component'
+import { JwtModule } from '@auth0/angular-jwt'
+import { tokenGetter } from './auth/services/auth.service'
+import { HttpClientModule } from '@angular/common/http'
+import { CoreModule } from './core/core.module'
+import { CommonModule } from '@angular/common'
+import { UserModule } from './user/user.module'
+import { SharedModule } from './shared/shared.module'
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [SuccessComponent],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
-
-    MatMenuModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatListModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatExpansionModule,
-
     HttpClientModule,
-    ServicesModule.forRoot(),
-    CookieModule.forRoot(),
-    FlexLayoutModule,
-    SharedModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        whitelistedDomains: [
+          environment.apiDomain,
+          environment.clientDomain,
+          environment.authApiDomain,
+        ],
+      },
+    }),
+    SharedModule,
+    AuthModule,
+    UserModule,
     AppRoutingModule,
-    AffiliatesModule,
-    FacilitatorsModule,
-    WorkshopsModule,
-    UIComponentsModule,
-    SupportModule,
-    LayoutModule,
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useFactory: LoggerInterceptorProvider,
-      multi: true,
-    },
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([]),
+    CoreModule,
   ],
   bootstrap: [AppComponent],
 })

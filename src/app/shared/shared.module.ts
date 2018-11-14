@@ -1,77 +1,35 @@
-import { NgModule, ModuleWithProviders } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-
-import { CKEditorModule } from 'ng2-ckeditor'
-
-import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component'
-import { IconLegendComponent } from './components/icon-legend/icon-legend.component'
+import { NgModule } from '@angular/core'
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component'
-import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component'
-import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component'
-
-// Material Design imports
-import {
-  MatDialogModule,
-  MatAutocompleteModule,
-  MatOptionModule,
-  MatProgressSpinnerModule,
-  MatButtonModule,
-  MatIconModule,
-  MatInputModule,
-} from '@angular/material'
-import { FileDropComponent } from './components/file-drop/file-drop.component'
 import { FileDisplayComponent } from './components/file-display/file-display.component'
+import { FileDropComponent } from './components/file-drop/file-drop.component'
+import { FileTreeComponent } from './components/file-tree/file-tree.component'
+import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component'
+import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component'
+import { MaterialModule } from '../material'
+import { IconLegendComponent } from './components/icon-legend/icon-legend.component'
+import { CommonModule } from '@angular/common'
 import { FlexLayoutModule } from '@angular/flex-layout'
+import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+
+export const COMPONENTS = [
+  AlertDialogComponent,
+  FileDisplayComponent,
+  FileDropComponent,
+  FileTreeComponent,
+  SimpleMessageDialog,
+  TextResponseDialogComponent,
+  IconLegendComponent,
+]
 
 @NgModule({
   imports: [
     CommonModule,
+    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-
-    MatDialogModule,
-    MatAutocompleteModule,
-    MatOptionModule,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-
-    CKEditorModule,
-    FlexLayoutModule,
+    MaterialModule,
   ],
-  declarations: [
-    AlertDialogComponent,
-    IconLegendComponent,
-    SimpleMessageDialog,
-    SfLookupComponent,
-    TextResponseDialogComponent,
-    FileDropComponent,
-    FileDisplayComponent,
-  ],
-  exports: [
-    // MdDialogModule,
-    CKEditorModule,
-    AlertDialogComponent,
-    IconLegendComponent,
-    SimpleMessageDialog,
-    SfLookupComponent,
-    TextResponseDialogComponent,
-    FileDropComponent,
-    FileDisplayComponent,
-  ],
-  entryComponents: [
-    AlertDialogComponent,
-    SimpleMessageDialog,
-    TextResponseDialogComponent,
-    FileDropComponent,
-  ],
+  declarations: COMPONENTS,
+  exports: COMPONENTS,
 })
-export class SharedModule {
-  public static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SharedModule,
-    }
-  }
-}
+export class SharedModule {}

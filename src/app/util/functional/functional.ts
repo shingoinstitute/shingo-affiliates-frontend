@@ -226,3 +226,5 @@ flipC(fn5)
 export const tuple = <T extends any[]>(...args: T): T => args
 export const fst = <A>(t: [A, ...any[]]) => t[0]
 export const snd = <A, B>(t: [A, B, ...any[]]) => t[1]
+export const getProperty = <T, P extends keyof T>(prop: P) => (obj: T) =>
+  obj[prop]
