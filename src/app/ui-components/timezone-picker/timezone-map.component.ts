@@ -720,14 +720,14 @@ export class DataTzidDirective {
         stroke: none;
       }
       path[data-tzid]:hover {
-        fill: #ffbbea;
-        stroke: #ff8bea;
+        fill: #26557f;
+        stroke: #26557f;
         fill-opacity: 0.25;
         stroke-opacity: 1;
       }
       path[data-tzid].active {
-        fill: #ffbbea;
-        stroke: #ff8bea;
+        fill: #26557f;
+        stroke: #26557f;
         fill-opacity: 0.45;
         stroke-opacity: 1;
       }
