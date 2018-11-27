@@ -42,6 +42,8 @@ import {
   MatExpansionModule,
 } from '@angular/material'
 import { MatMomentDateModule } from '@angular/material-moment-adapter'
+import { UIComponentsModule } from '../ui-components/ui-components.module'
+import { DashboardComponent } from './dashboard/dashboard.component'
 
 @NgModule({
   imports: [
@@ -71,6 +73,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter'
     NgxMatSelectSearchModule,
 
     FlexLayoutModule,
+    UIComponentsModule,
     SharedModule.forRoot(),
     RouterModule,
   ],
@@ -84,6 +87,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter'
     UpcomingWorkshopsComponent,
     WorkshopDashboardComponent,
     WorkshopDetailComponent,
+    DashboardComponent,
   ],
   exports: [
     WorkshopComponent,
@@ -95,6 +99,7 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter'
     UpcomingWorkshopsComponent,
     WorkshopDashboardComponent,
     WorkshopDetailComponent,
+    DashboardComponent,
   ],
   providers: [WorkshopResolver],
 })

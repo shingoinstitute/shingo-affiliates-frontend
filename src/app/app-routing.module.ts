@@ -7,7 +7,7 @@ import {
 } from '@angular/router'
 
 /** Interface Components */
-import { DashboardComponent } from './ui-components/dashboard/dashboard.component'
+import { DashboardComponent } from './workshops/dashboard/dashboard.component'
 import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component'
 import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component'
 import { WorkshopDashboardComponent } from './workshops/workshop-dashboard/workshop-dashboard.component'

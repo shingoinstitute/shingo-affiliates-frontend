@@ -30,6 +30,7 @@ import { merge } from 'lodash'
 import { CustomValidators } from 'ng2-validation'
 import { LocaleService } from '../../services/locale/locale.service'
 import { mergeMap, map, startWith } from 'rxjs/operators'
+import { tz } from 'moment-timezone'
 
 const MILLI_DAY = 1000 * 60 * 60 * 24
 
@@ -62,10 +63,14 @@ export class WorkshopFormComponent implements OnInit {
   public workshopForm!: FormGroup
   public countryFilterControl = new FormControl()
   public languageFilterControl = new FormControl()
+  public tzFilterControl = new FormControl()
+  public tzPickerControl = new FormControl()
   public courseManagers: CourseManager[] = []
   public facilitatorOpts: Facilitator[] = []
   public affiliates: Affiliate[] = []
   public describe: any = {}
+  private timezones = tz.names()
+  public tzOptions$: Observable<string[]> = of([])
 
   public workshopTypes: string[] = [
     'Discover',
@@ -113,6 +118,15 @@ export class WorkshopFormComponent implements OnInit {
           normalizeString(l)
             .toLocaleLowerCase()
             .startsWith(normalizeString(value).toLocaleLowerCase()),
+        ),
+      ),
+    )
+    this.tzOptions$ = this.tzFilterControl.valueChanges.pipe(
+      startWith(''),
+      map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
+      map(value =>
+        this.timezones.filter(tz =>
+          tz.toLowerCase().includes(value.toLowerCase()),
         ),
       ),
     )
@@ -182,16 +196,12 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   public createForm() {
-    const dateFormGroup = this.fb.group({
-      startDate: [this.workshop.startDate],
-      endDate: [this.workshop.endDate],
-    })
-
     this.workshopForm = this.fb.group({
       affiliate: [
         this.workshop.affiliate || new Affiliate(),
         Validators.required,
       ],
+      timezone: ['', Validators.required],
       type: [this.workshop.type, Validators.required],
       status: [this.workshop.status, Validators.required],
       language: [this.workshop.language],
@@ -216,6 +226,13 @@ export class WorkshopFormComponent implements OnInit {
       website: [this.workshop.website],
       billing: [this.workshop.billing, [Validators.required, Validators.email]],
       facilitator: [''],
+    })
+
+    this.workshopForm.controls.timezone.valueChanges.subscribe(v => {
+      this.tzPickerControl.setValue(v, { onlySelf: true, emitEvent: false })
+    })
+    this.tzPickerControl.valueChanges.subscribe(v => {
+      ;(this.workshopForm.controls.timezone as FormControl).setValue(v)
     })
   }
 

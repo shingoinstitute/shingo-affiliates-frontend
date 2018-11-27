@@ -124,11 +124,47 @@ export const mapOnMaybeC = <A, B>(f: (a: A) => Maybe<B>) => (as: A[]): B[] =>
 
 export const catMaybes = <A>(as: Array<Maybe<A>>): A[] => mapOnMaybe(as, id)
 
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => Either<L, R>,
+): { left: L[]; right: R[] }
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => boolean,
+): { left: A[]; right: A[] }
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => boolean | Either<L, R>,
+): { left: A[]; right: A[] } | { left: L[]; right: R[] } {
+  const left: any[] = []
+  const right: any[] = []
+
+  for (const a of fa) {
+    const e = f(a)
+    if (typeof e === 'boolean') {
+      if (e) {
+        right.push(a)
+      } else {
+        left.push(a)
+      }
+    } else {
+      if (isLeft(e)) {
+        left.push(e[1])
+      } else {
+        right.push(e[1])
+      }
+    }
+  }
+
+  return { left, right }
+}
+
 // sanity check for the module
 import * as module from './Array'
 import { the } from './types'
 import { Functor1 } from './structures/Functor'
 import { Foldable1 } from './structures/Foldable'
+import { Either, isLeft } from './Either'
 
 the<Functor1<URI>, typeof module>()
 the<Foldable1<URI>, typeof module>()
