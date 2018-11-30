@@ -1,8 +1,34 @@
 import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
+import { ValidationErrors, FormGroup } from '@angular/forms'
+
+export const withoutTime = (d: Date) => {
+  const newDate = new Date(d)
+  newDate.setHours(0, 0, 0, 0)
+  return newDate
+}
 
 export const notUndefined = <T>(v: T): v is Exclude<T, undefined> =>
   typeof v !== 'undefined'
+
+/**
+ * Removes diacritical marks from a string
+ * @see https://thread.engineering/2018-08-29-searching-and-sorting-text-with-diacritical-marks-in-javascript/
+ * @param value a string
+ */
+export const normalizeString = (value: string) =>
+  value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+export const getFormValidationErrors = (form: FormGroup) => {
+  const map: { [name: string]: ValidationErrors } = {}
+  Object.keys(form.controls).forEach(key => {
+    const controlErrors = form.controls[key].errors
+    if (controlErrors != null) {
+      map[key] = controlErrors
+    }
+  })
+  return map
+}
 
 export const truthy = <T>(
   v: T,

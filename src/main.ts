@@ -9,14 +9,6 @@ if (environment.production) {
   enableProdMode()
 }
 
-;(() => {
-  Date.prototype.withoutTime = function() {
-    const d: Date = new Date(this)
-    d.setHours(0, 0, 0, 0)
-    return d
-  }
-})()
-
 platformBrowserDynamic()
   .bootstrapModule(AppModule)
   .catch(err => console.error(err))

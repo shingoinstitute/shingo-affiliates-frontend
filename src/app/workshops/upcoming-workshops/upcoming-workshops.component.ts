@@ -5,6 +5,7 @@ import {
 } from '../../services/workshop/workshop.service'
 import { Filter } from '../../services/filters/filter.abstract'
 import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service'
+import { withoutTime } from '../../util/util'
 
 @Component({
   selector: 'app-upcoming-workshops',
@@ -27,7 +28,7 @@ export class UpcomingWorkshopsComponent {
     ]
     const upcomingFilter = filterFactory.createDateRangeFilter()
 
-    upcomingFilter.criteria = [new Date().withoutTime(), null]
+    upcomingFilter.criteria = [withoutTime(new Date()), null]
     upcomingFilter.active = true
 
     this.filters = [upcomingFilter]
