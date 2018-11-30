@@ -1,0 +1,7 @@
+mat-form-field {
+  width: 100%;
+}
+mat-form-field input.autoComplete {
+  width: fit-content;
+  min-width: 280px;
+}

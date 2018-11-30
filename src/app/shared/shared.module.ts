@@ -7,7 +7,11 @@ import { CKEditorModule } from 'ng2-ckeditor'
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component'
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component'
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component'
-import { SfLookupComponent } from './components/sf-lookup/sf-lookup.component'
+import {
+  SearchComponent,
+  SearchSelectionRenderDirective,
+  SearchAutocompleteRenderDirective,
+} from './components/search/search.component'
 import { TextResponseDialogComponent } from './components/text-response-dialog/text-response-dialog.component'
 
 // Material Design imports
@@ -19,6 +23,8 @@ import {
   MatButtonModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
+  MatChipsModule,
 } from '@angular/material'
 import { FileDropComponent } from './components/file-drop/file-drop.component'
 import { FileDisplayComponent } from './components/file-display/file-display.component'
@@ -37,6 +43,8 @@ import { FlexLayoutModule } from '@angular/flex-layout'
     MatButtonModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
+    MatChipsModule,
 
     CKEditorModule,
     FlexLayoutModule,
@@ -45,7 +53,9 @@ import { FlexLayoutModule } from '@angular/flex-layout'
     AlertDialogComponent,
     IconLegendComponent,
     SimpleMessageDialog,
-    SfLookupComponent,
+    SearchComponent,
+    SearchAutocompleteRenderDirective,
+    SearchSelectionRenderDirective,
     TextResponseDialogComponent,
     FileDropComponent,
     FileDisplayComponent,
@@ -56,7 +66,9 @@ import { FlexLayoutModule } from '@angular/flex-layout'
     AlertDialogComponent,
     IconLegendComponent,
     SimpleMessageDialog,
-    SfLookupComponent,
+    SearchComponent,
+    SearchAutocompleteRenderDirective,
+    SearchSelectionRenderDirective,
     TextResponseDialogComponent,
     FileDropComponent,
     FileDisplayComponent,

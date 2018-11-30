@@ -1,0 +1,66 @@
+<mat-form-field>
+  <mat-chip-list #chipList class="mat-chip-list-stacked">
+    <ng-container *ngIf="!textOnly">
+      <mat-chip
+        style="height: unset;"
+        *ngFor="let o of selectedObjects"
+        [removable]="!disabled"
+        (removed)="removeItem(o)"
+      >
+        <div
+          style="width: 100%;"
+          fxLayout="row"
+          fxLayoutAlign="space-between center"
+        >
+          <div>
+            <ng-container
+              *ngTemplateOutlet="
+                listRender?.templateRef || defaultRender;
+                context: { $implicit: o }
+              "
+            ></ng-container>
+          </div>
+          <mat-icon matChipRemove *ngIf="!disabled">cancel</mat-icon>
+        </div>
+      </mat-chip>
+    </ng-container>
+  </mat-chip-list>
+  <input
+    #searchInput
+    class="autoComplete"
+    type="text"
+    matInput
+    [formControl]="searchInputControl"
+    [matChipInputFor]="chipList"
+    [matChipInputAddOnBlur]="false"
+    [matAutocomplete]="auto"
+    [placeholder]="placeholder"
+    (blur)="this.touch()"
+  />
+
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    [displayWith]="displayWith"
+    (optionSelected)="onSelectChange($event.option.value)"
+  >
+    <mat-option *ngFor="let o of (objects$ | async)" [value]="o">
+      <ng-container
+        *ngTemplateOutlet="
+          autoRender?.templateRef || defaultRender;
+          context: { $implicit: o }
+        "
+      ></ng-container>
+    </mat-option>
+  </mat-autocomplete>
+
+  <mat-spinner
+    matSuffix
+    color="accent"
+    diameter="24"
+    *ngIf="isSearching"
+  ></mat-spinner>
+</mat-form-field>
+
+<ng-template #defaultRender let-o>
+  <div [innerHTML]="displayObjFn(o)"></div>
+</ng-template>
