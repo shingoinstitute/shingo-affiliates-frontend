@@ -30,7 +30,7 @@ import {
   AlertDialogData,
 } from '../../shared/components/alert-dialog/alert-dialog.component'
 import { AuthService } from '../../services/auth/auth.service'
-import { Moment } from 'moment'
+import moment, { Moment } from 'moment'
 
 @Component({
   selector: 'app-workshop-data-table',
@@ -60,7 +60,7 @@ export class WorkshopDataTableComponent implements OnInit {
   @ViewChild(MatPaginator)
   public paginator!: MatPaginator
 
-  public selectedWorkshop: Workshop | undefined
+  public selectedWorkshop?: Workshop
   public get selectedSfId() {
     return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''
   }
@@ -196,7 +196,7 @@ export class WorkshopDataTableComponent implements OnInit {
   public getDaysLate(w: Workshop): number {
     const _1day = 1000 * 60 * 60 * 24
     const now = Date.now()
-    const dueAt = new Date(w.endDate).valueOf() + _1day * 7
+    const dueAt = w.endDate.valueOf() + _1day * 7
     return Math.floor((now - dueAt) / _1day)
   }
 
@@ -245,7 +245,7 @@ export class WorkshopDataTableComponent implements OnInit {
     } else if (date instanceof Date) {
       w[type] = date
     } else if (typeof date === 'string') {
-      w[type] = new Date(date)
+      w[type] = moment(date)
     }
   }
 }

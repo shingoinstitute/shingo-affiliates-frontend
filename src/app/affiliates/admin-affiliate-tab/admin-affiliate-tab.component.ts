@@ -4,7 +4,6 @@ import { AffiliateService } from '../../services/affiliate/affiliate.service'
 import { SFSuccessResult } from '../../services/api/base-api.abstract.service'
 import { MatSnackBar, MatDialog } from '@angular/material'
 
-import { AffiliateFormComponent } from '../../affiliates/affiliate-form/affiliate-form.component'
 import { Router } from '@angular/router'
 import { AffiliateDataTableComponent } from '../../affiliates/affiliate-data-table/affiliate-data-table.component'
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component'
@@ -40,19 +39,6 @@ export class AdminAffiliateTabComponent {
     } else {
       this.update(this.selectedAffiliate)
     }
-  }
-
-  public onCreate() {
-    const dialogRef = this.dialog.open(AffiliateFormComponent, {
-      data: {
-        isDialog: true,
-        affiliate: new Affiliate(),
-      },
-    })
-
-    dialogRef
-      .afterClosed()
-      .subscribe(affiliate => affiliate && this.create(affiliate))
   }
 
   public onDelete(affiliate: Affiliate) {

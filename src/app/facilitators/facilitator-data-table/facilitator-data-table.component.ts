@@ -7,7 +7,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core'
-import { MatDialog, MatPaginator, MatSort } from '@angular/material'
+import { MatPaginator, MatSort } from '@angular/material'
 
 import { DataProvider } from '../../services/data-provider/data-provider.service'
 import { FacilitatorService } from '../../services/facilitator/facilitator.service'
@@ -15,7 +15,6 @@ import { Facilitator, FacilitatorRoleType } from '../facilitator.model'
 import { FacilitatorDataSource } from '../../services/facilitator/facilitator-data-source.service'
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service'
 import { IconType } from '../../shared/components/icon-legend/icon-legend.component'
-import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component'
 import { RouterService } from '../../services/router/router.service'
 import { Filter } from '../../services/filters/filter.abstract'
 
@@ -70,7 +69,6 @@ export class FacilitatorDataTableComponent implements OnInit {
   public isLoading = false
 
   constructor(
-    public dialog: MatDialog,
     public router: RouterService,
     public providerFactory: DataProviderFactory,
     public _fs: FacilitatorService,
@@ -128,21 +126,6 @@ export class FacilitatorDataTableComponent implements OnInit {
         throw error
       }
     }
-  }
-
-  public onClickForm(facilitator: Facilitator) {
-    const dialogRef = this.dialog.open(FacilitatorFormComponent, {
-      data: {
-        isDialog: true,
-        facilitator,
-      },
-    })
-
-    dialogRef.afterClosed().subscribe((f: Facilitator) => {
-      if (f) {
-        this.saved.emit(f)
-      }
-    })
   }
 
   public loginAs(facilitator: Facilitator) {

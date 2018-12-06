@@ -12,6 +12,7 @@ import {
   HostBinding,
   ElementRef,
   forwardRef,
+  ChangeDetectorRef,
 } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Observable, merge, Subscription } from 'rxjs'
@@ -104,6 +105,8 @@ export class TimezoneMapComponent
   @ViewChildren(DataTzidDirective)
   private zoneElements!: QueryList<DataTzidDirective>
 
+  constructor(private cdRef: ChangeDetectorRef) {}
+
   ngAfterViewInit(): void {
     const zones = this.zoneElements.map(elem =>
       elem.selected
@@ -124,15 +127,24 @@ export class TimezoneMapComponent
       this.deactivateOthers(zoneInfo[2])
       this.handleSelect(zoneInfo[0])
     })
+
+    if (this.selected) {
+      const elem = this.zoneElements.find(e => e.tzid === this.selected)
+      if (elem) {
+        elem.active = true
+        this.cdRef.detectChanges()
+      }
+    }
   }
 
-  private deactivateOthers(otherZones: DataTzidDirective[]) {
-    otherZones.forEach(elem => {
+  private deactivateOthers(otherZones: Iterable<DataTzidDirective>) {
+    for (const elem of otherZones) {
       elem.active = false
-    })
+    }
   }
 
   private activateWithId(id: string) {
+    if (!this.zoneElements) return
     const {
       right: [elem],
       left: rest,
@@ -162,6 +174,19 @@ export class TimezoneMapComponent
     if (typeof obj === 'string') {
       this.activateWithId(obj)
     }
+  }
+
+  set value(val: string | undefined) {
+    if (val) {
+      this.writeValue(val)
+    } else {
+      this.selected = undefined
+      this.deactivateOthers(this.zoneElements)
+    }
+  }
+
+  get value() {
+    return this.selected
   }
 
   registerOnChange(fn: any): void {

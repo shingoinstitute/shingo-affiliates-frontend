@@ -67,7 +67,7 @@ export class WorkshopService extends BaseAPIService {
 
   public getById(id: string) {
     return this.http
-      .get(this.baseUrl + `/${id}`, requestOptions(this.jwt))
+      .get<any>(this.baseUrl + `/${id}`, requestOptions(this.jwt))
       .pipe(
         map(res => new Workshop(res)),
         catchError(this.handleError),

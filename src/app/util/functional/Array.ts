@@ -124,20 +124,54 @@ export const mapOnMaybeC = <A, B>(f: (a: A) => Maybe<B>) => (as: A[]): B[] =>
 
 export const catMaybes = <A>(as: Array<Maybe<A>>): A[] => mapOnMaybe(as, id)
 
+/**
+ * Partitions an iterable into two arrays
+ *
+ * If the given function returns a Left for some value,
+ * that value is added to the left array,
+ * otherwise the value is added to the right array
+ *
+ * @param fa some iterable
+ * @param f the discriminator function
+ */
 export function partitionMap<A, L, R>(
   fa: Iterable<A>,
   f: (a: A) => Either<L, R>,
 ): { left: L[]; right: R[] }
-export function partitionMap<A, L, R>(
+/**
+ * Partitions an iterable into two arrays
+ *
+ * If the given function returns false for some value,
+ * that value is added to the left array,
+ * otherwise the value is added to the right array
+ *
+ * @param fa some iterable
+ * @param f the discriminator function
+ */
+export function partitionMap<A>(
   fa: Iterable<A>,
   f: (a: A) => boolean,
 ): { left: A[]; right: A[] }
+/**
+ * Partitions an iterable into two arrays
+ *
+ * If the given function returns a Left or false for some value,
+ * that value is added to the left array,
+ * otherwise it the value is added to the right array
+ *
+ * @param fa some iterable
+ * @param f the discriminator function
+ */
 export function partitionMap<A, L, R>(
   fa: Iterable<A>,
   f: (a: A) => boolean | Either<L, R>,
-): { left: A[]; right: A[] } | { left: L[]; right: R[] } {
-  const left: any[] = []
-  const right: any[] = []
+): { left: Array<A | L>; right: Array<A | R> }
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => boolean | Either<L, R>,
+): { left: Array<A | L>; right: Array<A | R> } {
+  const left: Array<A | L> = []
+  const right: Array<A | R> = []
 
   for (const a of fa) {
     const e = f(a)

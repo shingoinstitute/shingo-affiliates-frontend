@@ -11,6 +11,8 @@ import {
   TextResponseDialogComponent,
   TextResponseData,
 } from '../../shared/components/text-response-dialog/text-response-dialog.component'
+import { Moment } from 'moment'
+import { withoutTime } from '../../util/util'
 
 @Component({
   selector: 'app-workshop',
@@ -19,7 +21,7 @@ import {
 })
 export class WorkshopComponent {
   @Input()
-  public workshop!: Workshop
+  public workshop: Workshop = new Workshop()
 
   constructor(
     public router: Router,
@@ -42,7 +44,7 @@ export class WorkshopComponent {
     return (
       this.workshop.status === 'Proposed' ||
       (this.workshop.status === 'Verified' &&
-        new Date(this.workshop.endDate) > new Date())
+        (this.workshop.endDate as Moment).toDate() > withoutTime(new Date()))
     )
   }
 

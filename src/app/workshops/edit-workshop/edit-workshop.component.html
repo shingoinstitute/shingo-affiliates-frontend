@@ -1,8 +1,17 @@
 <div class="edit-workshop-container">
   <div class="edit-workshop-header">
     <h1 class="mat-headline">Edit Workshop</h1>
-    <p class="mat-subheading-1">Fill out the form and click <strong>save</strong> to update the workshop.</p>
-    <p class="mat-subheading-1">Fields with an asterisk (<strong>*</strong>) are required, and must be filled out in order to save the workshop.</p>
+    <p class="mat-subheading-1">
+      Fill out the form and click <strong>save</strong> to update the workshop.
+    </p>
+    <p class="mat-subheading-1">
+      Fields with an asterisk (<strong>*</strong>) are required, and must be
+      filled out in order to save the workshop.
+    </p>
   </div>
-  <app-workshop-form [workshop]="workshop" [submitFunction]="save"></app-workshop-form>
+  <app-workshop-form
+    [workshop]="workshop"
+    [pending]="pending"
+    (submitted)="save($event)"
+  ></app-workshop-form>
 </div>

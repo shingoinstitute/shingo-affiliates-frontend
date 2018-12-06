@@ -1,9 +1,34 @@
 import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
 import { ValidationErrors, FormGroup } from '@angular/forms'
+import { Moment, isMoment } from 'moment'
 
-export const withoutTime = (d: Date) => {
-  const newDate = new Date(d)
+export type Overwrite<A, B> = Pick<A, Exclude<keyof A, keyof B>> & B
+
+/**
+ * Takes a date or moment object and returns a string in the format YYYY-MM-DD
+ * @param date a date or moment object
+ * @param utc whether to return the local date or a utc date
+ */
+export const getIsoYMD = (date: Moment | Date, utc = false): string => {
+  if (utc) {
+    if (date instanceof Date) {
+      return `${date.getUTCFullYear()}-${date.getUTCMonth() +
+        1}-${date.getUTCDate()}`
+    } else {
+      return date.utc().format('YYYY-MM-DD')
+    }
+  } else {
+    if (date instanceof Date) {
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    } else {
+      return date.format('YYYY-MM-DD')
+    }
+  }
+}
+
+export const withoutTime = (d: Date | Moment) => {
+  const newDate = isMoment(d) ? d.toDate() : new Date(d)
   newDate.setHours(0, 0, 0, 0)
   return newDate
 }

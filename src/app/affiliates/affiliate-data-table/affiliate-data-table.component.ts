@@ -6,7 +6,7 @@ import {
   EventEmitter,
   OnInit,
 } from '@angular/core'
-import { MatPaginator, MatSort, MatDialog } from '@angular/material'
+import { MatPaginator, MatSort } from '@angular/material'
 
 import { DataProvider } from '../../services/data-provider/data-provider.service'
 import { AffiliateService } from '../../services/affiliate/affiliate.service'
@@ -14,7 +14,6 @@ import { Affiliate } from '../affiliate.model'
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service'
 import { AffiliateDataSource } from '../../services/affiliate/affiliate-data-source.service'
 import { IconType } from '../../shared/components/icon-legend/icon-legend.component'
-import { AffiliateFormComponent } from '../affiliate-form/affiliate-form.component'
 import { Filter } from '../../services/filters/filter.abstract'
 import { RouterService } from '../../services/router/router.service'
 
@@ -55,7 +54,6 @@ export class AffiliateDataTableComponent implements OnInit {
   ]
 
   constructor(
-    public dialog: MatDialog,
     public providerFactory: DataProviderFactory,
     public _as: AffiliateService,
     public router: RouterService,
@@ -111,31 +109,5 @@ export class AffiliateDataTableComponent implements OnInit {
 
   public delete(affiliate: Affiliate) {
     this.deleted.emit(affiliate)
-  }
-
-  /**
-   * @deprecated keeping this function around just in case, but we're most
-   * likely moving away from using dialogs to open edit-detail-forms completely.
-   */
-  public openFormDialog(affiliate: Affiliate) {
-    // determine height and width value of dialog
-    const height = window.innerWidth < 960 ? '100vh' : '90vh'
-    const width =
-      window.innerWidth < 960 ? String(window.innerWidth) : undefined
-
-    const dialogRef = this.dialog.open(AffiliateFormComponent, {
-      data: {
-        isDialog: true,
-        affiliate,
-      },
-      height,
-      width,
-    })
-
-    dialogRef.afterClosed().subscribe(af => {
-      if (af) {
-        this.saved.emit(af)
-      }
-    })
   }
 }

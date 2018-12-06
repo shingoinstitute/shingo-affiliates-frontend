@@ -10,6 +10,7 @@ import { SharedModule } from '../shared/shared.module'
 import { AffiliateDataTableComponent } from './affiliate-data-table/affiliate-data-table.component'
 import { AffiliateFormComponent } from './affiliate-form/affiliate-form.component'
 import { AdminAffiliateTabComponent } from './admin-affiliate-tab/admin-affiliate-tab.component'
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search'
 
 // Material Design imports
 import {
@@ -26,7 +27,9 @@ import {
   MatInputModule,
   MatTooltipModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
 } from '@angular/material'
+import { AffiliateFormPageComponent } from './affiliate-form-page.component'
 
 @NgModule({
   imports: [
@@ -48,6 +51,8 @@ import {
     MatInputModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    NgxMatSelectSearchModule,
+    MatSelectModule,
 
     FlexLayoutModule,
     SharedModule.forRoot(),
@@ -55,14 +60,16 @@ import {
   declarations: [
     AdminAffiliateTabComponent,
     AffiliateDataTableComponent,
+    AffiliateFormPageComponent,
     AffiliateFormComponent,
   ],
   exports: [
     AffiliateDataTableComponent,
     AffiliateFormComponent,
+    AffiliateFormPageComponent,
     AdminAffiliateTabComponent,
   ],
-  entryComponents: [AffiliateFormComponent],
+  entryComponents: [AffiliateFormPageComponent],
 })
 export default class AffiliatesModule {}
 

@@ -1,6 +1,7 @@
 // Angular Modules
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { map } from 'rxjs/operators'
 
 export interface CountryItem {
   name: string
@@ -15,6 +16,17 @@ export class CountriesService {
   constructor(private http: HttpClient) {}
 
   public get() {
-    return this.http.get<CountryItem[]>(this._baseUrl)
+    return this.http.get<CountryItem[]>(this._baseUrl).pipe(
+      map(cs =>
+        cs.map(
+          c =>
+            // Salesforce is automatically changing United States of America to United States
+            // TODO: fix salesforce instead of this hack
+            c.name === 'United States of America'
+              ? { ...c, name: 'United States' }
+              : c,
+        ),
+      ),
+    )
   }
 }

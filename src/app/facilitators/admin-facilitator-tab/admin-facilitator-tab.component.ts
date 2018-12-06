@@ -3,7 +3,6 @@ import { Component } from '@angular/core'
 import { Facilitator } from '../../facilitators/facilitator.model'
 import { FacilitatorService } from '../../services/facilitator/facilitator.service'
 import { MatSnackBar, MatDialog } from '@angular/material'
-import { FacilitatorFormComponent } from '../facilitator-form/facilitator-form.component'
 import { Router } from '@angular/router'
 import { AlertDialogComponent } from '../../shared/components/alert-dialog/alert-dialog.component'
 import { FacilitatorFilterFactory } from '../../services/filters/facilitators/facilitator-filter-factory.service'
@@ -196,21 +195,6 @@ export class AdminFacilitatorTabComponent implements OnInit {
         this.apiCallbackHandler(null, err)
       },
     )
-  }
-
-  public onCreate() {
-    const dialogRef = this.dialog.open(FacilitatorFormComponent, {
-      data: {
-        isDialog: true,
-        facilitator: new Facilitator(),
-      },
-    })
-
-    dialogRef.afterClosed().subscribe(facilitator => {
-      if (facilitator) {
-        this.onSave(facilitator)
-      }
-    })
   }
 
   public apiCallbackHandler(data?: any, err?: any) {

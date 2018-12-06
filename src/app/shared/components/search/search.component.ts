@@ -19,6 +19,7 @@ import {
   OnDestroy,
   ElementRef,
   ViewChild,
+  ChangeDetectorRef,
 } from '@angular/core'
 import {
   FormControl,
@@ -111,6 +112,7 @@ export class SearchComponent<T> implements ControlValueAccessor, OnDestroy {
   set value(v: T | T[]) {
     if (typeof v === 'string' && this.textOnly) {
       this.searchInputControl.setValue(v, { emitEvent: false })
+      this.changeRef.detectChanges()
     } else {
       this.selectedObjects = (v && (Array.isArray(v) ? v : [v])) || []
     }
@@ -154,7 +156,7 @@ export class SearchComponent<T> implements ControlValueAccessor, OnDestroy {
     this.disabled = isDisabled
   }
 
-  constructor() {
+  constructor(private changeRef: ChangeDetectorRef) {
     this.objects$ = this.searchInputControl.valueChanges.pipe(
       tap(value => {
         if (this.textOnly) {
