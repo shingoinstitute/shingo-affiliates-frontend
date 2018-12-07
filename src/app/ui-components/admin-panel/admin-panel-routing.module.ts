@@ -6,8 +6,8 @@ import { AdminTabsComponent } from './admin-tabs/admin-tabs.component'
 
 import { AdminAffiliateTabComponent } from '../../affiliates/admin-affiliate-tab/admin-affiliate-tab.component'
 import { AdminFacilitatorTabComponent } from '../../facilitators/admin-facilitator-tab/admin-facilitator-tab.component'
-import { FacilitatorFormComponent } from '../../facilitators/facilitator-form/facilitator-form.component'
 import { AffiliateFormPageComponent } from '../../affiliates/affiliate-form-page.component'
+import { FacilitatorFormPageComponent } from '../../facilitators/facilitators.module'
 
 const adminRoutes: Routes = [
   {
@@ -22,7 +22,7 @@ const adminRoutes: Routes = [
           { path: 'facilitators', component: AdminFacilitatorTabComponent },
           {
             path: 'facilitators/form/:id',
-            component: FacilitatorFormComponent,
+            component: FacilitatorFormPageComponent,
           },
           {
             path: 'affiliates/form/:id',

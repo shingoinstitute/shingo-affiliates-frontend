@@ -22,22 +22,20 @@ import { CustomValidators } from 'ng2-validation'
 // Lodash functions
 import { normalizeString, getFormValidationErrors } from '../../util/util'
 
-export type AffiliateFormAction = 'create' | 'map' | 'update'
+export type FormAction = 'create' | 'map' | 'update'
 export interface AffiliateForm {
-  action: AffiliateFormAction
+  action: FormAction
   id: string
-  logo: string
+  logo?: string
   name: string
-  website: string
-  publicContact: string
-  publicContactEmail: string
-  publicContactPhone: string
-  languages: string[]
+  website?: string
+  publicContact?: string
+  publicContactEmail?: string
+  publicContactPhone?: string
+  languages?: string[]
 }
 
-export const transitionState = (
-  current: AffiliateFormAction,
-): AffiliateFormAction => {
+export const transitionState = (current: FormAction): FormAction => {
   switch (current) {
     case 'create':
       return 'map'
@@ -50,16 +48,16 @@ export const addToAffiliate = (
   form: AffiliateForm,
   affiliate = new Affiliate(),
 ) => {
-  if (form.id) {
-    affiliate.Id = form.id
-  }
-  affiliate.Logo__c = form.logo
-  affiliate.Name = form.name
-  affiliate.Website = form.website
-  affiliate.Public_Contact__c = form.publicContact
-  affiliate.Public_Contact_Email__c = form.publicContactEmail
-  affiliate.Public_Contact_Phone__c = form.publicContactPhone
-  affiliate.languages = form.languages
+  if (form.id) affiliate.Id = form.id
+  if (form.name) affiliate.Name = form.name
+  if (form.logo) affiliate.Logo__c = form.logo
+  if (form.website) affiliate.Website = form.website
+  if (form.publicContact) affiliate.Public_Contact__c = form.publicContact
+  if (form.publicContactEmail)
+    affiliate.Public_Contact_Email__c = form.publicContactEmail
+  if (form.publicContactPhone)
+    affiliate.Public_Contact_Phone__c = form.publicContactPhone
+  if (form.languages) affiliate.languages = form.languages
 
   return affiliate
 }
@@ -80,7 +78,7 @@ export function handleAffiliateAction(
   affService: AffiliateService,
 ): ReturnType<AffiliateService['create']>
 export function handleAffiliateAction(
-  action: AffiliateFormAction,
+  action: FormAction,
   affiliate: Affiliate,
   affService: AffiliateService,
 ):
@@ -88,7 +86,7 @@ export function handleAffiliateAction(
   | ReturnType<AffiliateService['create']>
   | ReturnType<AffiliateService['update']>
 export function handleAffiliateAction(
-  action: AffiliateFormAction,
+  action: FormAction,
   affiliate: Affiliate,
   affService: AffiliateService,
 ):
@@ -111,21 +109,26 @@ export function handleAffiliateAction(
   styleUrls: ['./affiliate-form.component.scss'],
 })
 export class AffiliateFormComponent implements OnInit, OnDestroy {
-  // tslint:disable-next-line:no-input-rename
   private _id = ''
   get affId() {
     return (this.initialAffiliate && this.initialAffiliate.Id) || this._id
   }
 
+  private _initialAffiliate?: Affiliate
   @Input('affiliate')
+  get initialAffiliate() {
+    return this._initialAffiliate
+  }
   set initialAffiliate(data: Affiliate | undefined) {
     if (data) {
+      this._initialAffiliate = data
       this.patchValue(data)
+      this.action = transitionState(this.action)
     }
   }
 
   @Input()
-  action: AffiliateFormAction = 'create'
+  action: FormAction = 'create'
   @Input()
   pending = false
   @Output()
@@ -138,8 +141,6 @@ export class AffiliateFormComponent implements OnInit, OnDestroy {
     ...DEFAULT_AFFILIATE_SEARCH_FIELDS,
   ]
 
-  isLoading = false
-  isDialog = false
   private routeSubscription?: Subscription
   affForm!: FormGroup
   languages$ = of([] as string[])
@@ -164,11 +165,11 @@ export class AffiliateFormComponent implements OnInit, OnDestroy {
     )
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.affForm = this.buildForm()
   }
 
-  public ngOnDestroy() {
+  ngOnDestroy() {
     if (this.routeSubscription) this.routeSubscription.unsubscribe()
   }
 
@@ -177,7 +178,7 @@ export class AffiliateFormComponent implements OnInit, OnDestroy {
 
   getFormErrors = getFormValidationErrors
 
-  public getButtonString(state: AffiliateFormAction): string {
+  getButtonString(state: FormAction): string {
     switch (state) {
       case 'create':
         return 'Save New'
@@ -191,25 +192,30 @@ export class AffiliateFormComponent implements OnInit, OnDestroy {
   private buildForm() {
     const affForm = this.fb.group({
       name: [
-        this.initialAffiliate && this.initialAffiliate.name,
+        this.initialAffiliate && this.initialAffiliate.Name,
         Validators.required,
       ],
-      logo: [this.initialAffiliate && this.initialAffiliate.logo],
+      logo: [
+        this.initialAffiliate && this.initialAffiliate.Logo__c,
+        CustomValidators.url,
+      ],
       website: [
-        this.initialAffiliate && this.initialAffiliate.website,
+        this.initialAffiliate && this.initialAffiliate.Website,
         CustomValidators.url,
       ],
       publicContact: [
-        this.initialAffiliate && this.initialAffiliate.publicContact,
+        this.initialAffiliate && this.initialAffiliate.Public_Contact__c,
       ],
       publicContactEmail: [
-        this.initialAffiliate && this.initialAffiliate.publicContactEmail,
+        this.initialAffiliate && this.initialAffiliate.Public_Contact_Email__c,
         Validators.email,
       ],
       publicContactPhone: [
-        this.initialAffiliate && this.initialAffiliate.publicContactPhone,
+        this.initialAffiliate && this.initialAffiliate.Public_Contact_Phone__c,
       ],
-      languages: [this.initialAffiliate && this.initialAffiliate.languages],
+      languages: [
+        (this.initialAffiliate && this.initialAffiliate.languages) || [],
+      ],
     })
     return affForm
   }
@@ -218,24 +224,21 @@ export class AffiliateFormComponent implements OnInit, OnDestroy {
     if (!this.affForm) return
     this._id = affiliate.Id
     this.affForm.patchValue({
-      logo: affiliate.logo,
-      name: affiliate.name,
-      website: affiliate.website,
-      publicContact: affiliate.publicContact,
-      publicContactEmail: affiliate.publicContactEmail,
-      publicContactPhone: affiliate.publicContactPhone,
+      logo: affiliate.Logo__c,
+      name: affiliate.Name,
+      website: affiliate.Website,
+      publicContact: affiliate.Public_Contact__c,
+      publicContactEmail: affiliate.Public_Contact_Email__c,
+      publicContactPhone: affiliate.Public_Contact_Phone__c,
       languages: affiliate.languages,
     })
   }
 
-  public selectedAffiliate(affiliate?: Affiliate) {
-    if (affiliate) {
-      this.patchValue(affiliate)
-      this.action = transitionState(this.action)
-    }
+  selectedAffiliate(affiliate?: Affiliate) {
+    this.initialAffiliate = affiliate
   }
 
-  public onSave() {
+  onSave() {
     const form = this.affForm.value as AffiliateForm
     form.action = this.action
     form.id = this.affId

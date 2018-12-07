@@ -1,25 +1,27 @@
+<ng-template #actions>
+  <div class="form-actions">
+    <button mat-raised-button class="mat-accent" (click)="onSave()">
+      {{ getButtonString(action) }}
+    </button>
+    <button mat-raised-button (click)="location.back()">Cancel</button>
+  </div>
+</ng-template>
+
 <div
   class="form-container"
   [formGroup]="affForm"
-  [class.loading-active]="isLoading"
+  [class.loading-active]="pending"
 >
   <div
     class="spinner-container"
     fxLayout
     fxLayoutAlign="center center"
-    *ngIf="isLoading"
+    *ngIf="pending"
   >
     <mat-spinner diameter="48" class="mat-accent"></mat-spinner>
   </div>
 
-  <div class="form-actions">
-    <ng-container *ngIf="!isDialog">
-      <button mat-raised-button class="mat-accent" (click)="onSave()">
-        {{ getButtonString(action) }}
-      </button>
-      <button mat-raised-button (click)="location.back()">Cancel</button>
-    </ng-container>
-  </div>
+  <ng-container *ngTemplateOutlet="actions"></ng-container>
 
   <div class="form-header">
     <h3 class="mat-headline">Affiliate Form</h3>
@@ -45,13 +47,19 @@
       </mat-form-field>
     </div>
 
-    <div class="input-item">
-      <div class="logo-img">
-        <img [src]="affForm.controls['logo'].value" alt="logo image" />
+    <div class="input-item" *ngIf="affForm.controls['logo']; let logoC">
+      <div
+        *ngIf="!logoC.hasError('url') && logoC.value !== ''"
+        class="logo-img"
+      >
+        <img [src]="logoC.value" alt="Logo" />
       </div>
 
       <mat-form-field>
         <input matInput placeholder="Logo URL" formControlName="logo" />
+        <mat-error *ngIf="logoC.hasError('url')">
+          Logo URL must be a valid url
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -129,15 +137,5 @@
     -->
   </div>
 
-  <div class="form-actions">
-    <button
-      mat-raised-button
-      [disabled]="!affForm.valid"
-      class="mat-accent"
-      (click)="onSave()"
-    >
-      {{ getButtonString(action) }}
-    </button>
-    <button mat-raised-button (click)="location.back()">Cancel</button>
-  </div>
+  <ng-container *ngTemplateOutlet="actions"></ng-container>
 </div>

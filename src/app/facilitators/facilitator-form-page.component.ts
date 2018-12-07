@@ -1,66 +1,64 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
-import { Affiliate } from './affiliate.model'
 import { Subscription, Observable } from 'rxjs'
-import {
-  FormAction,
-  AffiliateForm,
-  addToAffiliate,
-  handleAffiliateAction,
-} from './affiliate-form/affiliate-form.component'
-import { AffiliateService } from '../services/affiliate/affiliate.service'
+import { ActivatedRoute } from '@angular/router'
+import { Facilitator } from './facilitator.model'
 import { MatSnackBar } from '@angular/material'
+import { FacilitatorService } from '../services/facilitator/facilitator.service'
+import {
+  FacilitatorForm,
+  addToFacilitator,
+  handleFacilitatorAction,
+} from './facilitator-form/facilitator-form.component'
+import { FormAction } from '../affiliates/affiliate-form/affiliate-form.component'
 import { SFSuccessResult } from '../services/workshop/workshop.service'
 import { Location } from '@angular/common'
 
 @Component({
-  selector: 'app-affiliate-form-page',
+  selector: 'app-facilitator-form-page',
   template: `
-    <app-affiliate-form
-      [affiliate]="affiliate"
-      [action]="action"
+    <app-facilitator-form
+      [facilitator]="facilitator"
       [pending]="pending"
+      [action]="action"
       (submitted)="onSubmit($event)"
-    ></app-affiliate-form>
+    ></app-facilitator-form>
   `,
 })
-export class AffiliateFormPageComponent implements OnInit, OnDestroy {
+export class FacilitatorFormPageComponent implements OnInit, OnDestroy {
   pending = false
-  affiliate?: Affiliate
+  facilitator?: Facilitator
   action: FormAction = 'create'
-  routeSubscription?: Subscription
+  private routeSub?: Subscription
   constructor(
     private route: ActivatedRoute,
-    private _as: AffiliateService,
     private snackbar: MatSnackBar,
+    private _fs: FacilitatorService,
     private location: Location,
   ) {}
 
   ngOnInit() {
-    this.routeSubscription = this.route.params.subscribe(route => {
+    this.routeSub = this.route.params.subscribe(route => {
       const id = route['id']
       if (typeof id === 'string' && id !== 'create') {
-        this.getSFObject(id)
         this.action = 'update'
+        this.getSFObject(id)
       } else {
         this.action = 'create'
       }
     })
   }
 
-  ngOnDestroy(): void {
-    if (this.routeSubscription) {
-      this.routeSubscription.unsubscribe()
-    }
+  ngOnDestroy() {
+    if (this.routeSub) this.routeSub.unsubscribe()
   }
 
   private getSFObject(id: string) {
     this.pending = true
-    this._as.getById(id).subscribe(
-      (affiliate?: Affiliate) => {
+    this._fs.getById(id).subscribe(
+      (facilitator?: Facilitator) => {
         this.pending = false
-        if (affiliate) {
-          this.affiliate = affiliate
+        if (facilitator) {
+          this.facilitator = facilitator
         }
       },
       err => {
@@ -83,20 +81,22 @@ export class AffiliateFormPageComponent implements OnInit, OnDestroy {
     )
   }
 
-  onSubmit(affForm?: AffiliateForm) {
-    if (affForm) {
-      const aff = addToAffiliate(affForm, this.affiliate)
+  onSubmit(facForm?: FacilitatorForm) {
+    console.log('Saving', facForm)
+    if (facForm) {
+      const fac = addToFacilitator(facForm, this.facilitator)
+      console.log('Merged Fac', fac)
       this.pending = true
       type ReturnTypeMerged = Observable<SFSuccessResult | { mapped: true }>
-      ;(handleAffiliateAction(
-        affForm.action,
-        aff,
-        this._as,
+      ;(handleFacilitatorAction(
+        facForm.action,
+        fac,
+        this._fs,
       ) as ReturnTypeMerged).subscribe(result => {
         this.pending = false
         const text = (result as SFSuccessResult).success
-          ? 'Successfully saved the Affiliate'
-          : 'Successfully mapped the Affiliate'
+          ? 'Successfully saved the Facilitator'
+          : 'Successfully mapped the Facilitator'
         this.snackbar.open(text, undefined, { duration: 2000 })
         this.location.back()
       }, this.handleError)

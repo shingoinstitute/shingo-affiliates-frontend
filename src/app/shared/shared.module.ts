@@ -2,8 +2,6 @@ import { NgModule, ModuleWithProviders } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
-import { CKEditorModule } from 'ng2-ckeditor'
-
 import { SimpleMessageDialog } from './components/simple-message-dialog/simple-message-dialog.component'
 import { IconLegendComponent } from './components/icon-legend/icon-legend.component'
 import { AlertDialogComponent } from './components/alert-dialog/alert-dialog.component'
@@ -46,7 +44,6 @@ import { FlexLayoutModule } from '@angular/flex-layout'
     MatListModule,
     MatChipsModule,
 
-    CKEditorModule,
     FlexLayoutModule,
   ],
   declarations: [
@@ -62,7 +59,6 @@ import { FlexLayoutModule } from '@angular/flex-layout'
   ],
   exports: [
     // MdDialogModule,
-    CKEditorModule,
     AlertDialogComponent,
     IconLegendComponent,
     SimpleMessageDialog,

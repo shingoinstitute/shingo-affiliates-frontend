@@ -36,7 +36,6 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.23",
-    "ng2-ckeditor": "^1.2.2",
     "ng2-validation": "^4.2.0",
     "ngx-cookie": "^4.0.2",
     "ngx-mat-select-search": "^1.4.2",
