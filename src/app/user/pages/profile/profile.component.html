@@ -1,0 +1,52 @@
+<div class="container" fxLayout="column">
+  <div
+    class="profile-body"
+    fxLayout
+    fxLayout.lt-md="column"
+    fxLayoutAlign.lt-md="start center"
+    fxLayoutGap="8px"
+    *ngIf="(user$ | async); let user"
+  >
+    <div class="user-overview" fxLayout="column">
+      <img class="profile-img" [src]="user.sfContact.Photograph__c" />
+      <h1 class="mat-title">{{ user.sfContact.Name }}</h1>
+      <strong>{{ user.sfContact.Title }}</strong> <em>{{ user.email }}</em>
+    </div>
+    <div class="user-details" fxLayout="column">
+      <form [formGroup]="profileForm" fxLayout="column" novalidate>
+        <h3>Biography</h3>
+        <div
+          class="bio"
+          [innerHtml]="
+            user.sfContact.Biography__c ||
+            '<em>Please contact the Shingo Coordinator with a draft biography...</em>'
+          "
+        ></div>
+        <h3>Language/Locale</h3>
+        <mat-form-field fxLayout="column" fxFlex="33" fxFlex.lt-md="100">
+          <input
+            matInput
+            placeholder="Language code"
+            formControlName="locale"
+            (blur)="saveLocale()"
+          />
+          <mat-hint
+            >Use form: <em>lang</em>-<em>Region</em>, e.g.
+            <em>en-GB</em></mat-hint
+          >
+          <mat-error *ngIf="profileForm.controls['locale'].hasError('bcp47')"
+            >Language code is not in the correct format</mat-error
+          >
+        </mat-form-field>
+      </form>
+      <div class="profile-actions" fxLayout>
+        <button mat-raised-button (click)="changePassword()">
+          Change Password
+        </button>
+      </div>
+    </div>
+  </div>
+  <div fxLayout fxLayoutAlign="center center" *ngIf="!(user$ | async)">
+    <mat-spinner></mat-spinner>
+  </div>
+</div>

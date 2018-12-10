@@ -43,10 +43,10 @@ import { tz, Moment } from 'moment-timezone'
 import {
   normalizeString,
   getFormValidationErrors,
-  Overwrite,
   getIsoYMD,
   withoutTime,
 } from '../../util/util'
+import { Overwrite } from '../../util/types'
 import moment, { isMoment } from 'moment'
 import { eq, lte, lt, gte, gt } from '../../util/functional'
 

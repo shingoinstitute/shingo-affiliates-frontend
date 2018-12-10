@@ -27,9 +27,6 @@ import { UIComponentsModule } from './ui-components/ui-components.module'
 // App Routing Module
 import { AppRoutingModule } from './app-routing.module'
 
-// App Components
-import { AppComponent } from './app.component'
-
 // Providers
 import { LoggerInterceptorProvider } from './interceptor.provider'
 
@@ -44,17 +41,46 @@ import {
   MatProgressSpinnerModule,
   MatExpansionModule,
 } from '@angular/material'
-import {
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MatMomentDateAdapterOptions,
-} from '@angular/material-moment-adapter'
 import { LayoutModule } from '@angular/cdk/layout'
+import { CommonModule } from '@angular/common'
+import { JwtModule } from '@auth0/angular-jwt'
+import { tokenGetter } from './auth/services/auth.service'
+import { environment } from '../environments/environment'
+import { AuthModule } from './auth/auth.module'
+import { StoreModule } from '@ngrx/store'
+import { reducers, metaReducers } from './reducers'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { EffectsModule } from '@ngrx/effects'
+import { UserModule } from './user/user.module'
+import { AppComponent } from './core/pages/main/app.component'
+import { CoreModule } from './core/core.module'
+import { SuccessComponent } from './success.component'
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [SuccessComponent],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        whitelistedDomains: [
+          environment.clientDomain,
+          environment.apiDomain,
+          environment.authApiDomain,
+        ],
+      },
+    }),
+    AuthModule,
+    UserModule,
+    CoreModule,
+    AppRoutingModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([]),
 
     MatMenuModule,
     MatButtonModule,
@@ -65,12 +91,10 @@ import { LayoutModule } from '@angular/cdk/layout'
     MatProgressSpinnerModule,
     MatExpansionModule,
 
-    HttpClientModule,
     ServicesModule.forRoot(),
     CookieModule.forRoot(),
     FlexLayoutModule,
     SharedModule.forRoot(),
-    AppRoutingModule,
     AffiliatesModule,
     FacilitatorsModule,
     WorkshopsModule,

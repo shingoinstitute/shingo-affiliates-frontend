@@ -53,6 +53,7 @@
     "component-class-suffix": true,
     "directive-class-suffix": true,
     "no-object-literal-type-assertion": false,
+    "no-implicit-dependencies": [true, "dev", ["~app"]],
     "prettier": true
   }
 }

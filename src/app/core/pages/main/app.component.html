@@ -17,7 +17,11 @@
     </div>
   </span>
 
-  <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    *ngIf="(loggedIn$ | async)"
+  >
     <mat-icon>account_circle</mat-icon>
   </button>
 
@@ -30,7 +34,7 @@
     <mat-icon aria-label="Sidenav toggle icon">menu</mat-icon>
   </button>
 
-  <a mat-button *ngIf="!isAuthenticated" routerLink="/login">Login</a>
+  <a mat-button *ngIf="!(loggedIn$ | async)" routerLink="/login">Login</a>
 
   <mat-menu style="color: black" #menu="matMenu">
     <a mat-menu-item routerLink="/profile">
@@ -59,7 +63,7 @@
     [opened]="!media.isActive('lt-md')"
   >
     <mat-nav-list>
-      <ng-container *ngIf="isAuthenticated">
+      <ng-container *ngIf="(loggedIn$ | async)">
         <p class="nav-list-title">Main Menu</p>
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
           >Dashboard</a
@@ -69,7 +73,7 @@
           >Workshops</a
         >
         <mat-divider></mat-divider>
-        <ng-container *ngIf="auth.user?.isAdmin">
+        <ng-container *ngIf="(isAdmin$ | async)">
           <a
             mat-list-item
             routerLink="/admin/affiliates"

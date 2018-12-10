@@ -3,8 +3,6 @@ import { HttpHeaders } from '@angular/common/http'
 import { ValidationErrors, FormGroup } from '@angular/forms'
 import { Moment, isMoment } from 'moment'
 
-export type Overwrite<A, B> = Pick<A, Exclude<keyof A, keyof B>> & B
-
 /**
  * Takes a date or moment object and returns a string in the format YYYY-MM-DD
  * @param date a date or moment object

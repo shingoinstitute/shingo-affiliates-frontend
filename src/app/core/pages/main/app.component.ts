@@ -1,4 +1,4 @@
-import { distinctUntilChanged } from 'rxjs/operators'
+import { map } from 'rxjs/operators'
 // Angular Modules
 import {
   Component,
@@ -6,6 +6,7 @@ import {
   OnDestroy,
   LOCALE_ID,
   Inject,
+  OnInit,
 } from '@angular/core'
 import {
   MatIconRegistry,
@@ -17,73 +18,64 @@ import { DomSanitizer } from '@angular/platform-browser'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
 
 // App Modules
-import { AuthService } from './services/auth/auth.service'
-import { WorkshopService } from './services/workshop/workshop.service'
-import { RouterService } from './services/router/router.service'
-import { MaterialsDialog } from './ui-components/materials/materials-dialog/materials-dialog.component'
+import { MaterialsDialog } from '~app/ui-components/materials/materials-dialog/materials-dialog.component'
 
 // RxJS Modules
-import { Subscription } from 'rxjs'
+import { Subscription, Observable } from 'rxjs'
 
 // RxJS operators
 
-import { SupportService } from './services/support/support.service'
-import { SupportPage } from './services/support/support.model'
-import { UserState } from './shared/models/user.model'
+import { SupportPage } from '~app/services/support/support.model'
 import { ObservableMedia } from '@angular/flex-layout'
-import { LocaleService } from './services/locale/locale.service'
+import { LocaleService } from '~app/services/locale/locale.service'
+
+import { User } from '~app/user/services/user.service'
+import * as fromRoot from '~app/reducers'
+import * as fromAuth from '~app/auth/reducers'
+import * as fromUser from '~app/user/reducers'
+import { Store, select } from '@ngrx/store'
+import { AuthService } from '~app/auth/services/auth.service'
+import { AuthActions } from '~app/auth/actions'
+import { SupportService } from '~app/services/support/support.service'
+import { property } from '~app/util/functional'
+import { UserRenew } from '~app/user/actions/user-api.actions'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnDestroy {
-  public supportCategories: string[] = []
-  public supportCategoryPages: { [key: string]: SupportPage[] } = {}
+export class AppComponent implements OnDestroy, OnInit {
+  supportCategories: string[] = []
+  supportCategoryPages: { [key: string]: SupportPage[] } = {}
 
   @ViewChild('sidenav')
-  public sidenav!: MatSidenav
+  sidenav!: MatSidenav
 
-  public isLoading = true
-  public isAuthenticated = false
-  public activeRoute = '/'
-  public routeToLoginSubscription: Subscription
+  isLoading = true
+  loggedIn$: Observable<boolean>
+  isAdmin$: Observable<boolean>
+  user$: Observable<User | null>
+  private routeToLoginSubscription?: Subscription
+  private loggedInSub?: Subscription
 
   constructor(
-    public iconRegistry: MatIconRegistry,
-    public sanitizer: DomSanitizer,
-    public router: Router,
-    public auth: AuthService,
-    public ws: WorkshopService,
-    public routerService: RouterService,
-    public supportService: SupportService,
-    public dialog: MatDialog,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private auth: AuthService,
+    private supportService: SupportService,
+    private dialog: MatDialog,
     public media: ObservableMedia,
-    public localeService: LocaleService,
+    private localeService: LocaleService,
     @Inject(LOCALE_ID) public locale: string,
     private dateAdapter: DateAdapter<any>,
+    private store: Store<fromRoot.State>,
   ) {
     this.initIconRegistry()
-
-    this.routeToLoginSubscription = this.router.events.subscribe(route => {
-      // Subscribe to router event stream
-      if (route instanceof NavigationEnd) {
-        // On `NavigationEnd`, capture current route so we can re-redirect the user (if they aren't authenticated)
-        // to the route they originally intended to visit, *after* a successful log in.
-        this.activeRoute = route.url
-
-        this.getSupportCategories()
-        // Now that the route has been captured, check to see if the user is authenticated, and redirect them to `/login` if they aren't
-        if (
-          !this.activeRoute.match(/.*password.*/gi) &&
-          this.activeRoute !== '/login' &&
-          !this.activeRoute.match(/.*support.*/gi)
-        ) {
-          this.authenticateOnLoad()
-        }
-      }
-    })
+    this.loggedIn$ = this.store.pipe(select(fromAuth.getLoggedIn))
+    this.isAdmin$ = this.store.pipe(select(fromUser.isAdmin))
+    this.user$ = this.store.pipe(select(fromUser.getUser))
 
     this.router.events.subscribe(route => {
       if (route instanceof NavigationStart) {
@@ -98,54 +90,29 @@ export class AppComponent implements OnDestroy {
     })
   }
 
-  public ngOnDestroy() {
-    // tslint:disable-next-line:no-unused-expression
-    this.routeToLoginSubscription && this.routeToLoginSubscription.unsubscribe()
+  ngOnInit() {
+    this.loggedInSub = this.loggedIn$.subscribe(v => {
+      // have valid jwt token, but no user
+      if (this.auth.authenticated && !v) {
+        this.store.dispatch(new UserRenew())
+      }
+    })
   }
 
-  /**
-   * @description authenticateOnLoad starts listening to an event stream
-   * then calls a function on authService that emits an event to the event stream.
-   * The event stream subscription continues listening to changes that may be
-   * emitted by other parts of the app.
-   */
-  public authenticateOnLoad() {
-    // Subscribe to event stream of authentication change events
-    this.auth.authenticationChange$.pipe(distinctUntilChanged()).subscribe(
-      isValid => {
-        this.isAuthenticated = isValid
-        if (!this.isAuthenticated && this.activeRoute !== '/login') {
-          this.routerService.navigateRoutes(['/login', this.activeRoute])
-        }
-      },
-      error => {
-        this.isAuthenticated = false
-        this.routerService.navigateRoutes(['/login', this.activeRoute])
-      },
-    )
-
-    // Check to see if the current user is authenticated, firing an event that is captured by the above subscription.
-    this.auth.updateUserAuthStatus()
+  ngOnDestroy() {
+    if (this.routeToLoginSubscription)
+      this.routeToLoginSubscription.unsubscribe()
+    if (this.loggedInSub) this.loggedInSub.unsubscribe()
   }
 
   /**
    * Handles logging out... yeah.
    */
-  public logoutHandler() {
-    this.auth.logout().subscribe(
-      state => {
-        if (state === UserState.LoggedInAs) {
-          this.routerService.navigateRoutes(['/admin/facilitators'])
-        }
-      },
-      err => {
-        console.error(err)
-        this.auth.authenticationChange$.next(false)
-      },
-    )
+  logoutHandler() {
+    this.store.dispatch(new AuthActions.Logout())
   }
 
-  public openMaterials(folder: 'workshops' | 'forms' | 'marketing') {
+  openMaterials(folder: 'workshops' | 'forms' | 'marketing') {
     const folders = { workshops: false, marketing: false, forms: false }
     folders[folder] = true
     this.dialog.open(MaterialsDialog, {
@@ -154,7 +121,7 @@ export class AppComponent implements OnDestroy {
     })
   }
 
-  public initIconRegistry() {
+  initIconRegistry() {
     this.iconRegistry.addSvgIcon(
       'search_grey',
       this.sanitizer.bypassSecurityTrustResourceUrl(
@@ -367,7 +334,7 @@ export class AppComponent implements OnDestroy {
     )
   }
 
-  public getSupportCategories() {
+  getSupportCategories() {
     this.supportService.getCategories().subscribe(categories => {
       this.supportCategories = []
       this.supportCategoryPages = {}
@@ -377,7 +344,7 @@ export class AppComponent implements OnDestroy {
     })
   }
 
-  public getSupportCategoryPages(category: string) {
+  getSupportCategoryPages(category: string) {
     this.supportService.getCategory(category).subscribe(
       pages => {
         if (pages.length) {
@@ -389,14 +356,21 @@ export class AppComponent implements OnDestroy {
     )
   }
 
-  public isLoggedInAs(): boolean {
-    return !!(this.auth.user && this.auth.user.state === UserState.LoggedInAs)
+  isLoggedInAs(): boolean {
+    return false
+    // return !!(this.auth.user && this.auth.user.state === UserState.LoggedInAs)
   }
 
-  public getLoggedInInfo(): string {
-    if (this.auth.user) {
-      return `${this.auth.user.name} (${this.auth.user.roleName})`
-    }
-    return 'unknown'
+  getLoggedInInfo(): Observable<string> {
+    return this.user$.pipe(
+      map(
+        user =>
+          user
+            ? `${user.sfContact.Name} (${(user.roles || [])
+                .map(property('name'))
+                .join(', ') || 'unknown'})`
+            : 'unknown user',
+      ),
+    )
   }
 }

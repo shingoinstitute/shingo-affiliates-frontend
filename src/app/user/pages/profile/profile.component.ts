@@ -1,31 +1,36 @@
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { Component } from '@angular/core'
 import { MatDialog } from '@angular/material'
 
-import { User } from '../../../shared/models/user.model'
-import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog.component'
+import { User } from '../../services/user.service'
+import { ChangePasswordDialog } from '../../components/change-password-dialog/change-password-dialog.component'
 import { SimpleMessageDialog } from '../../../shared/components/simple-message-dialog/simple-message-dialog.component'
 import { LocaleService } from '../../../services/locale/locale.service'
 import { FormGroup, FormControl } from '@angular/forms'
 import { bcp47Validator } from '../../../services/locale/bcp47validator'
+import { Observable } from 'rxjs'
+import { Store, select } from '@ngrx/store'
+import * as fromUser from '../../reducers'
+import { filter } from 'rxjs/operators'
+import { truthy } from '../../../util/util'
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent implements OnInit {
-  public user!: User
-  public profileForm!: FormGroup
+export class ProfileComponent {
+  user$: Observable<User>
+  profileForm: FormGroup
 
   constructor(
-    public route: ActivatedRoute,
-    public dialog: MatDialog,
-    public localeService: LocaleService,
-  ) {}
-
-  public ngOnInit() {
-    this.user = this.route.snapshot.data['user']
+    private dialog: MatDialog,
+    private localeService: LocaleService,
+    private store: Store<fromUser.State>,
+  ) {
+    this.user$ = this.store.pipe(
+      select(fromUser.getUser),
+      filter(truthy),
+    )
     this.profileForm = new FormGroup({
       locale: new FormControl(this.localeService.locale, {
         updateOn: 'blur',
@@ -34,7 +39,7 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  public saveLocale() {
+  saveLocale() {
     const localeControl = this.profileForm.get('locale')
     if (!localeControl) return
     if (localeControl.invalid) return
@@ -45,7 +50,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  public changePassword() {
+  changePassword() {
     const dialogRef = this.dialog.open(ChangePasswordDialog)
     dialogRef.afterClosed().subscribe(message => {
       if (message) {
