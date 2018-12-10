@@ -31,7 +31,7 @@
           <h2 class="mat-h2"><strong>Pick</strong> or drop Evaluations here</h2>
         </app-file-drop>
 
-        <mat-progress-bar *ngIf="uploadEvaluationsProgress > 0" [color]="accent" mode="determinate" [value]="uploadEvaluationsProgress"></mat-progress-bar>
+        <mat-progress-bar *ngIf="uploadEvaluationsProgress > 0" color="accent" mode="determinate" [value]="uploadEvaluationsProgress"></mat-progress-bar>
 
         <div class="files" fxLayout="row" fxLayoutGap="8px">
           <app-file-display *ngFor="let file of evaluations" [file]="file"></app-file-display>

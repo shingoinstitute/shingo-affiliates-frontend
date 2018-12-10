@@ -6,11 +6,11 @@
         <b class="mat-subheading">{{workshop.type}} ( {{workshop.isPublic ? 'Public' : 'Private'}} ) &mdash; {{workshop.location}}</b>
         <p>Status:&emsp;{{workshop.status}}</p>
         <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" mat-raised-button class="mat-accent"> Edit &ensp;
-          <mat-icon svgIcon="edit_white"></mat-icon>
+          <mat-icon>edit</mat-icon>
         </button>
         <br>
         <button *ngIf="canCancel()" [style.height]="'fit-content'" (click)="cancel()" mat-raised-button class="mat-warn"> Cancel &ensp;
-          <mat-icon svgIcon="cancel_white"></mat-icon>
+          <mat-icon>cancel</mat-icon>
         </button>
       </div>
     </div>

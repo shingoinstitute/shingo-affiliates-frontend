@@ -8,14 +8,14 @@ import {
 } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { WorkshopDataSource } from '../../services/workshop/workshop-data-source.service'
-import { DataProvider } from '../../services/data-provider/data-provider.service'
-import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service'
+import { WorkshopDataSource } from '~app/services/workshop/workshop-data-source.service'
+import { DataProvider } from '~app/services/data-provider/data-provider.service'
+import { DataProviderFactory } from '~app/services/data-provider/data-provider-factory.service'
 import {
   WorkshopService,
   WorkshopProperties,
   WorkshopTrackByStrategy,
-} from '../../services/workshop/workshop.service'
+} from '~app/services/workshop/workshop.service'
 import {
   MatSort,
   MatPaginator,
@@ -23,13 +23,13 @@ import {
   MatDialog,
   MatDatepickerInputEvent,
 } from '@angular/material'
-import { Workshop } from '../workshop.model'
-import { Filter } from '../../services/filters/filter.abstract'
+import { Workshop } from '../../workshop.model'
+import { Filter } from '~app/services/filters/filter.abstract'
 import {
   AlertDialogComponent,
   AlertDialogData,
-} from '../../shared/components/alert-dialog/alert-dialog.component'
-import { AuthService } from '../../services/auth/auth.service'
+} from '~app/shared/components/alert-dialog/alert-dialog.component'
+import { AuthService } from '~app/services/auth/auth.service'
 import moment, { Moment } from 'moment'
 
 @Component({

@@ -3,9 +3,9 @@ import { Component } from '@angular/core'
 import {
   WorkshopProperties,
   Workshop,
-} from '../../services/workshop/workshop.service'
-import { Filter } from '../../services/filters/filter.abstract'
-import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service'
+} from '~app/services/workshop/workshop.service'
+import { Filter } from '~app/services/filters/filter.abstract'
+import { WorkshopFilterFactory } from '~app/services/filters/workshops/workshop-filter-factory.service'
 
 @Component({
   selector: 'app-action-pending',

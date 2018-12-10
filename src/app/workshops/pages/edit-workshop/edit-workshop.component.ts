@@ -6,13 +6,13 @@ import { ActivatedRoute, Router } from '@angular/router'
 import {
   WorkshopService,
   SFSuccessResult,
-} from '../../services/workshop/workshop.service'
-import { Workshop } from '../../workshops/workshop.model'
+} from '~app/services/workshop/workshop.service'
+import { Workshop } from '~app/workshops/workshop.model'
 import { MatSnackBar } from '@angular/material'
 import {
   WorkshopForm,
   addToWorkshop,
-} from '../workshop-form/workshop-form.component'
+} from '../../components/workshop-form/workshop-form.component'
 
 @Component({
   selector: 'app-edit-workshop',

@@ -4,15 +4,15 @@ import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material'
 
 // App Modules
-import { WorkshopService } from '../../services/workshop/workshop.service'
-import { AuthService } from '../../services/auth/auth.service'
-import { Workshop } from '../workshop.model'
+import { WorkshopService } from '~app/services/workshop/workshop.service'
+import { AuthService } from '~app/services/auth/auth.service'
+import { Workshop } from '../../workshop.model'
 import {
   TextResponseDialogComponent,
   TextResponseData,
-} from '../../shared/components/text-response-dialog/text-response-dialog.component'
+} from '~app/shared/components/text-response-dialog/text-response-dialog.component'
 import { Moment } from 'moment'
-import { withoutTime } from '../../util/util'
+import { withoutTime } from '~app/util/util'
 
 @Component({
   selector: 'app-workshop',

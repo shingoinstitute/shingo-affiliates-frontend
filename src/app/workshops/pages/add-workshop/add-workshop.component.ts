@@ -5,14 +5,14 @@ import { Component } from '@angular/core'
 import {
   WorkshopService,
   SFSuccessResult,
-} from '../../services/workshop/workshop.service'
-import { Workshop } from '../workshop.model'
+} from '~app/services/workshop/workshop.service'
+import { Workshop } from '../../workshop.model'
 import { Router } from '@angular/router'
 import { MatSnackBar } from '@angular/material'
 import {
   WorkshopForm,
   addToWorkshop,
-} from '../workshop-form/workshop-form.component'
+} from '../../components/workshop-form/workshop-form.component'
 
 @Component({
   selector: 'app-add-workshop',

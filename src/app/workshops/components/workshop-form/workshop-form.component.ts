@@ -9,27 +9,27 @@ import {
 } from '@angular/forms'
 
 // App Modules
-import { AuthService } from '../../services/auth/auth.service'
+import { AuthService } from '~app/services/auth/auth.service'
 import {
   CountriesService,
   CountryItem,
-} from '../../services/countries/countries.service'
-import { FacilitatorService } from '../../services/facilitator/facilitator.service'
+} from '~app/services/countries/countries.service'
+import { FacilitatorService } from '~app/services/facilitator/facilitator.service'
 import {
   AffiliateService,
   DEFAULT_AFFILIATE_SEARCH_FIELDS,
-} from '../../services/affiliate/affiliate.service'
-import { WorkshopService } from '../../services/workshop/workshop.service'
+} from '~app/services/affiliate/affiliate.service'
+import { WorkshopService } from '~app/services/workshop/workshop.service'
 import {
   Workshop,
   WorkshopType,
   WorkshopStatusType,
   addTimeAndTz,
   Timezone,
-} from '../workshop.model'
-import { CourseManager } from '../course-manager.model'
-import { Facilitator } from '../../facilitators/facilitator.model'
-import { Affiliate } from '../../affiliates/affiliate.model'
+} from '../../workshop.model'
+import { CourseManager } from '../../course-manager.model'
+import { Facilitator } from '~app/facilitators/facilitator.model'
+import { Affiliate } from '~app/affiliates/affiliate.model'
 
 // RxJS Modules
 import { Observable, of } from 'rxjs'
@@ -37,7 +37,7 @@ import { Observable, of } from 'rxjs'
 // RxJS operators
 
 import { CustomValidators } from 'ng2-validation'
-import { LocaleService } from '../../services/locale/locale.service'
+import { LocaleService } from '~app/services/locale/locale.service'
 import { mergeMap, map, startWith } from 'rxjs/operators'
 import { tz, Moment } from 'moment-timezone'
 import {
@@ -45,10 +45,10 @@ import {
   getFormValidationErrors,
   getIsoYMD,
   withoutTime,
-} from '../../util/util'
-import { Overwrite } from '../../util/types'
+} from '~app/util/util'
+import { Overwrite } from '~app/util/types'
 import moment, { isMoment } from 'moment'
-import { eq, lte, lt, gte, gt } from '../../util/functional'
+import { eq, lte, lt, gte, gt } from '~app/util/functional'
 
 export interface WorkshopForm {
   affiliate: Affiliate

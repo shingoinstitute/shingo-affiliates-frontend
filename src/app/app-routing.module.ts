@@ -8,10 +8,10 @@ import {
 
 /** Interface Components */
 import { DashboardComponent } from './workshops/dashboard/dashboard.component'
-import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component'
-import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component'
-import { WorkshopDashboardComponent } from './workshops/workshop-dashboard/workshop-dashboard.component'
-import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component'
+// import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component'
+// import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component'
+// import { WorkshopDashboardComponent } from './workshops/workshop-dashboard/workshop-dashboard.component'
+// import { WorkshopDetailComponent } from './workshops/workshop-detail/workshop-detail.component'
 import { PasswordResetComponent } from './ui-components/user-auth/password-reset/password-reset.component'
 import { ForgotPasswordComponent } from './ui-components/user-auth/forgot-password/forgot-password.component'
 import { ForbiddenPageComponent } from './core/pages/forbidden-page/forbidden-page.component'
@@ -23,7 +23,7 @@ import { UserResolver } from './services/auth/user.resolver'
 import { IsAdminGuard } from './services/auth/is-admin.guard'
 
 /** Workshops */
-import { WorkshopComponent } from './workshops/workshop/workshop.component'
+// import { WorkshopComponent } from './workshops/workshop/workshop.component'
 import { WorkshopResolver } from './workshops/workshop.resolver'
 import { AuthGuard } from './auth/services/auth-guard.service'
 import { SuccessComponent } from './success.component'

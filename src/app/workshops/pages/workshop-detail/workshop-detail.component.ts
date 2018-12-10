@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { HttpEventType, HttpResponse } from '@angular/common/http'
 
-import { Workshop, WorkshopStatusType } from '../../workshops/workshop.model'
-import { WorkshopService } from '../../services/workshop/workshop.service'
+import { Workshop, WorkshopStatusType } from '~app/workshops/workshop.model'
+import { WorkshopService } from '~app/services/workshop/workshop.service'
 
-import { FileFailure } from '../../shared/components/file-drop/file-drop.component'
-import { withUnit } from '../../util/util'
-import { not } from '../../util/functional'
+import { FileFailure } from '~app/shared/components/file-drop/file-drop.component'
+import { withUnit } from '~app/util/util'
+import { not } from '~app/util/functional'
 
 const syntheticFile = Symbol()
 interface SyntheticFile {

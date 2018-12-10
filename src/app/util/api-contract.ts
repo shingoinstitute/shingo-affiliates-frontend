@@ -19,7 +19,7 @@ import {
   IndexKeys,
   ReturnOf,
   ArgsOf,
-  KeysOfType1,
+  KeysOfType2,
 } from './types'
 
 declare global {
@@ -108,14 +108,17 @@ export interface ParamDataBase {
 type ShouldParamData<T> = T extends ParamDataBase
   ? T['info'] extends never ? never : T
   : never
-type DataUndefinedKeys<T extends { [k: string]: { data: any } }> = KeysOfType1<
+/** keys of an object where the data sub-object can be undefined */
+type DataUndefinedKeys<T extends { [k: string]: { data: any } }> = KeysOfType2<
   { [K in keyof T]: T[K]['data'] },
   undefined
 >
+/** makes a key optional if its data entry has type undefined */
 type HandleOptionalKeys<
   T extends { [k: string]: { data: any } },
   K extends keyof T = DataUndefinedKeys<T>
 > = MakeKeysOptional<T, K>
+/** Gets the params from the given tuple `T` and transforms for usage */
 type GetParams<
   T,
   Tp = OmitNever<

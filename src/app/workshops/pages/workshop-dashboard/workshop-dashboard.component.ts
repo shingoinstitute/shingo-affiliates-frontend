@@ -9,22 +9,22 @@ import {
 import { Component, OnInit } from '@angular/core'
 import { Router, ActivatedRoute } from '@angular/router'
 
-import { AuthService } from '../../services/auth/auth.service'
-import { Filter } from '../../services/filters/filter.abstract'
-import { User } from '../../shared/models/user.model'
-import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service'
+import { AuthService } from '~app/services/auth/auth.service'
+import { Filter } from '~app/services/filters/filter.abstract'
+import { User } from '~app/shared/models/user.model'
+import { WorkshopFilterFactory } from '~app/services/filters/workshops/workshop-filter-factory.service'
 import {
   WorkshopProperties,
   WorkshopService,
   Workshop,
-} from '../../services/workshop/workshop.service'
+} from '~app/services/workshop/workshop.service'
 
 import { Moment } from 'moment'
 import { FormControl, FormArray } from '@angular/forms'
-import { just, nothing, map as mapMaybe } from '../../util/functional/Maybe'
-import { DateRange } from '../../services/filters/workshops/workshop-date-range-filter'
-import { tuple, fst, constant } from '../../util/functional'
-import { filterMap, XOR, withoutTime } from '../../util/util'
+import { just, nothing, map as mapMaybe } from '~app/util/functional/Maybe'
+import { DateRange } from '~app/services/filters/workshops/workshop-date-range-filter'
+import { tuple, fst, constant } from '~app/util/functional'
+import { filterMap, XOR, withoutTime } from '~app/util/util'
 
 const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
   f.criteria = criteria
