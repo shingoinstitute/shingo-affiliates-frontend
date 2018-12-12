@@ -943,8 +943,15 @@ export class Workshop extends SFObject {
     super()
     if (workshop) {
       Object.assign(this, workshop)
-      this.Local_Start_Time__c = formatTime(this.Local_Start_Time__c)
-      this.Local_End_Time__c = formatTime(this.Local_End_Time__c)
+      // existing workshops will not have Local_{Start,End}_Time__c or Timezone__c defined
+      // until we go back and retroactively fill them in salesforce, we will have this null check
+      if (!this.Timezone__c) this.Timezone__c = 'Etc/UTC'
+      this.Local_Start_Time__c = formatTime(
+        this.Local_Start_Time__c || '08:00:00.000Z',
+      )
+      this.Local_End_Time__c = formatTime(
+        this.Local_End_Time__c || '17:00:00.000Z',
+      )
       this.Organizing_Affiliate__r = new Affiliate(
         workshop.Organizing_Affiliate__r,
       )
