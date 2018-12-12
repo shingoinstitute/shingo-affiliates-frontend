@@ -1,14 +1,32 @@
-<mat-toolbar color="primary" class="elevated" [ngClass]="{'logged-in-as': isLoggedInAs()}">
-  <img [style.height]="'150px'" src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png">
+<mat-toolbar
+  color="primary"
+  class="elevated"
+  [ngClass]="{ 'logged-in-as': isLoggedInAs() }"
+  style="overflow: hidden;"
+>
+  <img
+    [style.height]="'150px'"
+    src="https://res.cloudinary.com/shingo/image/upload/v1478120909/ShingoLogos/mixed-logos-white.png"
+  />
   <span fxFlex>
-    <div style="font-family: monospace; text-align: center;" *ngIf="isLoggedInAs()">Logged in as <strong>{{getLoggedInInfo()}}</strong></div>
+    <div
+      style="font-family: monospace; text-align: center;"
+      *ngIf="isLoggedInAs()"
+    >
+      Logged in as <strong>{{ getLoggedInInfo() }}</strong>
+    </div>
   </span>
 
   <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isAuthenticated">
     <mat-icon>account_circle</mat-icon>
   </button>
 
-  <button aria-label="Toggle sidenav" *ngIf="media.isActive('lt-md')" mat-icon-button (click)="sidenav.toggle()">
+  <button
+    aria-label="Toggle sidenav"
+    *ngIf="media.isActive('lt-md')"
+    mat-icon-button
+    (click)="sidenav.toggle()"
+  >
     <mat-icon aria-label="Sidenav toggle icon">menu</mat-icon>
   </button>
 
@@ -24,39 +42,65 @@
       <span>Logout</span>
     </button>
   </mat-menu>
-
 </mat-toolbar>
-<mat-sidenav-container ngClass="sidenav-container" [ngClass.lt-sm]="{ 'sidenav-container-lt-sm': true, 'sidenav-container': false }">
-  <mat-sidenav #sidenav fixedInViewport="true" fixedTopGap="64" [attr.role]="media.isActive('lt-md') ? 'dialog' : 'navigation'"
-    [mode]="media.isActive('lt-md') ? 'over' : 'side'" [opened]="!media.isActive('lt-md')">
+<mat-sidenav-container
+  ngClass="sidenav-container"
+  [ngClass.lt-sm]="{
+    'sidenav-container-lt-sm': true,
+    'sidenav-container': false
+  }"
+>
+  <mat-sidenav
+    #sidenav
+    fixedInViewport="true"
+    fixedTopGap="64"
+    [attr.role]="media.isActive('lt-md') ? 'dialog' : 'navigation'"
+    [mode]="media.isActive('lt-md') ? 'over' : 'side'"
+    [opened]="!media.isActive('lt-md')"
+  >
     <mat-nav-list>
       <ng-container *ngIf="isAuthenticated">
         <p class="nav-list-title">Main Menu</p>
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
+          >Dashboard</a
+        >
         <mat-divider></mat-divider>
-        <a mat-list-item routerLink="/workshops" routerLinkActive="active">Workshops</a>
+        <a mat-list-item routerLink="/workshops" routerLinkActive="active"
+          >Workshops</a
+        >
         <mat-divider></mat-divider>
-        <ng-container *ngIf="auth.user && auth.user.isAdmin">
-          <a mat-list-item routerLink="/admin/affiliates" routerLinkActive="active">Admin
-            Panel</a>
+        <ng-container *ngIf="auth.user?.isAdmin">
+          <a
+            mat-list-item
+            routerLink="/admin/affiliates"
+            routerLinkActive="active"
+            >Admin Panel</a
+          >
           <mat-divider></mat-divider>
         </ng-container>
         <p class="nav-list-title">Affiliate Materials</p>
-        <a mat-list-item nohref (click)="openMaterials('workshops')">Workshop
-          Materials</a>
+        <a mat-list-item nohref (click)="openMaterials('workshops')"
+          >Workshop Materials</a
+        >
         <mat-divider></mat-divider>
-        <a mat-list-item nohref (click)="openMaterials('forms')">Forms/Evaluations</a>
+        <a mat-list-item nohref (click)="openMaterials('forms')"
+          >Forms/Evaluations</a
+        >
         <mat-divider></mat-divider>
-        <a mat-list-item nohref (click)="openMaterials('marketing')">Marketing
-          Materials</a>
+        <a mat-list-item nohref (click)="openMaterials('marketing')"
+          >Marketing Materials</a
+        >
         <mat-divider></mat-divider>
       </ng-container>
 
       <p class="nav-list-title">Support</p>
       <a mat-list-item routerLink="/support">Support Home</a>
       <mat-divider></mat-divider>
-      <mat-expansion-panel class="mat-elevation-z nav-support-category" *ngFor="let category of supportCategories"
-        [style.border-bottom]="'1px solid lightgrey'">
+      <mat-expansion-panel
+        class="mat-elevation-z nav-support-category"
+        *ngFor="let category of supportCategories"
+        [style.border-bottom]="'1px solid lightgrey'"
+      >
         <mat-expansion-panel-header>
           <mat-panel-title class="panel-title">
             {{ category }}
@@ -64,12 +108,15 @@
         </mat-expansion-panel-header>
 
         <mat-list *ngIf="supportCategoryPages[category]">
-          <mat-list-item *ngFor="let page of supportCategoryPages[category]" class="nav-support-list-item">
-            <a class="mat-caption" routerLink="/support/{{ page.Id }}">{{ page.title
-              }}</a>
+          <mat-list-item
+            *ngFor="let page of supportCategoryPages[category]"
+            class="nav-support-list-item"
+          >
+            <a class="mat-caption" routerLink="/support/{{ page.Id }}">{{
+              page.title
+            }}</a>
           </mat-list-item>
         </mat-list>
-
       </mat-expansion-panel>
     </mat-nav-list>
   </mat-sidenav>

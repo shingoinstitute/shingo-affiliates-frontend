@@ -24,7 +24,7 @@ import { FormControl, FormArray } from '@angular/forms'
 import { just, nothing, map as mapMaybe } from '../../util/functional/Maybe'
 import { DateRange } from '../../services/filters/workshops/workshop-date-range-filter'
 import { tuple, fst, constant } from '../../util/functional'
-import { filterMap, XOR } from '../../util/util'
+import { filterMap, XOR, withoutTime } from '../../util/util'
 
 const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
   f.criteria = criteria
@@ -181,7 +181,7 @@ export class WorkshopDashboardComponent implements OnInit {
       tuple(
         setFilterState(
           this.filterFactory.createDateRangeFilter('by Upcoming Workshops'),
-          [new Date().withoutTime(), null],
+          [withoutTime(new Date()), null],
           true,
         ),
         this.toggleDisabled('by Action Pending', 'by Archived', 'by Date'),

@@ -7,7 +7,6 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { WorkshopsModule } from '../workshops/workshops.module'
 import { AdminPanelModule } from './admin-panel/admin-panel.module'
 
-import { DashboardComponent } from './dashboard/dashboard.component'
 import { LoginComponent } from './user-auth/login/login.component'
 import { FormsEvalsComponent } from './materials/forms-evals/forms-evals.component'
 import { MarketingMaterialsComponent } from './materials/marketing-materials/marketing-materials.component'
@@ -37,6 +36,10 @@ import {
   MatTreeModule,
 } from '@angular/material'
 import { FileTreeComponent } from './file-tree/file-tree.component'
+import {
+  TimezoneMapComponent,
+  DataTzidDirective,
+} from './timezone-picker/timezone-map.component'
 
 @NgModule({
   imports: [
@@ -58,11 +61,9 @@ import { FileTreeComponent } from './file-tree/file-tree.component'
     MatTreeModule,
 
     FlexLayoutModule,
-    WorkshopsModule,
     AdminPanelModule,
   ],
   declarations: [
-    DashboardComponent,
     LoginComponent,
     FormsEvalsComponent,
     MarketingMaterialsComponent,
@@ -77,9 +78,10 @@ import { FileTreeComponent } from './file-tree/file-tree.component'
     ForbiddenPageComponent,
     PageNotFoundComponent,
     FileTreeComponent,
+    TimezoneMapComponent,
+    DataTzidDirective,
   ],
   exports: [
-    DashboardComponent,
     LoginComponent,
     FormsEvalsComponent,
     MarketingMaterialsComponent,
@@ -90,6 +92,7 @@ import { FileTreeComponent } from './file-tree/file-tree.component'
     MaterialsDialog,
     MatDatepickerModule,
     FileTreeComponent,
+    TimezoneMapComponent,
   ],
   entryComponents: [ChangePasswordDialog, MaterialsDialog],
 })

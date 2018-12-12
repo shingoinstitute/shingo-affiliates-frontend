@@ -124,11 +124,81 @@ export const mapOnMaybeC = <A, B>(f: (a: A) => Maybe<B>) => (as: A[]): B[] =>
 
 export const catMaybes = <A>(as: Array<Maybe<A>>): A[] => mapOnMaybe(as, id)
 
+/**
+ * Partitions an iterable into two arrays
+ *
+ * If the given function returns a Left for some value,
+ * that value is added to the left array,
+ * otherwise the value is added to the right array
+ *
+ * @param fa some iterable
+ * @param f the discriminator function
+ */
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => Either<L, R>,
+): { left: L[]; right: R[] }
+/**
+ * Partitions an iterable into two arrays
+ *
+ * If the given function returns false for some value,
+ * that value is added to the left array,
+ * otherwise the value is added to the right array
+ *
+ * @param fa some iterable
+ * @param f the discriminator function
+ */
+export function partitionMap<A>(
+  fa: Iterable<A>,
+  f: (a: A) => boolean,
+): { left: A[]; right: A[] }
+/**
+ * Partitions an iterable into two arrays
+ *
+ * If the given function returns a Left or false for some value,
+ * that value is added to the left array,
+ * otherwise it the value is added to the right array
+ *
+ * @param fa some iterable
+ * @param f the discriminator function
+ */
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => boolean | Either<L, R>,
+): { left: Array<A | L>; right: Array<A | R> }
+export function partitionMap<A, L, R>(
+  fa: Iterable<A>,
+  f: (a: A) => boolean | Either<L, R>,
+): { left: Array<A | L>; right: Array<A | R> } {
+  const left: Array<A | L> = []
+  const right: Array<A | R> = []
+
+  for (const a of fa) {
+    const e = f(a)
+    if (typeof e === 'boolean') {
+      if (e) {
+        right.push(a)
+      } else {
+        left.push(a)
+      }
+    } else {
+      if (isLeft(e)) {
+        left.push(e[1])
+      } else {
+        right.push(e[1])
+      }
+    }
+  }
+
+  return { left, right }
+}
+
 // sanity check for the module
 import * as module from './Array'
 import { the } from './types'
 import { Functor1 } from './structures/Functor'
 import { Foldable1 } from './structures/Foldable'
+import { Either, isLeft } from './Either'
 
 the<Functor1<URI>, typeof module>()
 the<Foldable1<URI>, typeof module>()

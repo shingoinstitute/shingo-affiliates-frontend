@@ -5,5 +5,8 @@
   "team.teamProject": "Affiliate Portal",
   "editor.minimap.maxColumn": 60,
   "editor.minimap.enabled": false,
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.formatOnPaste": true
 }

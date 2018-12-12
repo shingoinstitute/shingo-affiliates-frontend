@@ -133,75 +133,6 @@ mat-nav-list p {
 }
 
 /* Misc */
-// button mat-icon ~ span { margin-left: 4px; }
-// .mat-sort-header-container{
-//    display: flex;
-//    cursor: pointer
-// }
-// .mat-sort-header-position-before { flex-direction: row-reverse }
-// .mat-sort-header-button {
-//    border: none;
-//    background:0 0;
-//    display: flex;
-//    align-items: center;
-//    padding: 0;
-//    cursor: pointer;
-//    outline: 0;
-//    font: inherit;
-//    color: currentColor
-// }
-// .mat-sort-header-arrow {
-//    display: none;
-//    height: 10px;
-//    width: 10px;
-//    position: relative;
-//    margin: 0 0 0 6px
-// }
-// .mat-sort-header-position-before .mat-sort-header-arrow {
-//    margin:0 6px 0 0
-// }
-// .mat-sort-header-asc {
-//    display: block;
-//    transform: rotate(45deg)
-// }
-// .mat-sort-header-desc {
-//    display: block;
-//    transform: rotate(225deg);
-//    top: 2px;
-// }
-// .mat-sort-header-stem {
-//    background: currentColor;
-//    transform: rotate(135deg);
-//    height: 10px;
-//    width: 2px;
-//    margin: auto
-// }
-// .mat-sort-header-pointer-left {
-//    background: currentColor;
-//    width: 2px;
-//    height: 8px;
-//    position: absolute;
-//    bottom: 0;
-//    right: 0
-// }
-// .mat-sort-header-pointer-right {
-//    background: currentColor;width:8px;height:2px;position:absolute;bottom:0;right:0
-// }
-// mat-row mat-cell,
-// mat-header-row mat-header-cell {
-//    padding: 0 24px 0 4px;
-// }
-// mat-row mat-cell:last-child,
-// mat-header-row mat-header-cell:last-child {
-//    padding-left: -4px;
-// }
-// mat-row mat-cell:first-child,
-// mat-header-row mat-header-cell:first-child {
-//    padding: 0;
-//    margin-right: 16px;
-// }
-// mat-cell > p { margin: 4px 0 4px 0;}
-// mat-row { height: 56px; }
 .hidden {
   display: none !important;
 }
@@ -241,34 +172,6 @@ mat-nav-list p {
   flex-direction: row;
   flex: 1 0 auto;
 }
-// mat-form-field {
-//   flex: 1 0 auto;
-// }
-// mat-table.admin-data-table {
-//   mat-row {
-//     mat-cell {
-//       cursor: default;
-//     }
-//     mat-cell:not(.dt-actions-cell) {
-//       overflow: hidden;
-//     }
-//     mat-cell.dt-actions-cell {
-//       overflow: visible;
-//       padding-right: 0;
-//     }
-//     mat-cell.dt-email-cell:hover,
-//     mat-cell.dt-last-login-cell:hover,
-//     mat-cell.dt-name-cell:hover {
-//       display: inline-table;
-//       background-color: #efefef;
-//       z-index: 9999;
-//       padding-top: 4px;
-//       padding-bottom: 4px;
-//       border-radius: 4px;
-//       cursor: default;
-//     }
-//   }
-// }
 @media only screen and (max-width: $break-small) {
   mat-table.admin-data-table {
     width: $break-medium-1;
@@ -311,4 +214,17 @@ body {
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
+}
+
+// Material Angular Style Fixes
+
+// vertical chip lists overflow their container by a small amount (the internal left padding)
+// using width: fill-available fixes this, but we fall back to the original width: 100%
+// for browsers that do not support fill-available
+.mat-chip-list-stacked mat-chip.mat-standard-chip {
+  width: 100%;
+  width: -moz-available !important;
+  width: -webkit-fill-available !important;
+  width: -webkit-stretch !important;
+  width: strech !important;
 }

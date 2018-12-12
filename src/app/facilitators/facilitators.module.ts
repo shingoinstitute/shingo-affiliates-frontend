@@ -28,6 +28,7 @@ import {
   MatTooltipModule,
   MatProgressSpinnerModule,
 } from '@angular/material'
+import { FacilitatorFormPageComponent } from './facilitator-form-page.component'
 
 @NgModule({
   imports: [
@@ -58,13 +59,15 @@ import {
     AdminFacilitatorTabComponent,
     FacilitatorDataTableComponent,
     FacilitatorFormComponent,
+    FacilitatorFormPageComponent,
   ],
   exports: [
     AdminFacilitatorTabComponent,
     FacilitatorDataTableComponent,
     FacilitatorFormComponent,
+    FacilitatorFormPageComponent,
   ],
-  entryComponents: [FacilitatorFormComponent],
+  entryComponents: [FacilitatorFormPageComponent],
 })
 export default class FacilitatorsModule {}
 
@@ -72,6 +75,7 @@ export {
   FacilitatorsModule,
   FacilitatorDataTableComponent,
   FacilitatorFormComponent,
+  FacilitatorFormPageComponent,
   AdminFacilitatorTabComponent,
 }
 

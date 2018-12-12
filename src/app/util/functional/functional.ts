@@ -226,3 +226,9 @@ flipC(fn5)
 export const tuple = <T extends any[]>(...args: T): T => args
 export const fst = <A>(t: [A, ...any[]]) => t[0]
 export const snd = <A, B>(t: [A, B, ...any[]]) => t[1]
+
+export const gt = (a: number, b: number) => a > b
+export const eq = (a: number, b: number) => a === b
+export const lt = (a: number, b: number) => a < b
+export const lte = (a: number, b: number) => a <= b
+export const gte = (a: number, b: number) => a >= b

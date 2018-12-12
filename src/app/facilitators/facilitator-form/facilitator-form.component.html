@@ -1,84 +1,147 @@
-<form class="form-container" [formGroup]="formGroup" [class.loading-active]="isLoading" #formContainer id="disable-lastpass-search">
-
-  <div class="spinner-container" fxLayout fxLayoutAlign="center center">
-    <mat-spinner diameter="48" color="accent" *ngIf="isLoading"></mat-spinner>
-  </div>
-
+<ng-template #actions>
   <div class="form-actions">
-    <ng-container *ngIf="isDialog">
-      <button mat-raised-button type="button" class="mat-accent" [mat-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
-        Save </button>
-      <button mat-raised-button type="button" [mat-dialog-close]="false"> Cancel </button>
-    </ng-container>
-
-    <ng-container *ngIf="!isDialog">
-      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
-        Save </button>
-      <button mat-raised-button type="button" (click)="location.back()"> Cancel </button>
-    </ng-container>
+    <button
+      mat-raised-button
+      type="button"
+      class="mat-accent"
+      (click)="onSave()"
+      [disabled]="!formGroup.valid"
+    >
+      {{ getButtonString(action) }}
+    </button>
+    <button mat-raised-button type="button" (click)="location.back()">
+      Cancel
+    </button>
   </div>
+</ng-template>
+
+<form
+  class="form-container"
+  [formGroup]="formGroup"
+  [class.loading-active]="pending"
+  id="disable-lastpass-search"
+>
+  <div class="spinner-container" fxLayout fxLayoutAlign="center center">
+    <mat-spinner diameter="48" color="accent" *ngIf="pending"></mat-spinner>
+  </div>
+
+  <ng-container *ngTemplateOutlet="actions"></ng-container>
 
   <div class="form-header">
-    <h3> Facilitator Form </h3>
+    <h3>Facilitator Form</h3>
+    <p *ngIf="facId !== ''">Salesforce ID: {{ facId }}</p>
   </div>
 
   <div class="input-item">
-    <app-sf-lookup placeholder="Email" [sfObject]="facilitator" formControlName="email" [displayFn]="displayFn.bind(this)"
-      [extraArgs]="false" (selected)="onSelectFacilitator($event)" (changed)="facilitator.email = $event"></app-sf-lookup>
+    <app-search
+      [displayWith]="displayFn"
+      [searchFn]="facilitatorSearch"
+      (selected)="onSelectFacilitator($event)"
+      placeholder="Search Existing..."
+    ></app-search>
   </div>
 
   <div class="input-item">
     <mat-form-field>
-      <input matInput [(ngModel)]="facilitator.firstName" placeholder="First Name" formControlName="firstName" required>
+      <input
+        matInput
+        placeholder="Email"
+        formControlName="email"
+        required
+        type="email"
+      />
+      <mat-error *ngIf="formGroup.controls['email'].hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="formGroup.controls['email'].hasError('email')">
+        Email must be a valid email address
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="input-item">
     <mat-form-field>
-      <input matInput [(ngModel)]="facilitator.lastName" placeholder="Last Name" formControlName="lastName" required>
+      <input
+        matInput
+        placeholder="First Name"
+        formControlName="firstName"
+        required
+      />
+      <mat-error *ngIf="formGroup.controls['firstName'].hasError('required')">
+        First Name is required
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="input-item">
     <mat-form-field>
-      <input matInput [(ngModel)]="facilitator.title" formControlName="title" placeholder="Title">
+      <input
+        matInput
+        placeholder="Last Name"
+        formControlName="lastName"
+        required
+      />
+      <mat-error *ngIf="formGroup.controls['lastName'].hasError('required')">
+        Last Name is required
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="input-item">
-    <div class="facilitator-img">
-      <img src="{{ facilitator.photo }}">
+    <mat-form-field>
+      <input matInput formControlName="title" placeholder="Title" />
+    </mat-form-field>
+  </div>
+
+  <div class="input-item">
+    <div
+      *ngIf="!formGroup.controls['photo'].hasError('url')"
+      class="facilitator-img"
+    >
+      <img [src]="formGroup.controls['photo'].value" alt="Photograph" />
     </div>
 
     <mat-form-field>
-      <input matInput [(ngModel)]="facilitator.photo" formControlName="photo" placeholder="Photograph URL">
+      <input matInput formControlName="photo" placeholder="Photograph URL" />
+      <mat-error *ngIf="formGroup.controls['photo'].hasError('url')">
+        Photograph URL must be a valid url
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="input-item">
-    <app-sf-lookup formControlName="affiliate" (selected)="onSelectAffiliate($event)" [sfObject]="facilitator.affiliate"
-      [displayFn]="displayFn.bind(this)" placeholder="Affiliate"></app-sf-lookup>
+    <app-search
+      formControlName="affiliate"
+      [displayWith]="displayFn"
+      [searchFn]="affiliateSearch"
+      placeholder="Affiliate *"
+    ></app-search>
+    <mat-error
+      *ngIf="
+        formGroup.controls['affiliate'].touched &&
+        formGroup.controls['affiliate'].hasError('required')
+      "
+    >
+      Affiliate is required
+    </mat-error>
   </div>
 
   <div class="input-item">
-    <p class="mat-caption">*Facilitators must be assigned an affiliate to change their role type.</p>
-    <mat-select [(ngModel)]="facilitator.role" placeholder="Role" formControlName="role">
-      <mat-option *ngFor="let role of roles" [value]="role"> {{ role }}</mat-option>
-    </mat-select>
+    <p class="mat-caption">
+      *Facilitators must be assigned an affiliate to change their role type.
+    </p>
+    <mat-form-field>
+      <mat-select placeholder="Role" formControlName="role">
+        <mat-option *ngFor="let role of roles" [value]="role">
+          {{ role }}</mat-option
+        >
+      </mat-select>
+
+      <mat-error *ngIf="formGroup.controls['role'].hasError('required')">
+        Role is required
+      </mat-error>
+    </mat-form-field>
   </div>
 
-  <div class="form-actions">
-    <ng-container *ngIf="isDialog">
-      <button mat-raised-button type="button" class="mat-accent" [mat-dialog-close]="facilitator" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
-        Save </button>
-      <button mat-raised-button type="button" [mat-dialog-close]="false"> Cancel </button>
-    </ng-container>
-
-    <ng-container *ngIf="!isDialog">
-      <button mat-raised-button type="button" class="mat-accent" (click)="onSave()" [disabled]="!formGroup.valid || facilitator.affiliate.sfId == ''">
-        Save </button>
-      <button mat-raised-button type="button" (click)="location.back()"> Cancel </button>
-    </ng-container>
-  </div>
-
+  <ng-container *ngTemplateOutlet="actions"></ng-container>
 </form>

@@ -8,7 +8,7 @@ mat-form-field {
   width: 100%;
 }
 form .input-item:nth-child(even) {
-  background-color: $row-background-color;
+  background-color: #eee;
 }
 .form-actions {
   margin: ($default-margin * 2) 0 ($default-margin * 2) 0;

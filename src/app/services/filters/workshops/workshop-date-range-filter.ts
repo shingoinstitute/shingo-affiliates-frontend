@@ -1,21 +1,23 @@
 import { Filter } from '../filter.abstract'
 import { Workshop } from '../../../workshops/workshop.model'
 import { and, constant } from '../../../util/functional'
+import { withoutTime } from '../../../util/util'
+import { Moment } from 'moment'
 
 // tslint:disable-next-line:prettier
 // prettier-ignore
-export type DateRange = [(Date | null)?, (Date | null)?]
+export type DateRange = [(Date | Moment | null)?, (Date | Moment | null)?]
 
 export class WorkshopDateRangeFilter extends Filter<Workshop, DateRange> {
   constructor(name: string) {
     super(name)
   }
 
-  private _endsBefore = (d: Date) => (w: Workshop) =>
-    this.lessThanWithoutTime(new Date(w.endDate), new Date(d))
+  private _endsBefore = (d: Date | Moment) => (w: Workshop) =>
+    this.lessThanWithoutTime(w.endDate, d)
 
-  private _startsAfter = (d: Date) => (w: Workshop) =>
-    this.greaterThanWithoutTime(new Date(w.startDate), new Date(d))
+  private _startsAfter = (d: Date | Moment) => (w: Workshop) =>
+    this.greaterThanWithoutTime(w.startDate, d)
 
   _filter = (range: DateRange) => {
     const startsAfter = range[0]
@@ -31,15 +33,11 @@ export class WorkshopDateRangeFilter extends Filter<Workshop, DateRange> {
     return constant(true)
   }
 
-  public greaterThanWithoutTime(a: Date, b: Date): boolean {
-    a.setHours(0, 0, 0, 0)
-    b.setHours(0, 0, 0, 0)
-    return a >= b
+  public greaterThanWithoutTime(a: Date | Moment, b: Date | Moment): boolean {
+    return withoutTime(a) >= withoutTime(b)
   }
 
-  public lessThanWithoutTime(a: Date, b: Date): boolean {
-    a.setHours(0, 0, 0, 0)
-    b.setHours(0, 0, 0, 0)
-    return a <= b
+  public lessThanWithoutTime(a: Date | Moment, b: Date | Moment): boolean {
+    return withoutTime(a) <= withoutTime(b)
   }
 }

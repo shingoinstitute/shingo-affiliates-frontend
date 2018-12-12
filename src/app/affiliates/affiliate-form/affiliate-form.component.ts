@@ -1,247 +1,251 @@
-import { map } from 'rxjs/operators'
+import { map, startWith } from 'rxjs/operators'
 import {
   Component,
   OnInit,
   Input,
-  Inject,
-  Optional,
-  ElementRef,
-  ViewChild,
   OnDestroy,
-  AfterViewInit,
+  Output,
+  EventEmitter,
 } from '@angular/core'
 import { Location } from '@angular/common'
-import { FormGroup, FormBuilder, Validators } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
-import { MAT_DIALOG_DATA, MatSnackBar } from '@angular/material'
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 
 import { Affiliate } from '../affiliate.model'
 import {
   AffiliateService,
   DEFAULT_AFFILIATE_SEARCH_FIELDS,
 } from '../../services/affiliate/affiliate.service'
-import { AffiliateFormState, State } from './affiliate-form-state.class'
 
-import { Subscription } from 'rxjs'
+import { Subscription, Observable, of } from 'rxjs'
 import { CustomValidators } from 'ng2-validation'
 
 // Lodash functions
-import { merge } from 'lodash'
+import { normalizeString, getFormValidationErrors } from '../../util/util'
 
-declare var $: any
+export type FormAction = 'create' | 'map' | 'update'
+export interface AffiliateForm {
+  action: FormAction
+  id: string
+  logo?: string
+  name: string
+  website?: string
+  publicContact?: string
+  publicContactEmail?: string
+  publicContactPhone?: string
+  languages?: string[]
+}
+
+export const transitionState = (current: FormAction): FormAction => {
+  switch (current) {
+    case 'create':
+      return 'map'
+    default:
+      return current
+  }
+}
+
+export const addToAffiliate = (
+  form: AffiliateForm,
+  affiliate = new Affiliate(),
+) => {
+  if (form.id) affiliate.Id = form.id
+  if (form.name) affiliate.Name = form.name
+  if (form.logo) affiliate.Logo__c = form.logo
+  if (form.website) affiliate.Website = form.website
+  if (form.publicContact) affiliate.Public_Contact__c = form.publicContact
+  if (form.publicContactEmail)
+    affiliate.Public_Contact_Email__c = form.publicContactEmail
+  if (form.publicContactPhone)
+    affiliate.Public_Contact_Phone__c = form.publicContactPhone
+  if (form.languages) affiliate.languages = form.languages
+
+  return affiliate
+}
+
+export function handleAffiliateAction(
+  action: 'map',
+  affiliate: Affiliate,
+  affService: AffiliateService,
+): ReturnType<AffiliateService['map']>
+export function handleAffiliateAction(
+  action: 'update',
+  affiliate: Affiliate,
+  affService: AffiliateService,
+): ReturnType<AffiliateService['update']>
+export function handleAffiliateAction(
+  action: 'create',
+  affiliate: Affiliate,
+  affService: AffiliateService,
+): ReturnType<AffiliateService['create']>
+export function handleAffiliateAction(
+  action: FormAction,
+  affiliate: Affiliate,
+  affService: AffiliateService,
+):
+  | ReturnType<AffiliateService['map']>
+  | ReturnType<AffiliateService['create']>
+  | ReturnType<AffiliateService['update']>
+export function handleAffiliateAction(
+  action: FormAction,
+  affiliate: Affiliate,
+  affService: AffiliateService,
+):
+  | ReturnType<AffiliateService['map']>
+  | ReturnType<AffiliateService['create']>
+  | ReturnType<AffiliateService['update']> {
+  switch (action) {
+    case 'create':
+      return affService.create(affiliate)
+    case 'update':
+      return affService.update(affiliate)
+    case 'map':
+      return affService.map(affiliate)
+  }
+}
 
 @Component({
   selector: 'app-affiliate-form',
   templateUrl: './affiliate-form.component.html',
   styleUrls: ['./affiliate-form.component.scss'],
 })
-export class AffiliateFormComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class AffiliateFormComponent implements OnInit, OnDestroy {
+  private _id = ''
+  get affId() {
+    return (this.initialAffiliate && this.initialAffiliate.Id) || this._id
+  }
+
+  private _initialAffiliate?: Affiliate
+  @Input('affiliate')
+  get initialAffiliate() {
+    return this._initialAffiliate
+  }
+  set initialAffiliate(data: Affiliate | undefined) {
+    if (data) {
+      this._initialAffiliate = data
+      this.patchValue(data)
+      this.action = transitionState(this.action)
+    }
+  }
+
   @Input()
-  public affiliate: Affiliate = new Affiliate()
+  action: FormAction = 'create'
+  @Input()
+  pending = false
+  @Output()
+  submitted = new EventEmitter<AffiliateForm>()
 
-  @ViewChild('formContainer')
-  public formContainer!: ElementRef
-
-  public extraFields: string[] = [
+  private extraFields: string[] = [
     'Public_Contact__c',
     'Public_Contact_Email__c',
     'Public_Contact_Phone__c',
-  ].concat(DEFAULT_AFFILIATE_SEARCH_FIELDS)
+    ...DEFAULT_AFFILIATE_SEARCH_FIELDS,
+  ]
 
-  public state!: AffiliateFormState
-  public languages: string[] = Affiliate.DEFAULT_LANGUAGE_OPTIONS
-  public languageOptions: any
-  public isLoading = false
-  public isDialog!: boolean
-  public routeSubscription!: Subscription
-  public affForm!: FormGroup
-  public affiliateSummary!: string
+  private routeSubscription?: Subscription
+  affForm!: FormGroup
+  languages$ = of([] as string[])
+
+  languageFilterControl = new FormControl()
 
   constructor(
-    @Optional()
-    @Inject(MAT_DIALOG_DATA)
-    public data: any,
-    public _as: AffiliateService,
-    public snackbar: MatSnackBar,
     public location: Location,
-    public route: ActivatedRoute,
-    public fb: FormBuilder,
+    private _as: AffiliateService,
+    private fb: FormBuilder,
   ) {
-    this.buildForm()
-    this.languageOptions = this.affForm.controls.langControl.valueChanges.pipe(
-      map(val => this.filterLanguages(val)),
+    this.languages$ = this.languageFilterControl.valueChanges.pipe(
+      startWith(''),
+      map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
+      map(value =>
+        Affiliate.DEFAULT_LANGUAGE_OPTIONS.filter(l =>
+          normalizeString(l)
+            .toLocaleLowerCase()
+            .includes(normalizeString(value).toLocaleLowerCase()),
+        ),
+      ),
     )
   }
 
-  public ngOnInit() {
-    if (this.data) {
-      this.isDialog = this.data.isDialog
-      this.affiliate = this.data.affiliate
-    }
-
-    if (!this.affiliate.sfId) {
-      this.affiliate = new Affiliate()
-      this.routeSubscription = this.route.params.subscribe(route => {
-        const id = route['id']
-        if (typeof id === 'string' && id !== 'create') {
-          this.getSFObject(id)
-          this.state = new AffiliateFormState(State.Updating)
-        } else {
-          this.state = new AffiliateFormState(State.Creating)
-        }
-      })
-    }
+  ngOnInit() {
+    this.affForm = this.buildForm()
   }
 
-  public ngAfterViewInit() {
-    // center element if it's not a dialog box
-    // if (!this.isDialog) {
-    //   $(this.formContainer.nativeElement).css('margin', '0 auto')
-    // }
-  }
-
-  public ngOnDestroy() {
+  ngOnDestroy() {
     if (this.routeSubscription) this.routeSubscription.unsubscribe()
   }
 
-  public buildForm() {
-    this.affForm = this.fb.group({
-      affiliate: [this.affiliate || new Affiliate(), Validators.required],
-      logo: [this.affiliate.logo],
-      website: [this.affiliate.website, CustomValidators.url],
-      publicContact: [this.affiliate.publicContact],
-      publicContactEmail: [this.affiliate.publicContactEmail, Validators.email],
-      publicContactPhone: [this.affiliate.publicContactPhone],
-      langControl: [''],
-    })
-  }
+  affiliateSearch = (query: string): Observable<Affiliate[]> =>
+    this._as.search(query, this.extraFields)
 
-  public selectedAffiliate(affiliate: Affiliate) {
-    this.affiliate = affiliate
-    this.affForm.patchValue({
-      logo: this.affiliate.logo,
-      website: this.affiliate.website,
-      publicContact: this.affiliate.publicContact,
-      publicContactEmail: this.affiliate.publicContactEmail,
-      publicContactPhone: this.affiliate.publicContactPhone,
-    })
-    this.state.next()
-  }
+  getFormErrors = getFormValidationErrors
 
-  public getSFObject(id: string) {
-    this.isLoading = true
-    this._as.getById(id).subscribe(
-      (affiliate: Affiliate) => {
-        this.affiliate = affiliate ? affiliate : new Affiliate()
-        this.affForm.patchValue({
-          logo: this.affiliate.logo,
-          website: this.affiliate.website,
-          publicContact: this.affiliate.publicContact,
-          publicContactEmail: this.affiliate.publicContactEmail,
-          publicContactPhone: this.affiliate.publicContactPhone,
-        })
-        this.affForm.controls.affiliate.patchValue({ sfObject: this.affiliate })
-        this.isLoading = false
-        this.languageOptions = this.affForm.controls.langControl.valueChanges.pipe(
-          map(val => this.filterLanguages(val)),
-        )
-      },
-      err => {
-        console.error(err)
-        this.isLoading = false
-      },
-    )
-  }
-
-  public filterLanguages(val: string) {
-    return val
-      ? this.languages.filter(
-          s => s.toLowerCase().indexOf(val.toLowerCase()) === 0,
-        )
-      : this.languages
-  }
-
-  public onSelectLanguage(lang: string) {
-    this.affiliate.addLanguage(lang)
-    this.affForm.controls.langControl.setValue(null)
-  }
-
-  public removeLanguage(lang: string) {
-    this.affiliate.removeLangauge(lang)
-  }
-
-  public onSave() {
-    this.snackbar.open('Saving Changes...')
-    merge(this.affiliate, this.affForm.value)
-    switch (this.state.state) {
-      case State.Creating:
-        this.create()
-        break
-      case State.Mapping:
-        this.map()
-        break
-      case State.Updating:
-        this.update()
-        break
+  getButtonString(state: FormAction): string {
+    switch (state) {
+      case 'create':
+        return 'Save New'
+      case 'map':
+        return 'Add Existing to Portal'
+      case 'update':
+        return 'Update'
     }
   }
 
-  public map() {
-    this._as.map(this.affiliate).subscribe(
-      data => {
-        this.snackbar.open('Successfully mapped a new Affiliate', undefined, {
-          duration: 2000,
-        })
-        if (!this.isDialog) {
-          this.location.back()
-        }
-      },
-      err => {
-        this.handleError(err)
-      },
-    )
+  private buildForm() {
+    const affForm = this.fb.group({
+      name: [
+        this.initialAffiliate && this.initialAffiliate.Name,
+        Validators.required,
+      ],
+      logo: [
+        this.initialAffiliate && this.initialAffiliate.Logo__c,
+        CustomValidators.url,
+      ],
+      website: [
+        this.initialAffiliate && this.initialAffiliate.Website,
+        CustomValidators.url,
+      ],
+      publicContact: [
+        this.initialAffiliate && this.initialAffiliate.Public_Contact__c,
+      ],
+      publicContactEmail: [
+        this.initialAffiliate && this.initialAffiliate.Public_Contact_Email__c,
+        Validators.email,
+      ],
+      publicContactPhone: [
+        this.initialAffiliate && this.initialAffiliate.Public_Contact_Phone__c,
+      ],
+      languages: [
+        (this.initialAffiliate && this.initialAffiliate.languages) || [],
+      ],
+    })
+    return affForm
   }
 
-  public create() {
-    this._as.create(this.affiliate).subscribe(
-      data => {
-        this.snackbar.open('Successfully created new Affiliate', undefined, {
-          duration: 2000,
-        })
-        if (!this.isDialog) {
-          this.location.back()
-        }
-      },
-      err => {
-        this.handleError(err)
-      },
-    )
+  private patchValue(affiliate: Affiliate) {
+    if (!this.affForm) return
+    this._id = affiliate.Id
+    this.affForm.patchValue({
+      logo: affiliate.Logo__c,
+      name: affiliate.Name,
+      website: affiliate.Website,
+      publicContact: affiliate.Public_Contact__c,
+      publicContactEmail: affiliate.Public_Contact_Email__c,
+      publicContactPhone: affiliate.Public_Contact_Phone__c,
+      languages: affiliate.languages,
+    })
   }
 
-  public update() {
-    this._as.update(this.affiliate).subscribe(
-      data => {
-        this.snackbar.open('Update Successful', undefined, { duration: 2000 })
-        if (!this.isDialog) {
-          this.location.back()
-        }
-      },
-      err => {
-        this.handleError(err)
-      },
-    )
+  selectedAffiliate(affiliate?: Affiliate) {
+    this.initialAffiliate = affiliate
   }
 
-  public handleError(err: any) {
-    console.error(err)
-    this.snackbar.open(
-      'An error occurred and the requested operation could not be completed.',
-      'Okay',
-    )
+  onSave() {
+    const form = this.affForm.value as AffiliateForm
+    form.action = this.action
+    form.id = this.affId
+    this.submitted.emit(form)
   }
 
-  public displayFn(affilate: Affiliate) {
+  displayFn = (affilate?: Affiliate) => {
     return affilate ? affilate.name : ''
   }
 }
