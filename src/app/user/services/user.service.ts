@@ -3,7 +3,6 @@ import {
   AuthController,
   FacilitatorsController,
 } from '@shingo/affiliates-api/controllers'
-import { AuthUser } from '@shingo/affiliates-api/guards/auth.guard'
 import { Injectable } from '@angular/core'
 import { ApiBase } from '../../shared/services/api/api-base.abstract'
 import { Observable, throwError, of } from 'rxjs'
@@ -12,11 +11,12 @@ import { Store, select } from '@ngrx/store'
 import { HttpClient } from '@angular/common/http'
 import { mergeMap } from 'rxjs/operators'
 import { AuthService } from '../../auth/services/auth.service'
+import { User } from '../user.model'
 
 export type AuthContract = ApiContract<AuthController>
 export type FacilitatorContract = ApiContract<FacilitatorsController>
 export type AuthPayload = AuthContract['login']['body']
-export type User = AuthUser
+export { User }
 
 @Injectable({
   providedIn: 'root',

@@ -6,7 +6,6 @@ import { CountriesService } from './countries/countries.service'
 import { FacilitatorService } from './facilitator/facilitator.service'
 import { RouterService } from './router/router.service'
 import { SupportService } from './support/support.service'
-import { WorkshopService } from './workshop/workshop.service'
 import { WorkshopFilterFactory } from './filters/workshops/workshop-filter-factory.service'
 import { FacilitatorFilterFactory } from './filters/facilitators/facilitator-filter-factory.service'
 import { DataProviderFactory } from './data-provider/data-provider-factory.service'
@@ -28,7 +27,6 @@ export class ServicesModule {
         RouterService,
         SupportService,
         AffiliateService,
-        WorkshopService,
         WorkshopFilterFactory,
         FacilitatorFilterFactory,
         DataProviderFactory,

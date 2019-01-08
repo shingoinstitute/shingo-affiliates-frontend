@@ -2,6 +2,45 @@ import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
 import { ValidationErrors, FormGroup } from '@angular/forms'
 import { Moment, isMoment } from 'moment'
+import { tuple } from './functional'
+import { reduce } from './iterable'
+
+/**
+ * Iterates over the enumerable keys of a record yielding (key, value) pairs, similar to `Map.prototype.entries`
+ *
+ * Yielded entries have no guaranteed order, unlike Map, which returns in insertion order
+ * @param map a javascript plain object
+ */
+export function* recordEntries<R extends Record<any, any>>(
+  map: R,
+): IterableIterator<[keyof R, R[keyof R]]> {
+  for (const key in map) {
+    if (map.hasOwnProperty(key)) {
+      yield tuple(key, map[key])
+    }
+  }
+
+  for (const sym of Object.getOwnPropertySymbols(map)) {
+    if (map.hasOwnProperty(sym)) {
+      // typescript cannot do symbol indexing as of 3.1. See: https://github.com/Microsoft/TypeScript/issues/24587 and https://github.com/Microsoft/TypeScript/issues/1863
+      yield tuple(
+        sym as Extract<keyof R, symbol>,
+        (map as any)[sym] as R[keyof R],
+      )
+    }
+  }
+}
+
+export const toRecord = <K extends keyof any, V>(entries: Iterable<[K, V]>) =>
+  reduce(
+    entries,
+    (acc, curr) => {
+      const [key, value] = curr
+      acc[key] = value
+      return acc
+    },
+    {} as Record<K, V>,
+  )
 
 /**
  * Takes a date or moment object and returns a string in the format YYYY-MM-DD
@@ -23,6 +62,20 @@ export const getIsoYMD = (date: Moment | Date, utc = false): string => {
       return date.format('YYYY-MM-DD')
     }
   }
+}
+
+/**
+ * Adds a property to an object if the given value is not null or undefined
+ * @param base the base object to add the property to
+ * @param key the property name
+ * @param value the property value
+ */
+export const addIf = <T, K extends keyof T>(
+  base: T,
+  key: K,
+  value: T[K] | null | undefined,
+) => {
+  if (value != null) base[key] = value
 }
 
 export const withoutTime = (d: Date | Moment) => {
@@ -74,11 +127,6 @@ export const requestOptions = (
 
 export const XOR = (a: boolean, b: boolean) => (a || b) && (!a || !b)
 
-export const filterMapC = <A, B>(
-  filter: (v: A, i: number, arr: A[]) => boolean,
-  map: (v: A, i: number, arr: A[]) => B,
-) => (xs: A[]) => filterMap(xs, filter, map)
-
 export const filterMap = <A, B>(
   xs: A[],
   filter: (v: A, i: number, arr: A[]) => boolean,
@@ -91,6 +139,12 @@ export const filterMap = <A, B>(
     },
     [] as B[],
   )
+
+export const filterMapC = <A, B>(
+  filter: (v: A, i: number, arr: A[]) => boolean,
+  map: (v: A, i: number, arr: A[]) => B,
+) => (xs: A[]) => filterMap(xs, filter, map)
+
 /**
  * Converts a salesforce field name to a camel case string
  * @param s The salesforce field name (often ends in __c)

@@ -7,7 +7,7 @@ import { LoginPageComponent } from './pages/login/login-page.component'
 import { LoginFormComponent } from './components/login-form/login-form.component'
 
 import { AuthEffects } from './effects/auth.effects'
-import { reducers } from './reducers'
+import { reducers, ROOT_KEY } from './reducers'
 // import { MaterialModule } from '../material'
 import { AuthRoutingModule } from './auth-routing.module'
 import {
@@ -29,7 +29,7 @@ export const COMPONENTS = [LoginPageComponent, LoginFormComponent]
     MatButtonModule,
     FlexLayoutModule,
     AuthRoutingModule,
-    StoreModule.forFeature('auth', reducers),
+    StoreModule.forFeature(ROOT_KEY, reducers),
     EffectsModule.forFeature([AuthEffects]),
   ],
   declarations: COMPONENTS,

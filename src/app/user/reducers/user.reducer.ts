@@ -3,7 +3,7 @@ import produce from 'immer'
 import { UserAction, UserActionTypes } from '../actions/user-api.actions'
 
 export interface State {
-  user: User | null
+  readonly user: Readonly<User> | null
 }
 
 export const initialState: State = {

@@ -1,15 +1,8 @@
 // Angular Modules
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core'
-import {
-  FormGroup,
-  FormBuilder,
-  FormControl,
-  Validators,
-  ValidatorFn,
-} from '@angular/forms'
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 
 // App Modules
-import { AuthService } from '~app/services/auth/auth.service'
 import {
   CountriesService,
   CountryItem,
@@ -19,36 +12,44 @@ import {
   AffiliateService,
   DEFAULT_AFFILIATE_SEARCH_FIELDS,
 } from '~app/services/affiliate/affiliate.service'
-import { WorkshopService } from '~app/services/workshop/workshop.service'
+import * as W from '../../workshop.model'
+// tslint:disable-next-line:no-duplicate-imports
 import {
-  Workshop,
   WorkshopType,
   WorkshopStatusType,
   addTimeAndTz,
   Timezone,
+  WorkshopBase,
 } from '../../workshop.model'
 import { CourseManager } from '../../course-manager.model'
 import { Facilitator } from '~app/facilitators/facilitator.model'
 import { Affiliate } from '~app/affiliates/affiliate.model'
+import * as fromRoot from '~app/reducers'
+import * as fromUser from '~app/user/reducers'
+import { Store, select } from '@ngrx/store'
 
 // RxJS Modules
 import { Observable, of } from 'rxjs'
 
-// RxJS operators
-
 import { CustomValidators } from 'ng2-validation'
 import { LocaleService } from '~app/services/locale/locale.service'
-import { mergeMap, map, startWith } from 'rxjs/operators'
+import { mergeMap, map, startWith, first, filter } from 'rxjs/operators'
 import { tz, Moment } from 'moment-timezone'
 import {
   normalizeString,
   getFormValidationErrors,
   getIsoYMD,
   withoutTime,
+  addIf,
+  truthy,
 } from '~app/util/util'
 import { Overwrite } from '~app/util/types'
 import moment, { isMoment } from 'moment'
-import { eq, lte, lt, gte, gt } from '~app/util/functional'
+import produce from 'immer'
+import { TimeRangeValidator } from '~app/shared/validators/time-range.validator'
+import { TimeValidator } from '~app/shared/validators/time.validator'
+import { affiliateId, User } from '~app/user/user.model'
+import { WorkshopService } from '~app/workshops/services/workshop.service'
 
 export interface WorkshopForm {
   affiliate: Affiliate
@@ -73,79 +74,31 @@ export interface WorkshopForm {
 
 export const addToWorkshop = (
   form: WorkshopForm,
-  workshop = new Workshop(),
-): Workshop => {
-  workshop.affiliate = form.affiliate
-  workshop.type = form.type
-  if (form.status) {
-    workshop.status = form.status
-  }
-  workshop.language = form.language
-  workshop.isPublic = form.isPublic
-  workshop.city = form.city
-  workshop.country = form.country
-  workshop.hostSite = form.hostSite
-  workshop.courseManager = form.courseManager
-  workshop.Start_Date__c = form.dates.startDate
-  workshop.End_Date__c = form.dates.endDate
-  workshop.Local_Start_Time__c = form.times.startTime
-  workshop.Local_End_Time__c = form.times.endTime
-  workshop.Timezone__c = form.timezone
-
-  if (form.website) {
-    workshop.website = form.website
-  }
-  workshop.billing = form.billing
-  workshop.addInstructor(...form.instructors)
-  return workshop
-}
-
-const TimeValidator: ValidatorFn = control => {
-  const errors = Validators.pattern(/^\d\d:\d\d(:\d\d)?$/)(control)
-  return !errors ? errors : { time: true }
-}
-
-type TimeRangeInput = Date | Moment | number | false | '' | null | undefined
-
-/**
- * Validates that a point in time occurs before or after the specified point
- * @param otherDate the other point in time
- * @param mode should the validated point occur before or after the other point?
- * @param allowEqual if mode is before or after, allow equal points to be valid
- */
-const TimeRangeValidator = (
-  otherDate: TimeRangeInput | (() => TimeRangeInput),
-  mode: 'before' | 'after' | 'equal' = 'after',
-  allowEqual = true,
-  mapControlFn?: (value: unknown) => TimeRangeInput,
-): ValidatorFn => control => {
-  const value: TimeRangeInput =
-    typeof mapControlFn !== 'undefined'
-      ? mapControlFn(control.value)
-      : control.value
-
-  if (!value && value !== 0) return null
-
-  const other = typeof otherDate === 'function' ? otherDate() : otherDate
-  if (!other && other !== 0) return null
-
-  const otherMilli = other.valueOf()
-  const valueMilli = value.valueOf()
-
-  const isValidFn =
-    mode === 'equal'
-      ? eq
-      : mode === 'before'
-        ? allowEqual
-          ? lte
-          : lt
-        : allowEqual
-          ? gte
-          : gt
-
-  const valid = isValidFn(valueMilli, otherMilli)
-
-  return valid ? null : { 'time-range': mode }
+  workshop = W.workshop(),
+): WorkshopBase => {
+  return produce(workshop, ws => {
+    addIf(ws, 'Organizing_Affiliate__r', form.affiliate)
+    addIf(ws, 'Organizing_Affiliate__c', form.affiliate && form.affiliate.Id)
+    addIf(ws, 'Workshop_Type__c', form.type)
+    addIf(ws, 'Status__c', form.status)
+    addIf(ws, 'Language__c', form.language)
+    addIf(ws, 'Public__c', form.isPublic)
+    addIf(ws, 'Event_City__c', form.city)
+    addIf(ws, 'Event_Country__c', form.country)
+    addIf(ws, 'Host_Site__c', form.hostSite)
+    addIf(ws, 'Course_Manager__r', form.courseManager)
+    addIf(ws, 'Course_Manager__c', form.courseManager && form.courseManager.Id)
+    addIf(ws, 'Start_Date__c', form.dates.startDate)
+    addIf(ws, 'End_Date__c', form.dates.endDate)
+    addIf(ws, 'Local_Start_Time__c', W.addMilliToTime(form.times.startTime))
+    addIf(ws, 'Local_End_Time__c', W.addMilliToTime(form.times.endTime))
+    addIf(ws, 'Timezone__c', form.timezone)
+    addIf(ws, 'Registration_Website__c', form.website)
+    addIf(ws, 'Billing_Contact__c', form.billing)
+    if (form.instructors && form.instructors.length > 0) {
+      W.addInstructorsMut(ws, form.instructors as any)
+    }
+  })
 }
 
 @Component({
@@ -154,10 +107,10 @@ const TimeRangeValidator = (
   styleUrls: ['./workshop-form.component.scss'],
 })
 export class WorkshopFormComponent implements OnInit {
-  private _initialWorkshop?: Workshop
+  private _initialWorkshop?: WorkshopBase
   // tslint:disable-next-line:no-input-rename
   @Input('workshop')
-  set initialWorkshop(ws: Workshop | undefined) {
+  set initialWorkshop(ws: WorkshopBase | undefined) {
     this._initialWorkshop = ws
     if (this.workshopForm && ws) {
       this.workshopForm.controls['status'].setValidators(Validators.required)
@@ -210,19 +163,25 @@ export class WorkshopFormComponent implements OnInit {
     'Active Event',
   ]
 
+  isAdmin$: Observable<boolean>
+  private user$: Observable<User | null>
+
   constructor(
     private fb: FormBuilder,
-    public auth: AuthService,
     private _cs: CountriesService,
     private locale: LocaleService,
     private _fs: FacilitatorService,
     private _as: AffiliateService,
     private _ws: WorkshopService,
-  ) {}
+    store: Store<fromRoot.State>,
+  ) {
+    this.isAdmin$ = store.pipe(select(fromUser.isAdmin))
+    this.user$ = store.pipe(select(fromUser.getUser))
+  }
 
   facilitatorSearch = (query: string) => this._fs.search(query)
   courseManagerSearch = (query: string) =>
-    this._as.searchCMS(query, this.getAffiliateId())
+    this.getAffiliateId$().pipe(mergeMap(id => this._as.searchCMS(query, id)))
   affiliateSearch = (query: string) =>
     this._as.search(query, DEFAULT_AFFILIATE_SEARCH_FIELDS)
 
@@ -323,7 +282,7 @@ export class WorkshopFormComponent implements OnInit {
     const endTime =
       (this.initialWorkshop && this.initialWorkshop.Local_End_Time__c) ||
       '17:00'
-    const affiliate = this.initialWorkshop && this.initialWorkshop.affiliate
+    const affiliate = this.initialWorkshop && W.affiliate(this.initialWorkshop)
     const timezone =
       (this.initialWorkshop && this.initialWorkshop.Timezone__c) ||
       moment.tz.guess()
@@ -331,40 +290,41 @@ export class WorkshopFormComponent implements OnInit {
     const formgroupConfig: { [k in keyof WorkshopForm]: any } = {
       affiliate: [affiliate, Validators.required],
       type: [
-        (this.initialWorkshop && this.initialWorkshop.type) || 'Discover',
+        (this.initialWorkshop && W.type(this.initialWorkshop)) || 'Discover',
         Validators.required,
       ],
       status: [
-        this.initialWorkshop && this.initialWorkshop.status,
+        this.initialWorkshop && W.status(this.initialWorkshop),
         ...(!this.isNewWorkshop ? [Validators.required] : []),
       ],
       language: [
-        (this.initialWorkshop && this.initialWorkshop.language) || 'English',
+        (this.initialWorkshop && W.language(this.initialWorkshop)) || 'English',
         Validators.required,
       ],
       isPublic: [
-        (this.initialWorkshop && this.initialWorkshop.isPublic) || false,
+        (this.initialWorkshop && this.initialWorkshop.Public__c) || false,
         Validators.required,
       ],
       city: [
-        this.initialWorkshop && this.initialWorkshop.city,
+        this.initialWorkshop && W.city(this.initialWorkshop),
         Validators.required,
       ],
       country: [
-        this.initialWorkshop && this.initialWorkshop.country,
+        this.initialWorkshop && W.country(this.initialWorkshop),
         Validators.required,
       ],
       hostSite: [
-        this.initialWorkshop && this.initialWorkshop.hostSite,
+        this.initialWorkshop && W.hostSite(this.initialWorkshop),
         Validators.required,
       ],
       courseManager: [
-        this.initialWorkshop && this.initialWorkshop.courseManager,
+        this.initialWorkshop && W.courseManager(this.initialWorkshop),
         Validators.required,
       ],
       dates: this.fb.group({
         startDate: [
-          (this.initialWorkshop && this.initialWorkshop.startDate) || moment(),
+          (this.initialWorkshop && W.startDate(this.initialWorkshop)) ||
+            moment(),
           [
             Validators.required,
             TimeRangeValidator(
@@ -379,7 +339,7 @@ export class WorkshopFormComponent implements OnInit {
           ],
         ],
         endDate: [
-          (this.initialWorkshop && this.initialWorkshop.endDate) ||
+          (this.initialWorkshop && W.endDate(this.initialWorkshop)) ||
             moment().add(1, 'd'),
           Validators.required,
         ],
@@ -420,25 +380,29 @@ export class WorkshopFormComponent implements OnInit {
         endTime: [endTime, [Validators.required, TimeValidator]],
       }),
       timezone: [timezone, Validators.required],
-      website: [this.initialWorkshop && this.initialWorkshop.website],
+      website: [this.initialWorkshop && W.website(this.initialWorkshop)],
       billing: [
-        this.initialWorkshop && this.initialWorkshop.billing,
+        this.initialWorkshop && W.billing(this.initialWorkshop),
         [Validators.required, Validators.email],
       ],
       instructors: [
-        this.initialWorkshop && this.initialWorkshop.instructors,
+        this.initialWorkshop && W.instructors(this.initialWorkshop),
         Validators.required,
       ],
     }
 
     this.workshopForm = this.fb.group(formgroupConfig)
 
-    if (!affiliate && !(this.auth.user && this.auth.user.isAdmin)) {
-      this.getAffiliate()
-        .toPromise()
-        .then(aff => {
-          this.workshopForm.controls['affiliate'].setValue(aff)
-        })
+    if (!affiliate) {
+      this.isAdmin$.pipe(first()).subscribe(isAdmin => {
+        if (!isAdmin) {
+          this.getAffiliate$()
+            .toPromise()
+            .then(aff => {
+              this.workshopForm.controls['affiliate'].setValue(aff)
+            })
+        }
+      })
     }
 
     this.workshopForm.controls.timezone.valueChanges
@@ -480,7 +444,6 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   onSubmit() {
-    if (!this.auth.user) return
     const value = this.workshopForm.value as Overwrite<
       WorkshopForm,
       {
@@ -503,27 +466,21 @@ export class WorkshopFormComponent implements OnInit {
   contactDisplayWith = (value: null | undefined | { name: string }) =>
     value ? value.name : ''
 
-  private getAffiliate(): Observable<Affiliate> {
-    if (!this.auth.user) {
-      throw new Error(
-        'Dont know how this happened, but the user is not logged in',
-      )
-    }
+  private getAffiliate$(): Observable<Affiliate> {
     if (this.workshopForm.controls['affiliate'].value) {
       return of(this.workshopForm.controls['affiliate'].value as Affiliate)
     }
-    return this._as.getById(this.auth.user.affiliate)
+    return this.getAffiliateId$().pipe(mergeMap(id => this._as.getById(id)))
   }
 
-  private getAffiliateId(): string {
-    if (!this.auth.user) {
-      throw new Error(
-        'Dont know how this happened, but the user is not logged in',
-      )
-    }
+  private getAffiliateId$(): Observable<string> {
     if (this.workshopForm.value.affiliate)
-      return (this.workshopForm.value.affiliate as Affiliate).sfId
-    else return this.auth.user.affiliate
+      return of((this.workshopForm.value.affiliate as Affiliate).sfId)
+    return this.user$.pipe(
+      filter(truthy),
+      // tslint:disable-next-line:no-non-null-assertion
+      map(affiliateId),
+    )
   }
 
   getFormErrors = getFormValidationErrors

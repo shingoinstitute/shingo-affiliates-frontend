@@ -4,15 +4,19 @@ import { Router } from '@angular/router'
 import { MatDialog } from '@angular/material'
 
 // App Modules
-import { WorkshopService } from '~app/services/workshop/workshop.service'
-import { AuthService } from '~app/services/auth/auth.service'
-import { Workshop } from '../../workshop.model'
 import {
   TextResponseDialogComponent,
   TextResponseData,
 } from '~app/shared/components/text-response-dialog/text-response-dialog.component'
-import { Moment } from 'moment'
-import { withoutTime } from '~app/util/util'
+import { WorkshopBase } from '~app/workshops/workshop.model'
+// tslint:disable-next-line:no-duplicate-imports
+import * as W from '~app/workshops/workshop.model'
+import { ordNumValue, greaterThan } from '~app/util/functional/Ord'
+import { Observable } from 'rxjs'
+import * as fromRoot from '~app/reducers'
+import * as fromUser from '~app/user/reducers'
+import { Store, select } from '@ngrx/store'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'app-workshop',
@@ -21,34 +25,47 @@ import { withoutTime } from '~app/util/util'
 })
 export class WorkshopComponent {
   @Input()
-  public workshop: Workshop = new Workshop()
+  workshop: WorkshopBase = W.workshop()
+
+  isAdmin$: Observable<boolean>
 
   constructor(
-    public router: Router,
-    public auth: AuthService,
-    public _ws: WorkshopService,
-    public dialog: MatDialog,
-  ) {}
-
-  public canEdit() {
-    if (this.auth.user && this.auth.user.isAdmin) return true
-    else {
-      return (
-        this.workshop.status === 'Proposed' ||
-        this.workshop.status === 'Verified'
-      )
-    }
+    private router: Router,
+    private dialog: MatDialog,
+    store: Store<fromRoot.State>,
+  ) {
+    this.isAdmin$ = store.pipe(select(fromUser.isAdmin))
   }
 
-  public canCancel() {
-    return (
-      this.workshop.status === 'Proposed' ||
-      (this.workshop.status === 'Verified' &&
-        (this.workshop.endDate as Moment).toDate() > withoutTime(new Date()))
+  // add the workshop.model module to the class instance so
+  // that we can use it in the template
+  W = W
+
+  get canEdit$() {
+    return this.isAdmin$.pipe(
+      map(isAdmin => {
+        if (isAdmin) return isAdmin
+        const status = W.status(this.workshop)
+        return status === 'Proposed' || status === 'Verified'
+      }),
     )
   }
 
-  public cancel() {
+  get canCancel() {
+    const status = W.status(this.workshop)
+    return (
+      status === 'Proposed' ||
+      status === 'Verified' ||
+      greaterThan(ordNumValue)(W.endDate(this.workshop))(new Date())
+    )
+  }
+
+  get largeImage() {
+    const split = W.image(this.workshop).split('.png')
+    return `${split[0]}Large.png`
+  }
+
+  cancel() {
     const dialogRef = this.dialog.open(TextResponseDialogComponent, {
       data: {
         title: 'Cancel Workshop?',
@@ -59,19 +76,15 @@ export class WorkshopComponent {
       } as TextResponseData,
     })
     dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined) {
-        this.workshop.status = 'Cancelled'
-        this._ws.cancel(this.workshop, result).subscribe(cancelled => cancelled)
+      if (typeof result !== 'undefined') {
+        throw new Error('Unimplemented')
+        // this.workshop.status = 'Cancelled'
+        // this._ws.cancel(this.workshop, result).subscribe(cancelled => cancelled)
       }
     })
   }
 
-  public goToEdit() {
-    this.router.navigateByUrl(`/workshops/${this.workshop.sfId}/edit`)
-  }
-
-  public largeImage() {
-    const split = this.workshop.image.split('.png')
-    return `${split[0]}Large.png`
+  goToEdit() {
+    this.router.navigateByUrl(`/workshops/${this.workshop.Id}/edit`)
   }
 }

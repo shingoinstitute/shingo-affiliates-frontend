@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { HttpEventType, HttpResponse } from '@angular/common/http'
+import { HttpEventType } from '@angular/common/http'
 
-import { Workshop, WorkshopStatusType } from '~app/workshops/workshop.model'
-import { WorkshopService } from '~app/services/workshop/workshop.service'
+import { WorkshopBase } from '~app/workshops/workshop.model'
+// tslint:disable-next-line:no-duplicate-imports
+import * as W from '~app/workshops/workshop.model'
+import { WorkshopService } from '~app/workshops/services/workshop.service'
 
 import { FileFailure } from '~app/shared/components/file-drop/file-drop.component'
 import { withUnit } from '~app/util/util'
@@ -19,6 +21,8 @@ interface SyntheticFile {
 
 const isSyntheticFile = (f: File | SyntheticFile): f is SyntheticFile =>
   !!(f as SyntheticFile)[syntheticFile]
+const attendeeFileRegex = /attendee_list/
+const evaluationFileRegex = /evaluation/
 
 @Component({
   selector: 'app-workshop-detail',
@@ -26,17 +30,17 @@ const isSyntheticFile = (f: File | SyntheticFile): f is SyntheticFile =>
   styleUrls: ['./workshop-detail.component.scss'],
 })
 export class WorkshopDetailComponent implements OnInit {
-  public workshop!: Workshop
-  public attendeeFile: File | SyntheticFile | undefined
-  public evaluations: Array<File | SyntheticFile> = []
-  public attendeeModified = false
-  public evaluationsModified = false
-  public errors: Array<{ from: 'attendee' | 'eval'; data: string }> = []
+  workshop!: WorkshopBase
+  attendeeFile: File | SyntheticFile | undefined
+  evaluations: Array<File | SyntheticFile> = []
+  attendeeModified = false
+  evaluationsModified = false
+  errors: Array<{ from: 'attendee' | 'eval'; data: string }> = []
 
-  public uploadAttendeeProgress = 0
-  public uploadEvaluationsProgress = 0
+  uploadAttendeeProgress = 0
+  uploadEvaluationsProgress = 0
 
-  public supportedFileTypes: string[] = [
+  supportedFileTypes: string[] = [
     '.csv',
     '.pdf',
     '.zip',
@@ -47,60 +51,59 @@ export class WorkshopDetailComponent implements OnInit {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   ]
 
-  public maximumFileSizeInBytes: number = 1000 * 1000 * 25
+  maximumFileSizeInBytes: number = 1000 * 1000 * 25
 
-  public get showFiles(): boolean {
-    return (
-      this.workshop.status !== 'Proposed' ||
-      this.workshop.status !== ('Verified' as WorkshopStatusType)
-    )
+  get showFiles(): boolean {
+    const status = W.status(this.workshop)
+    return status !== 'Proposed' && status !== 'Verified'
   }
 
-  public get showAttendeeUpload(): boolean {
-    return this.workshop.status === ('Action Pending' as WorkshopStatusType)
+  get showAttendeeUpload(): boolean {
+    return W.status(this.workshop) === 'Action Pending'
   }
 
-  public get showEvalUpload(): boolean {
+  get showEvalUpload(): boolean {
     return (
-      this.showAttendeeUpload || this.workshop.status === 'Ready To Be Invoiced'
+      this.showAttendeeUpload ||
+      W.status(this.workshop) === 'Ready To Be Invoiced'
     )
   }
 
   constructor(public route: ActivatedRoute, public _ws: WorkshopService) {}
 
-  public ngOnInit() {
+  ngOnInit() {
     this.workshop = this.route.snapshot.data['workshop']
-    const file = this.workshop.files.find(
-      f => !!(f.Name || '').match(/attendee_list/),
-    )
-    if (file) {
+    const files = W.files(this.workshop)
+    const aFile = files.find(f => attendeeFileRegex.test(f.Name || ''))
+    if (aFile) {
       this.attendeeFile = {
         [syntheticFile]: true,
-        name: file.Name,
-        type: file.ContentType,
-        size: file.BodyLength,
-      } as SyntheticFile
+        // tslint:disable:no-non-null-assertion
+        name: aFile.Name!,
+        type: aFile.ContentType!,
+        size: aFile.BodyLength!,
+        // tslint:enable:no-non-null-assertion
+      }
     }
-    this.evaluations = this.workshop.files
-      .filter(f => f.Name.match(/evaluation/))
-      .map(
-        f =>
-          ({
-            [syntheticFile]: true,
-            name: f.Name,
-            type: f.ContentType,
-            size: f.BodyLength,
-          } as SyntheticFile),
-      )
+    this.evaluations = files
+      .filter(f => evaluationFileRegex.test(f.Name || ''))
+      .map<SyntheticFile>(f => ({
+        [syntheticFile]: true,
+        // tslint:disable:no-non-null-assertion
+        name: f.Name!,
+        type: f.ContentType!,
+        size: f.BodyLength!,
+        // tslint:enable:no-non-null-assertion
+      }))
   }
 
-  public addAttendeeList(file: File) {
+  addAttendeeList(file: File) {
     this.attendeeModified = true
     this.attendeeFile = file
     this.errors = this.errors.filter(e => e.from !== 'attendee')
   }
 
-  public addEvaluation(file: File) {
+  addEvaluation(file: File) {
     if (!this.evaluations.find(f => f.name === file.name)) {
       this.evaluationsModified = true
       this.evaluations.push(file)
@@ -108,7 +111,7 @@ export class WorkshopDetailComponent implements OnInit {
     this.errors = this.errors.filter(e => e.from !== 'eval')
   }
 
-  public upload() {
+  upload() {
     if (this.attendeeFile && this.attendeeModified) {
       this.uploadAttendeeListFile()
     }
@@ -120,11 +123,11 @@ export class WorkshopDetailComponent implements OnInit {
     this.errors = []
   }
 
-  public uploadAttendeeListFile() {
+  uploadAttendeeListFile() {
     if (!this.attendeeFile || isSyntheticFile(this.attendeeFile)) return
     this.uploadAttendeeProgress = 0
     this._ws
-      .uploadAttendeeFile(this.workshop.sfId, this.attendeeFile)
+      .uploadAttendeeFile(this.workshop.Id, this.attendeeFile, true)
       .subscribe(event => {
         if (event.type === HttpEventType.UploadProgress) {
           const percentDone = Math.round((event.loaded * 100) / event.total)
@@ -136,22 +139,24 @@ export class WorkshopDetailComponent implements OnInit {
       })
   }
 
-  public uploadEvaluationsFiles() {
+  uploadEvaluationsFiles() {
     const files = this.evaluations.filter(not(isSyntheticFile))
     if (files.length === 0) return
     this.uploadEvaluationsProgress = 0
-    this._ws.uploadEvaluations(this.workshop.sfId, files).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress) {
-        const percentDone = Math.round((event.loaded * 100) / event.total)
-        this.uploadEvaluationsProgress = percentDone
-      } else {
-        this.uploadEvaluationsProgress = 0
-        this.evaluationsModified = false
-      }
-    })
+    this._ws
+      .uploadEvaluations(this.workshop.Id, files, true)
+      .subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          const percentDone = Math.round((event.loaded * 100) / event.total)
+          this.uploadEvaluationsProgress = percentDone
+        } else {
+          this.uploadEvaluationsProgress = 0
+          this.evaluationsModified = false
+        }
+      })
   }
 
-  public rejectedFile(err: FileFailure, from: 'attendee' | 'eval') {
+  rejectedFile(err: FileFailure, from: 'attendee' | 'eval') {
     if (err.reason === 'accept') {
       this.errors.push({
         from,

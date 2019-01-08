@@ -1,664 +1,274 @@
 import moment, { Moment, isMoment } from 'moment'
-import { tz } from 'moment-timezone'
-import { Affiliate } from '../affiliates/affiliate.model'
-import { Facilitator } from '../facilitators/facilitator.model'
-import { CourseManager } from './course-manager.model'
-import { SFObject } from '../shared/models/sf-object.abstract.model'
-import { tuple } from '../util/functional'
-import { getIsoYMD } from '../util/util'
+import { getIsoYMD, addIf } from '../util/util'
+import { ReadAllReturn, ReadReturn } from './services/workshop.service'
+import { MakeKeysOptional, ToReadonlyArray, Overwrite } from '~app/util/types'
+import { Workshop__c } from '@shingo/affiliates-api/sf-interfaces/Workshop__c.interface'
+import { compose } from '~app/util/functional'
+// tslint:disable: no-use-before-declare
 
-export type Timezone =
-  | 'Africa/Abidjan'
-  | 'Africa/Accra'
-  | 'Africa/Addis_Ababa'
-  | 'Africa/Algiers'
-  | 'Africa/Asmara'
-  | 'Africa/Asmera'
-  | 'Africa/Bamako'
-  | 'Africa/Bangui'
-  | 'Africa/Banjul'
-  | 'Africa/Bissau'
-  | 'Africa/Blantyre'
-  | 'Africa/Brazzaville'
-  | 'Africa/Bujumbura'
-  | 'Africa/Cairo'
-  | 'Africa/Casablanca'
-  | 'Africa/Ceuta'
-  | 'Africa/Conakry'
-  | 'Africa/Dakar'
-  | 'Africa/Dar_es_Salaam'
-  | 'Africa/Djibouti'
-  | 'Africa/Douala'
-  | 'Africa/El_Aaiun'
-  | 'Africa/Freetown'
-  | 'Africa/Gaborone'
-  | 'Africa/Harare'
-  | 'Africa/Johannesburg'
-  | 'Africa/Juba'
-  | 'Africa/Kampala'
-  | 'Africa/Khartoum'
-  | 'Africa/Kigali'
-  | 'Africa/Kinshasa'
-  | 'Africa/Lagos'
-  | 'Africa/Libreville'
-  | 'Africa/Lome'
-  | 'Africa/Luanda'
-  | 'Africa/Lubumbashi'
-  | 'Africa/Lusaka'
-  | 'Africa/Malabo'
-  | 'Africa/Maputo'
-  | 'Africa/Maseru'
-  | 'Africa/Mbabane'
-  | 'Africa/Mogadishu'
-  | 'Africa/Monrovia'
-  | 'Africa/Nairobi'
-  | 'Africa/Ndjamena'
-  | 'Africa/Niamey'
-  | 'Africa/Nouakchott'
-  | 'Africa/Ouagadougou'
-  | 'Africa/Porto-Novo'
-  | 'Africa/Sao_Tome'
-  | 'Africa/Timbuktu'
-  | 'Africa/Tripoli'
-  | 'Africa/Tunis'
-  | 'Africa/Windhoek'
-  | 'America/Adak'
-  | 'America/Anchorage'
-  | 'America/Anguilla'
-  | 'America/Antigua'
-  | 'America/Araguaina'
-  | 'America/Argentina/Buenos_Aires'
-  | 'America/Argentina/Catamarca'
-  | 'America/Argentina/ComodRivadavia'
-  | 'America/Argentina/Cordoba'
-  | 'America/Argentina/Jujuy'
-  | 'America/Argentina/La_Rioja'
-  | 'America/Argentina/Mendoza'
-  | 'America/Argentina/Rio_Gallegos'
-  | 'America/Argentina/Salta'
-  | 'America/Argentina/San_Juan'
-  | 'America/Argentina/San_Luis'
-  | 'America/Argentina/Tucuman'
-  | 'America/Argentina/Ushuaia'
-  | 'America/Aruba'
-  | 'America/Asuncion'
-  | 'America/Atikokan'
-  | 'America/Atka'
-  | 'America/Bahia'
-  | 'America/Bahia_Banderas'
-  | 'America/Barbados'
-  | 'America/Belem'
-  | 'America/Belize'
-  | 'America/Blanc-Sablon'
-  | 'America/Boa_Vista'
-  | 'America/Bogota'
-  | 'America/Boise'
-  | 'America/Buenos_Aires'
-  | 'America/Cambridge_Bay'
-  | 'America/Campo_Grande'
-  | 'America/Cancun'
-  | 'America/Caracas'
-  | 'America/Catamarca'
-  | 'America/Cayenne'
-  | 'America/Cayman'
-  | 'America/Chicago'
-  | 'America/Chihuahua'
-  | 'America/Coral_Harbour'
-  | 'America/Cordoba'
-  | 'America/Costa_Rica'
-  | 'America/Creston'
-  | 'America/Cuiaba'
-  | 'America/Curacao'
-  | 'America/Danmarkshavn'
-  | 'America/Dawson'
-  | 'America/Dawson_Creek'
-  | 'America/Denver'
-  | 'America/Detroit'
-  | 'America/Dominica'
-  | 'America/Edmonton'
-  | 'America/Eirunepe'
-  | 'America/El_Salvador'
-  | 'America/Ensenada'
-  | 'America/Fort_Nelson'
-  | 'America/Fort_Wayne'
-  | 'America/Fortaleza'
-  | 'America/Glace_Bay'
-  | 'America/Godthab'
-  | 'America/Goose_Bay'
-  | 'America/Grand_Turk'
-  | 'America/Grenada'
-  | 'America/Guadeloupe'
-  | 'America/Guatemala'
-  | 'America/Guayaquil'
-  | 'America/Guyana'
-  | 'America/Halifax'
-  | 'America/Havana'
-  | 'America/Hermosillo'
-  | 'America/Indiana/Indianapolis'
-  | 'America/Indiana/Knox'
-  | 'America/Indiana/Marengo'
-  | 'America/Indiana/Petersburg'
-  | 'America/Indiana/Tell_City'
-  | 'America/Indiana/Vevay'
-  | 'America/Indiana/Vincennes'
-  | 'America/Indiana/Winamac'
-  | 'America/Indianapolis'
-  | 'America/Inuvik'
-  | 'America/Iqaluit'
-  | 'America/Jamaica'
-  | 'America/Jujuy'
-  | 'America/Juneau'
-  | 'America/Kentucky/Louisville'
-  | 'America/Kentucky/Monticello'
-  | 'America/Knox_IN'
-  | 'America/Kralendijk'
-  | 'America/La_Paz'
-  | 'America/Lima'
-  | 'America/Los_Angeles'
-  | 'America/Louisville'
-  | 'America/Lower_Princes'
-  | 'America/Maceio'
-  | 'America/Managua'
-  | 'America/Manaus'
-  | 'America/Marigot'
-  | 'America/Martinique'
-  | 'America/Matamoros'
-  | 'America/Mazatlan'
-  | 'America/Mendoza'
-  | 'America/Menominee'
-  | 'America/Merida'
-  | 'America/Metlakatla'
-  | 'America/Mexico_City'
-  | 'America/Miquelon'
-  | 'America/Moncton'
-  | 'America/Monterrey'
-  | 'America/Montevideo'
-  | 'America/Montreal'
-  | 'America/Montserrat'
-  | 'America/Nassau'
-  | 'America/New_York'
-  | 'America/Nipigon'
-  | 'America/Nome'
-  | 'America/Noronha'
-  | 'America/North_Dakota/Beulah'
-  | 'America/North_Dakota/Center'
-  | 'America/North_Dakota/New_Salem'
-  | 'America/Ojinaga'
-  | 'America/Panama'
-  | 'America/Pangnirtung'
-  | 'America/Paramaribo'
-  | 'America/Phoenix'
-  | 'America/Port-au-Prince'
-  | 'America/Port_of_Spain'
-  | 'America/Porto_Acre'
-  | 'America/Porto_Velho'
-  | 'America/Puerto_Rico'
-  | 'America/Punta_Arenas'
-  | 'America/Rainy_River'
-  | 'America/Rankin_Inlet'
-  | 'America/Recife'
-  | 'America/Regina'
-  | 'America/Resolute'
-  | 'America/Rio_Branco'
-  | 'America/Rosario'
-  | 'America/Santa_Isabel'
-  | 'America/Santarem'
-  | 'America/Santiago'
-  | 'America/Santo_Domingo'
-  | 'America/Sao_Paulo'
-  | 'America/Scoresbysund'
-  | 'America/Shiprock'
-  | 'America/Sitka'
-  | 'America/St_Barthelemy'
-  | 'America/St_Johns'
-  | 'America/St_Kitts'
-  | 'America/St_Lucia'
-  | 'America/St_Thomas'
-  | 'America/St_Vincent'
-  | 'America/Swift_Current'
-  | 'America/Tegucigalpa'
-  | 'America/Thule'
-  | 'America/Thunder_Bay'
-  | 'America/Tijuana'
-  | 'America/Toronto'
-  | 'America/Tortola'
-  | 'America/Vancouver'
-  | 'America/Virgin'
-  | 'America/Whitehorse'
-  | 'America/Winnipeg'
-  | 'America/Yakutat'
-  | 'America/Yellowknife'
-  | 'Antarctica/Casey'
-  | 'Antarctica/Davis'
-  | 'Antarctica/DumontDUrville'
-  | 'Antarctica/Macquarie'
-  | 'Antarctica/Mawson'
-  | 'Antarctica/McMurdo'
-  | 'Antarctica/Palmer'
-  | 'Antarctica/Rothera'
-  | 'Antarctica/South_Pole'
-  | 'Antarctica/Syowa'
-  | 'Antarctica/Troll'
-  | 'Antarctica/Vostok'
-  | 'Arctic/Longyearbyen'
-  | 'Asia/Aden'
-  | 'Asia/Almaty'
-  | 'Asia/Amman'
-  | 'Asia/Anadyr'
-  | 'Asia/Aqtau'
-  | 'Asia/Aqtobe'
-  | 'Asia/Ashgabat'
-  | 'Asia/Ashkhabad'
-  | 'Asia/Atyrau'
-  | 'Asia/Baghdad'
-  | 'Asia/Bahrain'
-  | 'Asia/Baku'
-  | 'Asia/Bangkok'
-  | 'Asia/Barnaul'
-  | 'Asia/Beirut'
-  | 'Asia/Bishkek'
-  | 'Asia/Brunei'
-  | 'Asia/Calcutta'
-  | 'Asia/Chita'
-  | 'Asia/Choibalsan'
-  | 'Asia/Chongqing'
-  | 'Asia/Chungking'
-  | 'Asia/Colombo'
-  | 'Asia/Dacca'
-  | 'Asia/Damascus'
-  | 'Asia/Dhaka'
-  | 'Asia/Dili'
-  | 'Asia/Dubai'
-  | 'Asia/Dushanbe'
-  | 'Asia/Famagusta'
-  | 'Asia/Gaza'
-  | 'Asia/Harbin'
-  | 'Asia/Hebron'
-  | 'Asia/Ho_Chi_Minh'
-  | 'Asia/Hong_Kong'
-  | 'Asia/Hovd'
-  | 'Asia/Irkutsk'
-  | 'Asia/Istanbul'
-  | 'Asia/Jakarta'
-  | 'Asia/Jayapura'
-  | 'Asia/Jerusalem'
-  | 'Asia/Kabul'
-  | 'Asia/Kamchatka'
-  | 'Asia/Karachi'
-  | 'Asia/Kashgar'
-  | 'Asia/Kathmandu'
-  | 'Asia/Katmandu'
-  | 'Asia/Khandyga'
-  | 'Asia/Kolkata'
-  | 'Asia/Krasnoyarsk'
-  | 'Asia/Kuala_Lumpur'
-  | 'Asia/Kuching'
-  | 'Asia/Kuwait'
-  | 'Asia/Macao'
-  | 'Asia/Macau'
-  | 'Asia/Magadan'
-  | 'Asia/Makassar'
-  | 'Asia/Manila'
-  | 'Asia/Muscat'
-  | 'Asia/Nicosia'
-  | 'Asia/Novokuznetsk'
-  | 'Asia/Novosibirsk'
-  | 'Asia/Omsk'
-  | 'Asia/Oral'
-  | 'Asia/Phnom_Penh'
-  | 'Asia/Pontianak'
-  | 'Asia/Pyongyang'
-  | 'Asia/Qatar'
-  | 'Asia/Qyzylorda'
-  | 'Asia/Rangoon'
-  | 'Asia/Riyadh'
-  | 'Asia/Saigon'
-  | 'Asia/Sakhalin'
-  | 'Asia/Samarkand'
-  | 'Asia/Seoul'
-  | 'Asia/Shanghai'
-  | 'Asia/Singapore'
-  | 'Asia/Srednekolymsk'
-  | 'Asia/Taipei'
-  | 'Asia/Tashkent'
-  | 'Asia/Tbilisi'
-  | 'Asia/Tehran'
-  | 'Asia/Tel_Aviv'
-  | 'Asia/Thimbu'
-  | 'Asia/Thimphu'
-  | 'Asia/Tokyo'
-  | 'Asia/Tomsk'
-  | 'Asia/Ujung_Pandang'
-  | 'Asia/Ulaanbaatar'
-  | 'Asia/Ulan_Bator'
-  | 'Asia/Urumqi'
-  | 'Asia/Ust-Nera'
-  | 'Asia/Vientiane'
-  | 'Asia/Vladivostok'
-  | 'Asia/Yakutsk'
-  | 'Asia/Yangon'
-  | 'Asia/Yekaterinburg'
-  | 'Asia/Yerevan'
-  | 'Atlantic/Azores'
-  | 'Atlantic/Bermuda'
-  | 'Atlantic/Canary'
-  | 'Atlantic/Cape_Verde'
-  | 'Atlantic/Faeroe'
-  | 'Atlantic/Faroe'
-  | 'Atlantic/Jan_Mayen'
-  | 'Atlantic/Madeira'
-  | 'Atlantic/Reykjavik'
-  | 'Atlantic/South_Georgia'
-  | 'Atlantic/St_Helena'
-  | 'Atlantic/Stanley'
-  | 'Australia/ACT'
-  | 'Australia/Adelaide'
-  | 'Australia/Brisbane'
-  | 'Australia/Broken_Hill'
-  | 'Australia/Canberra'
-  | 'Australia/Currie'
-  | 'Australia/Darwin'
-  | 'Australia/Eucla'
-  | 'Australia/Hobart'
-  | 'Australia/LHI'
-  | 'Australia/Lindeman'
-  | 'Australia/Lord_Howe'
-  | 'Australia/Melbourne'
-  | 'Australia/NSW'
-  | 'Australia/North'
-  | 'Australia/Perth'
-  | 'Australia/Queensland'
-  | 'Australia/South'
-  | 'Australia/Sydney'
-  | 'Australia/Tasmania'
-  | 'Australia/Victoria'
-  | 'Australia/West'
-  | 'Australia/Yancowinna'
-  | 'Brazil/Acre'
-  | 'Brazil/DeNoronha'
-  | 'Brazil/East'
-  | 'Brazil/West'
-  | 'CET'
-  | 'CST6CDT'
-  | 'Canada/Atlantic'
-  | 'Canada/Central'
-  | 'Canada/Eastern'
-  | 'Canada/Mountain'
-  | 'Canada/Newfoundland'
-  | 'Canada/Pacific'
-  | 'Canada/Saskatchewan'
-  | 'Canada/Yukon'
-  | 'Chile/Continental'
-  | 'Chile/EasterIsland'
-  | 'Cuba'
-  | 'EET'
-  | 'EST'
-  | 'EST5EDT'
-  | 'Egypt'
-  | 'Eire'
-  | 'Etc/GMT'
-  | 'Etc/GMT+0'
-  | 'Etc/GMT+1'
-  | 'Etc/GMT+10'
-  | 'Etc/GMT+11'
-  | 'Etc/GMT+12'
-  | 'Etc/GMT+2'
-  | 'Etc/GMT+3'
-  | 'Etc/GMT+4'
-  | 'Etc/GMT+5'
-  | 'Etc/GMT+6'
-  | 'Etc/GMT+7'
-  | 'Etc/GMT+8'
-  | 'Etc/GMT+9'
-  | 'Etc/GMT-0'
-  | 'Etc/GMT-1'
-  | 'Etc/GMT-10'
-  | 'Etc/GMT-11'
-  | 'Etc/GMT-12'
-  | 'Etc/GMT-13'
-  | 'Etc/GMT-14'
-  | 'Etc/GMT-2'
-  | 'Etc/GMT-3'
-  | 'Etc/GMT-4'
-  | 'Etc/GMT-5'
-  | 'Etc/GMT-6'
-  | 'Etc/GMT-7'
-  | 'Etc/GMT-8'
-  | 'Etc/GMT-9'
-  | 'Etc/GMT0'
-  | 'Etc/Greenwich'
-  | 'Etc/UCT'
-  | 'Etc/UTC'
-  | 'Etc/Universal'
-  | 'Etc/Zulu'
-  | 'Europe/Amsterdam'
-  | 'Europe/Andorra'
-  | 'Europe/Astrakhan'
-  | 'Europe/Athens'
-  | 'Europe/Belfast'
-  | 'Europe/Belgrade'
-  | 'Europe/Berlin'
-  | 'Europe/Bratislava'
-  | 'Europe/Brussels'
-  | 'Europe/Bucharest'
-  | 'Europe/Budapest'
-  | 'Europe/Busingen'
-  | 'Europe/Chisinau'
-  | 'Europe/Copenhagen'
-  | 'Europe/Dublin'
-  | 'Europe/Gibraltar'
-  | 'Europe/Guernsey'
-  | 'Europe/Helsinki'
-  | 'Europe/Isle_of_Man'
-  | 'Europe/Istanbul'
-  | 'Europe/Jersey'
-  | 'Europe/Kaliningrad'
-  | 'Europe/Kiev'
-  | 'Europe/Kirov'
-  | 'Europe/Lisbon'
-  | 'Europe/Ljubljana'
-  | 'Europe/London'
-  | 'Europe/Luxembourg'
-  | 'Europe/Madrid'
-  | 'Europe/Malta'
-  | 'Europe/Mariehamn'
-  | 'Europe/Minsk'
-  | 'Europe/Monaco'
-  | 'Europe/Moscow'
-  | 'Europe/Nicosia'
-  | 'Europe/Oslo'
-  | 'Europe/Paris'
-  | 'Europe/Podgorica'
-  | 'Europe/Prague'
-  | 'Europe/Riga'
-  | 'Europe/Rome'
-  | 'Europe/Samara'
-  | 'Europe/San_Marino'
-  | 'Europe/Sarajevo'
-  | 'Europe/Saratov'
-  | 'Europe/Simferopol'
-  | 'Europe/Skopje'
-  | 'Europe/Sofia'
-  | 'Europe/Stockholm'
-  | 'Europe/Tallinn'
-  | 'Europe/Tirane'
-  | 'Europe/Tiraspol'
-  | 'Europe/Ulyanovsk'
-  | 'Europe/Uzhgorod'
-  | 'Europe/Vaduz'
-  | 'Europe/Vatican'
-  | 'Europe/Vienna'
-  | 'Europe/Vilnius'
-  | 'Europe/Volgograd'
-  | 'Europe/Warsaw'
-  | 'Europe/Zagreb'
-  | 'Europe/Zaporozhye'
-  | 'Europe/Zurich'
-  | 'GB'
-  | 'GB-Eire'
-  | 'GMT'
-  | 'GMT+0'
-  | 'GMT-0'
-  | 'GMT0'
-  | 'Greenwich'
-  | 'HST'
-  | 'Hongkong'
-  | 'Iceland'
-  | 'Indian/Antananarivo'
-  | 'Indian/Chagos'
-  | 'Indian/Christmas'
-  | 'Indian/Cocos'
-  | 'Indian/Comoro'
-  | 'Indian/Kerguelen'
-  | 'Indian/Mahe'
-  | 'Indian/Maldives'
-  | 'Indian/Mauritius'
-  | 'Indian/Mayotte'
-  | 'Indian/Reunion'
-  | 'Iran'
-  | 'Israel'
-  | 'Jamaica'
-  | 'Japan'
-  | 'Kwajalein'
-  | 'Libya'
-  | 'MET'
-  | 'MST'
-  | 'MST7MDT'
-  | 'Mexico/BajaNorte'
-  | 'Mexico/BajaSur'
-  | 'Mexico/General'
-  | 'NZ'
-  | 'NZ-CHAT'
-  | 'Navajo'
-  | 'PRC'
-  | 'PST8PDT'
-  | 'Pacific/Apia'
-  | 'Pacific/Auckland'
-  | 'Pacific/Bougainville'
-  | 'Pacific/Chatham'
-  | 'Pacific/Chuuk'
-  | 'Pacific/Easter'
-  | 'Pacific/Efate'
-  | 'Pacific/Enderbury'
-  | 'Pacific/Fakaofo'
-  | 'Pacific/Fiji'
-  | 'Pacific/Funafuti'
-  | 'Pacific/Galapagos'
-  | 'Pacific/Gambier'
-  | 'Pacific/Guadalcanal'
-  | 'Pacific/Guam'
-  | 'Pacific/Honolulu'
-  | 'Pacific/Johnston'
-  | 'Pacific/Kiritimati'
-  | 'Pacific/Kosrae'
-  | 'Pacific/Kwajalein'
-  | 'Pacific/Majuro'
-  | 'Pacific/Marquesas'
-  | 'Pacific/Midway'
-  | 'Pacific/Nauru'
-  | 'Pacific/Niue'
-  | 'Pacific/Norfolk'
-  | 'Pacific/Noumea'
-  | 'Pacific/Pago_Pago'
-  | 'Pacific/Palau'
-  | 'Pacific/Pitcairn'
-  | 'Pacific/Pohnpei'
-  | 'Pacific/Ponape'
-  | 'Pacific/Port_Moresby'
-  | 'Pacific/Rarotonga'
-  | 'Pacific/Saipan'
-  | 'Pacific/Samoa'
-  | 'Pacific/Tahiti'
-  | 'Pacific/Tarawa'
-  | 'Pacific/Tongatapu'
-  | 'Pacific/Truk'
-  | 'Pacific/Wake'
-  | 'Pacific/Wallis'
-  | 'Pacific/Yap'
-  | 'Poland'
-  | 'Portugal'
-  | 'ROC'
-  | 'ROK'
-  | 'Singapore'
-  | 'Turkey'
-  | 'UCT'
-  | 'US/Alaska'
-  | 'US/Aleutian'
-  | 'US/Arizona'
-  | 'US/Central'
-  | 'US/East-Indiana'
-  | 'US/Eastern'
-  | 'US/Hawaii'
-  | 'US/Indiana-Starke'
-  | 'US/Michigan'
-  | 'US/Mountain'
-  | 'US/Pacific'
-  | 'US/Pacific-New'
-  | 'US/Samoa'
-  | 'UTC'
-  | 'Universal'
-  | 'W-SU'
-  | 'WET'
-  | 'Zulu'
+/* ================
+ * TYPE DEFINITIONS
+ * ================
+ */
 
-type m<T> = T | null | undefined
-// tslint:disable-next-line:class-name
-export interface Workshop__c {
-  Id: string
-  IsDeleted: boolean
-  Name?: m<string>
-  CreatedDate: string
-  CreatedById: string
-  CreatedBy: object
-  LastModifiedDate: string
-  LastModifiedById: string
-  LastModifiedBy: object
-  SystemModstamp: string
-  LastViewedDate?: m<string>
-  LastReferencedDate?: m<string>
-  Billing_Contact__c?: m<string>
-  Course_Manager__c?: m<string>
-  Course_Manager__r?: m<object /*Contact*/>
-  Event_City__c?: m<string>
-  Event_Country__c?: m<string>
-  Organizing_Affiliate__c: string
-  Organizing_Affiliate__r: object /*Account*/
-  Public__c: boolean
-  Registration_Website__c?: m<string>
-  End_Time__c: string
-  Start_Time__c: string
-  End_Date__c: string
-  Start_Date__c: string
-  Local_Start_Time__c: string
-  Local_End_Time__c: string
-  Timezone__c?: m<Timezone>
-  Status__c?: m<
-    | 'Proposed'
-    | 'Verified'
-    | 'Action Pending'
-    | 'Ready To Be Invoiced'
-    | 'Invoiced, Not Paid'
-    | 'Archived'
-    | 'Cancelled'
-  >
-  Workshop_Type__c?: m<'Discover' | 'Improve' | 'Enable' | 'Align' | 'Build'>
-  Host_Site__c?: m<string>
-  Language__c?: m<string>
+/**
+ * The possible type resulting from a call to WorkshopService.getAll or WorkshopService.getById
+ *
+ * ReadAllReturn is a subset of Workshop__c, which is a subset of ReadReturn
+ * (because ReadReturn is Workshop__c plus files and facilitators)
+ * therefore the combination is ReadAllReturn intersected with ReadReturn,
+ * but those keys that are present in ReadReturn and not ReadAllReturn must be optional
+ *
+ * We don't care if Organizing_Affiliate__r and Course_Manager__r are proper Accounts,
+ * because they are not used to create/update the workshop in SF
+ * (we use their Ids as Organizing_Affiliate__c and Course_Manager__c)
+ */
+export type WorkshopBase = Overwrite<
+  Base,
+  {
+    Organizing_Affiliate__r?: Partial<
+      Exclude<Base['Organizing_Affiliate__r'], undefined>
+    >
+    Course_Manager__r?: Partial<Exclude<Base['Course_Manager__r'], undefined>>
+  }
+>
+type Base = ReadAllReturn &
+  MakeKeysOptional<ReadReturn, Exclude<keyof ReadReturn, keyof ReadAllReturn>>
 
-  AttachedContentDocuments?: m<object[]>
-  AttachedContentNotes?: m<object[]>
-  Attachments?: m<object[]>
-  CombinedAttachments?: m<object[]>
-  ContentDocumentLinks?: m<object[]>
-  DuplicateRecordItems?: m<object[]>
-  Emails?: m<object[]>
-  Notes?: m<object[]>
-  NotesAndAttachments?: m<object[]>
-  ProcessInstances?: m<object[]>
-  ProcessSteps?: m<object[]>
-  TopicAssignments?: m<object[]>
-  Instructors__r?: m<object[] /*WorkshopFacilitatorAssociation__c[]*/>
-  Attendees__r?: m<object[]>
+export { Workshop__c }
+export type Timezone = Workshop__c['Timezone__c']
+
+export type WorkshopType = Exclude<
+  Workshop__c['Workshop_Type__c'],
+  null | undefined
+>
+
+export type WorkshopStatusType = Exclude<
+  Workshop__c['Status__c'],
+  null | undefined
+>
+
+export const WORKSHOP_COURSE_TYPES: ReadonlyArray<WorkshopType> = [
+  'Discover',
+  'Enable',
+  'Improve',
+  'Align',
+  'Build',
+]
+
+export const WORKSHOP_STATUS_TYPES: ReadonlyArray<WorkshopStatusType> = [
+  'Proposed',
+  'Verified',
+  'Action Pending',
+  'Ready To Be Invoiced',
+  'Invoiced, Not Paid',
+  'Archived',
+  'Cancelled',
+]
+
+/* ==================
+ * ACCESSOR FUNCTIONS
+ * ==================
+ */
+
+export const name = (w: WorkshopBase) => w.Name || undefined
+export const nameFormatted = (w: WorkshopBase) =>
+  `${type(w)} @ ${startDateFormatted(w)} - ${endDateFormatted(
+    w,
+  )} by ${(w.Organizing_Affiliate__r && w.Organizing_Affiliate__r.Name) ||
+    'unknown'}`
+export const startDate = (w: WorkshopBase) =>
+  moment.tz(w.Start_Date__c, w.Timezone__c)
+export const endDate = (w: WorkshopBase) =>
+  moment.tz(w.End_Date__c, w.Timezone__c)
+export const startDateFormatted = compose(
+  formatDate,
+  startDate,
+)
+export const endDateFormatted = compose(
+  formatDate,
+  endDate,
+)
+export const startTime = (w: WorkshopBase) =>
+  addTimeAndTz(w.Start_Date__c, localStartTime(w), w.Timezone__c)
+export const endTime = (w: WorkshopBase) =>
+  addTimeAndTz(w.End_Date__c, localEndTime(w), w.Timezone__c)
+export const localStartTime = (w: WorkshopBase) =>
+  formatTime(w.Local_Start_Time__c)
+export const localEndTime = (w: WorkshopBase) => formatTime(w.Local_End_Time__c)
+export const courseManager = (w: WorkshopBase) =>
+  w.Course_Manager__r || undefined
+export const courseManagerId = (w: WorkshopBase) => {
+  const manager = courseManager(w)
+  return manager ? manager.Id : w.Course_Manager__c || undefined
+}
+export const instructors = (w: WorkshopBase) => w.facilitators || []
+export const city = (w: WorkshopBase) => w.Event_City__c || undefined
+export const country = (w: WorkshopBase) => w.Event_Country__c || undefined
+export const hostSite = (w: WorkshopBase) => w.Host_Site__c || undefined
+export const affiliate = (w: WorkshopBase) =>
+  w.Organizing_Affiliate__r || undefined
+export const affiliateId = (w: WorkshopBase) => {
+  const aff = affiliate(w)
+  return aff ? aff.Id : w.Organizing_Affiliate__c
+}
+export const website = (w: WorkshopBase) =>
+  w.Registration_Website__c || undefined
+export const status = (w: WorkshopBase) => w.Status__c || undefined
+export const type = (w: WorkshopBase) => w.Workshop_Type__c || undefined
+export const billing = (w: WorkshopBase) => w.Billing_Contact__c || undefined
+export const language = (w: WorkshopBase) => w.Language__c || undefined
+export const image = (w: WorkshopBase): string => {
+  const wType = type(w)
+  if (!wType) return ''
+  switch (wType) {
+    case 'Improve':
+      return 'assets/imgs/shingo/Improve.png'
+    case 'Discover':
+      return 'assets/imgs/shingo/Discover.png'
+    case 'Build':
+      return 'assets/imgs/shingo/Build.png'
+    case 'Align':
+      return 'assets/imgs/shingo/Align.png'
+    case 'Enable':
+      return 'assets/imgs/shingo/Enable.png'
+  }
+}
+export const isVerified = (w: WorkshopBase) => {
+  const stat = status(w)
+  if (!stat) return false
+  return stat !== 'Proposed'
+}
+export const dueDate = (w: WorkshopBase) =>
+  moment(endDate(w).valueOf() + 1000 * 60 * 60 * 24 * 7)
+export const dueDateFormatted = compose(
+  formatDate,
+  dueDate,
+)
+export const location = (w: WorkshopBase): string => {
+  const region = city(w)
+  const nation = country(w)
+  if (region && nation) return `${region}, ${nation}`
+  else if (region) return region
+  else if (nation) return nation
+  return 'unknown'
+}
+export const files = (w: WorkshopBase) => w.files || []
+
+/**
+ * Formats a workshop object for consumption by salesforce
+ */
+export const toJSON = (w: WorkshopBase) => {
+  const ret: Partial<WorkshopBase> = {
+    Start_Date__c: w.Start_Date__c,
+    End_Date__c: w.End_Date__c,
+    Local_Start_Time__c: addMilliToTime(w.Local_Start_Time__c),
+    Local_End_Time__c: addMilliToTime(w.Local_End_Time__c),
+    Timezone__c: w.Timezone__c,
+    Public__c: w.Public__c,
+  }
+  if (!isPortalCreated(w)) {
+    ret.Id = w.Id
+  }
+  addIf(ret, 'Course_Manager__c', courseManagerId(w))
+  addIf(ret, 'Event_City__c', w.Event_City__c)
+  addIf(ret, 'Event_Country__c', w.Event_Country__c)
+  addIf(ret, 'Host_Site__c', w.Host_Site__c)
+  addIf(ret, 'Organizing_Affiliate__c', affiliateId(w))
+  addIf(ret, 'Registration_Website__c', w.Registration_Website__c)
+  addIf(ret, 'Status__c', w.Status__c)
+  addIf(ret, 'Workshop_Type__c', w.Workshop_Type__c)
+  addIf(ret, 'Billing_Contact__c', w.Billing_Contact__c)
+  addIf(ret, 'Language__c', w.Language__c)
+  addIf(ret, 'facilitators', w.facilitators)
+  return ret
+}
+
+let idCounter = 0
+export const ID_PREFIX = 'PORTAL_CREATED_WORKSHOP'
+
+/**
+ * Creates a new empty workshop object
+ */
+export const workshop = (init: Partial<WorkshopBase> = {}): WorkshopBase => {
+  const base: WorkshopBase = {
+    Id: `${ID_PREFIX}:${idCounter++}`,
+    Start_Date__c: getIsoYMD(new Date()),
+    End_Date__c: getIsoYMD(moment().add(1, 'd')),
+    Local_Start_Time__c: '08:00:00.000Z',
+    Local_End_Time__c: '17:00:00.000Z',
+    Timezone__c: moment.tz.guess() as Timezone,
+    get Start_Time__c() {
+      return addTimeAndTz(
+        this.Start_Date__c,
+        formatTime(this.Local_Start_Time__c),
+        this.Timezone__c,
+      ).toISOString(true)
+    },
+    get End_Time__c() {
+      return addTimeAndTz(
+        this.Start_Date__c,
+        formatTime(this.Local_End_Time__c),
+        this.Timezone__c,
+      ).toISOString(true)
+    },
+    Organizing_Affiliate__c: '',
+    Public__c: false,
+  }
+
+  // when spread the getters turn into static properties, which is what we want
+  return { ...base, ...init }
+}
+
+/* ================
+ * SETTER FUNCTIONS
+ * ================
+ */
+
+export const addInstructorsMut = (
+  w: WorkshopBase,
+  facs: ToReadonlyArray<Exclude<WorkshopBase['facilitators'], undefined>>,
+) => {
+  w.facilitators = [...new Set([...w.facilitators, ...facs])]
+  return w
+}
+
+/* =================
+ * UTILITY FUNCTIONS
+ * =================
+ */
+
+export const isPortalCreated = (w: WorkshopBase) =>
+  w.Id.startsWith(`${ID_PREFIX}:`)
+
+/**
+ * Adds the seconds and milliseconds section
+ * to a time string for use by salesforce
+ *
+ * @param time a time string in the form HH:mm
+ */
+export const addMilliToTime = (time: string) => {
+  if (time.charAt(time.length - 1) === 'Z') return time
+  return formatTime(time) + ':00.000Z'
+}
+
+/**
+ * Formats a time string for use in the website
+ *
+ * Removes the seconds and miliseconds section 00:00:00.000Z -> 00:00
+ * @param time a time string in the form HH:mm:ss.000Z
+ */
+export const formatTime = (time: string) => {
+  const replaced = time.replace(/:\d\d\.\d\d\dZ$/, '')
+  const coloncount = Array.from(replaced).reduce(
+    (p, c) => (c === ':' ? p + 1 : p),
+    0,
+  )
+  if (coloncount > 1) {
+    const lastcolon = replaced.lastIndexOf(':')
+    return replaced.slice(0, lastcolon)
+  }
+  return replaced
 }
 
 /**
@@ -687,322 +297,13 @@ export const addTimeAndTz = (
   return typeof zone === 'undefined' ? moment(info) : moment.tz(info, zone)
 }
 
-export type WorkshopType = 'Discover' | 'Enable' | 'Improve' | 'Align' | 'Build'
-
-export type WorkshopStatusType =
-  | 'Proposed'
-  | 'Verified'
-  | 'Action Pending'
-  | 'Ready To Be Invoiced'
-  | 'Invoiced, Not Paid'
-  | 'Archived'
-  | 'Cancelled'
-
-export const zones = tz.names()
-export const zoneOffsetPairs = zones.map(z => tuple(z, tz(z).format('Z')))
-
-const formatTime = (time: string) => {
-  const replaced = time.replace(/:\d\d\.\d\d\dZ$/, '')
-  const coloncount = Array.from(replaced).reduce(
-    (p, c) => (c === ':' ? p + 1 : p),
-    0,
-  )
-  if (coloncount > 1) {
-    const lastcolon = replaced.lastIndexOf(':')
-    return replaced.slice(0, lastcolon)
-  }
-  return replaced
-}
-
-/**
- * @desc Defines the interface to work with Workshops. Also provides a 'Facade' of the Salesforce API Naming conventions.
- *
- * @export
- * @class Workshop
- */
-export class Workshop extends SFObject {
-  public static get CourseTypes(): WorkshopType[] {
-    return ['Discover', 'Enable', 'Improve', 'Align', 'Build']
-  }
-  public static get WorkshopStatusTypes(): WorkshopStatusType[] {
-    return [
-      'Proposed',
-      'Verified',
-      'Action Pending',
-      'Ready To Be Invoiced',
-      'Invoiced, Not Paid',
-      'Archived',
-      'Cancelled',
-    ]
-  }
-
-  public get name(): string {
-    return `${this.type} @ ${this.startDateFormatted} - ${
-      this.endDateFormatted
-    } by ${this.affiliate.name}`
-  }
-
-  public get sfId(): string {
-    return this.Id
-  }
-
-  public get startDate(): Moment | Date {
-    return moment.tz(this.Start_Date__c, this.Timezone__c)
-  }
-  public set startDate(date: Moment | Date) {
-    this.Start_Date__c = getIsoYMD(date)
-  }
-
-  public get startDateFormatted(): string {
-    return Workshop.formatDate(this.startDate)
-  }
-
-  public get endDate(): Moment | Date {
-    return moment.tz(this.End_Date__c, this.Timezone__c)
-  }
-  public set endDate(date: Moment | Date) {
-    this.End_Date__c = getIsoYMD(date)
-  }
-
-  public get startTime(): Moment {
-    return addTimeAndTz(
-      this.Start_Date__c,
-      this.Local_Start_Time__c,
-      this.Timezone__c,
-    )
-  }
-
-  public get endTime(): Moment {
-    return addTimeAndTz(
-      this.End_Date__c,
-      this.Local_End_Time__c,
-      this.Timezone__c,
-    )
-  }
-
-  public get endDateFormatted(): string {
-    return Workshop.formatDate(this.endDate)
-  }
-
-  public get courseManager(): CourseManager {
-    return this.Course_Manager__r
-  }
-  public set courseManager(cm: CourseManager) {
-    this.Course_Manager__r = cm
-  }
-
-  public get courseManagerId(): string {
-    return this.Course_Manager__r
-      ? this.Course_Manager__r.sfId
-      : this.Course_Manager__c
-  }
-
-  public get instructors(): Facilitator[] {
-    return this.facilitators
-  }
-
-  public get city(): string {
-    return this.Event_City__c
-  }
-  public set city(city: string) {
-    this.Event_City__c = city
-  }
-
-  public get country(): string {
-    return this.Event_Country__c
-  }
-  public set country(country: string) {
-    this.Event_Country__c = country
-  }
-
-  public get hostSite(): string {
-    return this.Host_Site__c
-  }
-  public set hostSite(site: string) {
-    this.Host_Site__c = site
-  }
-
-  public get affiliate(): Affiliate {
-    return this.Organizing_Affiliate__r
-  }
-  public set affiliate(affiliate: Affiliate) {
-    this.Organizing_Affiliate__r = affiliate
-  }
-
-  public get affiliateId(): string {
-    return this.Organizing_Affiliate__c || this.Organizing_Affiliate__r.sfId
-  }
-  public set affiliateId(id: string) {
-    this.Organizing_Affiliate__c = id
-  }
-
-  public get isPublic(): boolean {
-    return this.Public__c
-  }
-  public set isPublic(isPublic: boolean) {
-    this.Public__c = isPublic
-  }
-
-  public get website(): string {
-    return this.Registration_Website__c
-  }
-  public set website(website: string) {
-    this.Registration_Website__c = website
-  }
-
-  public get status(): WorkshopStatusType {
-    return this.Status__c
-  }
-  public set status(status: WorkshopStatusType) {
-    this.Status__c = status
-  }
-
-  public get type(): WorkshopType {
-    return this.Workshop_Type__c
-  }
-  public set type(type: WorkshopType) {
-    this.Workshop_Type__c = type
-  }
-
-  public get billing(): string {
-    return this.Billing_Contact__c
-  }
-  public set billing(email: string) {
-    this.Billing_Contact__c = email
-  }
-
-  public get language(): string {
-    return this.Language__c
-  }
-  public set language(langauge: string) {
-    this.Language__c = langauge
-  }
-
-  public get image(): string {
-    switch (this.Workshop_Type__c.toLowerCase()) {
-      case 'improve':
-        return 'assets/imgs/shingo/Improve.png'
-      case 'discover':
-        return 'assets/imgs/shingo/Discover.png'
-      case 'build':
-        return 'assets/imgs/shingo/Build.png'
-      case 'align':
-        return 'assets/imgs/shingo/Align.png'
-      case 'enable':
-        return 'assets/imgs/shingo/Enable.png'
-      default:
-        return ''
-    }
-  }
-  public get isVerified(): boolean {
-    return this.Status__c.toLowerCase() !== 'proposed'
-  }
-  public get dueDate(): string {
-    // due 7 days from the endDate
-    const dueDate = this.endDate.valueOf() + 1000 * 60 * 60 * 24 * 7
-    return Workshop.formatDate(dueDate)
-  }
-  public get location(): string {
-    return `${this.city}, ${this.country}`
-  }
-  public files: Array<{
-    Name: string
-    ContentType: string
-    BodyLength: number
-  }> = []
-
-  // public members
-  /* tslint:disable:variable-name */
-  public Id = ''
-  public Start_Date__c = moment().format('YYYY-MM-DD')
-  public End_Date__c = moment(Date.now() + 1000 * 60 * 60 * 24).format(
-    'YYYY-MM-DD',
-  ) // end date starts 1 day from the current time
-  public Local_Start_Time__c = '08:00:00'
-  public Local_End_Time__c = '17:00:00'
-  public Timezone__c: Timezone = moment.tz.guess() as Timezone
-  public Course_Manager__r: CourseManager = new CourseManager()
-  public Course_Manager__c = ''
-  public facilitators: Facilitator[] = []
-  public Event_City__c = ''
-  public Event_Country__c = ''
-  public Host_Site__c = ''
-  public Organizing_Affiliate__c = ''
-  public Organizing_Affiliate__r: Affiliate = new Affiliate()
-  public Public__c = false
-  public Registration_Website__c = ''
-  public Status__c: WorkshopStatusType = 'Proposed'
-  public Workshop_Type__c: WorkshopType = 'Discover'
-  public Billing_Contact__c = ''
-  public Language__c = 'English'
-  /* tslint:enable:variable-name */
-
-  // Be careful because Object.assign will assign variables dynamically: eg
-  //  new Workshop({Id: 'some id', otherProp: 42}) => {Id: 'some id', otherProp: 42} that has type Workshop
-  constructor(workshop?: Workshop__c & { facilitators: any[] }) {
-    super()
-    if (workshop) {
-      Object.assign(this, workshop)
-      this.Local_Start_Time__c = formatTime(this.Local_Start_Time__c)
-      this.Local_End_Time__c = formatTime(this.Local_End_Time__c)
-      this.Organizing_Affiliate__r = new Affiliate(
-        workshop.Organizing_Affiliate__r,
-      )
-      this.Course_Manager__r = new CourseManager(workshop.Course_Manager__r)
-      if (workshop.facilitators && workshop.facilitators instanceof Array) {
-        this.facilitators = workshop.facilitators.map(
-          fac => new Facilitator(fac),
-        )
-      }
-    }
-  }
-
-  public static formatDate(d: string | number | Date | Moment) {
-    try {
-      if (!isMoment(d))
-        // tslint:disable-next-line:no-parameter-reassignment
-        d = moment(d)
-      return d.format('DD MMM, YYYY')
-    } catch (e) {
-      return ''
-    }
-  }
-
-  // Public "setter" for instructors
-  public addInstructor(...facilitator: Facilitator[]): void {
-    const filtered = facilitator.filter(
-      f => !this.facilitators.find(fac => fac.Id === f.sfId),
-    )
-    this.facilitators.push(...filtered)
-  }
-  public removeInstructorById(sfId: string): void {
-    this.facilitators = this.facilitators.filter(f => f['Id'] !== sfId)
-  }
-  public removeInstructorByIndex(index: number): void {
-    this.facilitators.splice(index, 1)
-  }
-
-  // Utility methods
-  public toJSON() {
-    return {
-      Id: this.sfId,
-      Start_Date__c: this.Start_Date__c,
-      End_Date__c: this.End_Date__c,
-      Local_Start_Time__c: this.Local_Start_Time__c + ':00.000Z',
-      Local_End_Time__c: this.Local_End_Time__c + ':00.000Z',
-      Timezone__c: this.Timezone__c,
-      Course_Manager__c: this.courseManagerId,
-      Event_City__c: this.city,
-      Event_Country__c: this.country,
-      Host_Site__c: this.hostSite,
-      Organizing_Affiliate__c: this.affiliateId,
-      Public__c: this.isPublic,
-      Registration_Website__c: this.website,
-      Status__c: this.status,
-      Workshop_Type__c: this.type,
-      Billing_Contact__c: this.billing,
-      Language__c: this.language,
-      facilitators: this.instructors,
-    }
+function formatDate(d: string | number | Date | Moment) {
+  try {
+    if (!isMoment(d))
+      // tslint:disable-next-line:no-parameter-reassignment
+      d = moment(d)
+    return d.format('DD MMM, YYYY')
+  } catch (e) {
+    return ''
   }
 }

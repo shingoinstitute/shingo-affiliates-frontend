@@ -11,9 +11,11 @@ export interface UserState {
   user: fromUser.State
 }
 
+export const ROOT_KEY = 'userdata' as 'userdata'
+
 // A slice of the global state. Keys here must not conflict with global state
 export interface State {
-  userdata: UserState
+  [ROOT_KEY]: UserState
 }
 
 export const reducers: ActionReducerMap<UserState, UserAction> = {

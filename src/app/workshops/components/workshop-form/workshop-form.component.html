@@ -1,6 +1,6 @@
 <mat-card class="form-group-container">
   <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
-    <div class="input-item" *ngIf="auth.user?.isAdmin">
+    <div class="input-item" *ngIf="(isAdmin$ | async)">
       <p class="mat-caption">
         {{ describe.organizingAffiliate?.inlineHelpText }}
       </p>
@@ -67,9 +67,11 @@
             placeholderLabel="Search languages..."
             noEntriesFoundLabel="Language not available"
           ></ngx-mat-select-search>
-          <mat-option *ngFor="let lang of (languages$ | async)" [value]="lang">{{
-            lang
-          }}</mat-option>
+          <mat-option
+            *ngFor="let lang of (languages$ | async)"
+            [value]="lang"
+            >{{ lang }}</mat-option
+          >
         </mat-select>
         <mat-error
           *ngIf="workshopForm.controls['language'].hasError('required')"
@@ -79,7 +81,7 @@
       </mat-form-field>
     </div>
 
-    <div class="input-item" *ngIf="auth.user?.isAdmin && !isNewWorkshop">
+    <div class="input-item" *ngIf="(isAdmin$ | async) && !isNewWorkshop">
       <p class="mat-caption">{{ describe.status?.inlineHelpText }}</p>
       <mat-form-field>
         <mat-select
@@ -259,9 +261,7 @@
         >
           Start Time is required
         </mat-error>
-        <mat-error
-          *ngIf="timeFormGroup.controls['startTime'].hasError('time')"
-        >
+        <mat-error *ngIf="timeFormGroup.controls['startTime'].hasError('time')">
           Start Time must be in 24-hour time (HH:mm)
         </mat-error>
         <mat-error
@@ -283,9 +283,7 @@
         >
           End Time is required
         </mat-error>
-        <mat-error
-          *ngIf="timeFormGroup.controls['endTime'].hasError('time')"
-        >
+        <mat-error *ngIf="timeFormGroup.controls['endTime'].hasError('time')">
           End Time must be in 24-hour time (HH:mm)
         </mat-error>
       </mat-form-field>
@@ -407,6 +405,8 @@
       <mat-spinner diameter="36" *ngIf="pending" color="accent"></mat-spinner>
     </div>
   </form>
-  <!-- <pre>{{ getFormErrors(workshopForm) | json }}</pre>
-  <pre>{{ workshopForm.getRawValue() | json }}</pre> -->
+  <!--
+    <pre>{{ getFormErrors(workshopForm) | json }}</pre>
+    <pre>{{ workshopForm.getRawValue() | json }}</pre>
+  -->
 </mat-card>

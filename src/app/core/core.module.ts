@@ -18,11 +18,15 @@ import {
   MatProgressSpinnerModule,
   MatExpansionModule,
 } from '@angular/material'
+import { DashboardComponent } from './pages/dashboard/dashboard.component'
+import { UIComponentsModule } from '~app/ui-components/ui-components.module'
+import { WorkshopsModule } from '~app/workshops/workshops.module'
 
 export const COMPONENTS = [
   AppComponent,
   ForbiddenPageComponent,
   PageNotFoundComponent,
+  DashboardComponent,
 ]
 
 @NgModule({
@@ -43,6 +47,8 @@ export const COMPONENTS = [
     FlexLayoutModule,
 
     LayoutModule,
+    UIComponentsModule,
+    WorkshopsModule,
   ],
   declarations: COMPONENTS,
   exports: COMPONENTS,

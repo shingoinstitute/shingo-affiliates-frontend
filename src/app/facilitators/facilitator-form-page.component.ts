@@ -10,7 +10,7 @@ import {
   handleFacilitatorAction,
 } from './facilitator-form/facilitator-form.component'
 import { FormAction } from '../affiliates/affiliate-form/affiliate-form.component'
-import { SFSuccessResult } from '../services/workshop/workshop.service'
+import { SFSuccessResult } from '~app/services/api/base-api.abstract.service'
 import { Location } from '@angular/common'
 
 @Component({

@@ -1,5 +1,7 @@
 import { Filter } from '../filter.abstract'
-import { Workshop } from '../../../workshops/workshop.model'
+import { WorkshopBase } from '~app/workshops/workshop.model'
+// tslint:disable-next-line:no-duplicate-imports
+import * as W from '~app/workshops/workshop.model'
 import { and, constant } from '../../../util/functional'
 import { withoutTime } from '../../../util/util'
 import { Moment } from 'moment'
@@ -8,16 +10,16 @@ import { Moment } from 'moment'
 // prettier-ignore
 export type DateRange = [(Date | Moment | null)?, (Date | Moment | null)?]
 
-export class WorkshopDateRangeFilter extends Filter<Workshop, DateRange> {
+export class WorkshopDateRangeFilter extends Filter<WorkshopBase, DateRange> {
   constructor(name: string) {
     super(name)
   }
 
-  private _endsBefore = (d: Date | Moment) => (w: Workshop) =>
-    this.lessThanWithoutTime(w.endDate, d)
+  private _endsBefore = (d: Date | Moment) => (w: WorkshopBase) =>
+    this.lessThanWithoutTime(W.endDate(w), d)
 
-  private _startsAfter = (d: Date | Moment) => (w: Workshop) =>
-    this.greaterThanWithoutTime(w.startDate, d)
+  private _startsAfter = (d: Date | Moment) => (w: WorkshopBase) =>
+    this.greaterThanWithoutTime(W.startDate(w), d)
 
   _filter = (range: DateRange) => {
     const startsAfter = range[0]

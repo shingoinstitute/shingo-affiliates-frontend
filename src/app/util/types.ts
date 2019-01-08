@@ -1,4 +1,4 @@
-export type Fn<Args extends any[], R> = (...args: Args) => R
+export { Fn } from './functional/types'
 export type ReturnOf<T> = T extends (...args: any[]) => infer R ? R : never
 export type ArgsOf<T> = T extends (...args: infer A) => any ? A : never
 export type UnPromise<T> = T extends Promise<infer I> ? I : never
@@ -115,3 +115,7 @@ export type RequireKeys<T, K extends keyof T> = Overwrite<
   T,
   { [key in K]-?: T[key] }
 >
+
+export type ToReadonlyArray<Arr extends any[]> = ReadonlyArray<Arr[number]>
+/** A map where every key is also it's value */
+export type KVMap<Entries extends string> = { readonly [K in Entries]: K }

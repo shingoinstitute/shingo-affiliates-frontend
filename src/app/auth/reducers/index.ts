@@ -13,9 +13,11 @@ export interface AuthState {
   loginPage: fromLoginPage.State
 }
 
+export const ROOT_KEY = 'auth'
+
 // keys here must not conflict with global state
 export interface State {
-  auth: AuthState
+  [ROOT_KEY]: AuthState
 }
 
 export const reducers: ActionReducerMap<

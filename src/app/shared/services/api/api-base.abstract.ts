@@ -3,7 +3,7 @@ import {
   methodMap,
   ParamDataBase,
 } from '../../../util/api-contract'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { environment } from '../../../../environments/environment'
 import { OmitNever } from '../../../util/types'
@@ -69,12 +69,25 @@ export const getParams = (params: ContractMethod['params']) => {
 
   return returned
 }
+export interface HttpOptionsSubset {
+  body?: any
+  headers?:
+    | HttpHeaders
+    | {
+        [header: string]: string | string[]
+      }
+  params?:
+    | HttpParams
+    | {
+        [header: string]: string | string[]
+      }
+}
 
 export abstract class ApiBase {
   get authHost() {
     return environment.apiUrl
   }
-  constructor(private http: HttpClient) {}
+  constructor(protected http: HttpClient) {}
   protected request<Base extends NoDataContractMethod = never>(
     route: Base['metadata']['route'],
     method: Base['metadata']['method'],
@@ -88,6 +101,22 @@ export abstract class ApiBase {
       params: Base['params']
       files: Base['files']
     }>,
+    noExecute: true,
+  ): {
+    url: string
+    method: (typeof methodMap)[keyof typeof methodMap]
+    options: HttpOptionsSubset
+  }
+  protected request<Base extends ContractMethod = never>(
+    route: Base['metadata']['route'],
+    method: Base['metadata']['method'],
+    data: OmitNever<{
+      body: Base['body']
+      urlparams: Base['urlparams']
+      params: Base['params']
+      files: Base['files']
+    }>,
+    noExecute?: false,
   ): Observable<Base['returntype']>
   protected request(
     route: ContractMethod['metadata']['route'],
@@ -98,7 +127,14 @@ export abstract class ApiBase {
       params?: ContractMethod['params']
       files?: ContractMethod['files']
     },
-  ): Observable<ContractMethod['returntype']> {
+    noExecute = false,
+  ):
+    | Observable<ContractMethod['returntype']>
+    | {
+        url: string
+        method: (typeof methodMap)[keyof typeof methodMap]
+        options: HttpOptionsSubset
+      } {
     const urlparams = data && data.urlparams
     const realroute = (urlparams && fillroute(route, urlparams)) || route
     const url = `${this.authHost}${realroute}`
@@ -121,15 +157,13 @@ export abstract class ApiBase {
 
     const body = (data && data.body) || filesBody
 
-    const options: {
-      body?: any
-      headers?: typeof headers
-      params?: typeof params
-    } = {}
+    const options: HttpOptionsSubset = {}
     if (typeof body !== 'undefined') options.body = body
     if (headers) options.headers = headers
     if (params) options.params = params
+    const realMethod = methodMap[method]
+    if (noExecute) return { options, url, method: realMethod }
 
-    return this.http.request(methodMap[method], url, options)
+    return this.http.request(realMethod, url, options)
   }
 }

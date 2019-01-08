@@ -6,7 +6,7 @@ import {
 } from '../../user/actions/user-api.actions'
 
 export interface State {
-  isLoggedIn: boolean
+  readonly isLoggedIn: boolean
 }
 
 export const initialState: State = {

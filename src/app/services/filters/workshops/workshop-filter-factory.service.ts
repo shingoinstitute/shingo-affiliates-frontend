@@ -3,10 +3,10 @@ import { FilterFactory } from '../filter-factory.abstract.service'
 import { PropertyFilter } from '../property-filter'
 import { TextFilter } from '../text-filter'
 import { WorkshopDateRangeFilter } from './workshop-date-range-filter'
-import { Workshop } from '../../../workshops/workshop.model'
+import { WorkshopBase } from '../../../workshops/workshop.model'
 
 @Injectable()
-export class WorkshopFilterFactory extends FilterFactory<Workshop> {
+export class WorkshopFilterFactory extends FilterFactory<WorkshopBase> {
   public static id = 0
 
   constructor() {
@@ -22,15 +22,15 @@ export class WorkshopFilterFactory extends FilterFactory<Workshop> {
 
   public createPropertyFilter(
     name: string = `WorkshopPropertyFilter:${WorkshopFilterFactory.id}`,
-  ): PropertyFilter<Workshop> {
+  ): PropertyFilter<WorkshopBase> {
     WorkshopFilterFactory.id++
-    return new PropertyFilter<Workshop>(name)
+    return new PropertyFilter<WorkshopBase>(name)
   }
 
   public createTextFilter(
     name: string = `WorkshopTextFilter:${WorkshopFilterFactory.id}`,
-  ): TextFilter<Workshop> {
+  ): TextFilter<WorkshopBase> {
     WorkshopFilterFactory.id++
-    return new TextFilter<Workshop>(name)
+    return new TextFilter<WorkshopBase>(name)
   }
 }

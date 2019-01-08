@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
 
 import { DataProvider } from './data-provider.service'
-import { WorkshopService } from '../workshop/workshop.service'
-import { Workshop } from '../../workshops/workshop.model'
+import { WorkshopService } from '~app/workshops/services/workshop.service'
+import { WorkshopBase } from '../../workshops/workshop.model'
 import { AffiliateService } from '../affiliate/affiliate.service'
 
 import { Affiliate } from '../../affiliates/affiliate.model'
@@ -19,8 +19,11 @@ export class DataProviderFactory {
     public router: RouterService,
   ) {}
 
-  public getWorkshopDataProvider(): DataProvider<WorkshopService, Workshop> {
-    return new DataProvider<WorkshopService, Workshop>(this._ws)
+  public getWorkshopDataProvider(): DataProvider<
+    WorkshopService,
+    WorkshopBase
+  > {
+    return new DataProvider<WorkshopService, WorkshopBase>(this._ws)
   }
 
   public getAffiliateDataProvider():

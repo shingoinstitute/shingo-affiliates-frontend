@@ -7,7 +7,7 @@ import {
 } from '@angular/router'
 
 /** Interface Components */
-import { DashboardComponent } from './workshops/dashboard/dashboard.component'
+// import { DashboardComponent } from './workshops/dashboard/dashboard.component'
 // import { AddWorkshopComponent } from './workshops/add-workshop/add-workshop.component'
 // import { EditWorkshopComponent } from './workshops/edit-workshop/edit-workshop.component'
 // import { WorkshopDashboardComponent } from './workshops/workshop-dashboard/workshop-dashboard.component'
@@ -27,15 +27,15 @@ import { IsAdminGuard } from './services/auth/is-admin.guard'
 import { WorkshopResolver } from './workshops/workshop.resolver'
 import { AuthGuard } from './auth/services/auth-guard.service'
 import { SuccessComponent } from './success.component'
+import { DashboardComponent } from './core/pages/dashboard/dashboard.component'
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/success', pathMatch: 'full' },
-  { path: 'success', component: SuccessComponent, canActivate: [AuthGuard] },
-  // {
-  //   path: 'dashboard',
-  //   component: DashboardComponent,
-  //   canActivate: [IsValidGuard],
-  // },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [IsValidGuard],
+  },
   // {
   //   path: 'workshops/new',
   //   component: AddWorkshopComponent,

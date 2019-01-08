@@ -54,6 +54,9 @@
     "directive-class-suffix": true,
     "no-object-literal-type-assertion": false,
     "no-implicit-dependencies": [true, "dev", ["~app"]],
-    "prettier": true
+    "prettier": { "severity": "warn" }
+  },
+  "linterOptions": {
+    "exclude": ["node_modules"]
   }
 }

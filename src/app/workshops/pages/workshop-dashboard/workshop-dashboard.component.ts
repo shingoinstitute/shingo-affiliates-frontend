@@ -7,24 +7,28 @@ import {
   startWith,
 } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Router } from '@angular/router'
 
-import { AuthService } from '~app/services/auth/auth.service'
 import { Filter } from '~app/services/filters/filter.abstract'
-import { User } from '~app/shared/models/user.model'
 import { WorkshopFilterFactory } from '~app/services/filters/workshops/workshop-filter-factory.service'
-import {
-  WorkshopProperties,
-  WorkshopService,
-  Workshop,
-} from '~app/services/workshop/workshop.service'
 
 import { Moment } from 'moment'
-import { FormControl, FormArray } from '@angular/forms'
+import { FormControl, FormGroup } from '@angular/forms'
 import { just, nothing, map as mapMaybe } from '~app/util/functional/Maybe'
 import { DateRange } from '~app/services/filters/workshops/workshop-date-range-filter'
-import { tuple, fst, constant } from '~app/util/functional'
-import { filterMap, XOR, withoutTime } from '~app/util/util'
+import { tuple as tp, fst } from '~app/util/functional'
+import { XOR, withoutTime, recordEntries, toRecord } from '~app/util/util'
+import { WorkshopBase } from '~app/workshops/workshop.model'
+import { WorkshopService } from '~app/workshops/services/workshop.service'
+import {
+  WorkshopProperties,
+  WORKSHOP_PROPERTY_MAP,
+} from '~app/workshops/components/workshop-data-table/workshop-data-table.component'
+import { Obj } from '~app/util/types'
+import { filter as filterI, map as mapI } from '~app/util/iterable'
+import { Store, select } from '@ngrx/store'
+import { State } from '~app/reducers'
+import * as fromUser from '~app/user/reducers'
 
 const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
   f.criteria = criteria
@@ -34,7 +38,7 @@ const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
 
 const noop = () => {}
 
-type FilterCB = (change: boolean, filter: Filter<Workshop, any>) => void
+type FilterCB = (change: boolean, filter: Filter<WorkshopBase, any>) => void
 
 @Component({
   selector: 'app-workshop-dashboard',
@@ -42,21 +46,21 @@ type FilterCB = (change: boolean, filter: Filter<Workshop, any>) => void
   styleUrls: ['./workshop-dashboard.component.scss'],
 })
 export class WorkshopDashboardComponent implements OnInit {
-  public get showDateRange(): boolean {
-    const idx = this.filters.findIndex(v => v[0].name === 'by Date')
-    return idx > 0 && this.filterControls.at(idx).value
+  get showDateRange(): boolean {
+    const control = this.filterControls.controls['by Date']
+    return !!(control && control.value)
   }
-  public get showStatusFilter(): boolean {
-    const idx = this.filters.findIndex(v => v[0].name === 'by Status')
-    return idx > 0 && this.filterControls.at(idx).value
+  get showStatusFilter(): boolean {
+    const control = this.filterControls.controls['by Status']
+    return !!(control && control.value)
   }
-  public get showTextFilter(): boolean {
-    const idx = this.filters.findIndex(v => v[0].name === 'by Text')
-    return idx > 0 && this.filterControls.at(idx).value
+  get showTextFilter(): boolean {
+    const control = this.filterControls.controls['by Text']
+    return !!(control && control.value)
   }
 
-  public dateRange: DateRange = [null, null]
-  public displayedColumns: WorkshopProperties[] = [
+  dateRange: DateRange = [null, null]
+  displayedColumns: WorkshopProperties[] = [
     'workshopType',
     'startDate',
     'endDate',
@@ -66,204 +70,225 @@ export class WorkshopDashboardComponent implements OnInit {
     'verified',
     'actions',
   ]
-  public allDisplayedColumns: WorkshopProperties[] = [
-    'workshopType',
-    'dueDate',
-    'instructors',
-    'location',
-    'verified',
-    'startDate',
-    'endDate',
-    'hostCity',
-    'hostCountry',
-    'daysLate',
-    'status',
-    'edit',
-    'actions',
-  ]
-  public filters: Array<[Filter<Workshop, any>, FilterCB]> = [] // list of (filter object, change callback) pairs
-  public get filterFns(): Array<Filter<Workshop, any>> {
-    return this.filters.map(fst)
+  allDisplayedColumns: WorkshopProperties[] = Object.keys(
+    WORKSHOP_PROPERTY_MAP,
+  ) as WorkshopProperties[]
+  filters: Record<string, [Filter<WorkshopBase, any>, FilterCB]> = {} // list of (filter object, change callback) pairs
+  get filterFns(): Array<Filter<WorkshopBase, any>> {
+    return Array.from(
+      mapI(recordEntries(this.filters), ([, value]) => fst(value)),
+    )
   }
-  public statuses: Observable<string[]> = of([])
-  public filterControls = new FormArray([])
-  public textSearchControl = new FormControl('')
-  public statusControl = new FormControl()
-  public startDateControl = new FormControl()
-  public endDateControl = new FormControl()
-
-  public get user(): User {
-    return this.route.snapshot.data['user']
-  }
+  statuses: Observable<string[]> = of([])
+  filterControls = new FormGroup({})
+  textSearchControl = new FormControl('')
+  statusControl = new FormControl()
+  startDateControl = new FormControl()
+  endDateControl = new FormControl()
+  private isAdmin$: Observable<boolean>
 
   constructor(
-    public filterFactory: WorkshopFilterFactory,
-    public _ws: WorkshopService,
-    public router: Router,
-    public route: ActivatedRoute,
-    public authService: AuthService,
+    private filterFactory: WorkshopFilterFactory,
+    private _ws: WorkshopService,
+    private router: Router,
+    private store: Store<State>,
   ) {
+    this.isAdmin$ = this.store.pipe(select(fromUser.isAdmin))
     this.statuses = this._ws
       .describe()
       .pipe(map(describe => this.getWorkshopStatuses(describe)))
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.initFilters()
 
     // here we set up mappings between the filters criteria and form control values
     this.textSearchControl.valueChanges
-      .pipe(debounceTime(150))
-      .subscribe(value =>
-        mapMaybe(this.findFilter('by Text'), ([f]) => {
+      .pipe(
+        debounceTime(150),
+        map(v => tp(v, this.findFilter('by Text'))),
+      )
+      .subscribe(([value, filter]) =>
+        mapMaybe(filter, ([f]) => {
           f.criteria = value
         }),
       )
-    this.statusControl.valueChanges.subscribe(value =>
-      mapMaybe(this.findFilter('by Status'), ([f]) => {
-        f.criteria = {
-          key: 'status',
-          value,
-        }
-      }),
-    )
-    this.startDateControl.valueChanges.subscribe(value =>
-      this.changeDateFilter(value, 0),
-    )
-    this.endDateControl.valueChanges.subscribe(value =>
-      this.changeDateFilter(value, 1),
-    )
+    this.statusControl.valueChanges
+      .pipe(map(v => tp(v, this.findFilter('by Status'))))
+      .subscribe(([value, filter]) =>
+        mapMaybe(filter, ([f]) => {
+          f.criteria = {
+            key: 'status',
+            value,
+          }
+        }),
+      )
+    this.startDateControl.valueChanges
+      .pipe(map(v => tp(v, this.findFilter('by Date'))))
+      .subscribe(([value, filter]) =>
+        mapMaybe(filter, ([f]) => this.changeDateFilter(f, value, 0)),
+      )
+    this.endDateControl.valueChanges
+      .pipe(map(v => tp(v, this.findFilter('by Date'))))
+      .subscribe(([value, filter]) =>
+        mapMaybe(filter, ([f]) => this.changeDateFilter(f, value, 1)),
+      )
     ;(this.filterControls.valueChanges as Observable<boolean[]>)
       .pipe(
         startWith(0), // start with some value, doesn't matter since we map it anyway
         // valueChanges only emits enabled controls, which breaks things because indexes change
-        map(() => this.filterControls.getRawValue() as boolean[]),
+        map(() => this.filterControls.getRawValue() as Obj<boolean>),
         // buffer pairwise so that we recieve a stream of overlapping pairs
         bufferCount(2, 1) as OperatorFunction<
-          boolean[],
-          [boolean[], boolean[]]
+          Obj<boolean>,
+          [Obj<boolean>, Obj<boolean>]
         >,
         mergeMap(([prev, next]) =>
-          filterMap(
-            next,
+          mapI(
             // if new value differs from previous value
-            (v, i) => XOR(v, prev[i]),
+            filterI(recordEntries(next), ([k, v]) => XOR(v, prev[k])),
             // then map to pair (value, filter)
-            (v, i) => tuple(v, this.filters[i]),
+            ([k, v]) => tp(v, this.findFilter(k)),
           ),
         ),
       )
-      .subscribe(([change, [filter, cb]]) => {
-        filter.active = change
-        cb(change, filter)
-      })
+      .subscribe(([change, mfilter]) =>
+        mapMaybe(mfilter, ([filter, cb]) => {
+          filter.active = change
+          cb(change, filter)
+        }),
+      )
   }
 
-  private changeDateFilter(date: Moment | null, idx: 0 | 1 = 0) {
+  private changeDateFilter(
+    filter: Filter<WorkshopBase, any>,
+    date: Moment | null,
+    idx: 0 | 1 = 0,
+  ) {
     if ((date && date.isValid) || date === null) {
       this.dateRange[idx] = date && date.toDate()
-      mapMaybe(this.findFilter('by Date'), ([f]) => {
-        f.criteria = this.dateRange
-      })
+      filter.criteria = this.dateRange
     }
   }
 
-  private addFilters(...fs: Array<[Filter<Workshop, any>, FilterCB]>) {
-    fs.forEach(([f]) => {
+  private addFilters(...fs: Array<[Filter<WorkshopBase, any>, FilterCB]>) {
+    mapI(filterI(fs, ([f]) => !this.filterControls.controls[f.name]), fpair => {
+      const [f] = fpair
+
+      // add the control as side effect
+      // avoids iterating array twice
       const control = new FormControl(f.getActive())
-      this.filterControls.push(control)
+      this.filterControls.addControl(f.name, control)
+
+      // add to filters record
+      this.filters[f.name] = fpair
     })
-    this.filters.push(...fs)
+  }
+
+  private removeFilters(...fs: Array<[Filter<WorkshopBase, any>, FilterCB]>) {
+    mapI(
+      filterI(fs, ([f]) => !!this.filterControls.controls[f.name]),
+      fpair => {
+        const [f] = fpair
+
+        // remove the control
+        this.filterControls.removeControl(f.name)
+
+        // delete the entry from the filters record
+        delete this.filters[f.name]
+      },
+    )
   }
 
   private initFilters() {
-    const filters: Array<[Filter<Workshop, any>, FilterCB]> = [
-      tuple(
+    const baseFilters: ReadonlyArray<[Filter<WorkshopBase, any>, FilterCB]> = [
+      tp(
         setFilterState(
           this.filterFactory.createDateRangeFilter('by Upcoming Workshops'),
           [withoutTime(new Date()), null],
           true,
         ),
         this.toggleDisabled('by Action Pending', 'by Archived', 'by Date'),
-      ) /* Upcoming */,
-      tuple(this.filterFactory.createTextFilter('by Text'), noop), // Text Search
-      tuple(
+      ), // Upcoming
+      tp(this.filterFactory.createTextFilter('by Text'), noop), // Text Search
+      tp(
         this.filterFactory.createDateRangeFilter('by Date'),
         this.toggleDisabled('by Upcoming Workshops'),
       ), // Date range
     ]
 
-    if (this.user.isAdmin) {
-      filters.push(
-        tuple(this.filterFactory.createPropertyFilter('by Status'), noop),
-      ) // By Status (for admin)
-    } else {
-      filters.push(
-        tuple(
-          setFilterState(
-            this.filterFactory.createPropertyFilter('by Action Pending'),
-            {
-              key: 'status',
-              value: [
-                'Action Pending',
-                'Invoiced, Not Paid',
-                'Finished, waiting for attendee list',
-                'Awaiting Invoice',
-              ],
-            },
-          ),
-          this.toggleDisabled('by Upcoming Workshops', 'by Archived'),
-        ), // Action Pending Property
-        tuple(
-          setFilterState(
-            this.filterFactory.createPropertyFilter('by Archived'),
-            {
-              key: 'status',
-              value: 'Archived',
-            },
-          ),
-          this.toggleDisabled('by Upcoming Workshops', 'by Action Pending'),
-        ), // Archived Workshops
-      )
-    }
+    const adminFilters = [
+      tp(this.filterFactory.createPropertyFilter('by Status'), noop),
+    ]
 
-    this.addFilters(...filters)
+    const nonAdminFilters = [
+      tp(
+        this.filterFactory
+          .createPropertyFilter('by Action Pending')
+          .setCriteria('Status__c', [
+            'Action Pending',
+            'Invoiced, Not Paid',
+            // 'Finished, waiting for attendee list',
+            // 'Awaiting Invoice',
+          ]),
+        this.toggleDisabled('by Upcoming Workshops', 'by Archived'),
+      ), // Action Pending Property
+      tp(
+        this.filterFactory
+          .createPropertyFilter('by Archived')
+          .setCriteria('Status__c', 'Archived'),
+        this.toggleDisabled('by Upcoming Workshops', 'by Action Pending'),
+      ), // Archived Workshops
+    ]
 
-    // run the intial callbacks for all filters with their initial state
-    filters.forEach(([f, cb]) => cb(f.getActive(), f))
+    this.isAdmin$.subscribe(isAdmin => {
+      if (isAdmin) {
+        this.addFilters(...adminFilters)
+        this.removeFilters(...nonAdminFilters)
+      } else {
+        this.addFilters(...nonAdminFilters)
+        this.removeFilters(...adminFilters)
+      }
+    })
+
+    baseFilters.forEach(([f, cb]) => cb(f.getActive(), f))
+    this.addFilters(...baseFilters)
   }
 
   private toggleDisabled(...toDisable: string[]): FilterCB {
     return (state: boolean) => {
-      this.filters.forEach(([f], idx) => {
-        if (toDisable.includes(f.name)) {
-          const control = this.filterControls.at(idx)
+      toDisable.forEach(name => {
+        const filter = this.findFilter(name)
+        mapMaybe(filter, ([f]) => {
+          const control = this.filterControls.controls[f.name]
           if (state) {
             control.disable({ emitEvent: false, onlySelf: true })
           } else {
             control.enable({ emitEvent: false, onlySelf: true })
           }
-        }
+        })
       })
     }
   }
 
-  private findFilter(name: string) {
-    const filter = this.filters.find(([f]) => f.name === name)
-    return typeof filter !== 'undefined' ? just(filter) : nothing
+  private findFilter(name: string | number) {
+    const f = this.filters[name]
+    return typeof f !== 'undefined' ? just(f) : nothing
   }
 
-  public goToWorkshopEdit(sfId: string) {
+  goToWorkshopEdit(sfId: string) {
     this.router.navigateByUrl(`/workshops/${sfId}/edit`)
   }
 
-  public clearFilters() {
-    this.filterControls.patchValue(this.filters.map(constant(false)))
+  clearFilters() {
+    this.filterControls.patchValue(
+      toRecord(mapI(recordEntries(this.filters), ([n]) => tp(n, false))),
+    )
     this.clearDateFilter()
     this.textSearchControl.setValue('')
   }
 
-  public clearDateFilter() {
+  clearDateFilter() {
     this.startDateControl.setValue(null)
     this.endDateControl.setValue(null)
   }

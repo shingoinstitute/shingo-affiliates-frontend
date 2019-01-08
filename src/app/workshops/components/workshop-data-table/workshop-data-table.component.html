@@ -1,187 +1,205 @@
 <mat-table #table matSort [dataSource]="dataSource" [trackBy]="workshopTrackBy" [matSortDisableClear]="true">
 
   <!-- Workshop Type Column -->
-  <ng-container matColumnDef="workshopType">
+  <ng-container [matColumnDef]="properties.workshopType">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Course Type </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <ng-container *ngIf="selectedSfId != workshop.sfId">
-        <img src="{{ workshop.image }}">
+      <ng-container *ngIf="selectedWorkshopId != workshop.Id; then viewCourseType; else editCourseType">
       </ng-container>
 
-      <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <mat-select floatPlaceholder="never" placeholder="Course Type" [(ngModel)]="workshop.type">
-          <mat-option *ngFor="let type of CourseTypes" [value]="type">{{ type }}</mat-option>
-        </mat-select>
-      </ng-container>
+      <ng-template #viewCourseType>
+        <img [src]="W.image(workshop)">
+      </ng-template>
     </mat-cell>
   </ng-container>
 
   <!-- Action Type Column -->
-  <ng-container matColumnDef="actionType">
+  <ng-container [matColumnDef]="properties.actionType">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Action Type </mat-header-cell>
-    <mat-cell *matCellDef="let workshop"> {{ workshop.status }} </mat-cell>
+    <mat-cell *matCellDef="let workshop"> {{ W.status(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Location Column -->
-  <ng-container matColumnDef="location">
+  <ng-container [matColumnDef]="properties.location">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Location </mat-header-cell>
     <mat-cell *matCellDef="let workshop" fxLayout="column" fxLayoutAlign="center start" class="location-cell">
-      <p>{{ workshop.city }}</p>
-      <p *ngIf="workshop.country !== ''" [style.font-size]="'12px'">{{ workshop.country }}</p>
+      <p>{{ W.city(workshop) }}</p>
+      <p *ngIf="W.country(workshop); let country" [style.font-size]="'12px'">{{ country }}</p>
     </mat-cell>
   </ng-container>
 
   <!-- Start Date Column -->
-  <ng-container matColumnDef="startDate">
+  <ng-container [matColumnDef]="properties.startDate">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <ng-container *ngIf="selectedSfId != workshop.sfId">
-        {{ workshop.startDateFormatted }}
+      <ng-container *ngIf="selectedWorkshopId != workshop.Id; then viewStartDate; else editStartDate">
       </ng-container>
-
-      <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <mat-form-field class="workshop-date-picker-form-field">
-          <input matInput [matDatepicker]="startDatePicker" (dateChange)="dateChange($event, workshop, 'startDate')"
-            [value]="workshop.startDate" [max]="workshop.endDate">
-          <mat-datepicker #startDatePicker [startAt]="workshop.startDate"></mat-datepicker>
-          <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
-        </mat-form-field>
-      </ng-container>
+      <ng-template #viewStartDate>
+        {{ W.startDateFormatted(workshop) }}
+      </ng-template>
     </mat-cell>
   </ng-container>
 
   <!-- End Date Column -->
-  <ng-container matColumnDef="endDate">
+  <ng-container [matColumnDef]="properties.endDate">
     <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <ng-container *ngIf="selectedSfId != workshop.sfId">
-        {{ workshop.endDateFormatted }}
+      <ng-container *ngIf="selectedWorkshopId != workshop.Id; then viewEndDate; else editEndDate">
       </ng-container>
-
-      <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <mat-form-field class="workshop-date-picker-form-field">
-          <input matInput [matDatepicker]="endDatePicker" (dateChange)="dateChange($event, workshop, 'endDate')"
-            [value]="workshop.endDate" [min]="workshop.startDate">
-          <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #endDatePicker [startAt]="workshop.endDate"></mat-datepicker>
-        </mat-form-field>
-      </ng-container>
+      <ng-template #viewEndDate>
+        {{ W.endDateFormatted(workshop) }}
+      </ng-template>
     </mat-cell>
   </ng-container>
 
   <!-- Days Late Column -->
-  <ng-container matColumnDef="daysLate">
+  <ng-container [matColumnDef]="properties.daysLate">
     <mat-header-cell *matHeaderCellDef> Days Late </mat-header-cell>
     <mat-cell *matCellDef="let workshop"> Due: {{ formatDaysLate(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Instructors Column -->
-  <ng-container matColumnDef="instructors">
+  <ng-container [matColumnDef]="properties.instructors">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Instructor(s) </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <em *ngIf="!workshop.instructors.length">No Instructors</em>
-      <p [style.margin]="'0'">{{ workshop.instructors.join(', ') }}</p>
+      <ng-container *ngIf="W.instructors(workshop).length; then hasInstructors; else noInstructors">
+      </ng-container>
+      <ng-template #noInstructors>
+        <em>No Instructors</em>
+      </ng-template>
+      <ng-template #hasInstructors>
+        <p [style.margin]="'0'">{{ W.instructors(workshop).join(', ') }}</p>
+      </ng-template>
     </mat-cell>
   </ng-container>
 
   <!-- Status Column -->
-  <ng-container matColumnDef="status">
+  <ng-container [matColumnDef]="properties.status">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Status </mat-header-cell>
 
     <mat-cell *matCellDef="let workshop">
-      <ng-container *ngIf="selectedSfId != workshop.sfId">
-        {{ workshop.status }}
+      <ng-container *ngIf="selectedWorkshopId != workshop.Id || !(isAdmin$ | async); then viewStatus; else editStatus">
       </ng-container>
-
-      <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <mat-select floatPlaceholder="never" [(ngModel)]="workshop.status">
-          <mat-option *ngFor="let status of Statuses" [value]="status">{{ status }}</mat-option>
-        </mat-select>
-      </ng-container>
+      <ng-template #viewStatus>
+        {{ W.status(workshop) }}
+      </ng-template>
     </mat-cell>
   </ng-container>
 
   <!-- Verified Column -->
-  <ng-container matColumnDef="verified">
+  <ng-container [matColumnDef]="properties.verified">
     <mat-header-cell *matHeaderCellDef mat-sort-header arrowPosition="center"> Verified? </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <mat-icon style="color: #4bae4f" *ngIf="workshop.isVerified">check_circle</mat-icon>
-      <mat-icon style="color: #f44336" *ngIf="!workshop.isVerified">cancel</mat-icon>
+      <ng-container *ngIf="W.isVerified(workshop); then isVerified; else notVerfied"></ng-container>
+      <ng-template #isVerified><mat-icon style="color: #4bae4f">check_circle</mat-icon></ng-template>
+      <ng-template #notVerfied><mat-icon style="color: #f44336">cancel</mat-icon></ng-template>
     </mat-cell>
   </ng-container>
 
   <!-- Edit Button Column -->
-  <ng-container matColumnDef="edit">
+  <ng-container [matColumnDef]="properties.edit">
     <mat-header-cell *matHeaderCellDef> Edit
       <button class="refresh-button" mat-button (click)="refresh()">
         <mat-icon style="color: #757575">refresh</mat-icon>
       </button>
     </mat-header-cell>
     <mat-cell *matCellDef="let workshop">
-      <button (click)="onEdit(workshop.sfId)" mat-raised-button> Edit &ensp;<mat-icon>edit</mat-icon></button>
+      <button (click)="onEdit(workshop.Id)" mat-raised-button> Edit &ensp;<mat-icon>edit</mat-icon></button>
     </mat-cell>
   </ng-container>
 
   <!-- Due Date Column -->
-  <ng-container matColumnDef="dueDate">
+  <ng-container [matColumnDef]="properties.dueDate">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Due Date </mat-header-cell>
-    <mat-cell *matCellDef="let workshop"> {{ workshop.dueDate }} </mat-cell>
+    <mat-cell *matCellDef="let workshop"> {{ W.dueDateFormatted(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Host City Column -->
-  <ng-container matColumnDef="hostCity">
+  <ng-container [matColumnDef]="properties.hostCity">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Host City </mat-header-cell>
-    <mat-cell *matCellDef="let workshop"> {{ workshop.city }} </mat-cell>
+    <mat-cell *matCellDef="let workshop"> {{ W.city(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Host Country Column -->
-  <ng-container matColumnDef="hostCountry">
+  <ng-container [matColumnDef]="properties.hostCountry">
     <mat-header-cell *matHeaderCellDef mat-sort-header> Host Country </mat-header-cell>
-    <mat-cell *matCellDef="let workshop">{{ workshop.country }} </mat-cell>
+    <mat-cell *matCellDef="let workshop">{{ W.country(workshop) }} </mat-cell>
   </ng-container>
 
   <!-- Actions Column -->
-  <ng-container matColumnDef="actions">
+  <ng-container [matColumnDef]="properties.actions">
     <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
     <mat-cell *matCellDef="let workshop" class="actions">
+      <ng-container *ngIf="selectedWorkshopId != workshop.Id; then viewActions; else editActions"></ng-container>
 
       <!-- Non Editing Mode -->
-      <ng-container *ngIf="selectedSfId != workshop.sfId">
-        <button mat-mini-fab matTooltip="Edit" aria-label="Edit workshop inline" color="accent" (click)="selectedWorkshop = workshop">
+      <ng-template #viewActions>
+        <button mat-mini-fab matTooltip="Edit" aria-label="Edit workshop inline" color="accent" (click)="inlineEdit(workshop)">
           <mat-icon>edit</mat-icon>
         </button>
 
-        <button mat-mini-fab matTooltip="View Detail" aria-label="View workshop detail" color="accent" (click)="onSelectWorkshop(workshop)">
+        <a mat-mini-fab matTooltip="View Detail" aria-label="View workshop detail" color="accent" [routerLink]="'/workshops/' + workshop.Id">
           <mat-icon>description</mat-icon>
-        </button>
+        </a>
 
         <button mat-mini-fab matTooltip="Delete" aria-label="Delete workshop" color="warn" (click)="delete(workshop)"
-          *ngIf="authService.user && authService.user.isAdmin">
+          *ngIf="(isAdmin$ | async)">
           <mat-icon>delete</mat-icon>
         </button>
-      </ng-container>
+      </ng-template>
 
       <!-- Edit Mode -->
-      <ng-container *ngIf="selectedSfId == workshop.sfId">
-        <button mat-mini-fab matTooltip="Discard Changes" aria-label="Discard changes" color="warn" (click)="selectedWorkshop = null">
+      <ng-template #editActions>
+        <button mat-mini-fab matTooltip="Discard Changes" aria-label="Discard changes" color="warn" (click)="resetForm()">
           <mat-icon>cancel</mat-icon>
         </button>
 
-        <button mat-mini-fab matTooltip="Save" aria-label="Save changes" color="accent" (click)="save(workshop); this.selectedWorkshop = null;">
+        <button mat-mini-fab matTooltip="Save" aria-label="Save changes" color="accent" (click)="saveChanges()">
           <mat-icon>save</mat-icon>
         </button>
-      </ng-container>
-
+      </ng-template>
     </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row [id]="workshop.sfId" *matRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></mat-row>
+  <mat-row [id]="workshop.Id" *matRowDef="let workshop; columns: displayedColumns;" [ngClass]="{'past-due': isPastDue(workshop),'in-grace-period': isDue(workshop)}"></mat-row>
 </mat-table>
 
-<div fxLayout fxLayoutAlign="center center" *ngIf="isLoading">
+<div fxLayout fxLayoutAlign="center center" *ngIf="(isLoading$ | async)">
   <mat-spinner diameter="48"></mat-spinner>
 </div>
 
-<mat-paginator #paginator [length]="_workshopDataProvider.size | async" [pageIndex]="0" [pageSize]="5"
+<mat-paginator #paginator [length]="dataSetSize$ | async" [pageIndex]="0" [pageSize]="5"
   [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+
+<ng-template #editCourseType>
+  <mat-form-field>
+    <mat-select floatPlaceholder="never" placeholder="Course Type" [formControl]="formGroup.controls['type']">
+      <mat-option *ngFor="let type of CourseTypes" [value]="type">{{ type }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>
+
+<ng-template #editStartDate>
+  <mat-form-field class="workshop-date-picker-form-field">
+    <input matInput [matDatepicker]="startDatePicker" [formControl]="formGroup.controls['startDate']" [max]="formGroup.value.endDate">
+    <mat-datepicker #startDatePicker></mat-datepicker>
+    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+  </mat-form-field>
+</ng-template>
+
+<ng-template #editEndDate>
+  <mat-form-field class="workshop-date-picker-form-field">
+    <input matInput [matDatepicker]="endDatePicker" [formControl]="formGroup.controls['endDate']" [min]="formGroup.value.startDate">
+    <mat-datepicker #endDatePicker></mat-datepicker>
+    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+  </mat-form-field>
+</ng-template>
+
+<ng-template #editStatus>
+  <mat-form-field>
+    <mat-select floatPlaceholder="never" [formControl]="formGroup.controls['status']">
+      <mat-option *ngFor="let status of Statuses" [value]="status">{{ status }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</ng-template>

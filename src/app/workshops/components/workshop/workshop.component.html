@@ -1,41 +1,41 @@
 <mat-card class="container">
   <div fxLayout="column" fxLayoutGap="8px">
     <div fxLayout="row" fxLayoutGap="8px" class="detail-row">
-      <img class="course-img" [src]="largeImage()">
+      <img class="course-img" [src]="largeImage">
       <div fxLayout="column">
-        <b class="mat-subheading">{{workshop.type}} ( {{workshop.isPublic ? 'Public' : 'Private'}} ) &mdash; {{workshop.location}}</b>
-        <p>Status:&emsp;{{workshop.status}}</p>
-        <button *ngIf="canEdit()" [style.height]="'fit-content'" (click)="goToEdit()" mat-raised-button class="mat-accent"> Edit &ensp;
+        <b class="mat-subheading">{{W.type(workshop)}} ( {{workshop.Public__c ? 'Public' : 'Private'}} ) &mdash; {{W.location(workshop)}}</b>
+        <p>Status:&emsp;{{W.status(workshop)}}</p>
+        <button *ngIf="(canEdit$ | async)" [style.height]="'fit-content'" (click)="goToEdit()" mat-raised-button class="mat-accent"> Edit &ensp;
           <mat-icon>edit</mat-icon>
         </button>
         <br>
-        <button *ngIf="canCancel()" [style.height]="'fit-content'" (click)="cancel()" mat-raised-button class="mat-warn"> Cancel &ensp;
+        <button *ngIf="canCancel" [style.height]="'fit-content'" (click)="cancel()" mat-raised-button class="mat-warn"> Cancel &ensp;
           <mat-icon>cancel</mat-icon>
         </button>
       </div>
     </div>
     <br>
     <div fxLayout="row" class="detail-row">
-      <b>Dates:</b>&emsp;{{workshop.startDateFormatted}} &mdash; {{workshop.endDateFormatted}}
+      <b>Dates:</b>&emsp;{{W.startDateFormatted(workshop)}} &mdash; {{W.endDateFormatted(workshop)}}
     </div>
     <div fxLayout="row" class="detail-row">
-      <b>Host Site:</b>&emsp;{{workshop.hostSite}}
+      <b>Host Site:</b>&emsp;{{W.hostSite(workshop)}}
     </div>
-    <div fxLayout="row" *ngIf="workshop.courseManager" class="detail-row">
-      <b>Course Manager:</b>&emsp;{{workshop.courseManager.name}}
+    <div fxLayout="row" *ngIf="W.courseManager(workshop); let manager" class="detail-row">
+      <b>Course Manager:</b>&emsp;{{manager.Name}}
     </div>
     <div fxLayout="row" class="detail-row">
-      <b>Organizing Affiliate:</b>&emsp;{{workshop.affiliate.name}}
+      <b>Organizing Affiliate:</b>&emsp;{{W.affiliate(workshop)?.Name}}
     </div>
-    <div fxLayout="column">
-      <h4 *ngIf="workshop.instructors.length">Instructors:</h4>
-      <div fxLayout="row" class="instructor" *ngFor="let instructor of workshop.instructors" fxLayoutGap="4px">
+    <div fxLayout="column" *ngIf="W.instructors(workshop); let instructors">
+      <h4 *ngIf="instructors.length">Instructors:</h4>
+      <div fxLayout="row" class="instructor" *ngFor="let instructor of instructors" fxLayoutGap="4px">
         <div fxLayout="column" class="instructor-details" fxLayoutAlign="start stretch" fxFlex>
-          <h3>{{instructor.name}}</h3>
-          <i>{{instructor.email}}</i>
+          <h3>{{instructor.Name}}</h3>
+          <i>{{instructor.Email}}</i>
         </div>
         <div class="instructor-img">
-          <img [src]="instructor.photo" />
+          <img [src]="instructor.Photograph__c" />
         </div>
       </div>
     </div>

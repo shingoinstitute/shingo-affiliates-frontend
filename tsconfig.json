@@ -19,7 +19,15 @@
     "paths": {
       "~app/*": ["app/*"]
     },
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin",
+        "alwaysShowRuleFailuresAsWarnings": false,
+        "suppressWhileTypeErrorsPresent": true,
+        "ignoreDefinitionFiles": true
+      }
+    ]
   },
   "angularCompilerOptions": {
     "preserveWhitespaces": false

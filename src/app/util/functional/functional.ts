@@ -1,145 +1,148 @@
 // tslint:disable:no-shadowed-variable
-import { Function1, Lazy, Function2, Curried2 } from './types'
-// many functions here are from gcanti/fp-ts. All credit to them
+import { Fn, Curried2, BinaryOp } from './types'
+import { Predicate, Refinement } from './predicates'
 
-export function compose<A, B, C>(
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, C>
-export function compose<A, B, C, D>(
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, D>
-export function compose<A, B, C, D, E>(
-  de: Function1<D, E>,
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, E>
-export function compose<A, B, C, D, E, F>(
-  ef: Function1<E, F>,
-  de: Function1<D, E>,
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, F>
-export function compose<A, B, C, D, E, F, G>(
-  fg: Function1<F, G>,
-  ef: Function1<E, F>,
-  de: Function1<D, E>,
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, G>
-export function compose<A, B, C, D, E, F, G, H>(
-  gh: Function1<G, H>,
-  fg: Function1<F, G>,
-  ef: Function1<E, F>,
-  de: Function1<D, E>,
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, H>
-export function compose<A, B, C, D, E, F, G, H, I>(
-  hi: Function1<H, I>,
-  gh: Function1<G, H>,
-  fg: Function1<F, G>,
-  ef: Function1<E, F>,
-  de: Function1<D, E>,
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, I>
-export function compose<A, B, C, D, E, F, G, H, I, J>(
-  ij: Function1<I, J>,
-  hi: Function1<H, I>,
-  gh: Function1<G, H>,
-  fg: Function1<F, G>,
-  ef: Function1<E, F>,
-  de: Function1<D, E>,
-  cd: Function1<C, D>,
-  bc: Function1<B, C>,
-  ab: Function1<A, B>,
-): Function1<A, J>
+export function compose<As extends any[], B, C>(
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, C>
+export function compose<As extends any[], B, C, D>(
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, D>
+export function compose<As extends any[], B, C, D, E>(
+  de: Fn<[D], E>,
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, E>
+export function compose<As extends any[], B, C, D, E, F>(
+  ef: Fn<[E], F>,
+  de: Fn<[D], E>,
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, F>
+export function compose<As extends any[], B, C, D, E, F, G>(
+  fg: Fn<[F], G>,
+  ef: Fn<[E], F>,
+  de: Fn<[D], E>,
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, G>
+export function compose<As extends any[], B, C, D, E, F, G, H>(
+  gh: Fn<[G], H>,
+  fg: Fn<[F], G>,
+  ef: Fn<[E], F>,
+  de: Fn<[D], E>,
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, H>
+export function compose<As extends any[], B, C, D, E, F, G, H, I>(
+  hi: Fn<[H], I>,
+  gh: Fn<[G], H>,
+  fg: Fn<[F], G>,
+  ef: Fn<[E], F>,
+  de: Fn<[D], E>,
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, I>
+export function compose<As extends any[], B, C, D, E, F, G, H, I, J>(
+  ij: Fn<[I], J>,
+  hi: Fn<[H], I>,
+  gh: Fn<[G], H>,
+  fg: Fn<[F], G>,
+  ef: Fn<[E], F>,
+  de: Fn<[D], E>,
+  cd: Fn<[C], D>,
+  bc: Fn<[B], C>,
+  ab: Fn<As, B>,
+): Fn<As, J>
 // tslint:disable-next-line:ban-types
 export function compose(...fns: Function[]) {
   const len = fns.length - 1
-  return function(this: any, x: any) {
-    let y = x
+  return function(this: any, ...args: any[]) {
+    let y = args
     for (let i = len; i > -1; i--) {
-      y = fns[i].call(this, y)
+      y = [fns[i].call(this, ...y)]
     }
-    return y
+    return y[0]
   }
 }
 
-export function pipe<A, B, C>(ab: (a: A) => B, bc: (b: B) => C): (a: A) => C
-export function pipe<A, B, C, D>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-): (a: A) => D
-export function pipe<A, B, C, D, E>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-): (a: A) => E
-export function pipe<A, B, C, D, E, F>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-): (a: A) => F
-export function pipe<A, B, C, D, E, F, G>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-): (a: A) => G
-export function pipe<A, B, C, D, E, F, G, H>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-): (a: A) => H
-export function pipe<A, B, C, D, E, F, G, H, I>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-  hi: (h: H) => I,
-): (a: A) => I
-export function pipe<A, B, C, D, E, F, G, H, I, J>(
-  ab: (a: A) => B,
-  bc: (b: B) => C,
-  cd: (c: C) => D,
-  de: (d: D) => E,
-  ef: (e: E) => F,
-  fg: (f: F) => G,
-  gh: (g: G) => H,
-  hi: (h: H) => I,
-  ij: (i: I) => J,
-): (a: A) => J
+export function pipe<As extends any[], B, C>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+): Fn<As, C>
+export function pipe<As extends any[], B, C, D>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+): Fn<As, D>
+export function pipe<As extends any[], B, C, D, E>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+  de: Fn<[D], E>,
+): Fn<As, E>
+export function pipe<As extends any[], B, C, D, E, F>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+  de: Fn<[D], E>,
+  ef: Fn<[E], F>,
+): Fn<As, F>
+export function pipe<As extends any[], B, C, D, E, F, G>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+  de: Fn<[D], E>,
+  ef: Fn<[E], F>,
+  fg: Fn<[F], G>,
+): Fn<As, G>
+export function pipe<As extends any[], B, C, D, E, F, G, H>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+  de: Fn<[D], E>,
+  ef: Fn<[E], F>,
+  fg: Fn<[F], G>,
+  gh: Fn<[G], H>,
+): Fn<As, H>
+export function pipe<As extends any[], B, C, D, E, F, G, H, I>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+  de: Fn<[D], E>,
+  ef: Fn<[E], F>,
+  fg: Fn<[F], G>,
+  gh: Fn<[G], H>,
+  hi: Fn<[H], I>,
+): Fn<As, I>
+export function pipe<As extends any[], B, C, D, E, F, G, H, I, J>(
+  ab: Fn<As, B>,
+  bc: Fn<[B], C>,
+  cd: Fn<[C], D>,
+  de: Fn<[D], E>,
+  ef: Fn<[E], F>,
+  fg: Fn<[F], G>,
+  gh: Fn<[G], H>,
+  hi: Fn<[H], I>,
+  ij: Fn<[I], J>,
+): Fn<As, J>
 // tslint:disable-next-line:ban-types
 export function pipe(...fns: Function[]): Function {
   const len = fns.length - 1
-  return function(this: any, x: any) {
-    let y = x
+  return function(this: any, ...args: any[]) {
+    let y = args
     for (let i = 0; i <= len; i++) {
-      y = fns[i].call(this, y)
+      y = [fns[i].call(this, ...y)]
     }
-    return y
+    return y[0]
   }
 }
 
@@ -149,16 +152,16 @@ export function pipe(...fns: Function[]): Function {
  * Takes an argument and returns it
  * @param a a value
  */
-export const id = <A>(a: A) => a
-export { id as I }
+export const I = <A>(a: A) => a
+export { I as id }
 
 /**
  * The K combinator
  *
  * Takes two values and returns the first
  */
-export const K = <A>(a: A) => <B>(_b: B) => a
-export const constant: <A>(a: A) => Lazy<A> = K as any
+export const K = <A>(a: A) => <B>(_b?: B) => a
+export { K as constant }
 /**
  * The T (thrush) combinator
  *
@@ -175,9 +178,9 @@ export function flip<Fixed, R>(
   fn: <B>(a: Fixed, b: B) => R,
 ): <B>(b: B, a: Fixed) => R
 export function flip<Fixed1, Fixed2, R>(
-  fn: Function2<Fixed1, Fixed2, R>,
-): Function2<Fixed2, Fixed1, R>
-export function flip<A, B, C>(fn: Function2<A, B, C>): (b: B, a: A) => C {
+  fn: Fn<[Fixed1, Fixed2], R>,
+): Fn<[Fixed2, Fixed1], R>
+export function flip<A, B, C>(fn: Fn<[A, B], C>): (b: B, a: A) => C {
   return (b, a) => fn(a, b)
 }
 /*
@@ -233,3 +236,25 @@ export const lt = (a: number, b: number) => a < b
 export const lte = (a: number, b: number) => a <= b
 export const gte = (a: number, b: number) => a >= b
 export const property = <T, K extends keyof T>(prop: K) => (o: T) => o[prop]
+/** Changes the domain of a binary operator */
+export const on = <B, C>(op: BinaryOp<B, C>) => <A>(
+  f: (a: A) => B,
+): BinaryOp<A, C> => x => y => op(f(x))(f(y))
+
+// (t1 -> t2) -> (t3 -> t2 -> t4) -> (t3 -> t1 -> t4)
+export const mapT = <t1, t2>(fn: (a: t1) => t2) => <t3, t4>(
+  step: (acc: t3, curr: t2) => t4,
+) => (acc: t3, curr: t1) => step(acc, fn(curr))
+
+// (t -> Bool) -> (p -> t -> p) -> p -> t -> p
+export function filterT<t, u extends t>(
+  fn: Refinement<t, u>,
+): <p>(step: (acc: p, curr: u) => p) => (acc: p, curr: t) => p
+export function filterT<t>(
+  fn: Predicate<t>,
+): <p>(step: (acc: p, curr: t) => p) => (acc: p, curr: t) => p
+export function filterT<t>(
+  fn: Predicate<t>,
+): <p>(step: (acc: p, curr: t) => p) => (acc: p, curr: t) => p {
+  return step => (acc, curr) => (fn(curr) ? step(acc, curr) : acc)
+}

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { StoreModule } from '@ngrx/store'
-import { reducers } from './reducers'
+import { reducers, ROOT_KEY } from './reducers'
 import { EffectsModule } from '@ngrx/effects'
 import { UserEffects } from './effects/user.effects'
 import { ChangePasswordDialog } from './components/change-password-dialog/change-password-dialog.component'
@@ -41,7 +41,7 @@ export const COMPONENTS = [
     ReactiveFormsModule,
     UserRoutingModule,
     // must match the desired name in the global reducer slice
-    StoreModule.forFeature('userdata', reducers),
+    StoreModule.forFeature(ROOT_KEY, reducers),
     EffectsModule.forFeature([UserEffects]),
   ],
   declarations: COMPONENTS,

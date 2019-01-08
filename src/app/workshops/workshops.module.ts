@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 import { CustomFormsModule } from 'ng2-validation'
-import { RouterModule } from '@angular/router'
 
 import { FlexLayoutModule } from '@angular/flex-layout'
 
@@ -43,7 +42,12 @@ import {
 } from '@angular/material'
 import { MatMomentDateModule } from '@angular/material-moment-adapter'
 import { UIComponentsModule } from '../ui-components/ui-components.module'
-import { DashboardComponent } from './dashboard/dashboard.component'
+import { WorkshopsRoutingModule } from './workshops-routing.module'
+import { StoreModule } from '@ngrx/store'
+import { ROOT_KEY, reducers } from './reducers'
+import { EffectsModule } from '@ngrx/effects'
+import { WorkshopEffects } from './effects/workshop.effects'
+import { RouterModule } from '@angular/router'
 
 const COMPONENTS = [
   WorkshopComponent,
@@ -55,7 +59,6 @@ const COMPONENTS = [
   UpcomingWorkshopsComponent,
   WorkshopDashboardComponent,
   WorkshopDetailComponent,
-  DashboardComponent,
 ]
 
 @NgModule({
@@ -88,7 +91,11 @@ const COMPONENTS = [
     FlexLayoutModule,
     UIComponentsModule,
     SharedModule.forRoot(),
+
     RouterModule,
+    WorkshopsRoutingModule,
+    StoreModule.forFeature(ROOT_KEY, reducers),
+    EffectsModule.forFeature([WorkshopEffects]),
   ],
   declarations: COMPONENTS,
   exports: COMPONENTS,

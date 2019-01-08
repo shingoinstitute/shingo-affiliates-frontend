@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { WorkshopsController } from '@shingo/affiliates-api/controllers'
 import { ApiContract } from '~app/util/api-contract'
+import { Observable } from 'rxjs'
 
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
   'Id',
@@ -12,6 +13,14 @@ export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
   'Workshop_Type__c',
   'Organizing_Affiliate__c',
 ]
+
+/** The base type resulting from a call to WorkshopService.getById */
+export type ReadReturn = Exclude<
+  WorkshopContract['read']['returntype'],
+  undefined
+>
+/** The base type resulting from a call to WorkshopService.getAll */
+export type ReadAllReturn = WorkshopContract['readAll']['returntype'][number]
 
 export type WorkshopContract = ApiContract<WorkshopsController>
 
@@ -69,19 +78,60 @@ export class WorkshopService extends ApiBase {
     return this.request<Base>('/workshops/describe', 'GET', { params: {} })
   }
 
-  uploadAttendeeFile(id: string, file: File) {
+  uploadAttendeeFile(id: string, file: File, progress: true): Observable<any>
+  uploadAttendeeFile(
+    id: string,
+    file: File,
+    progress?: false,
+  ): Observable<WorkshopContract['uploadAttendeeFile']['returntype']>
+  uploadAttendeeFile(
+    id: string,
+    file: File,
+    progress = false,
+  ): Observable<any> {
     type Base = WorkshopContract['uploadAttendeeFile']
-    return this.request<Base>('/workshops/:id/attendee_file', 'POST', {
-      urlparams: { id },
-      files: { attendeeList: [file] },
+
+    const options = this.request<Base>(
+      '/workshops/:id/attendee_file',
+      'POST',
+      {
+        urlparams: { id },
+        files: { attendeeList: [file] },
+      },
+      true,
+    )
+
+    return this.http.request(options.method, options.url, {
+      ...options.options,
+      reportProgress: progress,
     })
   }
 
-  uploadEvaluations(id: string, files: File[]) {
+  uploadEvaluations(id: string, files: File[], progress: true): Observable<any>
+  uploadEvaluations(
+    id: string,
+    files: File[],
+    progress?: false,
+  ): Observable<WorkshopContract['uploadEvaluations']['returntype']>
+  uploadEvaluations(
+    id: string,
+    files: File[],
+    progress = false,
+  ): Observable<any> {
     type Base = WorkshopContract['uploadEvaluations']
-    return this.request<Base>('/workshops/:id/evaluation_files', 'POST', {
-      urlparams: { id },
-      files: { evaluationFiles: files },
+    const options = this.request<Base>(
+      '/workshops/:id/evaluation_files',
+      'POST',
+      {
+        urlparams: { id },
+        files: { evaluationFiles: files },
+      },
+      true,
+    )
+
+    return this.http.request(options.method, options.url, {
+      ...options.options,
+      reportProgress: progress,
     })
   }
 

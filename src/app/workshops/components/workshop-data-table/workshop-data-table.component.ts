@@ -6,32 +6,67 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core'
-import { Router } from '@angular/router'
 
-import { WorkshopDataSource } from '~app/services/workshop/workshop-data-source.service'
+import {
+  WorkshopDataSource,
+  WorkshopTrackByStrategy,
+} from '~app/services/workshop/workshop-data-source.service'
 import { DataProvider } from '~app/services/data-provider/data-provider.service'
 import { DataProviderFactory } from '~app/services/data-provider/data-provider-factory.service'
+import { WorkshopService } from '~app/workshops/services/workshop.service'
+import { MatSort, MatPaginator, MatDialog } from '@angular/material'
 import {
-  WorkshopService,
-  WorkshopProperties,
-  WorkshopTrackByStrategy,
-} from '~app/services/workshop/workshop.service'
-import {
-  MatSort,
-  MatPaginator,
-  MatButton,
-  MatDialog,
-  MatDatepickerInputEvent,
-} from '@angular/material'
-import { Workshop } from '../../workshop.model'
+  WORKSHOP_COURSE_TYPES,
+  WORKSHOP_STATUS_TYPES,
+  WorkshopBase,
+  endDate,
+} from '~app/workshops/workshop.model'
+// tslint:disable-next-line:no-duplicate-imports
+import * as W from '~app/workshops/workshop.model'
 import { Filter } from '~app/services/filters/filter.abstract'
 import {
   AlertDialogComponent,
   AlertDialogData,
 } from '~app/shared/components/alert-dialog/alert-dialog.component'
-import { AuthService } from '~app/services/auth/auth.service'
-import moment, { Moment } from 'moment'
+import { Observable, of } from 'rxjs'
+import { Store, select } from '@ngrx/store'
+import * as fromRoot from '~app/reducers'
+import * as fromUser from '~app/user/reducers'
+import { FormControl, FormGroup } from '@angular/forms'
+import { KVMap } from '~app/util/types'
 
+export type WorkshopProperties =
+  | 'actionType'
+  | 'workshopType'
+  | 'dueDate'
+  | 'instructors'
+  | 'location'
+  | 'verified'
+  | 'startDate'
+  | 'endDate'
+  | 'hostCity'
+  | 'hostCountry'
+  | 'daysLate'
+  | 'status'
+  | 'edit'
+  | 'actions'
+
+export const WORKSHOP_PROPERTY_MAP: KVMap<WorkshopProperties> = {
+  actionType: 'actionType',
+  actions: 'actions',
+  daysLate: 'daysLate',
+  dueDate: 'dueDate',
+  edit: 'edit',
+  endDate: 'endDate',
+  hostCity: 'hostCity',
+  hostCountry: 'hostCountry',
+  instructors: 'instructors',
+  location: 'location',
+  startDate: 'startDate',
+  status: 'status',
+  verified: 'verified',
+  workshopType: 'workshopType',
+}
 @Component({
   selector: 'app-workshop-data-table',
   templateUrl: './workshop-data-table.component.html',
@@ -39,7 +74,7 @@ import moment, { Moment } from 'moment'
 })
 export class WorkshopDataTableComponent implements OnInit {
   @Input()
-  public displayedColumns: WorkshopProperties[] = [
+  displayedColumns: WorkshopProperties[] = [
     'workshopType',
     'startDate',
     'endDate',
@@ -49,54 +84,61 @@ export class WorkshopDataTableComponent implements OnInit {
     'actions',
   ]
   @Input()
-  public dataSource: WorkshopDataSource | null = null
+  dataSource?: WorkshopDataSource
   @Input()
-  public filters: Array<Filter<Workshop, any>> = []
+  filters: Array<Filter<WorkshopBase, any>> = []
   @Output()
-  public editClick: EventEmitter<string> = new EventEmitter<string>()
+  editClick: EventEmitter<string> = new EventEmitter<string>()
 
   @ViewChild(MatSort)
-  public sort!: MatSort
+  sort!: MatSort
   @ViewChild(MatPaginator)
-  public paginator!: MatPaginator
+  paginator!: MatPaginator
 
-  public selectedWorkshop?: Workshop
-  public get selectedSfId() {
-    return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''
+  properties = WORKSHOP_PROPERTY_MAP
+
+  private selectedWorkshop?: WorkshopBase | null
+  get selectedWorkshopId() {
+    return (this.selectedWorkshop && this.selectedWorkshop.Id) || undefined
   }
-  public get Statuses() {
-    return Workshop.WorkshopStatusTypes
+  get Statuses() {
+    return WORKSHOP_STATUS_TYPES
   }
-  public get CourseTypes() {
-    return Workshop.CourseTypes
+  get CourseTypes() {
+    return WORKSHOP_COURSE_TYPES
   }
 
-  public isLoading = true
-  public _workshopDataProvider: DataProvider<WorkshopService, Workshop>
-  public trackByStrategy: WorkshopTrackByStrategy = 'reference'
-  public pendingTypes = {
-    'Active, not ready for app': 'Published to Website Only',
-    Cancelled: 'Cancelled',
-    Archived: 'Archived',
-    'Active event': 'Published to Website & Mobile App',
-    Proposed: 'Proposed',
-    'Finished, waiting for attendee list': 'Awaiting Attendee List/Evaluations',
-    'Awaiting Invoice': 'Awaiting Invoice',
-    Verified: 'Verified',
-    'Invoiced, Not Paid': 'Awaiting Payment',
+  get dataSetSize$() {
+    return this._workshopDataProvider.size
   }
+
+  isLoading$: Observable<boolean> = of(false)
+  isAdmin$: Observable<boolean>
+  private _workshopDataProvider: DataProvider<WorkshopService, WorkshopBase>
+  private trackByStrategy: WorkshopTrackByStrategy = 'id'
+
+  // add module to class instance so it can be used in template
+  W = W
+
+  formGroup: FormGroup
 
   constructor(
-    public providerFactory: DataProviderFactory,
-    public _ws: WorkshopService,
-    public router: Router,
-    public dialog: MatDialog,
-    public authService: AuthService,
+    providerFactory: DataProviderFactory,
+    private dialog: MatDialog,
+    store: Store<fromRoot.State>,
   ) {
+    this.isAdmin$ = store.pipe(select(fromUser.isAdmin))
     this._workshopDataProvider = providerFactory.getWorkshopDataProvider()
+    this.isLoading$ = this._workshopDataProvider.dataLoading
+    this.formGroup = new FormGroup({
+      type: new FormControl(),
+      startDate: new FormControl(),
+      endDate: new FormControl(),
+      status: new FormControl(),
+    })
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     if (!this.dataSource) {
       this.dataSource = new WorkshopDataSource(
         this._workshopDataProvider,
@@ -111,21 +153,16 @@ export class WorkshopDataTableComponent implements OnInit {
     if (this.filters) this.dataSource.addFilters(this.filters)
 
     this.sort.sort({ id: 'startDate', start: 'asc', disableClear: false })
-
-    // Begin listening to `dataLoading` event so this component knows when to toggle `isLoading` on/off.
-    this._workshopDataProvider.dataLoading.subscribe(
-      loading => (this.isLoading = loading),
-    )
   }
 
-  public refresh() {
+  refresh() {
     this._workshopDataProvider.refresh()
   }
 
-  public workshopTrackBy = (index: number, item: Workshop) => {
+  workshopTrackBy = (index: number, item: WorkshopBase) => {
     switch (this.trackByStrategy) {
       case 'id':
-        return item.sfId
+        return item.Id
       case 'reference':
         return item
       case 'index':
@@ -133,8 +170,32 @@ export class WorkshopDataTableComponent implements OnInit {
     }
   }
 
-  public onEdit(workshopId: string) {
+  onEdit(workshopId: string) {
     this.editClick.emit(workshopId)
+  }
+
+  private patchForm() {
+    this.formGroup.patchValue({
+      type: this.selectedWorkshop && W.type(this.selectedWorkshop),
+      startDate: this.selectedWorkshop && W.startDate(this.selectedWorkshop),
+      endDate: this.selectedWorkshop && W.endDate(this.selectedWorkshop),
+      status: this.selectedWorkshop && W.status(this.selectedWorkshop),
+    })
+  }
+
+  inlineEdit(workshop: WorkshopBase) {
+    this.selectedWorkshop = workshop
+    this.patchForm()
+  }
+
+  resetForm() {
+    this.selectedWorkshop = null
+    this.patchForm()
+  }
+
+  saveChanges() {
+    this.save()
+    this.resetForm()
   }
 
   /**
@@ -145,7 +206,7 @@ export class WorkshopDataTableComponent implements OnInit {
    * Workshops that fall in this category but are not "past due"
    * are considered to be within their grace period.
    */
-  public isDue(w: Workshop): boolean {
+  isDue(w: WorkshopBase): boolean {
     const daysLate = this.getDaysLate(w)
     return daysLate > 0 && daysLate <= 7
   }
@@ -155,7 +216,7 @@ export class WorkshopDataTableComponent implements OnInit {
    * where 'past due' is defined as being 7 or more days after
    * the workshop's end date.
    */
-  public isPastDue(w: Workshop): boolean {
+  isPastDue(w: WorkshopBase): boolean {
     return this.getDaysLate(w) > 7
   }
 
@@ -163,7 +224,7 @@ export class WorkshopDataTableComponent implements OnInit {
    * @description Returns a string describing how far a pending
    * action is past it's due date.
    */
-  public formatDaysLate(w: Workshop): string {
+  formatDaysLate(w: WorkshopBase): string {
     const daysLate = this.getDaysLate(w)
     if (daysLate < 1) {
       return `in ${Math.abs(daysLate)} days`
@@ -193,59 +254,44 @@ export class WorkshopDataTableComponent implements OnInit {
    * @description Returns the number of days a pending action
    * is past it's due date.
    */
-  public getDaysLate(w: Workshop): number {
+  private getDaysLate(w: WorkshopBase): number {
     const _1day = 1000 * 60 * 60 * 24
     const now = Date.now()
-    const dueAt = w.endDate.valueOf() + _1day * 7
+    const dueAt = endDate(w).valueOf() + _1day * 7
     return Math.floor((now - dueAt) / _1day)
   }
 
-  public onSelectWorkshop(workshop: Workshop) {
-    this.router.navigateByUrl(`/workshops/${workshop.sfId}`)
+  private save() {
+    console.log(this.formGroup.value)
+    throw new Error('Unimplemented')
+    // this.isLoading = true
+    // this._ws.update(ws).subscribe(res => {
+    //   this.isLoading = false
+    // })
   }
 
-  public save(ws: Workshop) {
-    this.isLoading = true
-    this._ws.update(ws).subscribe(res => {
-      this.isLoading = false
-    })
-  }
-
-  public delete(ws: Workshop) {
+  delete(ws: WorkshopBase) {
+    const data: AlertDialogData = {
+      sfObject: ws,
+      title: 'Delete Workshop?',
+      message: 'This will permanently delete the selected workshop.',
+      destructive: true,
+      confirmText: 'Yes, Delete Workshop',
+      cancelText: 'No, Keep Workshop',
+    }
     const dialogRef = this.dialog.open(AlertDialogComponent, {
-      data: {
-        sfObject: ws,
-        title: 'Delete Workshop?',
-        message: 'This will permanently delete the selected workshop.',
-        destructive: true,
-        confirm: 'Yes, Delete Workshop',
-        cancel: 'No, Keep Workshop',
-      } as AlertDialogData,
+      data,
     })
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.isLoading = true
-        this._ws.delete(ws).subscribe(res => {
-          this.isLoading = false
-          this.refresh()
-        })
+        throw new Error('Unimplemented')
+        // this.isLoading = true
+        // this._ws.delete(ws).subscribe(res => {
+        //   this.isLoading = false
+        //   this.refresh()
+        // })
       }
     })
-  }
-
-  public dateChange(
-    event: MatDatepickerInputEvent<Moment>,
-    w: Workshop,
-    type: 'startDate' | 'endDate',
-  ) {
-    const date = event.value
-    if (date && date.toDate) {
-      w[type] = date.toDate()
-    } else if (date instanceof Date) {
-      w[type] = date
-    } else if (typeof date === 'string') {
-      w[type] = moment(date)
-    }
   }
 }

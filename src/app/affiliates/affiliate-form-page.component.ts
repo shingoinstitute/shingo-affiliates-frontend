@@ -10,7 +10,7 @@ import {
 } from './affiliate-form/affiliate-form.component'
 import { AffiliateService } from '../services/affiliate/affiliate.service'
 import { MatSnackBar } from '@angular/material'
-import { SFSuccessResult } from '../services/workshop/workshop.service'
+import { SFSuccessResult } from '~app/services/api/base-api.abstract.service'
 import { Location } from '@angular/common'
 
 @Component({

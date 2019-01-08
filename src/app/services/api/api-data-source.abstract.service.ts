@@ -1,24 +1,22 @@
 import {
   merge as observableMerge,
   Observable,
-  empty,
+  EMPTY,
   combineLatest,
 } from 'rxjs'
 
-import { map, mergeMap, startWith, withLatestFrom } from 'rxjs/operators'
+import { map, startWith } from 'rxjs/operators'
 import { DataSource } from '@angular/cdk/table'
 import { MatPaginator, MatSort } from '@angular/material'
 
-import { BaseAPIService } from './base-api.abstract.service'
-import { SFObject } from '../../shared/models/sf-object.abstract.model'
 import { DataProvider } from '../data-provider/data-provider.service'
 import { Filter } from '../filters/filter.abstract'
 
 // RxJS operators
 
 export abstract class APIDataSource<
-  S extends BaseAPIService,
-  T extends SFObject
+  S extends { getAll: () => Observable<any[]> },
+  T
 > extends DataSource<T> {
   constructor(
     public _dp: DataProvider<S, T>,
@@ -31,7 +29,7 @@ export abstract class APIDataSource<
   public connect(): Observable<T[]> {
     const viewChanges$ = observableMerge(
       this.paginator.page.asObservable(),
-      (this.sort && this.sort.sortChange.asObservable()) || empty(),
+      (this.sort && this.sort.sortChange.asObservable()) || EMPTY,
     ).pipe(startWith(null))
 
     const latest$ = combineLatest(this._dp.data, viewChanges$)
