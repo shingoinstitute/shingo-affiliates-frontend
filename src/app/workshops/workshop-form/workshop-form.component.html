@@ -54,6 +54,26 @@
     </div>
 
     <div class="input-item">
+      <mat-form-field>
+        <input
+          type="text"
+          placeholder="Case Study"
+          matInput
+          formControlName="caseStudy"
+          [matAutocomplete]="auto"
+        />
+      </mat-form-field>
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let study of (commonCaseStudies$ | async)"
+          [value]="study"
+        >
+          {{ study }}
+        </mat-option>
+      </mat-autocomplete>
+    </div>
+
+    <div class="input-item">
       <p class="mat-caption">{{ describe.language?.inlineHelpText }}</p>
       <mat-form-field>
         <mat-select
@@ -67,9 +87,11 @@
             placeholderLabel="Search languages..."
             noEntriesFoundLabel="Language not available"
           ></ngx-mat-select-search>
-          <mat-option *ngFor="let lang of (languages$ | async)" [value]="lang">{{
-            lang
-          }}</mat-option>
+          <mat-option
+            *ngFor="let lang of (languages$ | async)"
+            [value]="lang"
+            >{{ lang }}</mat-option
+          >
         </mat-select>
         <mat-error
           *ngIf="workshopForm.controls['language'].hasError('required')"
@@ -83,7 +105,7 @@
       <p class="mat-caption">{{ describe.status?.inlineHelpText }}</p>
       <mat-form-field>
         <mat-select
-          placeholder="{{ describe.status?.label || 'Workshop Status'}}"
+          placeholder="{{ describe.status?.label || 'Workshop Status' }}"
           floatPlaceholder="auto"
           required
           formControlName="status"
@@ -164,7 +186,9 @@
         <input
           matInput
           type="email"
-          placeholder="{{ describe.billingContact?.label || 'Billing Contact' }}"
+          placeholder="{{
+            describe.billingContact?.label || 'Billing Contact'
+          }}"
           required
           formControlName="billing"
         />
@@ -259,9 +283,7 @@
         >
           Start Time is required
         </mat-error>
-        <mat-error
-          *ngIf="timeFormGroup.controls['startTime'].hasError('time')"
-        >
+        <mat-error *ngIf="timeFormGroup.controls['startTime'].hasError('time')">
           Start Time must be in 24-hour time (HH:mm)
         </mat-error>
         <mat-error
@@ -283,9 +305,7 @@
         >
           End Time is required
         </mat-error>
-        <mat-error
-          *ngIf="timeFormGroup.controls['endTime'].hasError('time')"
-        >
+        <mat-error *ngIf="timeFormGroup.controls['endTime'].hasError('time')">
           End Time must be in 24-hour time (HH:mm)
         </mat-error>
       </mat-form-field>
@@ -348,7 +368,9 @@
       <mat-form-field>
         <input
           matInput
-          placeholder="{{ describe.registrationWebsite?.label || 'Registration URL' }}"
+          placeholder="{{
+            describe.registrationWebsite?.label || 'Registration URL'
+          }}"
           formControlName="website"
         />
         <mat-error *ngIf="workshopForm.controls['website'].hasError('required')"
@@ -368,7 +390,9 @@
         multi="true"
         [displayWith]="contactDisplayWith"
         [searchFn]="facilitatorSearch"
-        placeholder="{{ describe.facilitator?.label || 'Course Instructors' }} *"
+        placeholder="{{
+          describe.facilitator?.label || 'Course Instructors'
+        }} *"
       >
         <ng-template search-selection let-facilitator>
           <div

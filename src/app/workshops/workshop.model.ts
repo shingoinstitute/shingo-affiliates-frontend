@@ -935,6 +935,7 @@ export class Workshop extends SFObject {
   public Workshop_Type__c: WorkshopType = 'Discover'
   public Billing_Contact__c = ''
   public Language__c = 'English'
+  public Case_Study__c?: string
   /* tslint:enable:variable-name */
 
   // Be careful because Object.assign will assign variables dynamically: eg
@@ -1009,6 +1010,7 @@ export class Workshop extends SFObject {
       Workshop_Type__c: this.type,
       Billing_Contact__c: this.billing,
       Language__c: this.language,
+      Case_Study__c: this.Case_Study__c,
       facilitators: this.instructors,
     }
   }

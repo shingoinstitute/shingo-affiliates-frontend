@@ -52,6 +52,7 @@ import { eq, lte, lt, gte, gt } from '../../util/functional'
 
 export interface WorkshopForm {
   affiliate: Affiliate
+  caseStudy: string
   timezone: Timezone
   times: { startTime: string; endTime: string }
   type: WorkshopType
@@ -91,6 +92,7 @@ export const addToWorkshop = (
   workshop.Local_Start_Time__c = form.times.startTime
   workshop.Local_End_Time__c = form.times.endTime
   workshop.Timezone__c = form.timezone
+  workshop.Case_Study__c = form.caseStudy
 
   if (form.website) {
     workshop.website = form.website
@@ -148,6 +150,13 @@ const TimeRangeValidator = (
   return valid ? null : { 'time-range': mode }
 }
 
+const COMMON_CASE_STUDIES = [
+  'NUMMI',
+  'Tessei',
+  'Virginia Mason',
+  'Tanpin Kanri 7-11',
+]
+
 @Component({
   selector: 'app-workshop-form',
   templateUrl: './workshop-form.component.html',
@@ -198,6 +207,7 @@ export class WorkshopFormComponent implements OnInit {
   tzOptions$: Observable<string[]> = of([])
 
   workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build']
+  commonCaseStudies$: Observable<string[]> = of(COMMON_CASE_STUDIES)
   languages$: Observable<string[]> = of(Affiliate.DEFAULT_LANGUAGE_OPTIONS)
   statuses: string[] = [
     'Invoiced, Not Paid',
@@ -248,6 +258,15 @@ export class WorkshopFormComponent implements OnInit {
       map(value =>
         this.timezones.filter(tz =>
           tz.toLowerCase().includes(value.toLowerCase()),
+        ),
+      ),
+    )
+    this.commonCaseStudies$ = this.workshopForm.controls.caseStudy.valueChanges.pipe(
+      startWith(''),
+      map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
+      map(value =>
+        COMMON_CASE_STUDIES.filter(c =>
+          c.toLowerCase().includes(value.toLowerCase()),
         ),
       ),
     )
@@ -338,6 +357,7 @@ export class WorkshopFormComponent implements OnInit {
         this.initialWorkshop && this.initialWorkshop.status,
         ...(!this.isNewWorkshop ? [Validators.required] : []),
       ],
+      caseStudy: [this.initialWorkshop && this.initialWorkshop.Case_Study__c],
       language: [
         (this.initialWorkshop && this.initialWorkshop.language) || 'English',
         Validators.required,
