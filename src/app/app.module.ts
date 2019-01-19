@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { FlexLayoutModule } from '@angular/flex-layout'
-import { CookieModule } from 'ngx-cookie'
+// import { CookieModule } from 'ngx-cookie'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 
 /** Shared Modules */
@@ -92,7 +92,7 @@ import { SuccessComponent } from './success.component'
     MatExpansionModule,
 
     ServicesModule.forRoot(),
-    CookieModule.forRoot(),
+    // CookieModule.forRoot(),
     FlexLayoutModule,
     SharedModule.forRoot(),
     AffiliatesModule,

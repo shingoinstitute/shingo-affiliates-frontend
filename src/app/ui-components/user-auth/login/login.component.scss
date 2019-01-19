@@ -16,7 +16,7 @@ $login-form-width: 400px;
 .login-page-body {
   display: flex;
   flex-direction: row;
-  align-items: start;
+  align-items: flex-start;
 }
 .login-form-container {
   margin-top: $default-margin * 4;

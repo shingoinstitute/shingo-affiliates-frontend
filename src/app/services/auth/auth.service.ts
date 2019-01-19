@@ -3,13 +3,13 @@ import { from as observableFrom, Observable, BehaviorSubject } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 // Angular Modules
 import { Facilitator } from '../../facilitators/facilitator.model'
-import { Injectable, EventEmitter } from '@angular/core'
+import { Injectable } from '@angular/core'
 
 // App Modules
 import { BaseService } from '../api/base.abstract.service'
 import { User, UserState } from '../../shared/models/user.model'
 import { environment } from '../../../environments/environment'
-import { CookieService } from 'ngx-cookie'
+// import { CookieService } from 'ngx-cookie'
 import { HttpClient } from '@angular/common/http'
 import { requestOptions } from '../../util/util'
 import { tuple } from '../../util/functional'
@@ -19,20 +19,15 @@ import { tuple } from '../../util/functional'
 @Injectable()
 export class JWTService {
   public get jwt(): string | null {
-    return this.cs.get('x-jwt') || null
+    throw new Error('DEPRECATED')
   }
   public set jwt(token: string | null) {
-    if (token == null) {
-      this.cs.remove('x-jwt')
-      return
-    }
-
-    this.cs.put('x-jwt', token)
+    throw new Error('DEPRECATED')
   }
   public removeToken() {
-    this.cs.remove('x-jwt')
+    throw new Error('DEPRECATED')
   }
-  constructor(private cs: CookieService) {}
+  // constructor(private cs: CookieService) {}
 }
 
 // tslint:disable-next-line:max-classes-per-file

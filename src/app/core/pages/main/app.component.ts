@@ -26,7 +26,7 @@ import { Subscription, Observable } from 'rxjs'
 // RxJS operators
 
 import { SupportPage } from '~app/services/support/support.model'
-import { ObservableMedia } from '@angular/flex-layout'
+import { MediaObserver } from '@angular/flex-layout'
 import { LocaleService } from '~app/services/locale/locale.service'
 
 import { User } from '~app/user/services/user.service'
@@ -66,7 +66,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private auth: AuthService,
     private supportService: SupportService,
     private dialog: MatDialog,
-    public media: ObservableMedia,
+    public media: MediaObserver,
     private localeService: LocaleService,
     @Inject(LOCALE_ID) public locale: string,
     private dateAdapter: DateAdapter<any>,
