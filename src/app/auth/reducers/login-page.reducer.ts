@@ -31,6 +31,7 @@ export function reducer(
 
       case AuthApiActions.AuthApiActionTypes.LoginFailure: {
         draft.error = action.payload.error
+        draft.pending = false
         return
       }
     }

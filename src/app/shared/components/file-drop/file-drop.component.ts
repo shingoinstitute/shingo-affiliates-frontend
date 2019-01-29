@@ -8,11 +8,11 @@ import {
 import { pipe } from '../../../util/functional'
 import { truthy } from '../../../util/util'
 import {
-  mapEither,
-  chainEither,
   left,
   Either,
   right,
+  bimapC,
+  chainC,
 } from '../../../util/functional/Either'
 
 export interface MultipleFailure {
@@ -91,6 +91,8 @@ const validateFile = (accept: ReadonlyArray<string>, maxSize: number) => (
   return right(file)
 }
 
+const getFiles = (fs: FileList) => Array.from(fs).filter(truthy)
+
 function getDataTransferFiles(dataTransfer: DataTransfer) {
   if (dataTransfer.items) {
     return Array.from(dataTransfer.items)
@@ -100,8 +102,6 @@ function getDataTransferFiles(dataTransfer: DataTransfer) {
     return getFiles(dataTransfer.files)
   }
 }
-
-const getFiles = (fs: FileList) => Array.from(fs).filter(truthy)
 
 const supportsFileUpload = () => 'FormData' in window && 'FileReader' in window
 const supportsDnD = () => {
@@ -249,7 +249,7 @@ export class FileDropComponent {
 
     const fn = pipe(
       validateFile(this.accept, this.maxFileSize),
-      chainEither(
+      chainC(
         (file): Either<FileFailure, File> => {
           count++
           size += file.size
@@ -275,7 +275,7 @@ export class FileDropComponent {
           return right(file)
         },
       ),
-      mapEither(file => this.handleFile(file), err => this.handleError(err)),
+      bimapC(err => this.handleError(err), file => this.handleFile(file)),
     )
 
     files.map(fn)

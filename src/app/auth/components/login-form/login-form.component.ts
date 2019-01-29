@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { FormGroup, FormControl, Validators } from '@angular/forms'
 import { AuthPayload } from '../../services/auth.service'
+import { typeOf } from '~app/util/predicates'
+import { HttpErrorResponse } from '@angular/common/http'
 
 @Component({
   selector: 'app-login-form',
@@ -27,9 +29,11 @@ import { AuthPayload } from '../../services/auth.service'
   ],
 })
 export class LoginFormComponent implements OnInit {
+  private _errorMessage: unknown
+
   @Input()
   set pending(isPending: boolean) {
-    if (isPending) {
+    if (isPending && !this.errorMessage) {
       this.form.disable()
     } else {
       this.form.enable()
@@ -37,7 +41,15 @@ export class LoginFormComponent implements OnInit {
   }
 
   @Input()
-  errorMessage: string | undefined | null
+  set errorMessage(value: unknown) {
+    if (value) {
+      this.form.enable()
+    }
+    this._errorMessage = value
+  }
+  get errorMessage() {
+    return this._errorMessage
+  }
 
   @Output()
   submitted = new EventEmitter<AuthPayload>()
@@ -63,5 +75,22 @@ export class LoginFormComponent implements OnInit {
     if (this.form.valid) {
       this.submitted.emit(this.form.value)
     }
+  }
+
+  displayError(error: unknown): string {
+    if (!error) return ''
+    console.error('Displaying Error', error)
+
+    if (typeOf('string', 'number', 'boolean', 'symbol')(error))
+      return String(error)
+
+    if (typeof error === 'object') {
+      if (error instanceof HttpErrorResponse) {
+        return (error.error && this.displayError(error.error)) || error.message
+      }
+      return JSON.stringify(error)
+    }
+
+    return 'Unknown Error'
   }
 }

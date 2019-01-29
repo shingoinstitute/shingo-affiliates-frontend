@@ -11,14 +11,14 @@ import { MaterialsDialog } from '../materials/materials-dialog/materials-dialog.
   providers: [AnnouncementService],
 })
 export class QuickDetailsComponent implements OnInit {
-  public announcements: Announcement[] = []
+  announcements: Announcement[] = []
 
   constructor(
-    public announcement: AnnouncementService,
-    public dialog: MatDialog,
+    private announcement: AnnouncementService,
+    private dialog: MatDialog,
   ) {}
 
-  public ngOnInit() {
+  ngOnInit() {
     this.announcement.getAnnouncements().subscribe(
       data => {
         this.announcements = data.map(Announcement.create)
@@ -29,7 +29,7 @@ export class QuickDetailsComponent implements OnInit {
     )
   }
 
-  public displayAfMaterials() {
+  displayAfMaterials() {
     this.dialog.open(MaterialsDialog, { width: '80%' })
   }
 }

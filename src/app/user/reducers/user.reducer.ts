@@ -1,22 +1,26 @@
 import { User } from '../services/user.service'
-import produce from 'immer'
 import { UserAction, UserActionTypes } from '../actions/user-api.actions'
+import { AsyncResult } from '~app/util/types'
+import { left, right } from '~app/util/functional/Either'
 
-export interface State {
-  readonly user: Readonly<User> | null
-}
+export type StateUnion = AsyncResult<Readonly<User>>
 
-export const initialState: State = {
-  user: null,
-}
+export type State = StateUnion
+
+export const initialState: State = left({ tag: 'unloaded' as 'unloaded' })
 
 export function reducer(state = initialState, action: UserAction): State {
-  return produce(state, draft => {
-    switch (action.type) {
-      case UserActionTypes.UserRenewSuccess: {
-        draft.user = action.payload.user
-        return
-      }
+  switch (action.type) {
+    case UserActionTypes.UserRenew: {
+      return left({ tag: 'loading' as 'loading' })
     }
-  })
+    case UserActionTypes.UserRenewSuccess: {
+      return right(action.payload.user)
+    }
+    case UserActionTypes.UserRenewError: {
+      return left({ tag: 'failed' as 'failed', value: action.payload })
+    }
+    default:
+      return state
+  }
 }

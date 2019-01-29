@@ -1,30 +1,32 @@
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule, Route } from '@angular/router'
 import { AddWorkshopComponent } from './pages/add-workshop/add-workshop.component'
 import { AuthGuard } from '~app/auth/services/auth-guard.service'
-import { EditWorkshopComponent } from './pages/edit-workshop/edit-workshop.component'
-import { WorkshopResolver } from './services/workshop.resolver'
-import { WorkshopDetailComponent } from './pages/workshop-detail/workshop-detail.component'
 import { WorkshopDashboardComponent } from './pages/workshop-dashboard/workshop-dashboard.component'
 import { NgModule } from '@angular/core'
+import { WorkshopFocusComponent } from './pages/workshop-focus/workshop-focus.component'
 
-const routes: Routes = [
+export const editRoute: Route = {
+  path: 'workshops/:id/edit',
+  component: WorkshopFocusComponent,
+  canActivate: [AuthGuard],
+  //  resolve: { workshop: 'hi' },
+}
+
+export const detailRoute: Route = {
+  path: 'workshops/:id',
+  component: WorkshopFocusComponent,
+  canActivate: [AuthGuard],
+  // resolve: { workshop: WorkshopResolver },
+}
+
+export const routes: Routes = [
   {
     path: 'workshops/new',
     component: AddWorkshopComponent,
     canActivate: [AuthGuard],
   },
-  {
-    path: 'workshops/:id/edit',
-    component: EditWorkshopComponent,
-    canActivate: [AuthGuard],
-    resolve: { workshop: WorkshopResolver },
-  },
-  {
-    path: 'workshops/:id',
-    component: WorkshopDetailComponent,
-    canActivate: [AuthGuard],
-    resolve: { workshop: WorkshopResolver },
-  },
+  editRoute,
+  detailRoute,
   {
     path: 'workshops',
     component: WorkshopDashboardComponent,

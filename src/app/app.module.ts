@@ -55,6 +55,7 @@ import { UserModule } from './user/user.module'
 import { AppComponent } from './core/pages/main/app.component'
 import { CoreModule } from './core/core.module'
 import { SuccessComponent } from './success.component'
+import { StoreRouterConnectingModule } from '@ngrx/router-store'
 
 @NgModule({
   declarations: [SuccessComponent],
@@ -79,6 +80,7 @@ import { SuccessComponent } from './success.component'
     CoreModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
+    StoreRouterConnectingModule.forRoot(),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([]),
 

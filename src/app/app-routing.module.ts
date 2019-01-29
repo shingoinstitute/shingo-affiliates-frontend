@@ -18,15 +18,15 @@ import { ForbiddenPageComponent } from './core/pages/forbidden-page/forbidden-pa
 import { PageNotFoundComponent } from './core/pages/page-not-found/page-not-found.component'
 
 /** Shared Module Components */
-import { IsValidGuard } from './services/auth/is-valid.guard'
-import { UserResolver } from './services/auth/user.resolver'
-import { IsAdminGuard } from './services/auth/is-admin.guard'
+// import { IsValidGuard } from './services/auth/is-valid.guard'
+// import { UserResolver } from './services/auth/user.resolver'
+// import { IsAdminGuard } from './services/auth/is-admin.guard'
 
 /** Workshops */
 // import { WorkshopComponent } from './workshops/workshop/workshop.component'
-import { WorkshopResolver } from './workshops/workshop.resolver'
+// import { WorkshopResolver } from './workshops/workshop.resolver'
 import { AuthGuard } from './auth/services/auth-guard.service'
-import { SuccessComponent } from './success.component'
+// import { SuccessComponent } from './success.component'
 import { DashboardComponent } from './core/pages/dashboard/dashboard.component'
 
 const appRoutes: Routes = [
@@ -34,7 +34,7 @@ const appRoutes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [IsValidGuard],
+    canActivate: [AuthGuard],
   },
   // {
   //   path: 'workshops/new',

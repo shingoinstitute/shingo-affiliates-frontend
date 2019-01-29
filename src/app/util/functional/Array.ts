@@ -3,6 +3,7 @@ import { id } from './functional'
 import { Applicative, Applicative1 } from './structures/Applicative'
 import { HKT } from './HKT'
 import { Sequence1, Traversable1, Traverse1 } from './structures/Traversable'
+import { Either, isLeft } from './Either'
 
 declare global {
   interface Array<T> {
@@ -19,6 +20,14 @@ declare module './HKT' {
 
 export const URI = 'Array'
 export type URI = typeof URI
+
+export const flatten = <A>(ffa: A[][]): A[] => ([] as A[]).concat(...ffa)
+export const copy = <A>(as: A[]): A[] => [...as]
+export const append = <A>(as: A[], a: A): A[] => {
+  const r = copy(as)
+  r.push(a)
+  return r
+}
 
 export const length = <A>(xs: A[]) => xs.length
 export const reduce1 = <A>(fa: A[], fn: (b: A, a: A) => A) => fa.reduce(fn)
@@ -58,15 +67,6 @@ export const sequence: Sequence1<URI> = <F>(F: Applicative<F>) => <A>(
     F.ap(F.map(fas, as => (a: A) => append(as, a)), fa),
   )
 
-export const copy = <A>(as: A[]): A[] => {
-  const l = as.length
-  const r = Array(l)
-  for (let i = 0; i < l; i++) {
-    r[i] = as[i]
-  }
-  return r
-}
-
 export const cons = <A>(a: A, as: A[]): A[] => {
   const l = as.length
   const arr = new Array(as.length + 1)
@@ -79,34 +79,9 @@ export const cons = <A>(a: A, as: A[]): A[] => {
 
 export const consC = <A>(a: A) => (as: A[]) => cons(a, as)
 
-export const append = <A>(as: A[], a: A): A[] => {
-  const r = copy(as)
-  r.push(a)
-  return r
-}
-
 export const appendC = <A>(as: A[]) => (a: A): A[] => append(as, a)
 
 // from gcanti/fp-ts
-export const flatten = <A>(ffa: A[][]): A[] => {
-  let rLen = 0
-  const len = ffa.length
-  for (let i = 0; i < len; i++) {
-    rLen += ffa[i].length
-  }
-  const r = Array(rLen)
-  let start = 0
-  for (let i = 0; i < len; i++) {
-    const arr = ffa[i]
-    const l = arr.length
-    for (let j = 0; j < l; j++) {
-      r[j + start] = arr[j]
-    }
-    start += l
-  }
-  return r
-}
-
 export const mapOnMaybe = <A, B>(as: A[], f: (a: A) => Maybe<B>): B[] =>
   as.reduce(
     (acc, curr) => {
@@ -183,9 +158,9 @@ export function partitionMap<A, L, R>(
       }
     } else {
       if (isLeft(e)) {
-        left.push(e[1])
+        left.push(e.value)
       } else {
-        right.push(e[1])
+        right.push(e.value)
       }
     }
   }
@@ -198,7 +173,6 @@ import * as module from './Array'
 import { the } from './types'
 import { Functor1 } from './structures/Functor'
 import { Foldable1 } from './structures/Foldable'
-import { Either, isLeft } from './Either'
 
 the<Functor1<URI>, typeof module>()
 the<Foldable1<URI>, typeof module>()

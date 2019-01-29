@@ -7,9 +7,29 @@ import {
   WorkshopGet,
   WorkshopUpdate,
 } from '../actions/workshop-api.actions'
-import { exhaustMap, map } from 'rxjs/operators'
-import { WorkshopAdd } from '../actions/workshop.actions'
-import { Omit, Overwrite } from '~app/util/types'
+import { exhaustMap, map, catchError, filter, switchMap } from 'rxjs/operators'
+import { WorkshopAdded, WorkshopErrored } from '../actions/workshop.actions'
+import { Overwrite } from '~app/util/types'
+import { of } from 'rxjs'
+import {
+  ROUTER_NAVIGATION,
+  RouterNavigationAction,
+  SerializedRouterStateSnapshot,
+} from '@ngrx/router-store'
+import { Route, ActivatedRouteSnapshot } from '@angular/router'
+import { array } from 'fp-ts/lib/Array'
+import { fromFoldable, Optional, Lens } from 'monocle-ts'
+import { editRoute, detailRoute } from '../workshops-routing.module'
+import { isSome } from 'fp-ts/lib/Option'
+import { or } from 'fp-ts/lib/function'
+
+const fromRouteConfig = (config: Route) => (r: ActivatedRouteSnapshot) =>
+  !!(r.routeConfig && r.routeConfig.path === config.path)
+const navAction = Lens.fromProp<
+  RouterNavigationAction<SerializedRouterStateSnapshot>
+>()
+
+const handleError = catchError(err => of(new WorkshopErrored(err)))
 
 @Injectable()
 export class WorkshopEffects {
@@ -22,9 +42,10 @@ export class WorkshopEffects {
   getAll$ = this.actions$.pipe(
     ofType<WorkshopGetAll>(WorkshopApiActionTypes.WorkshopGetAll),
     exhaustMap(() =>
-      this.workshopService
-        .getAll()
-        .pipe(map(workshops => new WorkshopAdd({ workshops }))),
+      this.workshopService.getAll().pipe(
+        map(workshops => new WorkshopAdded({ workshops })),
+        handleError,
+      ),
     ),
   )
 
@@ -32,9 +53,10 @@ export class WorkshopEffects {
   getOne$ = this.actions$.pipe(
     ofType<WorkshopGet>(WorkshopApiActionTypes.WorkshopGet),
     exhaustMap(v =>
-      this.workshopService
-        .getById(v.payload.id)
-        .pipe(map(w => new WorkshopAdd({ workshops: [w] }))),
+      this.workshopService.getById(v.payload.id).pipe(
+        map(w => new WorkshopAdded({ workshops: [w] })),
+        handleError,
+      ),
     ),
   )
 
@@ -47,6 +69,24 @@ export class WorkshopEffects {
         { Id: string }
       >
       return this.workshopService.update(workshop)
+    }),
+  )
+
+  @Effect()
+  navigateDetail$ = this.actions$.pipe(
+    ofType<RouterNavigationAction>(ROUTER_NAVIGATION),
+    map(
+      navAction('payload')
+        .compose(Lens.fromProp('routerState'))
+        .compose(Lens.fromProp('root'))
+        .composeOptional(Optional.fromNullableProp('children'))
+        .composeFold(fromFoldable(array)())
+        .find(or(fromRouteConfig(editRoute), fromRouteConfig(detailRoute))),
+    ),
+    filter(isSome),
+    switchMap(({ value }) => {
+      const id = value.params['id']
+      return of(new WorkshopGet({ id }))
     }),
   )
 }

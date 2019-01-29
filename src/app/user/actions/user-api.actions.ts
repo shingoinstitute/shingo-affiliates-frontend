@@ -5,6 +5,7 @@ import { User } from '../services/user.service'
 export enum UserActionTypes {
   UserRenew = '[User API] User Renew',
   UserRenewSuccess = '[User API] User Renew Success',
+  UserRenewError = '[User API] User Renew Error',
 }
 
 export class UserRenew implements Action {
@@ -17,4 +18,10 @@ export class UserRenewSuccess implements Action {
   constructor(public payload: { user: User }) {}
 }
 
-export type UserAction = UserRenew | UserRenewSuccess
+export class UserRenewError implements Action {
+  readonly type = UserActionTypes.UserRenewError
+
+  constructor(public payload: unknown) {}
+}
+
+export type UserAction = UserRenew | UserRenewSuccess | UserRenewError

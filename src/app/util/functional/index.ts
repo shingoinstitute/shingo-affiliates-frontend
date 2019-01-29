@@ -4,4 +4,4 @@
 // implementation of half of Haskell's type system
 export * from './functional'
 export * from './types'
-export * from './predicates'
+export * from './PredCombinators'

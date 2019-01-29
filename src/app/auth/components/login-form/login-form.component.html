@@ -39,7 +39,7 @@
           >Password is <strong>required</strong></mat-error
         >
       </mat-form-field>
-      <p *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p *ngIf="errorMessage">{{ displayError(errorMessage) }}</p>
       <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
         <button
           mat-raised-button

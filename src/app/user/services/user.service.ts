@@ -5,7 +5,7 @@ import {
 } from '@shingo/affiliates-api/controllers'
 import { Injectable } from '@angular/core'
 import { ApiBase } from '../../shared/services/api/api-base.abstract'
-import { Observable, throwError, of } from 'rxjs'
+import { Observable, throwError } from 'rxjs'
 import * as fromUser from '../reducers'
 import { Store, select } from '@ngrx/store'
 import { HttpClient } from '@angular/common/http'
@@ -42,19 +42,18 @@ export class UserService extends ApiBase {
     type Base = AuthContract['changePassword']
 
     return this.user$.pipe(
-      mergeMap(
-        user =>
-          user && user.email
-            ? this.auth
-                .login({ email: user.email, password: payload.oldPassword })
-                .pipe(
-                  mergeMap(() =>
-                    this.request<Base>('/auth/changepassword', 'POST', {
-                      body: payload,
-                    }),
-                  ),
-                )
-            : throwError(new Error('Must be logged in to change password')),
+      mergeMap(user =>
+        user && user.email
+          ? this.auth
+              .login({ email: user.email, password: payload.oldPassword })
+              .pipe(
+                mergeMap(() =>
+                  this.request<Base>('/auth/changepassword', 'POST', {
+                    body: payload,
+                  }),
+                ),
+              )
+          : throwError(new Error('Must be logged in to change password')),
       ),
     )
   }

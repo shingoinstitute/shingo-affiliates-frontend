@@ -1,34 +1,27 @@
 // Angular Modules
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { Component, Input } from '@angular/core'
 
 // App Modules
 import { WorkshopBase, workshop } from '~app/workshops/workshop.model'
-import { MatSnackBar } from '@angular/material'
 import {
   WorkshopForm,
   addToWorkshop,
-} from '../../components/workshop-form/workshop-form.component'
+} from '../workshop-form/workshop-form.component'
 
 @Component({
   selector: 'app-edit-workshop',
   templateUrl: './edit-workshop.component.html',
   styleUrls: ['./edit-workshop.component.scss'],
 })
-export class EditWorkshopComponent implements OnInit {
-  workshop!: WorkshopBase
+export class EditWorkshopComponent {
+  @Input()
+  workshop: WorkshopBase = workshop()
   pending = false
 
-  constructor(
-    // private _ws: WorkshopService,
-    // private router: Router,
-    // private snackbar: MatSnackBar,
-    private route: ActivatedRoute,
-  ) {}
-
-  public ngOnInit() {
-    this.workshop = this.route.snapshot.data['workshop']
-  }
+  constructor() // private _ws: WorkshopService,
+  // private router: Router,
+  // private snackbar: MatSnackBar,
+  {}
 
   private update(workshop: WorkshopBase) {
     throw new Error('Unimplemented')

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute } from '@angular/router'
+import { Component, OnInit, Input } from '@angular/core'
 import { HttpEventType } from '@angular/common/http'
 
 import { WorkshopBase } from '~app/workshops/workshop.model'
@@ -30,7 +29,8 @@ const evaluationFileRegex = /evaluation/
   styleUrls: ['./workshop-detail.component.scss'],
 })
 export class WorkshopDetailComponent implements OnInit {
-  workshop!: WorkshopBase
+  @Input()
+  workshop: WorkshopBase = W.workshop()
   attendeeFile: File | SyntheticFile | undefined
   evaluations: Array<File | SyntheticFile> = []
   attendeeModified = false
@@ -69,10 +69,9 @@ export class WorkshopDetailComponent implements OnInit {
     )
   }
 
-  constructor(public route: ActivatedRoute, public _ws: WorkshopService) {}
+  constructor(private _ws: WorkshopService) {}
 
   ngOnInit() {
-    this.workshop = this.route.snapshot.data['workshop']
     const files = W.files(this.workshop)
     const aFile = files.find(f => attendeeFileRegex.test(f.Name || ''))
     if (aFile) {

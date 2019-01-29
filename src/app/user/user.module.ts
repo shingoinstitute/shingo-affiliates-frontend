@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { StoreModule } from '@ngrx/store'
-import { reducers, ROOT_KEY } from './reducers'
+import { ROOT_KEY } from './reducers'
 import { EffectsModule } from '@ngrx/effects'
 import { UserEffects } from './effects/user.effects'
 import { ChangePasswordDialog } from './components/change-password-dialog/change-password-dialog.component'
@@ -19,6 +19,7 @@ import {
   MatDialogModule,
 } from '@angular/material'
 import { FlexLayoutModule } from '@angular/flex-layout'
+import { reducer } from './reducers/user.reducer'
 
 export const COMPONENTS = [
   ChangePasswordDialog,
@@ -41,7 +42,7 @@ export const COMPONENTS = [
     ReactiveFormsModule,
     UserRoutingModule,
     // must match the desired name in the global reducer slice
-    StoreModule.forFeature(ROOT_KEY, reducers),
+    StoreModule.forFeature(ROOT_KEY, reducer),
     EffectsModule.forFeature([UserEffects]),
   ],
   declarations: COMPONENTS,

@@ -1,4 +1,10 @@
-import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store'
+import {
+  ActionReducer,
+  ActionReducerMap,
+  MetaReducer,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store'
 import { environment } from '../../environments/environment'
 import { storeFreeze } from 'ngrx-store-freeze'
 import * as fromRouter from '@ngrx/router-store'
@@ -17,6 +23,39 @@ export const rootReducers: ActionReducerMap<RootState> = {
 }
 
 export const reducers: ActionReducerMap<State> = rootReducers as any
+
+export const selectRouterState = createFeatureSelector<
+  fromRouter.RouterReducerState
+>('router')
+
+/**
+ * Selects the routers first child route from root
+ *
+ * may return a null value
+ */
+export const selectRouteFirstChild = createSelector(
+  selectRouterState,
+  router => router.state.root.firstChild,
+)
+
+/**
+ * Selects the params of the routers first child route from root
+ *
+ * may return a null value
+ */
+export const selectRouteParams = createSelector(
+  selectRouteFirstChild,
+  route => route && route.params,
+)
+
+export const selectRouteByPath = (configPath: string) =>
+  createSelector(
+    selectRouterState,
+    router =>
+      router.state.root.children.find(
+        r => !!(r.routeConfig && r.routeConfig.path === configPath),
+      ),
+  )
 
 export function storeLogger(
   reducer: ActionReducer<State>,

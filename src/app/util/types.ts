@@ -1,3 +1,5 @@
+import { Either } from './functional/Either'
+
 export { Fn } from './functional/types'
 export type ReturnOf<T> = T extends (...args: any[]) => infer R ? R : never
 export type ArgsOf<T> = T extends (...args: infer A) => any ? A : never
@@ -17,6 +19,11 @@ export type OmitNever<O> = Pick<
   O,
   { [k in keyof O]: O[k] extends never ? never : k }[keyof O]
 >
+
+/**
+ * Like OmitNever, but distributes over unions
+ */
+export type OmitNever1<O> = O extends any ? OmitNever<O> : never
 
 /**
  * A shorthand to make homogeneous object types.
@@ -108,6 +115,10 @@ export type MaybeKeys<T> = KeysOfType2<T, null | undefined>
 
 export type MakeMaybe<T> = { [K in keyof T]+?: T[K] | null | undefined }
 export type Overwrite<A, B> = Pick<A, Exclude<keyof A, keyof B>> & B
+export type OverwriteKey<A, K extends keyof A, B> = Overwrite<
+  A,
+  { [k in K]: B }
+>
 
 export type UndefinedToOptional<T> = MakeKeysOptional<T, OptionalKeys<T>>
 
@@ -119,3 +130,34 @@ export type RequireKeys<T, K extends keyof T> = Overwrite<
 export type ToReadonlyArray<Arr extends any[]> = ReadonlyArray<Arr[number]>
 /** A map where every key is also it's value */
 export type KVMap<Entries extends string> = { readonly [K in Entries]: K }
+
+export type ExtractTagged<
+  T extends { [t in TagName]: any },
+  Tag extends T[TagName],
+  TagName extends keyof any = 'tag'
+> = Tag extends any ? Extract<T, { [t in TagName]: Tag }> : never
+
+/**
+ * A discriminated union representing the possible states of a value
+ * resulting from an async request
+ */
+export type AsyncResult<Loaded, Empty = never> = Either<
+  OmitNever1<
+    | { tag: 'failed'; value: unknown }
+    | { tag: 'unloaded'; value: Empty }
+    | { tag: 'loading'; value: Empty }
+  >,
+  Loaded
+>
+
+export type InnerValue<T> = T extends any[]
+  ? T[number]
+  : T extends Either<any, infer V>
+  ? V
+  : T extends Promise<infer V>
+  ? V
+  : T extends {}
+  ? T[keyof T]
+  : never
+
+export type Mutable<T> = { -readonly [k in keyof T]: T[k] }
