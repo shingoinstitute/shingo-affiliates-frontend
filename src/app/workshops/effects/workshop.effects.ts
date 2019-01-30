@@ -7,10 +7,21 @@ import {
   WorkshopGet,
   WorkshopUpdate,
 } from '../actions/workshop-api.actions'
-import { exhaustMap, map, catchError, filter, switchMap } from 'rxjs/operators'
-import { WorkshopAdded, WorkshopErrored } from '../actions/workshop.actions'
+import {
+  exhaustMap,
+  map,
+  catchError,
+  filter,
+  switchMap,
+  mergeMap,
+} from 'rxjs/operators'
+import {
+  WorkshopAdded,
+  WorkshopErrored,
+  WorkshopSelect,
+  WorkshopSelectErrored,
+} from '../actions/workshop.actions'
 import { Overwrite } from '~app/util/types'
-import { of } from 'rxjs'
 import {
   ROUTER_NAVIGATION,
   RouterNavigationAction,
@@ -22,6 +33,9 @@ import { fromFoldable, Optional, Lens } from 'monocle-ts'
 import { editRoute, detailRoute } from '../workshops-routing.module'
 import { isSome } from 'fp-ts/lib/Option'
 import { or } from 'fp-ts/lib/function'
+import { right } from '~app/util/functional/Either'
+import { loadingAsync } from '~app/util/util'
+import { Action } from '@ngrx/store'
 
 const fromRouteConfig = (config: Route) => (r: ActivatedRouteSnapshot) =>
   !!(r.routeConfig && r.routeConfig.path === config.path)
@@ -29,7 +43,12 @@ const navAction = Lens.fromProp<
   RouterNavigationAction<SerializedRouterStateSnapshot>
 >()
 
-const handleError = catchError(err => of(new WorkshopErrored(err)))
+const handleError = (selection: boolean = false) =>
+  catchError(err =>
+    [new WorkshopErrored(err) as Action].concat(
+      selection ? [new WorkshopSelectErrored(err)] : [],
+    ),
+  )
 
 @Injectable()
 export class WorkshopEffects {
@@ -44,7 +63,7 @@ export class WorkshopEffects {
     exhaustMap(() =>
       this.workshopService.getAll().pipe(
         map(workshops => new WorkshopAdded({ workshops })),
-        handleError,
+        handleError(),
       ),
     ),
   )
@@ -52,10 +71,14 @@ export class WorkshopEffects {
   @Effect()
   getOne$ = this.actions$.pipe(
     ofType<WorkshopGet>(WorkshopApiActionTypes.WorkshopGet),
-    exhaustMap(v =>
-      this.workshopService.getById(v.payload.id).pipe(
-        map(w => new WorkshopAdded({ workshops: [w] })),
-        handleError,
+    exhaustMap(({ payload: { id, selection } }) =>
+      this.workshopService.getById(id).pipe(
+        mergeMap(w =>
+          [new WorkshopAdded({ workshops: [w] }) as Action].concat(
+            selection ? [new WorkshopSelect(right(id))] : [],
+          ),
+        ),
+        handleError(selection),
       ),
     ),
   )
@@ -86,7 +109,10 @@ export class WorkshopEffects {
     filter(isSome),
     switchMap(({ value }) => {
       const id = value.params['id']
-      return of(new WorkshopGet({ id }))
+      return [
+        new WorkshopGet({ id, selection: true }),
+        new WorkshopSelect(loadingAsync),
+      ]
     }),
   )
 }

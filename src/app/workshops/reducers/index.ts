@@ -1,13 +1,16 @@
 // tslint:disable-next-line: no-duplicate-imports
 import { State as WorkshopState } from './workshops.reducer'
 import { createFeatureSelector, createSelector } from '@ngrx/store'
-import { snd, K, pipe, Predicate, Refinement } from '~app/util/functional'
+import { snd, K, pipe, property } from '~app/util/functional'
 import { recordEntries } from '~app/util/util'
 import { mapC as mapI, filterC as filterI } from '~app/util/iterable'
-import { mapC, map as mapEither } from '~app/util/functional/Either'
+import {
+  mapC,
+  map as mapEither,
+  chain as chainEither,
+} from '~app/util/functional/Either'
 import { WorkshopBase } from '../workshop.model'
 import { AsyncResult } from '~app/util/types'
-import { selectRouteParams } from '~app/reducers'
 
 export { WorkshopState }
 
@@ -26,6 +29,15 @@ export const selectWorkshopState = createFeatureSelector<State, WorkshopState>(
   ROOT_KEY,
 )
 
+export const selectWorkshops = createSelector(
+  selectWorkshopState,
+  property('workshops'),
+)
+export const selectSelectedWorkshopId = createSelector(
+  selectWorkshopState,
+  property('selectedWorkshop'),
+)
+
 export type GetWorkshopsResult = AsyncResult<WorkshopBase[]>
 
 /**
@@ -36,7 +48,7 @@ export type GetWorkshopsResult = AsyncResult<WorkshopBase[]>
  */
 export const getWorkshops = (pred: (w: WorkshopBase) => boolean = K(true)) =>
   createSelector(
-    selectWorkshopState,
+    selectWorkshops,
     mapC(
       pipe(
         recordEntries,
@@ -48,14 +60,13 @@ export const getWorkshops = (pred: (w: WorkshopBase) => boolean = K(true)) =>
   )
 
 /**
- * Selector that uses the id in the router store to return a workshop
+ * Selector that uses the selected workshop's id from the store to return a workshop
  */
 export const getCurrentWorkshop = createSelector(
-  selectWorkshopState,
-  selectRouteParams,
-  (wsE, params) =>
-    mapEither(
-      wsE,
-      ws => (params ? ws[params.id] : undefined) as WorkshopBase | undefined,
+  selectWorkshops,
+  selectSelectedWorkshopId,
+  (wsE, idE) =>
+    chainEither(wsE, ws =>
+      mapEither(idE, id => ws[id] as WorkshopBase | undefined),
     ),
 )

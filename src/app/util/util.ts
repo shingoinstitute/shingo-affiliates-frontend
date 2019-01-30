@@ -4,6 +4,7 @@ import { ValidationErrors, FormGroup } from '@angular/forms'
 import { Moment, isMoment } from 'moment'
 import { tuple } from './functional'
 import { reduce } from './iterable'
+import { left } from './functional/Either'
 
 /**
  * Iterates over the enumerable keys of a record yielding (key, value) pairs, similar to `Map.prototype.entries`
@@ -155,10 +156,8 @@ export const sfToCamelCase = (s: string): string =>
     .join('')
     .split('_')
     .join(' ')
-    .replace(
-      /(?:^\w|[A-Z]|\b\w)/g,
-      (letter, index) =>
-        index === 0 ? letter.toLowerCase() : letter.toUpperCase(),
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, (letter, index) =>
+      index === 0 ? letter.toLowerCase() : letter.toUpperCase(),
     )
     .replace(/\s+/g, '')
 
@@ -234,3 +233,6 @@ export const withUnit = (size: number, binary = false) => {
   const [multiplier, unit] = getSizeUnit(power as 0 | 1 | 2 | 3 | 4 | 5, binary)
   return `${(size / multiplier).toFixed(2)} ${unit === 'B' ? 'Bytes' : unit}`
 }
+
+export const unloadedAsync = left({ tag: 'unloaded' as 'unloaded' })
+export const loadingAsync = left({ tag: 'loading' as 'loading' })
