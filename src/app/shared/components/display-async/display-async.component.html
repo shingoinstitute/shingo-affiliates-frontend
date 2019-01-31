@@ -1,0 +1,32 @@
+<ng-container *ngIf="(data$ | async) as either">
+  <ng-container *ngIf="isLeft(either); else rightTemplate">
+    <ng-container
+      *ngIf="!hasChildren('left'); else leftTemplate"
+      [ngSwitch]="either.value.tag"
+    >
+      <mat-spinner *ngSwitchCase="'loading'"></mat-spinner>
+      <p *ngSwitchCase="'unloaded'">Data has not been loaded</p>
+      <div *ngSwitchCase="'failed'">
+        <p>Failure fetching data. Refresh the page to try again</p>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #leftTemplate>
+    <ng-container *ngFor="let child of leftRenders">
+      <ng-template
+        [ngTemplateOutlet]="child.templateRef"
+        [ngTemplateOutletContext]="{ $implicit: either.value }"
+      ></ng-template>
+    </ng-container>
+  </ng-template>
+
+  <ng-template #rightTemplate>
+    <ng-container *ngFor="let child of rightRenders">
+      <ng-template
+        [ngTemplateOutlet]="child.templateRef"
+        [ngTemplateOutletContext]="{ $implicit: either.value }"
+      ></ng-template>
+    </ng-container>
+  </ng-template>
+</ng-container>

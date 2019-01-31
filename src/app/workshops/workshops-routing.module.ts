@@ -3,18 +3,18 @@ import { AddWorkshopComponent } from './pages/add-workshop/add-workshop.componen
 import { AuthGuard } from '~app/auth/services/auth-guard.service'
 import { WorkshopDashboardComponent } from './pages/workshop-dashboard/workshop-dashboard.component'
 import { NgModule } from '@angular/core'
-import { WorkshopFocusComponent } from './pages/workshop-focus/workshop-focus.component'
+import { WorkshopDetailPageComponent } from './pages/workshop-detail-page/workshop-detail-page.component'
 
 export const editRoute: Route = {
   path: 'workshops/:id/edit',
-  component: WorkshopFocusComponent,
+  component: WorkshopDetailPageComponent,
   canActivate: [AuthGuard],
   //  resolve: { workshop: 'hi' },
 }
 
 export const detailRoute: Route = {
   path: 'workshops/:id',
-  component: WorkshopFocusComponent,
+  component: WorkshopDetailPageComponent,
   canActivate: [AuthGuard],
   // resolve: { workshop: WorkshopResolver },
 }

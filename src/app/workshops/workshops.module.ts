@@ -48,7 +48,10 @@ import { EffectsModule } from '@ngrx/effects'
 import { WorkshopEffects } from './effects/workshop.effects'
 import { RouterModule } from '@angular/router'
 import { reducer } from './reducers/workshops.reducer'
-import { WorkshopFocusComponent } from './pages/workshop-focus/workshop-focus.component'
+import { SelectWorkshopComponent } from './components/select-workshop.component'
+import { SelectAllWorkshopsComponent } from './components/select-all-workshops.component'
+import { WorkshopDetailPageComponent } from './pages/workshop-detail-page/workshop-detail-page.component'
+import { DisplayAsyncComponent } from '~app/shared/components/display-async/display-async.component'
 
 const COMPONENTS = [
   WorkshopComponent,
@@ -60,7 +63,9 @@ const COMPONENTS = [
   UpcomingWorkshopsComponent,
   WorkshopDashboardComponent,
   WorkshopDetailComponent,
-  WorkshopFocusComponent,
+  SelectWorkshopComponent,
+  SelectAllWorkshopsComponent,
+  WorkshopDetailPageComponent,
 ]
 
 @NgModule({
@@ -101,5 +106,6 @@ const COMPONENTS = [
   ],
   declarations: COMPONENTS,
   exports: COMPONENTS,
+  entryComponents: [DisplayAsyncComponent],
 })
 export class WorkshopsModule {}

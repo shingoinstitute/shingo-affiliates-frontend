@@ -1,0 +1,22 @@
+<app-select-workshop>
+  <ng-template focusRight let-workshop>
+    <ng-container *ngIf="workshop; else notFound">
+      <ng-container [ngSwitch]="page">
+        <app-workshop-detail
+          *ngSwitchCase="'detail'"
+          [workshop]="workshop"
+        ></app-workshop-detail>
+        <app-edit-workshop
+          *ngSwitchCase="'edit'"
+          [workshop]="workshop"
+        ></app-edit-workshop>
+      </ng-container>
+    </ng-container>
+    <ng-template #notFound>
+      <ng-container>
+        <h1>404</h1>
+        <p>Workshop with id {{ id$ | async }} not found</p>
+      </ng-container>
+    </ng-template>
+  </ng-template>
+</app-select-workshop>

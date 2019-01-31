@@ -44,7 +44,6 @@ const noop = () => {}
 type FilterCB = (change: boolean, filter: Filter<WorkshopBase, any>) => void
 
 @Component({
-  selector: 'app-workshop-dashboard',
   templateUrl: './workshop-dashboard.component.html',
   styleUrls: ['./workshop-dashboard.component.scss'],
 })

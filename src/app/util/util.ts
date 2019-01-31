@@ -5,6 +5,7 @@ import { Moment, isMoment } from 'moment'
 import { tuple } from './functional'
 import { reduce } from './iterable'
 import { left } from './functional/Either'
+import { AsyncResult } from './types'
 
 /**
  * Iterates over the enumerable keys of a record yielding (key, value) pairs, similar to `Map.prototype.entries`
@@ -234,5 +235,11 @@ export const withUnit = (size: number, binary = false) => {
   return `${(size / multiplier).toFixed(2)} ${unit === 'B' ? 'Bytes' : unit}`
 }
 
-export const unloadedAsync = left({ tag: 'unloaded' as 'unloaded' })
-export const loadingAsync = left({ tag: 'loading' as 'loading' })
+export const unloadedAsync: AsyncResult<never, never> = left({
+  tag: 'unloaded' as 'unloaded',
+})
+export const loadingAsync: AsyncResult<never, never> = left({
+  tag: 'loading' as 'loading',
+})
+export const failedAsync = (err: unknown) =>
+  left({ tag: 'failed' as 'failed', value: err })

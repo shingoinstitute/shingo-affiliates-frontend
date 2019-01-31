@@ -27,6 +27,11 @@ import {
 import { FileDropComponent } from './components/file-drop/file-drop.component'
 import { FileDisplayComponent } from './components/file-display/file-display.component'
 import { FlexLayoutModule } from '@angular/flex-layout'
+import {
+  FocusRightDirective,
+  FocusLeftDirective,
+} from './components/focus-either.directive'
+import { DisplayAsyncComponent } from './components/display-async/display-async.component'
 
 @NgModule({
   imports: [
@@ -56,6 +61,9 @@ import { FlexLayoutModule } from '@angular/flex-layout'
     TextResponseDialogComponent,
     FileDropComponent,
     FileDisplayComponent,
+    FocusRightDirective,
+    FocusLeftDirective,
+    DisplayAsyncComponent,
   ],
   exports: [
     // MdDialogModule,
@@ -68,6 +76,9 @@ import { FlexLayoutModule } from '@angular/flex-layout'
     TextResponseDialogComponent,
     FileDropComponent,
     FileDisplayComponent,
+    FocusRightDirective,
+    FocusLeftDirective,
+    DisplayAsyncComponent,
   ],
   entryComponents: [
     AlertDialogComponent,
