@@ -96,6 +96,8 @@ export const endTime = (w: WorkshopBase) =>
 export const localStartTime = (w: WorkshopBase) =>
   formatTime(w.Local_Start_Time__c)
 export const localEndTime = (w: WorkshopBase) => formatTime(w.Local_End_Time__c)
+export const lastModifiedDate = (w: WorkshopBase) =>
+  new Date(w.LastModifiedDate)
 export const courseManager = (w: WorkshopBase) =>
   w.Course_Manager__r || undefined
 export const courseManagerId = (w: WorkshopBase) => {
@@ -195,6 +197,7 @@ export const workshop = (init: Partial<WorkshopBase> = {}): WorkshopBase => {
     Id: `${ID_PREFIX}:${idCounter++}`,
     Start_Date__c: getIsoYMD(new Date()),
     End_Date__c: getIsoYMD(moment().add(1, 'd')),
+    LastModifiedDate: getIsoYMD(new Date()),
     Local_Start_Time__c: '08:00:00.000Z',
     Local_End_Time__c: '17:00:00.000Z',
     Timezone__c: moment.tz.guess() as Timezone,

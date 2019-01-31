@@ -1,7 +1,5 @@
 // App Modules
 import { Filter } from '../filters/filter.abstract'
-import { BaseAPIService } from '../api/base-api.abstract.service'
-import { SFObject } from '../../shared/models/sf-object.abstract.model'
 
 // RxJS Modules
 import { Observable, BehaviorSubject, of } from 'rxjs'

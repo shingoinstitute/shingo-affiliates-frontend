@@ -3,7 +3,7 @@ import { constant, T, tuple } from '../../util/functional'
 import * as maybe from '../../util/functional/Maybe'
 // tslint:disable-next-line:no-duplicate-imports
 import { Maybe } from '../../util/functional/Maybe'
-import { combineLatest, empty } from 'rxjs'
+import { combineLatest, EMPTY } from 'rxjs'
 import { mergeMap } from 'rxjs/operators'
 
 const applyCriteria = <T, C>(fm: {
@@ -29,7 +29,7 @@ export class EveryFilter<T, C extends Array<Filter<T, any>>> extends Filter<
       mergeMap(
         maybe.matchC({
           Just: filters => combineLatest(filters.map(f => f.dependencies$())),
-          Nothing: empty,
+          Nothing: () => EMPTY,
         }),
       ),
     )

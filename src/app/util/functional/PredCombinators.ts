@@ -43,8 +43,8 @@ export function and<A, B1 extends A, B2 extends A>(
 ): Refinement<A, B1 & B2>
 export function and<A, B extends A>(
   p1: Refinement<A, B>,
-  p2: Predicate<A>,
-): Predicate<A>
+  p2: Predicate<B>,
+): Predicate<B>
 export function and<A, B extends A>(
   p1: Predicate<A>,
   p2: Refinement<A, B>,

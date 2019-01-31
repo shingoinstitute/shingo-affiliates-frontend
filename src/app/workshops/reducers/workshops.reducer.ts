@@ -7,7 +7,7 @@ import {
   WorkshopApiAction,
   WorkshopApiActionTypes,
 } from '../actions/workshop-api.actions'
-import { WorkshopBase } from '../workshop.model'
+import { WorkshopBase, lastModifiedDate } from '../workshop.model'
 import { AsyncResult, Mutable } from '~app/util/types'
 import {
   left,
@@ -17,6 +17,7 @@ import {
   isRight,
 } from '~app/util/functional/Either'
 import { unloadedAsync } from '~app/util/util'
+import { greaterThan, ordDate } from 'fp-ts/lib/Ord'
 
 export interface WorkshopsValue {
   readonly [id: string]: Readonly<WorkshopBase>
@@ -32,12 +33,29 @@ export const initialState: State = {
   selectedWorkshop: unloadedAsync,
 }
 
+const gt = greaterThan(ordDate)
+
 const mutAddWorkshops = (
   ws: WorkshopBase[],
   val: Mutable<WorkshopsValue> = {},
 ) => {
   for (const newWs of ws) {
-    val[newWs.Id] = newWs
+    const old = val[newWs.Id]
+    if (!old) {
+      val[newWs.Id] = newWs
+      continue
+    }
+
+    const oldMod = lastModifiedDate(old)
+    const newMod = lastModifiedDate(newWs)
+    const greater = gt(newMod, oldMod)
+    const equalAndMore =
+      ordDate.equals(newMod, oldMod) &&
+      Object.keys(newWs).length > Object.keys(old).length
+    // only overwrite if the LastModifiedDate is newer, or dates are equal and the new data has more information
+    if (greater || equalAndMore) {
+      val[newWs.Id] = newWs
+    }
   }
   return val
 }

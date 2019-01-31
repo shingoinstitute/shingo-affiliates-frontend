@@ -44,7 +44,7 @@
                 floatPlaceholder="auto"
               >
                 <mat-option
-                  *ngFor="let status of (statuses | async)"
+                  *ngFor="let status of (statuses$ | async)"
                   [value]="status"
                   >{{ status }}</mat-option
                 >
@@ -126,7 +126,8 @@
 
   <app-workshop-data-table
     class="mat-elevation-z2"
-    [filters]="filterFns"
+    [workshops]="workshops$ | async"
+    [isLoading]="isLoading$ | async"
     [displayedColumns]="displayedColumns"
     (editClick)="goToWorkshopEdit($event)"
   ></app-workshop-data-table>

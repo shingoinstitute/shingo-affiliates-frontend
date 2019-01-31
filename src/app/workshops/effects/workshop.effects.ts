@@ -30,7 +30,11 @@ import {
 import { Route, ActivatedRouteSnapshot } from '@angular/router'
 import { array } from 'fp-ts/lib/Array'
 import { fromFoldable, Optional, Lens } from 'monocle-ts'
-import { editRoute, detailRoute } from '../workshops-routing.module'
+import {
+  editRoute,
+  detailRoute,
+  dashboardRoute,
+} from '../workshops-routing.module'
 import { isSome } from 'fp-ts/lib/Option'
 import { or } from 'fp-ts/lib/function'
 import { right } from '~app/util/functional/Either'
@@ -113,6 +117,23 @@ export class WorkshopEffects {
         new WorkshopGet({ id, selection: true }),
         new WorkshopSelect(loadingAsync),
       ]
+    }),
+  )
+
+  @Effect()
+  navigateDashboard$ = this.actions$.pipe(
+    ofType<RouterNavigationAction>(ROUTER_NAVIGATION),
+    map(r =>
+      navAction('payload')
+        .compose(Lens.fromProp('routerState'))
+        .compose(Lens.fromProp('root'))
+        .composeOptional(Optional.fromNullableProp('firstChild'))
+        .getOption(r)
+        .map(fromRouteConfig(dashboardRoute)),
+    ),
+    filter(v => isSome(v) && v.value),
+    switchMap(() => {
+      return [new WorkshopGetAll()]
     }),
   )
 }

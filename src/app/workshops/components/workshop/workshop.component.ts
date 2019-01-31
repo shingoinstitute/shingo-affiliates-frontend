@@ -11,12 +11,13 @@ import {
 import { WorkshopBase } from '~app/workshops/workshop.model'
 // tslint:disable-next-line:no-duplicate-imports
 import * as W from '~app/workshops/workshop.model'
-import { ordNumValue, greaterThan } from '~app/util/functional/Ord'
+import { ordNumValue } from '~app/util/functional/Ord'
 import { Observable } from 'rxjs'
 import * as fromRoot from '~app/reducers'
 import * as fromUser from '~app/user/reducers'
 import { Store, select } from '@ngrx/store'
 import { map } from 'rxjs/operators'
+import { greaterThan } from 'fp-ts/lib/Ord'
 
 @Component({
   selector: 'app-workshop',
@@ -56,7 +57,7 @@ export class WorkshopComponent {
     return (
       status === 'Proposed' ||
       status === 'Verified' ||
-      greaterThan(ordNumValue)(W.endDate(this.workshop))(new Date())
+      greaterThan(ordNumValue)(W.endDate(this.workshop), new Date())
     )
   }
 

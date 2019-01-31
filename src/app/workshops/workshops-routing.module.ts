@@ -19,6 +19,12 @@ export const detailRoute: Route = {
   // resolve: { workshop: WorkshopResolver },
 }
 
+export const dashboardRoute: Route = {
+  path: 'workshops',
+  component: WorkshopDashboardComponent,
+  canActivate: [AuthGuard],
+}
+
 export const routes: Routes = [
   {
     path: 'workshops/new',
@@ -27,11 +33,7 @@ export const routes: Routes = [
   },
   editRoute,
   detailRoute,
-  {
-    path: 'workshops',
-    component: WorkshopDashboardComponent,
-    canActivate: [AuthGuard],
-  },
+  dashboardRoute,
 ]
 
 @NgModule({

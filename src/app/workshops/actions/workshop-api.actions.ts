@@ -18,7 +18,7 @@ export class WorkshopGetAll implements Action {
 export class WorkshopGet implements Action {
   readonly type = WorkshopApiActionTypes.WorkshopGet
 
-  constructor(public payload: { id: string; selection: boolean }) {}
+  constructor(public payload: { id: string; selection?: boolean }) {}
 }
 
 export class WorkshopUpdate implements Action {

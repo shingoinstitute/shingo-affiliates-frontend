@@ -5,16 +5,11 @@ import {
   Input,
   Output,
   EventEmitter,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core'
 
-import {
-  WorkshopDataSource,
-  WorkshopTrackByStrategy,
-} from '~app/services/workshop/workshop-data-source.service'
-import { DataProvider } from '~app/services/data-provider/data-provider.service'
-import { DataProviderFactory } from '~app/services/data-provider/data-provider-factory.service'
-import { WorkshopService } from '~app/workshops/services/workshop.service'
-import { MatSort, MatPaginator, MatDialog } from '@angular/material'
+import { MatSort, MatPaginator } from '@angular/material'
 import {
   WORKSHOP_COURSE_TYPES,
   WORKSHOP_STATUS_TYPES,
@@ -23,17 +18,17 @@ import {
 } from '~app/workshops/workshop.model'
 // tslint:disable-next-line:no-duplicate-imports
 import * as W from '~app/workshops/workshop.model'
-import { Filter } from '~app/services/filters/filter.abstract'
-import {
-  AlertDialogComponent,
-  AlertDialogData,
-} from '~app/shared/components/alert-dialog/alert-dialog.component'
-import { Observable, of } from 'rxjs'
+import { Observable, BehaviorSubject } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import * as fromRoot from '~app/reducers'
 import * as fromUser from '~app/user/reducers'
 import { FormControl, FormGroup } from '@angular/forms'
 import { KVMap } from '~app/util/types'
+import { SortedDataSource } from '~app/util/SortedDataSource'
+import { pipe, property } from '~app/util/functional'
+import { ordNumValue } from '~app/util/functional/Ord'
+import { ordString, ordNumber, ordBoolean, unsafeCompare } from 'fp-ts/lib/Ord'
+import { invert, Ordering } from 'fp-ts/lib/Ordering'
 
 export type WorkshopProperties =
   | 'actionType'
@@ -67,12 +62,64 @@ export const WORKSHOP_PROPERTY_MAP: KVMap<WorkshopProperties> = {
   verified: 'verified',
   workshopType: 'workshopType',
 }
+
+export const sortWorkshop = (sort: MatSort) => (
+  data: WorkshopBase[],
+): WorkshopBase[] => {
+  if (!sort.active || sort.direction === '') {
+    return data
+  }
+
+  return data.sort(
+    pipe(
+      (a, b): Ordering => {
+        switch (sort.active as WorkshopProperties) {
+          case 'actionType':
+            return ordString.compare(W.status(a) || '', W.status(b) || '')
+          case 'workshopType':
+            return ordString.compare(W.type(a) || '', W.type(b) || '')
+          case 'dueDate':
+            return ordNumValue.compare(W.dueDate(a), W.dueDate(b))
+          case 'instructors': {
+            const instructorsA = W.instructors(a)
+            const instructorsB = W.instructors(b)
+            const [propA, propB] = [
+              instructorsA ? instructorsA.length : 0,
+              instructorsB ? instructorsB.length : 0,
+            ]
+            return ordNumber.compare(propA, propB)
+          }
+          case 'verified':
+            return ordBoolean.compare(W.isVerified(a), W.isVerified(b))
+          case 'startDate':
+            return ordNumValue.compare(W.startDate(a), W.startDate(b))
+          case 'endDate':
+            return ordNumValue.compare(W.endDate(a), W.endDate(b))
+          case 'hostCity':
+            return ordString.compare(W.city(a) || '', W.city(b) || '')
+          case 'hostCountry':
+            return ordString.compare(W.country(a) || '', W.country(b) || '')
+          case 'location':
+            return ordString.compare(W.location(a), W.location(b))
+          case 'status':
+            return ordString.compare(W.status(a) || '', W.status(b) || '')
+          default:
+            return unsafeCompare(a, b)
+        }
+      },
+      value => (sort.direction === 'asc' ? value : invert(value)),
+    ),
+  )
+}
+
 @Component({
   selector: 'app-workshop-data-table',
   templateUrl: './workshop-data-table.component.html',
   styleUrls: ['./workshop-data-table.component.scss'],
 })
-export class WorkshopDataTableComponent implements OnInit {
+export class WorkshopDataTableComponent implements OnInit, OnChanges {
+  @Input() workshops: WorkshopBase[] = []
+
   @Input()
   displayedColumns: WorkshopProperties[] = [
     'workshopType',
@@ -83,18 +130,16 @@ export class WorkshopDataTableComponent implements OnInit {
     'verified',
     'actions',
   ]
-  @Input()
-  dataSource?: WorkshopDataSource
-  @Input()
-  filters: Array<Filter<WorkshopBase, any>> = []
-  @Output()
-  editClick: EventEmitter<string> = new EventEmitter<string>()
+  @Input() isLoading = false
 
-  @ViewChild(MatSort)
-  sort!: MatSort
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator
+  @Output() editClick: EventEmitter<string> = new EventEmitter<string>()
+  @Output() refresh: EventEmitter<void> = new EventEmitter()
+  @Output() delete: EventEmitter<string> = new EventEmitter()
 
+  @ViewChild(MatSort) sort!: MatSort
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+
+  dataSource!: SortedDataSource<WorkshopBase>
   properties = WORKSHOP_PROPERTY_MAP
 
   private selectedWorkshop?: WorkshopBase | null
@@ -109,27 +154,22 @@ export class WorkshopDataTableComponent implements OnInit {
   }
 
   get dataSetSize$() {
-    return this._workshopDataProvider.size
+    return this.dataSource.size
   }
 
-  isLoading$: Observable<boolean> = of(false)
   isAdmin$: Observable<boolean>
-  private _workshopDataProvider: DataProvider<WorkshopService, WorkshopBase>
-  private trackByStrategy: WorkshopTrackByStrategy = 'id'
 
   // add module to class instance so it can be used in template
   W = W
 
   formGroup: FormGroup
 
-  constructor(
-    providerFactory: DataProviderFactory,
-    private dialog: MatDialog,
-    store: Store<fromRoot.State>,
-  ) {
+  workshops$: BehaviorSubject<WorkshopBase[]> = new BehaviorSubject<
+    WorkshopBase[]
+  >([])
+
+  constructor(store: Store<fromRoot.State>) {
     this.isAdmin$ = store.pipe(select(fromUser.isAdmin))
-    this._workshopDataProvider = providerFactory.getWorkshopDataProvider()
-    this.isLoading$ = this._workshopDataProvider.dataLoading
     this.formGroup = new FormGroup({
       type: new FormControl(),
       startDate: new FormControl(),
@@ -138,36 +178,39 @@ export class WorkshopDataTableComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
-    if (!this.dataSource) {
-      this.dataSource = new WorkshopDataSource(
-        this._workshopDataProvider,
-        this.paginator,
-        this.sort,
-      )
-    } else {
-      this.dataSource.paginator = this.paginator
-      this.dataSource.sort = this.sort
+  // we have to watch for changes since dataSource expects an observable
+  // and we have a plain array - changes won't get propogated if we
+  // pass of(this.workshops)
+  ngOnChanges(changes: SimpleChanges) {
+    for (const name in changes) {
+      if (changes.hasOwnProperty(name)) {
+        if (name === 'workshops') {
+          const change = changes[name]
+          this.workshops$.next(change.currentValue)
+        }
+      }
     }
+  }
 
-    if (this.filters) this.dataSource.addFilters(this.filters)
+  ngOnInit() {
+    this.workshops$.next(this.workshops)
+
+    this.dataSource = new SortedDataSource(
+      this.workshops$.asObservable(),
+      sortWorkshop(this.sort),
+      this.paginator,
+      this.sort,
+    )
 
     this.sort.sort({ id: 'startDate', start: 'asc', disableClear: false })
   }
 
-  refresh() {
-    this._workshopDataProvider.refresh()
+  onRefresh() {
+    this.refresh.emit()
   }
 
-  workshopTrackBy = (index: number, item: WorkshopBase) => {
-    switch (this.trackByStrategy) {
-      case 'id':
-        return item.Id
-      case 'reference':
-        return item
-      case 'index':
-        return index
-    }
+  workshopTrackBy = (_index: number, item: WorkshopBase) => {
+    return item.Id
   }
 
   onEdit(workshopId: string) {
@@ -263,35 +306,17 @@ export class WorkshopDataTableComponent implements OnInit {
 
   private save() {
     console.log(this.formGroup.value)
+    // return a patch result from immer in an emitter
     throw new Error('Unimplemented')
-    // this.isLoading = true
-    // this._ws.update(ws).subscribe(res => {
-    //   this.isLoading = false
-    // })
   }
 
-  delete(ws: WorkshopBase) {
-    const data: AlertDialogData = {
-      sfObject: ws,
-      title: 'Delete Workshop?',
-      message: 'This will permanently delete the selected workshop.',
-      destructive: true,
-      confirmText: 'Yes, Delete Workshop',
-      cancelText: 'No, Keep Workshop',
-    }
-    const dialogRef = this.dialog.open(AlertDialogComponent, {
-      data,
-    })
+  onDelete(ws: WorkshopBase) {
+    this.delete.emit(ws.Id)
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        throw new Error('Unimplemented')
-        // this.isLoading = true
-        // this._ws.delete(ws).subscribe(res => {
-        //   this.isLoading = false
-        //   this.refresh()
-        // })
-      }
-    })
+  getInstructors(workshop: WorkshopBase) {
+    return W.instructors(workshop)
+      .map(property('Name'))
+      .join(', ')
   }
 }

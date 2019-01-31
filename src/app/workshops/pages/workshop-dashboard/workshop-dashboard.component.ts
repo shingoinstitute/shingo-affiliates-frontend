@@ -1,4 +1,4 @@
-import { Observable, of, OperatorFunction } from 'rxjs'
+import { Observable, of, OperatorFunction, EMPTY } from 'rxjs'
 import {
   debounceTime,
   map,
@@ -16,7 +16,7 @@ import { Moment } from 'moment'
 import { FormControl, FormGroup } from '@angular/forms'
 import { just, nothing, map as mapMaybe } from '~app/util/functional/Maybe'
 import { DateRange } from '~app/services/filters/workshops/workshop-date-range-filter'
-import { tuple as tp, fst } from '~app/util/functional'
+import { tuple as tp, fst, K, id } from '~app/util/functional'
 import { XOR, withoutTime, recordEntries, toRecord } from '~app/util/util'
 import { WorkshopBase } from '~app/workshops/workshop.model'
 import { WorkshopService } from '~app/workshops/services/workshop.service'
@@ -29,6 +29,9 @@ import { filter as filterI, map as mapI } from '~app/util/iterable'
 import { Store, select } from '@ngrx/store'
 import { State } from '~app/reducers'
 import * as fromUser from '~app/user/reducers'
+import * as fromWorkshop from '~app/workshops/reducers'
+import { matchC } from '~app/util/functional/Either'
+import { EveryFilter } from '~app/services/filters/filter-every'
 
 const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
   f.criteria = criteria
@@ -46,20 +49,35 @@ type FilterCB = (change: boolean, filter: Filter<WorkshopBase, any>) => void
   styleUrls: ['./workshop-dashboard.component.scss'],
 })
 export class WorkshopDashboardComponent implements OnInit {
+  // angular somehow calls getters before class construction
+  // this should not be possible, since the getter resides on the class,
+  // but that means any class properties will be undefined and the getter
+  // will fail. Solution: throw in a bunch of null checks
   get showDateRange(): boolean {
-    const control = this.filterControls.controls['by Date']
+    const control =
+      this.filterControls && this.filterControls.controls['by Date']
     return !!(control && control.value)
   }
   get showStatusFilter(): boolean {
-    const control = this.filterControls.controls['by Status']
+    const control =
+      this.filterControls && this.filterControls.controls['by Status']
     return !!(control && control.value)
   }
   get showTextFilter(): boolean {
-    const control = this.filterControls.controls['by Text']
+    const control =
+      this.filterControls && this.filterControls.controls['by Text']
     return !!(control && control.value)
   }
+  get filterFns(): Array<Filter<WorkshopBase, any>> {
+    // angular somehow calls this getter before this.filters has been assigned a value
+    // before the class has been constructed - no idea how that's possible
+    // so we need this null check otherwise we get errors
+    if (!this.filters) return []
+    return Array.from(
+      mapI(recordEntries(this.filters), ([, value]) => fst(value)),
+    )
+  }
 
-  dateRange: DateRange = [null, null]
   displayedColumns: WorkshopProperties[] = [
     'workshopType',
     'startDate',
@@ -73,19 +91,19 @@ export class WorkshopDashboardComponent implements OnInit {
   allDisplayedColumns: WorkshopProperties[] = Object.keys(
     WORKSHOP_PROPERTY_MAP,
   ) as WorkshopProperties[]
-  filters: Record<string, [Filter<WorkshopBase, any>, FilterCB]> = {} // list of (filter object, change callback) pairs
-  get filterFns(): Array<Filter<WorkshopBase, any>> {
-    return Array.from(
-      mapI(recordEntries(this.filters), ([, value]) => fst(value)),
-    )
-  }
-  statuses: Observable<string[]> = of([])
+  statuses$: Observable<string[]> = of([])
   filterControls = new FormGroup({})
   textSearchControl = new FormControl('')
   statusControl = new FormControl()
   startDateControl = new FormControl()
   endDateControl = new FormControl()
+  workshops$: Observable<WorkshopBase[]> = of([])
+  isLoading$ = of(false)
+  error$: Observable<unknown> = EMPTY
+  private dateRange: DateRange = [null, null]
   private isAdmin$: Observable<boolean>
+  private parentFilter: Filter<WorkshopBase, Array<Filter<WorkshopBase, any>>>
+  private filters: Record<string, [Filter<WorkshopBase, any>, FilterCB]> = {} // record of names to (filter object, change callback) pairs
 
   constructor(
     private filterFactory: WorkshopFilterFactory,
@@ -94,9 +112,23 @@ export class WorkshopDashboardComponent implements OnInit {
     private store: Store<State>,
   ) {
     this.isAdmin$ = this.store.pipe(select(fromUser.isAdmin))
-    this.statuses = this._ws
+    this.statuses$ = this._ws
       .describe()
       .pipe(map(describe => this.getWorkshopStatuses(describe)))
+
+    const workshopData = this.store.pipe(select(fromWorkshop.getWorkshops()))
+
+    this.parentFilter = new EveryFilter('Every Filter')
+    this.parentFilter.active = true
+
+    this.isLoading$ = workshopData.pipe(
+      map(matchC(({ tag }) => tag === 'loading', K(false))),
+    )
+
+    this.workshops$ = workshopData.pipe(
+      map(matchC(() => [] as WorkshopBase[], id)),
+      mergeMap(data => this.parentFilter.filter(data)),
+    )
   }
 
   ngOnInit() {
@@ -172,8 +204,11 @@ export class WorkshopDashboardComponent implements OnInit {
   }
 
   private addFilters(...fs: Array<[Filter<WorkshopBase, any>, FilterCB]>) {
-    mapI(filterI(fs, ([f]) => !this.filterControls.controls[f.name]), fpair => {
+    fs.map(fpair => {
       const [f] = fpair
+      if (this.filterControls.controls[f.name]) {
+        this.filterControls.removeControl(f.name)
+      }
 
       // add the control as side effect
       // avoids iterating array twice
@@ -182,22 +217,24 @@ export class WorkshopDashboardComponent implements OnInit {
 
       // add to filters record
       this.filters[f.name] = fpair
+      this.parentFilter.criteria = this.filterFns
     })
   }
 
   private removeFilters(...fs: Array<[Filter<WorkshopBase, any>, FilterCB]>) {
-    mapI(
-      filterI(fs, ([f]) => !!this.filterControls.controls[f.name]),
-      fpair => {
-        const [f] = fpair
+    // an iterable doesn't execute until it's spread
+    // mapI(fs, fpair => {
+    fs.map(fpair => {
+      const [f] = fpair
+      if (!this.filterControls.controls[f.name]) return
 
-        // remove the control
-        this.filterControls.removeControl(f.name)
+      // remove the control
+      this.filterControls.removeControl(f.name)
 
-        // delete the entry from the filters record
-        delete this.filters[f.name]
-      },
-    )
+      // delete the entry from the filters record
+      delete this.filters[f.name]
+      this.parentFilter.criteria = this.filterFns
+    })
   }
 
   private initFilters() {
@@ -242,13 +279,8 @@ export class WorkshopDashboardComponent implements OnInit {
     ]
 
     this.isAdmin$.subscribe(isAdmin => {
-      if (isAdmin) {
-        this.addFilters(...adminFilters)
-        this.removeFilters(...nonAdminFilters)
-      } else {
-        this.addFilters(...nonAdminFilters)
-        this.removeFilters(...adminFilters)
-      }
+      this.addFilters(...(isAdmin ? adminFilters : nonAdminFilters))
+      this.removeFilters(...(isAdmin ? nonAdminFilters : adminFilters))
     })
 
     baseFilters.forEach(([f, cb]) => cb(f.getActive(), f))
@@ -258,8 +290,7 @@ export class WorkshopDashboardComponent implements OnInit {
   private toggleDisabled(...toDisable: string[]): FilterCB {
     return (state: boolean) => {
       toDisable.forEach(name => {
-        const filter = this.findFilter(name)
-        mapMaybe(filter, ([f]) => {
+        mapMaybe(this.findFilter(name), ([f]) => {
           const control = this.filterControls.controls[f.name]
           if (state) {
             control.disable({ emitEvent: false, onlySelf: true })
