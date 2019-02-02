@@ -51,7 +51,6 @@ import { reducer } from './reducers/workshops.reducer'
 import { SelectWorkshopComponent } from './components/select-workshop.component'
 import { SelectAllWorkshopsComponent } from './components/select-all-workshops.component'
 import { WorkshopDetailPageComponent } from './pages/workshop-detail-page/workshop-detail-page.component'
-import { DisplayAsyncComponent } from '~app/shared/components/display-async/display-async.component'
 
 const COMPONENTS = [
   WorkshopComponent,
@@ -106,6 +105,5 @@ const COMPONENTS = [
   ],
   declarations: COMPONENTS,
   exports: COMPONENTS,
-  entryComponents: [DisplayAsyncComponent],
 })
 export class WorkshopsModule {}

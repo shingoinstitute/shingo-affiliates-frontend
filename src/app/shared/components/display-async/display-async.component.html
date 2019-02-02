@@ -1,4 +1,4 @@
-<ng-container *ngIf="(data$ | async) as either">
+<ng-container *ngIf="data as either">
   <ng-container *ngIf="isLeft(either); else rightTemplate">
     <ng-container
       *ngIf="!hasChildren('left'); else leftTemplate"

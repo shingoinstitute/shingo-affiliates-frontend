@@ -124,11 +124,29 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <app-workshop-data-table
-    class="mat-elevation-z2"
-    [workshops]="workshops$ | async"
-    [isLoading]="isLoading$ | async"
-    [displayedColumns]="displayedColumns"
-    (editClick)="goToWorkshopEdit($event)"
-  ></app-workshop-data-table>
+  <app-select-all-workshops #ws>
+    <app-display-async [data]="ws.vm.data$ | async">
+      <ng-template focusRight let-workshops>
+        <app-workshop-data-table
+          class="mat-elevation-z2"
+          [workshops]="filterData$(workshops) | async"
+          [isLoading]="false"
+          [displayedColumns]="displayedColumns"
+          (editClick)="goToWorkshopEdit($event)"
+        ></app-workshop-data-table>
+      </ng-template>
+      <ng-template focusLeft let-result>
+        <ng-container [ngSwitch]="result.tag">
+          <app-workshop-data-table
+            *ngSwitchCase="'loading'"
+            class="mat-elevation-z2"
+            [workshops]="[]"
+            [isLoading]="true"
+            [displayedColumns]="displayedColumns"
+            (editClick)="goToWorkshopEdit($event)"
+          ></app-workshop-data-table>
+        </ng-container>
+      </ng-template>
+    </app-display-async>
+  </app-select-all-workshops>
 </div>

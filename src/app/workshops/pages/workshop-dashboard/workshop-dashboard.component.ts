@@ -16,7 +16,7 @@ import { Moment } from 'moment'
 import { FormControl, FormGroup } from '@angular/forms'
 import { just, nothing, map as mapMaybe } from '~app/util/functional/Maybe'
 import { DateRange } from '~app/services/filters/workshops/workshop-date-range-filter'
-import { tuple as tp, fst, K, id } from '~app/util/functional'
+import { tuple as tp, fst } from '~app/util/functional'
 import { XOR, withoutTime, recordEntries, toRecord } from '~app/util/util'
 import { WorkshopBase } from '~app/workshops/workshop.model'
 import { WorkshopService } from '~app/workshops/services/workshop.service'
@@ -29,8 +29,6 @@ import { filter as filterI, map as mapI } from '~app/util/iterable'
 import { Store, select } from '@ngrx/store'
 import { State } from '~app/reducers'
 import * as fromUser from '~app/user/reducers'
-import * as fromWorkshop from '~app/workshops/reducers'
-import { matchC } from '~app/util/functional/Either'
 import { EveryFilter } from '~app/services/filters/filter-every'
 
 const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
@@ -96,8 +94,8 @@ export class WorkshopDashboardComponent implements OnInit {
   statusControl = new FormControl()
   startDateControl = new FormControl()
   endDateControl = new FormControl()
-  workshops$: Observable<WorkshopBase[]> = of([])
-  isLoading$ = of(false)
+  // workshops$: Observable<WorkshopBase[]> = of([])
+  // isLoading$ = of(false)
   error$: Observable<unknown> = EMPTY
   private dateRange: DateRange = [null, null]
   private isAdmin$: Observable<boolean>
@@ -115,19 +113,12 @@ export class WorkshopDashboardComponent implements OnInit {
       .describe()
       .pipe(map(describe => this.getWorkshopStatuses(describe)))
 
-    const workshopData = this.store.pipe(select(fromWorkshop.getWorkshops()))
-
     this.parentFilter = new EveryFilter('Every Filter')
     this.parentFilter.active = true
+  }
 
-    this.isLoading$ = workshopData.pipe(
-      map(matchC(({ tag }) => tag === 'loading', K(false))),
-    )
-
-    this.workshops$ = workshopData.pipe(
-      map(matchC(() => [] as WorkshopBase[], id)),
-      mergeMap(data => this.parentFilter.filter(data)),
-    )
+  filterData$(data: WorkshopBase[]) {
+    return this.parentFilter.filter(data)
   }
 
   ngOnInit() {
