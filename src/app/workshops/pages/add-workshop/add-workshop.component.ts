@@ -11,7 +11,6 @@ import {
 } from '../../components/workshop-form/workshop-form.component'
 
 @Component({
-  selector: 'app-add-workshop',
   templateUrl: './add-workshop.component.html',
   styleUrls: ['./add-workshop.component.scss'],
 })

@@ -41,7 +41,6 @@ import {
   getIsoYMD,
   withoutTime,
   addIf,
-  truthy,
 } from '~app/util/util'
 import { Overwrite } from '~app/util/types'
 import moment, { isMoment } from 'moment'
@@ -50,6 +49,7 @@ import { TimeRangeValidator } from '~app/shared/validators/time-range.validator'
 import { TimeValidator } from '~app/shared/validators/time.validator'
 import { affiliateId, User } from '~app/user/user.model'
 import { WorkshopService } from '~app/workshops/services/workshop.service'
+import { isTruthy } from '~app/util/predicates'
 
 export interface WorkshopForm {
   affiliate: Affiliate
@@ -477,7 +477,7 @@ export class WorkshopFormComponent implements OnInit {
     if (this.workshopForm.value.affiliate)
       return of((this.workshopForm.value.affiliate as Affiliate).sfId)
     return this.user$.pipe(
-      filter(truthy),
+      filter(isTruthy),
       // tslint:disable-next-line:no-non-null-assertion
       map(affiliateId),
     )

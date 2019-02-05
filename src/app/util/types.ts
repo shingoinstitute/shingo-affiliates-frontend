@@ -41,26 +41,20 @@ export interface Obj<T> {
  */
 export type SBool = '0' | '1'
 
+export type If<P extends SBool, T, F> = P extends '1' ? T : F
+
 /**
  * Logical `AND`, `&&` equivalent for string bools.
- *
- * from tycho01/typical
  */
-export type And<A extends SBool, B extends SBool> = ({
-  1: { 1: '1' } & Obj<'0'>
-} & Obj<Obj<'0'>>)[A][B]
+export type And<A extends SBool, B extends SBool> = If<A, If<B, '1', '0'>, '0'>
 
 /**
  * Check if a type matches another (`<=`).
- *
- * from tycho01/typical
  */
-export type Matches<V, T> = V extends T ? '1' : '0'
+export type Matches<V, T> = [V] extends [T] ? '1' : '0'
 
 /**
  * Check if two types are equal (`==`), i.e. match both ways.
- *
- * from tycho01/typical
  */
 export type TypesEqual<A, B> = And<Matches<A, B>, Matches<B, A>>
 
@@ -73,7 +67,7 @@ export type TypesEqual<A, B> = And<Matches<A, B>, Matches<B, A>>
  * ```
  */
 export type KeysOfType<O, T> = {
-  [k in keyof O]-?: TypesEqual<O[k], T> extends '1' ? k : never
+  [k in keyof O]-?: If<TypesEqual<O[k], T>, k, never>
 }[keyof O]
 
 /**
@@ -86,7 +80,7 @@ export type KeysOfType<O, T> = {
  * ```
  */
 export type KeysOfType2<O, T> = {
-  [k in keyof O]-?: [T] extends [O[k]] ? k : never
+  [k in keyof O]-?: If<Matches<T, O[k]>, k, never>
 }[keyof O]
 
 /**
@@ -99,7 +93,7 @@ export type KeysOfType2<O, T> = {
  * ```
  */
 export type KeysOfType1<O, T> = {
-  [k in keyof O]-?: [O[k]] extends [T] ? k : never
+  [k in keyof O]-?: If<Matches<O[k], T>, k, never>
 }[keyof O]
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
@@ -150,14 +144,18 @@ export type AsyncResult<Loaded, Empty = never> = Either<
   Loaded
 >
 
-export type InnerValue<T> = T extends any[]
-  ? T[number]
+export type ArrayValue<A extends any[]> = A[number]
+export type PromiseValue<A extends Promise<any>> = A extends Promise<infer V>
+  ? V
+  : never
+export type ObjectValue<A> = A[keyof A]
+
+export type ValueOf<T> = T extends any[]
+  ? ArrayValue<T>
+  : T extends Promise<any>
+  ? PromiseValue<T>
   : T extends Either<any, infer V>
   ? V
-  : T extends Promise<infer V>
-  ? V
-  : T extends {}
-  ? T[keyof T]
-  : never
+  : ObjectValue<T>
 
 export type Mutable<T> = { -readonly [k in keyof T]: T[k] }

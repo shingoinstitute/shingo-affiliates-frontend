@@ -3,11 +3,22 @@ import { HttpHeaders } from '@angular/common/http'
 import { ValidationErrors, FormGroup } from '@angular/forms'
 import { Moment, isMoment } from 'moment'
 import { tuple } from './functional'
-import { reduce } from './iterable'
+import {
+  reduce,
+  repeat,
+  join,
+  map as mapI,
+  filter as filterI,
+} from './iterable'
 import { left } from './functional/Either'
 import { AsyncResult } from './types'
+// tslint:disable-next-line: no-implicit-dependencies
+import { DescribeSObjectResult } from 'jsforce'
 
 /**
+ * Polyfill for `Object.entries`, returning an iterable.
+ * Also returns ownPropertySymbols
+ *
  * Iterates over the enumerable keys of a record yielding (key, value) pairs, similar to `Map.prototype.entries`
  *
  * Yielded entries have no guaranteed order, unlike Map, which returns in insertion order
@@ -16,11 +27,8 @@ import { AsyncResult } from './types'
 export function* recordEntries<R extends Record<any, any>>(
   map: R,
 ): IterableIterator<[keyof R, R[keyof R]]> {
-  for (const key in map) {
-    if (map.hasOwnProperty(key)) {
-      yield tuple(key, map[key])
-    }
-  }
+  // using the iterable map here avoids traversing the Object.keys array twice
+  yield* mapI(Object.keys(map), (k: keyof R) => tuple(k, map[k]))
 
   for (const sym of Object.getOwnPropertySymbols(map)) {
     if (map.hasOwnProperty(sym)) {
@@ -33,16 +41,34 @@ export function* recordEntries<R extends Record<any, any>>(
   }
 }
 
+/**
+ * Polyfill for `Object.fromEntries`
+ */
 export const toRecord = <K extends keyof any, V>(entries: Iterable<[K, V]>) =>
   reduce(
     entries,
-    (acc, curr) => {
-      const [key, value] = curr
+    (acc, [key, value]) => {
       acc[key] = value
       return acc
     },
     {} as Record<K, V>,
   )
+
+export const pick = <O, Ks extends Array<keyof O>>(
+  obj: O,
+  keys: Ks,
+): Pick<O, Ks[number]> =>
+  toRecord(filterI(recordEntries(obj), ([k, _]) => keys.includes(k))) as Pick<
+    O,
+    Ks[number]
+  >
+
+export const leftpad = (n: number, c: string = ' ') => (s: string) => {
+  if (typeof (s as any).padStart === 'function') {
+    return (s as any).padStart(n, c)
+  }
+  return join(repeat(c, n - s.length)) + s
+}
 
 /**
  * Takes a date or moment object and returns a string in the format YYYY-MM-DD
@@ -50,16 +76,20 @@ export const toRecord = <K extends keyof any, V>(entries: Iterable<[K, V]>) =>
  * @param utc whether to return the local date or a utc date
  */
 export const getIsoYMD = (date: Moment | Date, utc = false): string => {
+  const pad = leftpad(2, '0')
   if (utc) {
     if (date instanceof Date) {
-      return `${date.getUTCFullYear()}-${date.getUTCMonth() +
-        1}-${date.getUTCDate()}`
+      return `${date.getUTCFullYear()}-${pad(
+        String(date.getUTCMonth() + 1),
+      )}-${pad(String(date.getUTCDate()))}`
     } else {
       return date.utc().format('YYYY-MM-DD')
     }
   } else {
     if (date instanceof Date) {
-      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      return `${date.getFullYear()}-${pad(String(date.getMonth() + 1))}-${pad(
+        String(date.getDate()),
+      )}`
     } else {
       return date.format('YYYY-MM-DD')
     }
@@ -107,10 +137,6 @@ export const getFormValidationErrors = (form: FormGroup) => {
   })
   return map
 }
-
-export const truthy = <T>(
-  v: T,
-): v is Exclude<T, false | 0 | '' | null | undefined> => Boolean(v)
 
 export const requestOptions = (
   jwt: JWTService,
@@ -161,6 +187,37 @@ export const sfToCamelCase = (s: string): string =>
       index === 0 ? letter.toLowerCase() : letter.toUpperCase(),
     )
     .replace(/\s+/g, '')
+
+export const GLOBAL_ID_PREFIX = 'PORTAL_CREATED_'
+export const isPortalCreated = (w: { Id: string }, sfx = '') =>
+  w.Id.startsWith(`${GLOBAL_ID_PREFIX + (sfx ? sfx + ':' : '')}`)
+
+export const getDescribes = (data: DescribeSObjectResult) =>
+  toRecord(
+    mapI(
+      filterI(
+        data.fields,
+        field =>
+          !!(field.inlineHelpText || field.label || field.picklistValues),
+      ),
+      field => {
+        const picked = pick(field, [
+          'inlineHelpText',
+          'label',
+          'name',
+          'picklistValues',
+        ])
+        return tuple(
+          sfToCamelCase(field.name),
+          // since it's not safe to access a record with keys over an infinite type (like string)
+          // we say the values have the possiblility of being undefined, since
+          // the values will be undefined for some string keys
+          // (not all, but most, since the number of possible keys is infinite)
+          picked as typeof picked | undefined,
+        )
+      },
+    ),
+  )
 
 /**
  * Error responses from the API like to change error objects into JSON strings

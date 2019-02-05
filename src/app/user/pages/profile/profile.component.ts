@@ -11,7 +11,7 @@ import { Observable } from 'rxjs'
 import { Store, select } from '@ngrx/store'
 import * as fromUser from '../../reducers'
 import { filter } from 'rxjs/operators'
-import { truthy } from '../../../util/util'
+import { isTruthy } from '~app/util/predicates'
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +29,7 @@ export class ProfileComponent {
   ) {
     this.user$ = this.store.pipe(
       select(fromUser.getUser),
-      filter(truthy),
+      filter(isTruthy),
     )
     this.profileForm = new FormGroup({
       locale: new FormControl(this.localeService.locale, {

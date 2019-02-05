@@ -26,6 +26,7 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = [
   'Summary__c',
 ]
 
+/** @deprecated use the type-safe AffiliateService */
 @Injectable()
 export class AffiliateService extends BaseAPIService {
   public route = 'affiliates'

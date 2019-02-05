@@ -1,5 +1,93 @@
 import { SFObject } from '../shared/models/sf-object.abstract.model'
+import { ReadAllReturn, ReadReturn } from './services/affiliate.service'
+import { MakeKeysOptional } from '~app/util/types'
+import { Account } from '@shingo/affiliates-api/sf-interfaces/Account.interface'
+import { GLOBAL_ID_PREFIX, isPortalCreated, addIf } from '~app/util/util'
 
+/* ================
+ * TYPE DEFINITIONS
+ * ================
+ */
+
+export type AffiliateBase = ReadAllReturn &
+  MakeKeysOptional<ReadReturn, Exclude<keyof ReadReturn, keyof ReadAllReturn>>
+
+export { Account }
+
+/* ==================
+ * ACCESSOR FUNCTIONS
+ * ==================
+ */
+export const DEFAULT_LANGUAGE_OPTIONS: ReadonlyArray<string> = [
+  'English',
+  'Spanish',
+  'French',
+  'Portuguese',
+  'Chinese',
+  'Cantonese',
+  'Dutch',
+  'French',
+  'German',
+  'Hindi',
+  'Italian',
+  'Japanese',
+  'Mandarin',
+  'Arabic',
+  'Russian',
+  'Polish',
+]
+
+export const name = (a: AffiliateBase) => a.Name
+export const summary = (a: AffiliateBase) => a.Summary__c || undefined
+export const logo = (a: AffiliateBase) => a.Logo__c || undefined
+export const pagePath = (a: AffiliateBase) => `/affiliates/${a.Id}`
+export const website = (a: AffiliateBase) => a.Website || undefined
+export const languages = (a: AffiliateBase) =>
+  a.Languages__c ? a.Languages__c.split(',') : []
+export const publicContact = (a: AffiliateBase) =>
+  a.Public_Contact__c || undefined
+export const publicContactPhone = (a: AffiliateBase) =>
+  a.Public_Contact_Phone__c || undefined
+export const publicContactEmail = (a: AffiliateBase) =>
+  a.Public_Contact_Email__c || undefined
+
+let idCounter = 0
+
+export const AFFILIATE_PREFIX = 'AFFILIATE'
+export const ID_PREFIX = GLOBAL_ID_PREFIX + AFFILIATE_PREFIX
+
+/**
+ * Formats an AffiliateBase object for consumption by salesforce
+ */
+export const toJSON = (a: AffiliateBase) => {
+  const ret: Partial<AffiliateBase> = {
+    Name: a.Name,
+  }
+  if (!isPortalCreated(a, AFFILIATE_PREFIX)) {
+    ret.Id = a.Id
+  }
+
+  addIf(ret, 'Summary__c', a.Summary__c)
+  addIf(ret, 'Logo__c', a.Logo__c)
+  addIf(ret, 'Page_Path__c', a.Page_Path__c)
+  addIf(ret, 'Website', a.Website)
+  addIf(ret, 'Languages__c', languages(a).join(','))
+  addIf(ret, 'Public_Contact__c', a.Public_Contact__c)
+  addIf(ret, 'Public_Contact_Phone__c', a.Public_Contact_Phone__c)
+  addIf(ret, 'Public_Contact_Email__c', a.Public_Contact_Email__c)
+
+  return ret
+}
+
+export const affiliate = (init: Partial<AffiliateBase> = {}): AffiliateBase => {
+  const base: AffiliateBase = {
+    Id: `${ID_PREFIX}:${idCounter++}`,
+    Name: '',
+  }
+  return { ...base, ...init, Id: base.Id }
+}
+
+/** @deprecated Use AffiliateBase */
 export class Affiliate extends SFObject {
   public static get OBJECT_NAME(): string {
     return 'Affiliate'

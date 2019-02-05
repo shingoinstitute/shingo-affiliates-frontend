@@ -6,7 +6,6 @@ import {
   HostListener,
 } from '@angular/core'
 import { pipe } from '../../../util/functional'
-import { truthy } from '../../../util/util'
 import {
   left,
   Either,
@@ -14,6 +13,7 @@ import {
   bimapC,
   chainC,
 } from '../../../util/functional/Either'
+import { isTruthy } from '~app/util/predicates'
 
 export interface MultipleFailure {
   reason: 'multiple'
@@ -91,7 +91,7 @@ const validateFile = (accept: ReadonlyArray<string>, maxSize: number) => (
   return right(file)
 }
 
-const getFiles = (fs: FileList) => Array.from(fs).filter(truthy)
+const getFiles = (fs: FileList) => Array.from(fs).filter(isTruthy)
 
 function getDataTransferFiles(dataTransfer: DataTransfer) {
   if (dataTransfer.items) {
