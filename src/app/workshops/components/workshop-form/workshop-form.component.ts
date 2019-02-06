@@ -29,11 +29,18 @@ import * as fromUser from '~app/user/reducers'
 import { Store, select } from '@ngrx/store'
 
 // RxJS Modules
-import { Observable, of } from 'rxjs'
+import { Observable, of, EMPTY, combineLatest } from 'rxjs'
 
 import { CustomValidators } from 'ng2-validation'
 import { LocaleService } from '~app/services/locale/locale.service'
-import { mergeMap, map, startWith, first, filter } from 'rxjs/operators'
+import {
+  mergeMap,
+  map,
+  startWith,
+  first,
+  filter,
+  catchError,
+} from 'rxjs/operators'
 import { tz, Moment } from 'moment-timezone'
 import {
   normalizeString,
@@ -41,6 +48,7 @@ import {
   getIsoYMD,
   withoutTime,
   addIf,
+  getDescribes,
 } from '~app/util/util'
 import { Overwrite } from '~app/util/types'
 import moment, { isMoment } from 'moment'
@@ -50,6 +58,7 @@ import { TimeValidator } from '~app/shared/validators/time.validator'
 import { affiliateId, User } from '~app/user/user.model'
 import { WorkshopService } from '~app/workshops/services/workshop.service'
 import { isTruthy } from '~app/util/predicates'
+import { property } from '~app/util/functional'
 
 export interface WorkshopForm {
   affiliate: Affiliate
@@ -101,6 +110,18 @@ export const addToWorkshop = (
   })
 }
 
+const defaultTypes = ['Discover', 'Enable', 'Improve', 'Align', 'Build']
+const defaultStatuses = [
+  'Invoiced, Not Paid',
+  'Finished, waiting for attendee list',
+  'Awaiting Invoice',
+  'Proposed',
+  'Archived',
+  'Cancelled',
+  'Active, not ready for app',
+  'Active Event',
+]
+
 @Component({
   selector: 'app-workshop-form',
   templateUrl: './workshop-form.component.html',
@@ -146,22 +167,15 @@ export class WorkshopFormComponent implements OnInit {
   languageFilterControl = new FormControl()
   tzFilterControl = new FormControl()
   tzPickerControl = new FormControl()
-  describe: any = {}
   private timezones = tz.names()
   tzOptions$: Observable<string[]> = of([])
+  describe$: Observable<{
+    workshopTypes: string[]
+    describe: ReturnType<typeof getDescribes>
+    statuses: string[]
+  }> = EMPTY
 
-  workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build']
   languages$: Observable<string[]> = of(Affiliate.DEFAULT_LANGUAGE_OPTIONS)
-  statuses: string[] = [
-    'Invoiced, Not Paid',
-    'Finished, waiting for attendee list',
-    'Awaiting Invoice',
-    'Proposed',
-    'Archived',
-    'Cancelled',
-    'Active, not ready for app',
-    'Active Event',
-  ]
 
   isAdmin$: Observable<boolean>
   private user$: Observable<User | null>
@@ -258,15 +272,41 @@ export class WorkshopFormComponent implements OnInit {
    * @description Gets an object (`this.describe`) from the api that is used to set helper text, labels, and picklist values
    */
   private getWorkshopDescription() {
-    this._ws.describe().subscribe(
-      data => {
-        this.describe = data
-        this.getWorkshopTypes()
-        this.getWorkshopStatuses()
-      },
-      err => {
-        console.error(err)
-      },
+    type Ret = ReturnType<typeof getDescribes>
+    const describes$ = this._ws.describeCached().pipe(
+      map(getDescribes),
+      catchError(() => of({} as Ret)),
+      startWith({} as Ret),
+    )
+    const workshopTypes$ = describes$.pipe(
+      map(d => {
+        const wsType = d.workshopType
+        const values = wsType && wsType.picklistValues
+
+        return values && values.length > 0
+          ? values.map(property('label')).filter(isTruthy)
+          : defaultTypes
+      }),
+      startWith(defaultTypes),
+    )
+    const statuses$ = describes$.pipe(
+      map(d => {
+        const wsStatus = d.status
+        const values = wsStatus && wsStatus.picklistValues
+
+        return values && values.length > 0
+          ? values.map(property('label')).filter(isTruthy)
+          : defaultStatuses
+      }),
+      startWith(defaultStatuses),
+    )
+
+    this.describe$ = combineLatest(describes$, workshopTypes$, statuses$).pipe(
+      map(([describe, workshopTypes, statuses]) => ({
+        describe,
+        workshopTypes,
+        statuses,
+      })),
     )
   }
 
@@ -277,11 +317,10 @@ export class WorkshopFormComponent implements OnInit {
 
   private createForm() {
     const startTime =
-      (this.initialWorkshop && this.initialWorkshop.Local_Start_Time__c) ||
+      (this.initialWorkshop && W.localStartTime(this.initialWorkshop)) ||
       '08:00'
     const endTime =
-      (this.initialWorkshop && this.initialWorkshop.Local_End_Time__c) ||
-      '17:00'
+      (this.initialWorkshop && W.localEndTime(this.initialWorkshop)) || '17:00'
     const affiliate = this.initialWorkshop && W.affiliate(this.initialWorkshop)
     const timezone =
       (this.initialWorkshop && this.initialWorkshop.Timezone__c) ||
@@ -484,32 +523,4 @@ export class WorkshopFormComponent implements OnInit {
   }
 
   getFormErrors = getFormValidationErrors
-
-  /**
-   * @description Sets value for `this.workshopTypes` from `this.describe`, or sets a default value if `this.describe` is null.
-   */
-  private getWorkshopTypes() {
-    try {
-      this.workshopTypes = this.describe.workshopType.picklistValues.map(
-        (option: { label: string }) => option.label,
-      )
-    } catch (e) {
-      console.warn(
-        'Failed to get workshop types from `this.describe.workshopType.picklistValues`. Using default values.',
-      )
-    }
-  }
-
-  private getWorkshopStatuses() {
-    try {
-      this.statuses = this.describe.status.picklistValues.map(
-        (option: { label: string }) => option.label,
-      )
-    } catch (e) {
-      console.warn(
-        'Failed to get workshop statuses from `this.describe.status.picklistValues`. Using default values.',
-        this.describe,
-      )
-    }
-  }
 }

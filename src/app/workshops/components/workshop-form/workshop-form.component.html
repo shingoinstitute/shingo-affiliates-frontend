@@ -1,412 +1,440 @@
-<mat-card class="form-group-container">
-  <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
-    <div class="input-item" *ngIf="(isAdmin$ | async)">
-      <p class="mat-caption">
-        {{ describe.organizingAffiliate?.inlineHelpText }}
-      </p>
+<ng-container *ngIf="(describe$ | async) as d">
+  <mat-card class="form-group-container">
+    <form [formGroup]="workshopForm" (ngSubmit)="onSubmit()" fxLayout="column">
+      <div class="input-item" *ngIf="(isAdmin$ | async)">
+        <p class="mat-caption">
+          {{ d.describe.organizingAffiliate?.inlineHelpText }}
+        </p>
 
-      <app-search
-        formControlName="affiliate"
-        [displayWith]="contactDisplayWith"
-        [searchFn]="affiliateSearch"
-        placeholder="{{ describe.organizingAffiliate?.label || 'Affiliate' }} *"
-      >
-        <ng-template search-selection let-affiliate>
-          <div fxLayout="row" fxLayoutAlign="space-around center">
-            <img class="thumbnail-search" [src]="affiliate.logo" />
-            <strong>{{ affiliate.name }}</strong>
+        <app-search
+          formControlName="affiliate"
+          [displayWith]="contactDisplayWith"
+          [searchFn]="affiliateSearch"
+          placeholder="{{
+            d.describe.organizingAffiliate?.label || 'Affiliate'
+          }} *"
+        >
+          <ng-template search-selection let-affiliate>
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+              <img class="thumbnail-search" [src]="affiliate.Logo__c" />
+              <strong>{{ affiliate.Name }}</strong>
+            </div>
+          </ng-template>
+        </app-search>
+        <mat-error
+          *ngIf="
+            this.workshopForm.controls['affiliate'].touched &&
+            this.workshopForm.controls['affiliate'].hasError('required')
+          "
+        >
+          * Affiliate is required
+        </mat-error>
+      </div>
+      <div class="input-item">
+        <p class="mat-caption">{{ d.describe.public?.inlineHelpText }}</p>
+        <mat-checkbox formControlName="isPublic">
+          Yes, publish to web.
+        </mat-checkbox>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">{{ d.describe.workshopType?.inlineHelpText }}</p>
+        <mat-form-field>
+          <mat-select
+            placeholder="{{ d.describe.workshopType?.label || 'Type' }}"
+            floatPlaceholder="auto"
+            formControlName="type"
+            required
+          >
+            <mat-option *ngFor="let type of d.workshopTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="workshopForm.controls['type'].hasError('required')">
+            Workshop Type is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">{{ d.describe.language?.inlineHelpText }}</p>
+        <mat-form-field>
+          <mat-select
+            placeholder="{{ d.describe.language?.label || 'Language' }}"
+            floatPlaceholder="auto"
+            required
+            formControlName="language"
+          >
+            <ngx-mat-select-search
+              [formControl]="languageFilterControl"
+              placeholderLabel="Search languages..."
+              noEntriesFoundLabel="Language not available"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let lang of (languages$ | async)"
+              [value]="lang"
+              >{{ lang }}</mat-option
+            >
+          </mat-select>
+          <mat-error
+            *ngIf="workshopForm.controls['language'].hasError('required')"
+          >
+            Language is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item" *ngIf="(isAdmin$ | async) && !isNewWorkshop">
+        <p class="mat-caption">{{ d.describe.status?.inlineHelpText }}</p>
+        <mat-form-field>
+          <mat-select
+            placeholder="{{ d.describe.status?.label || 'Workshop Status' }}"
+            floatPlaceholder="auto"
+            required
+            formControlName="status"
+          >
+            <mat-option *ngFor="let status of d.statuses" [value]="status">{{
+              status
+            }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="workshopForm.controls['status'].hasError('required')"
+          >
+            Status is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">{{ d.describe.eventCity?.inlineHelpText }}</p>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="{{ d.describe.eventCity?.label || 'City' }}"
+            required
+            formControlName="city"
+          />
+          <mat-error *ngIf="workshopForm.controls['city'].hasError('required')">
+            City is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">{{ d.describe.eventCountry?.inlineHelpText }}</p>
+        <mat-form-field>
+          <mat-select
+            placeholder="Event Country"
+            formControlName="country"
+            required
+          >
+            <ngx-mat-select-search
+              [formControl]="countryFilterControl"
+              placeholderLabel="Search countries..."
+              noEntriesFoundLabel="Country not found"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let country of (countryOptions$ | async)"
+              [value]="country.name"
+            >
+              {{ getLocalizedName(country) }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="workshopForm.controls['country'].hasError('required')"
+          >
+            Country is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">{{ d.describe.hostSite?.inlineHelpText }}</p>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="{{ d.describe.hostSite?.label || 'Host Site' }}"
+            required
+            formControlName="hostSite"
+          />
+          <mat-error
+            *ngIf="workshopForm.controls['hostSite'].hasError('required')"
+          >
+            Host Site is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">
+          {{ d.describe.billingContact?.inlineHelpText }}
+        </p>
+        <mat-form-field>
+          <input
+            matInput
+            type="email"
+            placeholder="{{
+              d.describe.billingContact?.label || 'Billing Contact'
+            }}"
+            required
+            formControlName="billing"
+          />
+          <mat-error
+            *ngIf="workshopForm.controls['billing'].hasError('required')"
+          >
+            Billing Contact is required
+          </mat-error>
+          <mat-error *ngIf="workshopForm.controls['billing'].hasError('email')">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item" fxLayoutGap="16px" [formGroup]="dateFormGroup">
+        <p class="md-warn-text" *ngIf="dateFormGroup.hasError('invalid date')">
+          &#42;{{ dateFormGroup.errors['invalid date'] }}
+        </p>
+        <div fxLayout="row" fxLayoutGap="8px">
+          <div fxLayout="column">
+            <p class="mat-caption">
+              {{ d.describe.startDate?.inlineHelpText }}
+            </p>
+            <!-- Start Date Picker -->
+            <mat-form-field>
+              <input
+                required
+                matInput
+                [matDatepicker]="startDatePicker"
+                placeholder="{{ d.describe.startDate?.label || 'Start Date' }}"
+                formControlName="startDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="startDatePicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker
+                #startDatePicker
+                [startAt]="dateFormGroup.controls['startDate'].value"
+              ></mat-datepicker>
+              <mat-error
+                *ngIf="dateFormGroup.controls['startDate'].hasError('required')"
+              >
+                Start Date is required
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  dateFormGroup.controls['startDate'].hasError('time-range')
+                "
+              >
+                Start Date must be before End Date
+              </mat-error>
+            </mat-form-field>
           </div>
-        </ng-template>
-      </app-search>
-      <mat-error
-        *ngIf="
-          this.workshopForm.controls['affiliate'].touched &&
-          this.workshopForm.controls['affiliate'].hasError('required')
-        "
-      >
-        * Affiliate is required
-      </mat-error>
-    </div>
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.public?.inlineHelpText }}</p>
-      <mat-checkbox formControlName="isPublic">
-        Yes, publish to web.
-      </mat-checkbox>
-    </div>
 
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.workshopType?.inlineHelpText }}</p>
-      <mat-form-field>
-        <mat-select
-          placeholder="{{ describe.workshopType?.label || 'Type' }}"
-          floatPlaceholder="auto"
-          formControlName="type"
-          required
-        >
-          <mat-option *ngFor="let type of workshopTypes" [value]="type">
-            {{ type }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="workshopForm.controls['type'].hasError('required')">
-          Workshop Type is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.language?.inlineHelpText }}</p>
-      <mat-form-field>
-        <mat-select
-          placeholder="{{ describe.language?.label || 'Language' }}"
-          floatPlaceholder="auto"
-          required
-          formControlName="language"
-        >
-          <ngx-mat-select-search
-            [formControl]="languageFilterControl"
-            placeholderLabel="Search languages..."
-            noEntriesFoundLabel="Language not available"
-          ></ngx-mat-select-search>
-          <mat-option
-            *ngFor="let lang of (languages$ | async)"
-            [value]="lang"
-            >{{ lang }}</mat-option
-          >
-        </mat-select>
-        <mat-error
-          *ngIf="workshopForm.controls['language'].hasError('required')"
-        >
-          Language is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item" *ngIf="(isAdmin$ | async) && !isNewWorkshop">
-      <p class="mat-caption">{{ describe.status?.inlineHelpText }}</p>
-      <mat-form-field>
-        <mat-select
-          placeholder="{{ describe.status?.label || 'Workshop Status'}}"
-          floatPlaceholder="auto"
-          required
-          formControlName="status"
-        >
-          <mat-option *ngFor="let status of statuses" [value]="status">{{
-            status
-          }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="workshopForm.controls['status'].hasError('required')">
-          Status is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.eventCity?.inlineHelpText }}</p>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="{{ describe.eventCity?.label || 'City' }}"
-          required
-          formControlName="city"
-        />
-        <mat-error *ngIf="workshopForm.controls['city'].hasError('required')">
-          City is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.eventCountry?.inlineHelpText }}</p>
-      <mat-form-field>
-        <mat-select
-          placeholder="Event Country"
-          formControlName="country"
-          required
-        >
-          <ngx-mat-select-search
-            [formControl]="countryFilterControl"
-            placeholderLabel="Search countries..."
-            noEntriesFoundLabel="Country not found"
-          ></ngx-mat-select-search>
-          <mat-option
-            *ngFor="let country of (countryOptions$ | async)"
-            [value]="country.name"
-          >
-            {{ getLocalizedName(country) }}
-          </mat-option>
-        </mat-select>
-        <mat-error
-          *ngIf="workshopForm.controls['country'].hasError('required')"
-        >
-          Country is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.hostSite?.inlineHelpText }}</p>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="{{ describe.hostSite?.label || 'Host Site' }}"
-          required
-          formControlName="hostSite"
-        />
-        <mat-error
-          *ngIf="workshopForm.controls['hostSite'].hasError('required')"
-        >
-          Host Site is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption">{{ describe.billingContact?.inlineHelpText }}</p>
-      <mat-form-field>
-        <input
-          matInput
-          type="email"
-          placeholder="{{ describe.billingContact?.label || 'Billing Contact' }}"
-          required
-          formControlName="billing"
-        />
-        <mat-error
-          *ngIf="workshopForm.controls['billing'].hasError('required')"
-        >
-          Billing Contact is required
-        </mat-error>
-        <mat-error *ngIf="workshopForm.controls['billing'].hasError('email')">
-          Please enter a valid email address
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item" fxLayoutGap="16px" [formGroup]="dateFormGroup">
-      <p class="md-warn-text" *ngIf="dateFormGroup.hasError('invalid date')">
-        &#42;{{ dateFormGroup.errors['invalid date'] }}
-      </p>
-      <div fxLayout="row" fxLayoutGap="8px">
-        <div fxLayout="column">
-          <p class="mat-caption">{{ describe.startDate?.inlineHelpText }}</p>
-          <!-- Start Date Picker -->
-          <mat-form-field>
-            <input
-              required
-              matInput
-              [matDatepicker]="startDatePicker"
-              placeholder="{{ describe.startDate?.label || 'Start Date' }}"
-              formControlName="startDate"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="startDatePicker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #startDatePicker
-              [startAt]="dateFormGroup.controls['startDate'].value"
-            ></mat-datepicker>
-            <mat-error
-              *ngIf="dateFormGroup.controls['startDate'].hasError('required')"
-            >
-              Start Date is required
-            </mat-error>
-            <mat-error
-              *ngIf="dateFormGroup.controls['startDate'].hasError('time-range')"
-            >
-              Start Date must be before End Date
-            </mat-error>
-          </mat-form-field>
-        </div>
-
-        <!-- End Date Picker -->
-        <div fxLayout="column">
-          <p class="mat-caption">{{ describe.endDate?.inlineHelpText }}</p>
-          <mat-form-field>
-            <input
-              required
-              matInput
-              [matDatepicker]="endDatePicker"
-              placeholder="{{ describe.endDate?.label || 'End Date' }}"
-              formControlName="endDate"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="endDatePicker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker
-              #endDatePicker
-              [startAt]="dateFormGroup.controls['endDate'].value"
-            ></mat-datepicker>
-            <mat-error
-              *ngIf="dateFormGroup.controls['endDate'].hasError('required')"
-            >
-              End Date is required
-            </mat-error>
-          </mat-form-field>
+          <!-- End Date Picker -->
+          <div fxLayout="column">
+            <p class="mat-caption">{{ d.describe.endDate?.inlineHelpText }}</p>
+            <mat-form-field>
+              <input
+                required
+                matInput
+                [matDatepicker]="endDatePicker"
+                placeholder="{{ d.describe.endDate?.label || 'End Date' }}"
+                formControlName="endDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="endDatePicker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker
+                #endDatePicker
+                [startAt]="dateFormGroup.controls['endDate'].value"
+              ></mat-datepicker>
+              <mat-error
+                *ngIf="dateFormGroup.controls['endDate'].hasError('required')"
+              >
+                End Date is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="input-item" fxLayoutGap="16px" formGroupName="times">
-      <mat-form-field>
-        <input
-          matInput
-          required
-          type="time"
-          placeholder="Start Time"
-          formControlName="startTime"
-        />
-        <mat-error
-          *ngIf="timeFormGroup.controls['startTime'].hasError('required')"
-        >
-          Start Time is required
-        </mat-error>
-        <mat-error *ngIf="timeFormGroup.controls['startTime'].hasError('time')">
-          Start Time must be in 24-hour time (HH:mm)
-        </mat-error>
-        <mat-error
-          *ngIf="timeFormGroup.controls['startTime'].hasError('time-range')"
-        >
-          The event must start before the end time
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input
-          matInput
-          required
-          type="time"
-          placeholder="End Time"
-          formControlName="endTime"
-        />
-        <mat-error
-          *ngIf="timeFormGroup.controls['endTime'].hasError('required')"
-        >
-          End Time is required
-        </mat-error>
-        <mat-error *ngIf="timeFormGroup.controls['endTime'].hasError('time')">
-          End Time must be in 24-hour time (HH:mm)
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <app-tz-map [formControl]="tzPickerControl"></app-tz-map>
-      <mat-form-field>
-        <mat-select formControlName="timezone" placeholder="Timezone" required>
-          <ngx-mat-select-search
-            [formControl]="tzFilterControl"
-            placeholderLabel="Search Timezones..."
-            noEntriesFoundLabel="Timezone not found"
-          ></ngx-mat-select-search>
-          <mat-option *ngFor="let tz of (tzOptions$ | async)" [value]="tz">{{
-            tz
-          }}</mat-option>
-        </mat-select>
-        <mat-error
-          *ngIf="workshopForm.controls['timezone'].hasError('required')"
-        >
-          Timezone is required
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <p class="mat-caption">
-        {{ describe.courseManager && describe.courseManager.inlineHelpText }}
-      </p>
-      <app-search
-        formControlName="courseManager"
-        [displayWith]="contactDisplayWith"
-        [searchFn]="courseManagerSearch"
-        placeholder="Course Manager *"
-      >
-        <ng-template search-autocomplete search-selection let-cm>
-          {{ cm.name }}:&nbsp;<span class="small-light-text">{{
-            cm.email
-          }}</span>
-        </ng-template>
-      </app-search>
-      <mat-error
-        *ngIf="
-          this.workshopForm.controls['courseManager'].touched &&
-          this.workshopForm.controls['courseManager'].hasError('required')
-        "
-      >
-        * Course Manager is required
-      </mat-error>
-    </div>
-
-    <div
-      class="input-item"
-      [style.display]="workshopForm.value.isPublic ? 'flex' : 'none'"
-    >
-      <p class="mat-caption">
-        {{ describe.registrationWebsite?.inlineHelpText }}
-      </p>
-      <mat-form-field>
-        <input
-          matInput
-          placeholder="{{ describe.registrationWebsite?.label || 'Registration URL' }}"
-          formControlName="website"
-        />
-        <mat-error *ngIf="workshopForm.controls['website'].hasError('required')"
-          >A registration website is required if the workshop is
-          public</mat-error
-        >
-        <mat-error *ngIf="workshopForm.controls['website'].hasError('url')"
-          >'{{ workshopForm.controls['website'].value }}' is not a valid
-          URL</mat-error
-        >
-      </mat-form-field>
-    </div>
-
-    <div class="input-item">
-      <app-search
-        formControlName="instructors"
-        multi="true"
-        [displayWith]="contactDisplayWith"
-        [searchFn]="facilitatorSearch"
-        placeholder="{{ describe.facilitator?.label || 'Course Instructors' }} *"
-      >
-        <ng-template search-selection let-facilitator>
-          <div
-            class="facilitator-item"
-            fxLayout="row"
-            fxLayoutAlign="space-around start"
+      <div class="input-item" fxLayoutGap="16px" formGroupName="times">
+        <mat-form-field>
+          <input
+            matInput
+            required
+            type="time"
+            placeholder="Start Time"
+            formControlName="startTime"
+          />
+          <mat-error
+            *ngIf="timeFormGroup.controls['startTime'].hasError('required')"
           >
-            <img class="thumbnail-search profile" [src]="facilitator.photo" />
-            <div fxLayout="column">
-              <b>{{ facilitator.Name }}</b> <i>{{ facilitator.Email }}</i>
+            Start Time is required
+          </mat-error>
+          <mat-error
+            *ngIf="timeFormGroup.controls['startTime'].hasError('time')"
+          >
+            Start Time must be in 24-hour time (HH:mm)
+          </mat-error>
+          <mat-error
+            *ngIf="timeFormGroup.controls['startTime'].hasError('time-range')"
+          >
+            The event must start before the end time
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            required
+            type="time"
+            placeholder="End Time"
+            formControlName="endTime"
+          />
+          <mat-error
+            *ngIf="timeFormGroup.controls['endTime'].hasError('required')"
+          >
+            End Time is required
+          </mat-error>
+          <mat-error *ngIf="timeFormGroup.controls['endTime'].hasError('time')">
+            End Time must be in 24-hour time (HH:mm)
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <app-tz-map [formControl]="tzPickerControl"></app-tz-map>
+        <mat-form-field>
+          <mat-select
+            formControlName="timezone"
+            placeholder="Timezone"
+            required
+          >
+            <ngx-mat-select-search
+              [formControl]="tzFilterControl"
+              placeholderLabel="Search Timezones..."
+              noEntriesFoundLabel="Timezone not found"
+            ></ngx-mat-select-search>
+            <mat-option *ngFor="let tz of (tzOptions$ | async)" [value]="tz">{{
+              tz
+            }}</mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="workshopForm.controls['timezone'].hasError('required')"
+          >
+            Timezone is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <p class="mat-caption">
+          {{ d.describe.courseManager?.inlineHelpText }}
+        </p>
+        <app-search
+          formControlName="courseManager"
+          [displayWith]="contactDisplayWith"
+          [searchFn]="courseManagerSearch"
+          placeholder="Course Manager *"
+        >
+          <ng-template search-autocomplete search-selection let-cm>
+            {{ cm.Name }}:&nbsp;<span class="small-light-text">{{
+              cm.Email
+            }}</span>
+          </ng-template>
+        </app-search>
+        <mat-error
+          *ngIf="
+            this.workshopForm.controls['courseManager'].touched &&
+            this.workshopForm.controls['courseManager'].hasError('required')
+          "
+        >
+          * Course Manager is required
+        </mat-error>
+      </div>
+
+      <div
+        class="input-item"
+        [style.display]="workshopForm.value.isPublic ? 'flex' : 'none'"
+      >
+        <p class="mat-caption">
+          {{ d.describe.registrationWebsite?.inlineHelpText }}
+        </p>
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="{{
+              d.describe.registrationWebsite?.label || 'Registration URL'
+            }}"
+            formControlName="website"
+          />
+          <mat-error
+            *ngIf="workshopForm.controls['website'].hasError('required')"
+            >A registration website is required if the workshop is
+            public</mat-error
+          >
+          <mat-error *ngIf="workshopForm.controls['website'].hasError('url')"
+            >'{{ workshopForm.controls['website'].value }}' is not a valid
+            URL</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <div class="input-item">
+        <app-search
+          formControlName="instructors"
+          multi="true"
+          [displayWith]="contactDisplayWith"
+          [searchFn]="facilitatorSearch"
+          placeholder="{{
+            d.describe.facilitator?.label || 'Course Instructors'
+          }} *"
+        >
+          <ng-template search-selection let-facilitator>
+            <div
+              class="facilitator-item"
+              fxLayout="row"
+              fxLayoutAlign="space-around start"
+            >
+              <img
+                class="thumbnail-search profile"
+                [src]="facilitator.Photograph__c"
+              />
+              <div fxLayout="column">
+                <b>{{ facilitator.Name }}</b> <i>{{ facilitator.Email }}</i>
+              </div>
             </div>
-          </div>
-        </ng-template>
-        <ng-template search-errors> </ng-template>
-      </app-search>
+          </ng-template>
+          <ng-template search-errors> </ng-template>
+        </app-search>
 
-      <mat-error
-        *ngIf="
-          this.workshopForm.controls['instructors'].touched &&
-          this.workshopForm.controls['instructors'].hasError('required')
-        "
-      >
-        * Need to Add an Instructor
-      </mat-error>
-    </div>
+        <mat-error
+          *ngIf="
+            this.workshopForm.controls['instructors'].touched &&
+            this.workshopForm.controls['instructors'].hasError('required')
+          "
+        >
+          * Need to Add an Instructor
+        </mat-error>
+      </div>
 
-    <div class="form-actions" fxLayout="row" fxLayoutGap="8px">
-      <button
-        mat-raised-button
-        type="submit"
-        class="mat-primary"
-        [disabled]="!workshopForm.valid"
-      >
-        Save
-      </button>
-      <mat-spinner diameter="36" *ngIf="pending" color="accent"></mat-spinner>
-    </div>
-  </form>
-  <!--
+      <div class="form-actions" fxLayout="row" fxLayoutGap="8px">
+        <button
+          mat-raised-button
+          type="submit"
+          class="mat-primary"
+          [disabled]="!workshopForm.valid"
+        >
+          Save
+        </button>
+        <mat-spinner diameter="36" *ngIf="pending" color="accent"></mat-spinner>
+      </div>
+    </form>
+    <!--
     <pre>{{ getFormErrors(workshopForm) | json }}</pre>
     <pre>{{ workshopForm.getRawValue() | json }}</pre>
   -->
-</mat-card>
+  </mat-card>
+</ng-container>

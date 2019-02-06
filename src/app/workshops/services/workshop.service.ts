@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { WorkshopsController } from '@shingo/affiliates-api/controllers'
 import { ApiContract } from '~app/util/api-contract'
-import { Observable } from 'rxjs'
+import { Observable, Subject, ReplaySubject } from 'rxjs'
+import { take } from 'rxjs/operators'
+// tslint:disable-next-line: no-implicit-dependencies
+import { DescribeSObjectResult } from 'jsforce'
 
 export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
   'Id',
@@ -15,14 +18,17 @@ export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
 ]
 
 /** The base type resulting from a call to WorkshopService.getById */
-export type ReadReturn = Exclude<
-  WorkshopContract['read']['returntype'],
-  undefined
->
+export type ReadReturn = Exclude<Contract['read']['returntype'], undefined>
 /** The base type resulting from a call to WorkshopService.getAll */
-export type ReadAllReturn = WorkshopContract['readAll']['returntype'][number]
+export type ReadAllReturn = Contract['readAll']['returntype'][number]
 
-export type WorkshopContract = ApiContract<WorkshopsController>
+export type Contract = ApiContract<WorkshopsController>
+
+// it's unlikely describe results will change over a users session,
+// and they take a long time to fetch. We can cache them using a subject
+// it doesn't make much sense to put in the store, since our usage of them
+// is pretty simple (we only get and run a transformation function over)
+const describeCache: Subject<DescribeSObjectResult> = new ReplaySubject(1)
 
 @Injectable({
   providedIn: 'root',
@@ -33,22 +39,22 @@ export class WorkshopService extends ApiBase {
   }
 
   getAll() {
-    type Base = WorkshopContract['readAll']
+    type Base = Contract['readAll']
     return this.request<Base>('/workshops', 'GET')
   }
 
   getById(id: string) {
-    type Base = WorkshopContract['read']
+    type Base = Contract['read']
     return this.request<Base>('/workshops/:id', 'GET', { urlparams: { id } })
   }
 
-  create(body: WorkshopContract['create']['body']) {
-    type Base = WorkshopContract['create']
+  create(body: Contract['create']['body']) {
+    type Base = Contract['create']
     return this.request<Base>('/workshops', 'POST', { body })
   }
 
-  update(body: WorkshopContract['update']['body']) {
-    type Base = WorkshopContract['update']
+  update(body: Contract['update']['body']) {
+    type Base = Contract['update']
     return this.request<Base>('/workshops/:id', 'PUT', {
       urlparams: { id: body.Id },
       body,
@@ -56,14 +62,14 @@ export class WorkshopService extends ApiBase {
   }
 
   delete(id: string) {
-    type Base = WorkshopContract['delete']
+    type Base = Contract['delete']
     return this.request<Base>('/workshops/:id', 'DELETE', {
       urlparams: { id },
     })
   }
 
   search(query: string, fields: string[] = DEFAULT_WORKSHOP_SEARCH_FIELDS) {
-    type Base = WorkshopContract['search']
+    type Base = Contract['search']
 
     return this.request<Base>('/workshops/search', 'GET', {
       params: {
@@ -74,8 +80,18 @@ export class WorkshopService extends ApiBase {
   }
 
   describe() {
-    type Base = WorkshopContract['describe']
+    type Base = Contract['describe']
     return this.request<Base>('/workshops/describe', 'GET', { params: {} })
+  }
+
+  describeCached() {
+    // we make the request and store a result when we get it in the cache
+    const req = this.describe().pipe(take(1))
+    req.subscribe(v => describeCache.next(v))
+
+    // the cache will return the last value immediately, but any subscribers
+    // should get updated when the network request completes
+    return describeCache.asObservable()
   }
 
   uploadAttendeeFile(id: string, file: File, progress: true): Observable<any>
@@ -83,13 +99,13 @@ export class WorkshopService extends ApiBase {
     id: string,
     file: File,
     progress?: false,
-  ): Observable<WorkshopContract['uploadAttendeeFile']['returntype']>
+  ): Observable<Contract['uploadAttendeeFile']['returntype']>
   uploadAttendeeFile(
     id: string,
     file: File,
     progress = false,
   ): Observable<any> {
-    type Base = WorkshopContract['uploadAttendeeFile']
+    type Base = Contract['uploadAttendeeFile']
 
     const options = this.request<Base>(
       '/workshops/:id/attendee_file',
@@ -112,13 +128,13 @@ export class WorkshopService extends ApiBase {
     id: string,
     files: File[],
     progress?: false,
-  ): Observable<WorkshopContract['uploadEvaluations']['returntype']>
+  ): Observable<Contract['uploadEvaluations']['returntype']>
   uploadEvaluations(
     id: string,
     files: File[],
     progress = false,
   ): Observable<any> {
-    type Base = WorkshopContract['uploadEvaluations']
+    type Base = Contract['uploadEvaluations']
     const options = this.request<Base>(
       '/workshops/:id/evaluation_files',
       'POST',
@@ -136,7 +152,7 @@ export class WorkshopService extends ApiBase {
   }
 
   cancel(id: string, reason: string) {
-    type Base = WorkshopContract['cancel']
+    type Base = Contract['cancel']
     return this.request<Base>('/workshops/:id/cancel', 'PUT', {
       urlparams: { id },
       body: { reason },

@@ -202,25 +202,17 @@ export const workshop = (init: Partial<WorkshopBase> = {}): WorkshopBase => {
     Local_End_Time__c: '17:00:00.000Z',
     Timezone__c: moment.tz.guess() as Timezone,
     get Start_Time__c() {
-      return addTimeAndTz(
-        this.Start_Date__c,
-        formatTime(this.Local_Start_Time__c),
-        this.Timezone__c,
-      ).toISOString(true)
+      return startTime(this).toISOString(true)
     },
     get End_Time__c() {
-      return addTimeAndTz(
-        this.Start_Date__c,
-        formatTime(this.Local_End_Time__c),
-        this.Timezone__c,
-      ).toISOString(true)
+      return endTime(this).toISOString(true)
     },
     Organizing_Affiliate__c: '',
     Public__c: false,
   }
 
   // when spread the getters turn into static properties, which is what we want
-  return { ...base, ...init }
+  return { ...base, ...init, Id: base.Id }
 }
 
 /* ================
