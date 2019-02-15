@@ -14,7 +14,6 @@ import { Filter } from '../../services/filters/filter.abstract'
 import { User } from '../../shared/models/user.model'
 import { WorkshopFilterFactory } from '../../services/filters/workshops/workshop-filter-factory.service'
 import {
-  WorkshopProperties,
   WorkshopService,
   Workshop,
 } from '../../services/workshop/workshop.service'
@@ -25,6 +24,11 @@ import { just, nothing, map as mapMaybe } from '../../util/functional/Maybe'
 import { DateRange } from '../../services/filters/workshops/workshop-date-range-filter'
 import { tuple, fst, constant } from '../../util/functional'
 import { filterMap, XOR, withoutTime } from '../../util/util'
+import {
+  WorkshopProperties,
+  WORKSHOP_PROPERTY_MAP,
+  WORKSHOP_PROPERTY_LABELS,
+} from '../workshop-data-table/workshop-data-table.component'
 
 const setFilterState = <T, C>(f: Filter<T, C>, criteria: C, active = false) => {
   f.criteria = criteria
@@ -60,27 +64,17 @@ export class WorkshopDashboardComponent implements OnInit {
     'workshopType',
     'startDate',
     'endDate',
+    'startTime',
+    'endTime',
     'location',
     'instructors',
     'status',
     'verified',
     'actions',
   ]
-  public allDisplayedColumns: WorkshopProperties[] = [
-    'workshopType',
-    'dueDate',
-    'instructors',
-    'location',
-    'verified',
-    'startDate',
-    'endDate',
-    'hostCity',
-    'hostCountry',
-    'daysLate',
-    'status',
-    'edit',
-    'actions',
-  ]
+  public allDisplayedColumns: WorkshopProperties[] = Object.keys(
+    WORKSHOP_PROPERTY_MAP,
+  ) as Array<keyof typeof WORKSHOP_PROPERTY_MAP>
   public filters: Array<[Filter<Workshop, any>, FilterCB]> = [] // list of (filter object, change callback) pairs
   public get filterFns(): Array<Filter<Workshop, any>> {
     return this.filters.map(fst)
@@ -106,6 +100,10 @@ export class WorkshopDashboardComponent implements OnInit {
     this.statuses = this._ws
       .describe()
       .pipe(map(describe => this.getWorkshopStatuses(describe)))
+  }
+
+  getColumnLabel(v: WorkshopProperties) {
+    return WORKSHOP_PROPERTY_LABELS[v]
   }
 
   public ngOnInit() {

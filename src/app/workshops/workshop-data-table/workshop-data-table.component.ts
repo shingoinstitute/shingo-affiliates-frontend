@@ -13,13 +13,11 @@ import { DataProvider } from '../../services/data-provider/data-provider.service
 import { DataProviderFactory } from '../../services/data-provider/data-provider-factory.service'
 import {
   WorkshopService,
-  WorkshopProperties,
   WorkshopTrackByStrategy,
 } from '../../services/workshop/workshop.service'
 import {
   MatSort,
   MatPaginator,
-  MatButton,
   MatDialog,
   MatDatepickerInputEvent,
 } from '@angular/material'
@@ -31,6 +29,71 @@ import {
 } from '../../shared/components/alert-dialog/alert-dialog.component'
 import { AuthService } from '../../services/auth/auth.service'
 import moment, { Moment } from 'moment'
+import { KVMap } from '../../util/types'
+
+export type WorkshopProperties =
+  | 'actionType'
+  | 'workshopType'
+  | 'dueDate'
+  | 'instructors'
+  | 'location'
+  | 'verified'
+  | 'startDate'
+  | 'endDate'
+  | 'hostCity'
+  | 'hostCountry'
+  | 'daysLate'
+  | 'status'
+  | 'edit'
+  | 'actions'
+  | 'startTime'
+  | 'endTime'
+  | 'relStartTime'
+  | 'relEndTime'
+
+export const WORKSHOP_PROPERTY_MAP: Readonly<KVMap<WorkshopProperties>> = {
+  actionType: 'actionType',
+  actions: 'actions',
+  daysLate: 'daysLate',
+  dueDate: 'dueDate',
+  edit: 'edit',
+  endDate: 'endDate',
+  hostCity: 'hostCity',
+  hostCountry: 'hostCountry',
+  instructors: 'instructors',
+  location: 'location',
+  startDate: 'startDate',
+  status: 'status',
+  verified: 'verified',
+  workshopType: 'workshopType',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  relStartTime: 'relStartTime',
+  relEndTime: 'relEndTime',
+}
+
+export const WORKSHOP_PROPERTY_LABELS: Readonly<
+  Record<WorkshopProperties, string>
+> = {
+  workshopType: 'Course Type',
+  actionType: 'Action Type',
+  location: 'Location',
+  startDate: 'Start Date',
+  endDate: 'End Date',
+  endTime: 'End Time',
+  startTime: 'Start Time',
+  relStartTime: 'Relative Start Time',
+  relEndTime: 'Relative End Time',
+  daysLate: 'Days Late',
+  instructors: 'Instructor(s)',
+  status: 'Status',
+  verified: 'Verified?',
+  edit: 'Edit',
+  dueDate: 'Due Date',
+  hostCity: 'Host City',
+  hostCountry: 'Host Country',
+  actions: 'Actions',
+}
 
 @Component({
   selector: 'app-workshop-data-table',
@@ -60,7 +123,10 @@ export class WorkshopDataTableComponent implements OnInit {
   @ViewChild(MatPaginator)
   public paginator!: MatPaginator
 
-  public selectedWorkshop?: Workshop
+  properties = WORKSHOP_PROPERTY_MAP
+  labels = WORKSHOP_PROPERTY_LABELS
+
+  selectedWorkshop?: Workshop
   public get selectedSfId() {
     return this.selectedWorkshop ? this.selectedWorkshop.sfId : ''
   }

@@ -28,22 +28,6 @@ export const DEFAULT_WORKSHOP_SEARCH_FIELDS: string[] = [
   'Organizing_Affiliate__c',
 ]
 
-export type WorkshopProperties =
-  | 'actionType'
-  | 'workshopType'
-  | 'dueDate'
-  | 'instructors'
-  | 'location'
-  | 'verified'
-  | 'startDate'
-  | 'endDate'
-  | 'hostCity'
-  | 'hostCountry'
-  | 'daysLate'
-  | 'status'
-  | 'edit'
-  | 'actions'
-  | undefined
 export type WorkshopTrackByStrategy = 'id' | 'reference' | 'index'
 
 @Injectable()

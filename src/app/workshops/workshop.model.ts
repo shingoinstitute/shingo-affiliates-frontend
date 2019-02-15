@@ -747,21 +747,29 @@ export class Workshop extends SFObject {
   }
 
   public get startDate(): Moment | Date {
-    return moment.tz(this.Start_Date__c, this.Timezone__c)
+    return moment(this.Start_Date__c)
   }
   public set startDate(date: Moment | Date) {
     this.Start_Date__c = getIsoYMD(date)
   }
-
+  get startDateTz(): Moment {
+    return moment.tz(this.Start_Date__c, this.Timezone__c)
+  }
   public get startDateFormatted(): string {
     return Workshop.formatDate(this.startDate)
   }
 
   public get endDate(): Moment | Date {
-    return moment.tz(this.End_Date__c, this.Timezone__c)
+    return moment(this.End_Date__c)
   }
   public set endDate(date: Moment | Date) {
     this.End_Date__c = getIsoYMD(date)
+  }
+  get endDateTz(): Moment {
+    return moment.tz(this.End_Date__c, this.Timezone__c)
+  }
+  public get endDateFormatted(): string {
+    return Workshop.formatDate(this.endDate)
   }
 
   public get startTime(): Moment {
@@ -771,6 +779,12 @@ export class Workshop extends SFObject {
       this.Timezone__c,
     )
   }
+  get startTimeFormatted(): string {
+    return this.startTime.format('HH:mm z')
+  }
+  get relStartTimeFormatted(): string {
+    return this.startTime.tz(moment.tz.guess()).format('DD MMM, YYYY @ HH:mm')
+  }
 
   public get endTime(): Moment {
     return addTimeAndTz(
@@ -779,9 +793,11 @@ export class Workshop extends SFObject {
       this.Timezone__c,
     )
   }
-
-  public get endDateFormatted(): string {
-    return Workshop.formatDate(this.endDate)
+  get endTimeFormatted(): string {
+    return this.endTime.format('HH:mm z')
+  }
+  get relEndTimeFormatted(): string {
+    return this.endTime.tz(moment.tz.guess()).format('DD MMM, YYYY @ HH:mm')
   }
 
   public get courseManager(): CourseManager {

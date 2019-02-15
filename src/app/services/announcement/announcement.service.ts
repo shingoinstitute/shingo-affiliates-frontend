@@ -13,8 +13,8 @@ export class AnnouncementService {
     return new Observable<Announcement[]>(observer => {
       const announcements: Announcement[] = [
         new Announcement(
-          'Changes to Workshop Form',
-          'Facilitators are now able to select the start and end times for a workshop.<br/>To do so, enter the local start and end time in the workshop form, and make sure to pick the correct timezone for the host site from the map or picklist.',
+          'Workshop Table Changes',
+          "The workshop data table now displays the start and end dates relative to the host-site's timezone.<br/>If you need to view the dates relative to your timezone, enable the Relative Start/End Time table fields under the Advanced Filter Options section of the Workshops page.",
           4,
         ),
       ]

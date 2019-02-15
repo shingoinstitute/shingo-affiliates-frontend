@@ -2,8 +2,19 @@ import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
 import { ValidationErrors, FormGroup } from '@angular/forms'
 import { Moment, isMoment } from 'moment'
+import { join, repeat } from './iterable'
 
 export type Overwrite<A, B> = Pick<A, Exclude<keyof A, keyof B>> & B
+
+export const leftpad = (n: number, c: string = ' ') => (s: string) => {
+  if (typeof (s as any).padStart === 'function') {
+    return (s as any).padStart(n, c)
+  }
+  return join(repeat(c, n - s.length)) + s
+}
+
+const pad2Zero = leftpad(2, '0')
+const padDate = (n: number) => pad2Zero(String(n))
 
 /**
  * Takes a date or moment object and returns a string in the format YYYY-MM-DD
@@ -13,14 +24,17 @@ export type Overwrite<A, B> = Pick<A, Exclude<keyof A, keyof B>> & B
 export const getIsoYMD = (date: Moment | Date, utc = false): string => {
   if (utc) {
     if (date instanceof Date) {
-      return `${date.getUTCFullYear()}-${date.getUTCMonth() +
-        1}-${date.getUTCDate()}`
+      return `${date.getUTCFullYear()}-${padDate(
+        date.getUTCMonth() + 1,
+      )}-${padDate(date.getUTCDate())}`
     } else {
       return date.utc().format('YYYY-MM-DD')
     }
   } else {
     if (date instanceof Date) {
-      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      return `${date.getFullYear()}-${padDate(date.getMonth() + 1)}-${padDate(
+        date.getDate(),
+      )}`
     } else {
       return date.format('YYYY-MM-DD')
     }
@@ -76,11 +90,6 @@ export const requestOptions = (
 
 export const XOR = (a: boolean, b: boolean) => (a || b) && (!a || !b)
 
-export const filterMapC = <A, B>(
-  filter: (v: A, i: number, arr: A[]) => boolean,
-  map: (v: A, i: number, arr: A[]) => B,
-) => (xs: A[]) => filterMap(xs, filter, map)
-
 export const filterMap = <A, B>(
   xs: A[],
   filter: (v: A, i: number, arr: A[]) => boolean,
@@ -93,6 +102,12 @@ export const filterMap = <A, B>(
     },
     [] as B[],
   )
+
+export const filterMapC = <A, B>(
+  filter: (v: A, i: number, arr: A[]) => boolean,
+  map: (v: A, i: number, arr: A[]) => B,
+) => (xs: A[]) => filterMap(xs, filter, map)
+
 /**
  * Converts a salesforce field name to a camel case string
  * @param s The salesforce field name (often ends in __c)
