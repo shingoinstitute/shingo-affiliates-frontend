@@ -16,6 +16,7 @@ import { tuple } from '../../util/functional'
 
 // RxJS operators
 
+/** @deprecated */
 @Injectable()
 export class JWTService {
   public get jwt(): string | null {
@@ -30,6 +31,7 @@ export class JWTService {
   // constructor(private cs: CookieService) {}
 }
 
+/** @deprecated */
 // tslint:disable-next-line:max-classes-per-file
 @Injectable()
 export class AuthService extends BaseService {

@@ -2,7 +2,7 @@ import { JWTService } from '../services/auth/auth.service'
 import { HttpHeaders } from '@angular/common/http'
 import { ValidationErrors, FormGroup } from '@angular/forms'
 import { Moment, isMoment } from 'moment'
-import { tuple } from './functional'
+import { tuple, Fn } from './functional'
 import {
   reduce,
   repeat,
@@ -14,6 +14,44 @@ import { left } from './functional/Either'
 import { AsyncResult } from './types'
 // tslint:disable-next-line: no-implicit-dependencies
 import { DescribeSObjectResult } from 'jsforce'
+import { take, takeUntil } from 'rxjs/operators'
+import { OperatorFunction, Observable } from 'rxjs'
+
+const noop = () => {}
+
+/**
+ * Subscribes to two observables and kills the subscriptions when either observable emits
+ * @param getSuccess a function filtering to the first observable
+ * @param getError a function filtering to the second observable
+ */
+export const subscribeTwo = <T, ASucc, AErr>(
+  actions$: Observable<T>,
+  getSuccess: OperatorFunction<T, ASucc>,
+  getError: OperatorFunction<T, AErr>,
+) => ({
+  success = noop,
+  error = noop,
+}: { success?: Fn<[ASucc], void>; error?: Fn<[AErr], void> } = {}) => {
+  const success$ = actions$.pipe(
+    getSuccess,
+    take(1),
+  )
+
+  const error$ = actions$.pipe(
+    getError,
+    take(1),
+    // terminates error subscription on action success
+    // we do this since we cant have the success subscription terminate the error subscription
+    // and also have the error subscription terminate the success subscription
+    takeUntil(success$),
+  )
+
+  const sub = success$.subscribe(success)
+  error$.subscribe(e => {
+    error(e)
+    sub.unsubscribe()
+  })
+}
 
 /**
  * Polyfill for `Object.entries`, returning an iterable.

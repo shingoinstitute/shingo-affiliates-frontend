@@ -6,6 +6,7 @@ import { Subject, ReplaySubject } from 'rxjs'
 // tslint:disable-next-line: no-implicit-dependencies
 import { DescribeSObjectResult } from 'jsforce'
 import { take } from 'rxjs/operators'
+import { HttpClient } from '@angular/common/http'
 
 export type Contract = ApiContract<AffiliatesController>
 /** The base type resulting from a call to AffiliateService.getById */
@@ -24,10 +25,12 @@ export const DEFAULT_AFFILIATE_SEARCH_FIELDS: string[] = [
 
 const describeCache: Subject<DescribeSObjectResult> = new ReplaySubject(1)
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AffiliateService extends ApiBase {
+  constructor(http: HttpClient) {
+    super(http)
+  }
+
   getAll(isPublic = false) {
     type Base = Contract['readAll']
     return this.request<Base>('/affiliates', 'GET', {

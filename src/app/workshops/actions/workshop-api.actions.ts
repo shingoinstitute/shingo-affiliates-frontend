@@ -1,7 +1,8 @@
 // tslint:disable:max-classes-per-file
 import { Action } from '@ngrx/store'
-import { WorkshopBase } from '../workshop.model'
-import { RequireKeys } from '~app/util/types'
+import { CreateData, UpdateData } from '../services/workshop.service'
+// tslint:disable-next-line: no-implicit-dependencies
+import { SuccessResult } from 'jsforce'
 
 export enum WorkshopApiActionTypes {
   WorkshopGetAll = '[Workshops/API] Get All',
@@ -9,6 +10,8 @@ export enum WorkshopApiActionTypes {
   WorkshopUpdate = '[Workshops/API] Update',
   WorkshopDelete = '[Workshops/API] Delete',
   WorkshopCreate = '[Workshops/API] Create',
+  WorkshopMutError = '[Workshops/API] Mut Error',
+  WorkshopMutSuccess = '[Workshops/API] Mut Success',
 }
 
 export class WorkshopGetAll implements Action {
@@ -21,17 +24,6 @@ export class WorkshopGet implements Action {
   constructor(public payload: { id: string; selection?: boolean }) {}
 }
 
-export class WorkshopUpdate implements Action {
-  readonly type = WorkshopApiActionTypes.WorkshopUpdate
-
-  constructor(
-    public payload: {
-      id: string
-      workshop: RequireKeys<Partial<WorkshopBase>, 'Organizing_Affiliate__c'>
-    },
-  ) {}
-}
-
 export class WorkshopDelete implements Action {
   readonly type = WorkshopApiActionTypes.WorkshopDelete
 
@@ -41,7 +33,32 @@ export class WorkshopDelete implements Action {
 export class WorkshopCreate implements Action {
   readonly type = WorkshopApiActionTypes.WorkshopCreate
 
-  constructor(public payload: { workshop: Partial<WorkshopBase> }) {}
+  constructor(public payload: { workshop: CreateData }) {}
+}
+
+export class WorkshopUpdate implements Action {
+  readonly type = WorkshopApiActionTypes.WorkshopUpdate
+  constructor(public payload: { id: string; data: UpdateData }) {}
+}
+
+export class WorkshopApiError implements Action {
+  readonly type = WorkshopApiActionTypes.WorkshopMutError
+  constructor(
+    public payload: {
+      error: unknown
+      action: Exclude<WorkshopApiAction, WorkshopApiError | WorkshopApiSuccess>
+    },
+  ) {}
+}
+
+export class WorkshopApiSuccess implements Action {
+  readonly type = WorkshopApiActionTypes.WorkshopMutSuccess
+  constructor(
+    public payload: {
+      result: SuccessResult
+      action: Exclude<WorkshopApiAction, WorkshopApiError | WorkshopApiSuccess>
+    },
+  ) {}
 }
 
 export type WorkshopApiAction =
@@ -50,3 +67,5 @@ export type WorkshopApiAction =
   | WorkshopUpdate
   | WorkshopDelete
   | WorkshopCreate
+  | WorkshopApiError
+  | WorkshopApiSuccess

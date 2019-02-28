@@ -1,5 +1,10 @@
 import moment, { Moment, isMoment } from 'moment'
-import { getIsoYMD, addIf } from '../util/util'
+import {
+  getIsoYMD,
+  addIf,
+  GLOBAL_ID_PREFIX,
+  isPortalCreated,
+} from '../util/util'
 import { ReadAllReturn, ReadReturn } from './services/workshop.service'
 import { MakeKeysOptional, ToReadonlyArray, Overwrite } from '~app/util/types'
 import { Workshop__c } from '@shingo/affiliates-api/sf-interfaces/Workshop__c.interface'
@@ -77,9 +82,11 @@ export const nameFormatted = (w: WorkshopBase) =>
     w,
   )} by ${(w.Organizing_Affiliate__r && w.Organizing_Affiliate__r.Name) ||
     'unknown'}`
-export const startDate = (w: WorkshopBase) =>
+export const startDate = (w: WorkshopBase) => moment(w.Start_Date__c)
+export const endDate = (w: WorkshopBase) => moment(w.End_Date__c)
+export const startDateTz = (w: WorkshopBase) =>
   moment.tz(w.Start_Date__c, w.Timezone__c)
-export const endDate = (w: WorkshopBase) =>
+export const endDateTz = (w: WorkshopBase) =>
   moment.tz(w.End_Date__c, w.Timezone__c)
 export const startDateFormatted = compose(
   formatDate,
@@ -96,6 +103,15 @@ export const endTime = (w: WorkshopBase) =>
 export const localStartTime = (w: WorkshopBase) =>
   formatTime(w.Local_Start_Time__c)
 export const localEndTime = (w: WorkshopBase) => formatTime(w.Local_End_Time__c)
+export const displayTime = (m: Moment) => m.format('HH:mm z')
+export const startTimeFormatted = compose(
+  displayTime,
+  startTime,
+)
+export const endTimeFormatted = compose(
+  displayTime,
+  endTime,
+)
 export const lastModifiedDate = (w: WorkshopBase) =>
   new Date(w.LastModifiedDate)
 export const courseManager = (w: WorkshopBase) =>
@@ -157,6 +173,10 @@ export const location = (w: WorkshopBase): string => {
 }
 export const files = (w: WorkshopBase) => w.files || []
 
+let idCounter = 0
+export const WORKSHOP_PREFIX = 'WORKSHOP'
+export const ID_PREFIX = GLOBAL_ID_PREFIX + WORKSHOP_PREFIX
+
 /**
  * Formats a workshop object for consumption by salesforce
  */
@@ -169,7 +189,7 @@ export const toJSON = (w: WorkshopBase) => {
     Timezone__c: w.Timezone__c,
     Public__c: w.Public__c,
   }
-  if (!isPortalCreated(w)) {
+  if (!isPortalCreated(w, WORKSHOP_PREFIX)) {
     ret.Id = w.Id
   }
   addIf(ret, 'Course_Manager__c', courseManagerId(w))
@@ -185,9 +205,6 @@ export const toJSON = (w: WorkshopBase) => {
   addIf(ret, 'facilitators', w.facilitators)
   return ret
 }
-
-let idCounter = 0
-export const ID_PREFIX = 'PORTAL_CREATED_WORKSHOP'
 
 /**
  * Creates a new empty workshop object
@@ -220,11 +237,13 @@ export const workshop = (init: Partial<WorkshopBase> = {}): WorkshopBase => {
  * ================
  */
 
-export const addInstructorsMut = (
-  w: WorkshopBase,
+export const addInstructorsMut = <
+  T extends Pick<WorkshopBase, 'facilitators'> = WorkshopBase
+>(
+  w: T,
   facs: ToReadonlyArray<Exclude<WorkshopBase['facilitators'], undefined>>,
 ) => {
-  w.facilitators = [...new Set([...w.facilitators, ...facs])]
+  w.facilitators = [...new Set([...(w.facilitators || []), ...facs])]
   return w
 }
 
@@ -232,9 +251,6 @@ export const addInstructorsMut = (
  * UTILITY FUNCTIONS
  * =================
  */
-
-export const isPortalCreated = (w: WorkshopBase) =>
-  w.Id.startsWith(`${ID_PREFIX}:`)
 
 /**
  * Adds the seconds and milliseconds section

@@ -52,7 +52,7 @@ export class AffiliateService extends BaseAPIService {
       .get(`${this.baseUrl}/${id}`, requestOptions(this.jwt))
       .pipe(
         map(res => new Affiliate(res)),
-        catchError<Affiliate, Affiliate>(this.handleError),
+        catchError(this.handleError),
       )
   }
 

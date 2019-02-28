@@ -8,9 +8,11 @@ import {
   mapC,
   map as mapEither,
   chain as chainEither,
+  matchC,
 } from '~app/util/functional/Either'
 import { WorkshopBase } from '../workshop.model'
 import { AsyncResult } from '~app/util/types'
+import { constUndefined } from 'fp-ts/lib/function'
 
 export { WorkshopState }
 
@@ -70,3 +72,9 @@ export const getCurrentWorkshop = createSelector(
       mapEither(idE, id => ws[id] as WorkshopBase | undefined),
     ),
 )
+
+export const getWorkshopById = (id: string) =>
+  createSelector(
+    selectWorkshops,
+    matchC(constUndefined, ws => ws[id]),
+  )

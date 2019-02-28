@@ -18,6 +18,7 @@ import {
 } from '~app/util/functional/Either'
 import { unloadedAsync } from '~app/util/util'
 import { greaterThan, ordDate } from 'fp-ts/lib/Ord'
+import { mergeDeepRight } from 'ramda'
 
 export interface WorkshopsValue {
   readonly [id: string]: Readonly<WorkshopBase>
@@ -38,10 +39,11 @@ const gt = greaterThan(ordDate)
 const mutAddWorkshops = (
   ws: WorkshopBase[],
   val: Mutable<WorkshopsValue> = {},
+  replace?: boolean,
 ) => {
   for (const newWs of ws) {
     const old = val[newWs.Id]
-    if (!old) {
+    if (!old || replace) {
       val[newWs.Id] = newWs
       continue
     }
@@ -79,8 +81,11 @@ export function reducer(
       }
       case WorkshopActionTypes.WorkshopAdded: {
         if (isRight(state.workshops)) {
-          mutAddWorkshops(action.payload.workshops, draft.workshops
-            .value as Mutable<WorkshopsValue>)
+          mutAddWorkshops(
+            action.payload.workshops,
+            draft.workshops.value as Mutable<WorkshopsValue>,
+            action.payload.replace,
+          )
           return
         } else {
           // we have some duplication here because we can't both return and modify the draft with immer
@@ -113,6 +118,28 @@ export function reducer(
           value: action.payload,
         })
         return
+      }
+      case WorkshopActionTypes.WorkshopUpdate: {
+        const { data, id } = action.payload
+        if (isRight(state.workshops)) {
+          const ws = draft.workshops.value as Mutable<WorkshopsValue>
+          // if the id changed, we combine the old and new with the other if it exists
+          // and delete the old id entry
+          if (data.Id && id !== data.Id) {
+            ws[data.Id] = (mergeDeepRight(
+              ws[data.Id] || {},
+              mergeDeepRight(ws[id], data),
+            ) as unknown) as WorkshopBase
+            delete ws[id]
+            return
+          }
+
+          // TODO: remove type assertion when typings fixed
+          ws[id] = (mergeDeepRight(ws[id], data) as unknown) as WorkshopBase
+          return
+        }
+        // don't do anything if we are in a left state
+        // we don't have the old workshop to use as a patch
       }
     }
   })

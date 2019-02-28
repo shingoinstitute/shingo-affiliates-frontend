@@ -5,7 +5,9 @@ import {
   WorkshopGetAll,
   WorkshopApiActionTypes,
   WorkshopGet,
-  WorkshopUpdate,
+  WorkshopApiAction,
+  WorkshopApiError,
+  WorkshopApiSuccess,
 } from '../actions/workshop-api.actions'
 import {
   exhaustMap,
@@ -20,6 +22,9 @@ import {
   WorkshopErrored,
   WorkshopSelect,
   WorkshopSelectErrored,
+  WorkshopRemoved,
+  WorkshopUpdate,
+  WorkshopAction,
 } from '../actions/workshop.actions'
 import { Overwrite } from '~app/util/types'
 import {
@@ -39,7 +44,10 @@ import { isSome } from 'fp-ts/lib/Option'
 import { or } from 'fp-ts/lib/function'
 import { right } from '~app/util/functional/Either'
 import { loadingAsync } from '~app/util/util'
-import { Action } from '@ngrx/store'
+import { Action, Store } from '@ngrx/store'
+import { mergeDeepRight } from 'ramda'
+import { workshop, WorkshopBase } from '../workshop.model'
+import { State } from '../reducers'
 
 const fromRouteConfig = (config: Route) => (r: ActivatedRouteSnapshot) =>
   !!(r.routeConfig && r.routeConfig.path === config.path)
@@ -47,34 +55,40 @@ const navAction = Lens.fromProp<
   RouterNavigationAction<SerializedRouterStateSnapshot>
 >()
 
-const handleError = (selection: boolean = false) =>
+const handleQueryClientError = (selection: boolean = false) =>
   catchError(err =>
     [new WorkshopErrored(err) as Action].concat(
       selection ? [new WorkshopSelectErrored(err)] : [],
     ),
   )
 
+// see https://blog.angularindepth.com/switchmap-bugs-b6de69155524
+// for a great explanation on what mapping operators to use
+
 @Injectable()
 export class WorkshopEffects {
   constructor(
-    private actions$: Actions,
+    private actions$: Actions<
+      WorkshopApiAction | WorkshopAction | RouterNavigationAction
+    >,
+    private store: Store<State>,
     private workshopService: WorkshopService,
   ) {}
 
   @Effect()
   getAll$ = this.actions$.pipe(
-    ofType<WorkshopGetAll>(WorkshopApiActionTypes.WorkshopGetAll),
+    ofType(WorkshopApiActionTypes.WorkshopGetAll),
     exhaustMap(() =>
       this.workshopService.getAll().pipe(
         map(workshops => new WorkshopAdded({ workshops })),
-        handleError(),
+        handleQueryClientError(),
       ),
     ),
   )
 
   @Effect()
   getOne$ = this.actions$.pipe(
-    ofType<WorkshopGet>(WorkshopApiActionTypes.WorkshopGet),
+    ofType(WorkshopApiActionTypes.WorkshopGet),
     exhaustMap(({ payload: { id, selection } }) =>
       this.workshopService.getById(id).pipe(
         mergeMap(w =>
@@ -82,26 +96,61 @@ export class WorkshopEffects {
             selection ? [new WorkshopSelect(right(id))] : [],
           ),
         ),
-        handleError(selection),
+        handleQueryClientError(selection),
       ),
     ),
   )
 
   @Effect()
+  create$ = this.actions$.pipe(
+    ofType(WorkshopApiActionTypes.WorkshopCreate),
+    exhaustMap(action => {
+      const {
+        payload: { workshop: newWs },
+      } = action
+      const toAdd = mergeDeepRight(workshop(), newWs)
+      return [
+        new WorkshopAdded({ workshops: [toAdd as WorkshopBase] }),
+        this.workshopService.create(newWs).pipe(
+          map(result => [
+            // tslint:disable-next-line: no-non-null-assertion
+            new WorkshopUpdate({ id: toAdd.Id!, data: { Id: result.id } }),
+            new WorkshopApiSuccess({ result, action }),
+          ]),
+          catchError(error => [
+            // tslint:disable-next-line: no-non-null-assertion
+            new WorkshopRemoved({ workshops: [toAdd.Id!] }),
+            new WorkshopApiError({ error, action }),
+          ]),
+        ),
+      ]
+    }),
+  )
+
+  @Effect()
   update$ = this.actions$.pipe(
-    ofType<WorkshopUpdate>(WorkshopApiActionTypes.WorkshopUpdate),
-    exhaustMap(v => {
-      const workshop = { ...v.payload.workshop, Id: v.payload.id } as Overwrite<
-        typeof v['payload']['workshop'],
-        { Id: string }
-      >
-      return this.workshopService.update(workshop)
+    ofType(WorkshopApiActionTypes.WorkshopUpdate),
+    exhaustMap(action => {
+      const {
+        payload: { id, data },
+      } = action
+      const diff = { ...data, Id: id } as Overwrite<typeof data, { Id: string }>
+
+      // TODO: Undo the optimistic update
+      // it doesn't really matter as we refetch every pagechange anyway
+      return [
+        new WorkshopUpdate({ id, data: diff }),
+        this.workshopService.update(diff).pipe(
+          map(result => new WorkshopApiSuccess({ result, action })),
+          catchError(error => [new WorkshopApiError({ error, action })]),
+        ),
+      ]
     }),
   )
 
   @Effect()
   navigateDetail$ = this.actions$.pipe(
-    ofType<RouterNavigationAction>(ROUTER_NAVIGATION),
+    ofType(ROUTER_NAVIGATION),
     map(
       navAction('payload')
         .compose(Lens.fromProp('routerState'))
@@ -122,7 +171,7 @@ export class WorkshopEffects {
 
   @Effect()
   navigateDashboard$ = this.actions$.pipe(
-    ofType<RouterNavigationAction>(ROUTER_NAVIGATION),
+    ofType(ROUTER_NAVIGATION),
     map(r =>
       navAction('payload')
         .compose(Lens.fromProp('routerState'))

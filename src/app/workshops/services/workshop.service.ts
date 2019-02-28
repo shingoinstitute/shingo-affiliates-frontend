@@ -23,6 +23,8 @@ export type ReadReturn = Exclude<Contract['read']['returntype'], undefined>
 export type ReadAllReturn = Contract['readAll']['returntype'][number]
 
 export type Contract = ApiContract<WorkshopsController>
+export type CreateData = Contract['create']['body']
+export type UpdateData = Contract['update']['body']
 
 // it's unlikely describe results will change over a users session,
 // and they take a long time to fetch. We can cache them using a subject

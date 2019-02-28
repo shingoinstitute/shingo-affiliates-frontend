@@ -8,10 +8,6 @@ import {
   CountryItem,
 } from '~app/services/countries/countries.service'
 import { FacilitatorService } from '~app/services/facilitator/facilitator.service'
-import {
-  AffiliateService,
-  DEFAULT_AFFILIATE_SEARCH_FIELDS,
-} from '~app/services/affiliate/affiliate.service'
 import * as W from '../../workshop.model'
 // tslint:disable-next-line:no-duplicate-imports
 import {
@@ -23,7 +19,10 @@ import {
 } from '../../workshop.model'
 import { CourseManager } from '../../course-manager.model'
 import { Facilitator } from '~app/facilitators/facilitator.model'
-import { Affiliate } from '~app/affiliates/affiliate.model'
+import {
+  DEFAULT_LANGUAGE_OPTIONS,
+  AffiliateBase,
+} from '~app/affiliates/affiliate.model'
 import * as fromRoot from '~app/reducers'
 import * as fromUser from '~app/user/reducers'
 import { Store, select } from '@ngrx/store'
@@ -59,9 +58,10 @@ import { affiliateId, User } from '~app/user/user.model'
 import { WorkshopService } from '~app/workshops/services/workshop.service'
 import { isTruthy } from '~app/util/predicates'
 import { property } from '~app/util/functional'
+import { AffiliateService } from '~app/affiliates/services/affiliate.service'
 
 export interface WorkshopForm {
-  affiliate: Affiliate
+  affiliate: AffiliateBase
   timezone: Timezone
   times: { startTime: string; endTime: string }
   type: WorkshopType
@@ -81,33 +81,34 @@ export interface WorkshopForm {
   instructors: Facilitator[]
 }
 
-export const addToWorkshop = (
+export const toWorkshopChanges = (
   form: WorkshopForm,
-  workshop = W.workshop(),
-): WorkshopBase => {
-  return produce(workshop, ws => {
-    addIf(ws, 'Organizing_Affiliate__r', form.affiliate)
-    addIf(ws, 'Organizing_Affiliate__c', form.affiliate && form.affiliate.Id)
-    addIf(ws, 'Workshop_Type__c', form.type)
-    addIf(ws, 'Status__c', form.status)
-    addIf(ws, 'Language__c', form.language)
-    addIf(ws, 'Public__c', form.isPublic)
-    addIf(ws, 'Event_City__c', form.city)
-    addIf(ws, 'Event_Country__c', form.country)
-    addIf(ws, 'Host_Site__c', form.hostSite)
-    addIf(ws, 'Course_Manager__r', form.courseManager)
-    addIf(ws, 'Course_Manager__c', form.courseManager && form.courseManager.Id)
-    addIf(ws, 'Start_Date__c', form.dates.startDate)
-    addIf(ws, 'End_Date__c', form.dates.endDate)
-    addIf(ws, 'Local_Start_Time__c', W.addMilliToTime(form.times.startTime))
-    addIf(ws, 'Local_End_Time__c', W.addMilliToTime(form.times.endTime))
-    addIf(ws, 'Timezone__c', form.timezone)
-    addIf(ws, 'Registration_Website__c', form.website)
-    addIf(ws, 'Billing_Contact__c', form.billing)
-    if (form.instructors && form.instructors.length > 0) {
-      W.addInstructorsMut(ws, form.instructors as any)
-    }
-  })
+): Partial<WorkshopBase> => {
+  const ws: Partial<WorkshopBase> = {}
+  addIf(ws, 'Organizing_Affiliate__r', form.affiliate)
+  addIf(ws, 'Organizing_Affiliate__c', form.affiliate && form.affiliate.Id)
+  addIf(ws, 'Workshop_Type__c', form.type)
+  addIf(ws, 'Status__c', form.status)
+  addIf(ws, 'Language__c', form.language)
+  addIf(ws, 'Public__c', form.isPublic)
+  addIf(ws, 'Event_City__c', form.city)
+  addIf(ws, 'Event_Country__c', form.country)
+  addIf(ws, 'Host_Site__c', form.hostSite)
+  addIf(ws, 'Course_Manager__r', form.courseManager)
+  addIf(ws, 'Course_Manager__c', form.courseManager && form.courseManager.Id)
+  addIf(ws, 'Start_Date__c', form.dates.startDate)
+  addIf(ws, 'End_Date__c', form.dates.endDate)
+  addIf(ws, 'Local_Start_Time__c', W.addMilliToTime(form.times.startTime))
+  addIf(ws, 'Local_End_Time__c', W.addMilliToTime(form.times.endTime))
+  addIf(ws, 'Timezone__c', form.timezone)
+  addIf(ws, 'Registration_Website__c', form.website)
+  addIf(ws, 'Billing_Contact__c', form.billing)
+  if (form.instructors && form.instructors.length > 0) {
+    // TODO: remove any once Facilitators is updated
+    ws.facilitators = form.instructors as any
+  }
+
+  return ws
 }
 
 const defaultTypes = ['Discover', 'Enable', 'Improve', 'Align', 'Build']
@@ -175,7 +176,7 @@ export class WorkshopFormComponent implements OnInit {
     statuses: string[]
   }> = EMPTY
 
-  languages$: Observable<string[]> = of(Affiliate.DEFAULT_LANGUAGE_OPTIONS)
+  languages$: Observable<ReadonlyArray<string>> = of(DEFAULT_LANGUAGE_OPTIONS)
 
   isAdmin$: Observable<boolean>
   private user$: Observable<User | null>
@@ -196,8 +197,7 @@ export class WorkshopFormComponent implements OnInit {
   facilitatorSearch = (query: string) => this._fs.search(query)
   courseManagerSearch = (query: string) =>
     this.getAffiliateId$().pipe(mergeMap(id => this._as.searchCMS(query, id)))
-  affiliateSearch = (query: string) =>
-    this._as.search(query, DEFAULT_AFFILIATE_SEARCH_FIELDS)
+  affiliateSearch = (query: string) => this._as.search(query)
 
   ngOnInit() {
     this.createForm()
@@ -208,7 +208,7 @@ export class WorkshopFormComponent implements OnInit {
       startWith(''),
       map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
       map(value =>
-        Affiliate.DEFAULT_LANGUAGE_OPTIONS.filter(l =>
+        DEFAULT_LANGUAGE_OPTIONS.filter(l =>
           normalizeString(l)
             .toLocaleLowerCase()
             .includes(normalizeString(value).toLocaleLowerCase()),
@@ -492,29 +492,29 @@ export class WorkshopFormComponent implements OnInit {
         }
       }
     >
-    const stringified: WorkshopForm = {
+    const withDatesConverted: WorkshopForm = {
       ...value,
       dates: {
         startDate: getIsoYMD(value.dates.startDate),
         endDate: getIsoYMD(value.dates.endDate),
       },
     }
-    this.submitted.emit(stringified)
+    this.submitted.emit(withDatesConverted)
   }
 
   contactDisplayWith = (value: null | undefined | { name: string }) =>
     value ? value.name : ''
 
-  private getAffiliate$(): Observable<Affiliate> {
+  private getAffiliate$(): Observable<AffiliateBase> {
     if (this.workshopForm.controls['affiliate'].value) {
-      return of(this.workshopForm.controls['affiliate'].value as Affiliate)
+      return of(this.workshopForm.controls['affiliate'].value as AffiliateBase)
     }
     return this.getAffiliateId$().pipe(mergeMap(id => this._as.getById(id)))
   }
 
   private getAffiliateId$(): Observable<string> {
     if (this.workshopForm.value.affiliate)
-      return of((this.workshopForm.value.affiliate as Affiliate).sfId)
+      return of((this.workshopForm.value.affiliate as AffiliateBase).Id)
     return this.user$.pipe(
       filter(isTruthy),
       // tslint:disable-next-line:no-non-null-assertion
