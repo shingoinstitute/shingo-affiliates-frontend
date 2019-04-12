@@ -151,10 +151,11 @@ const TimeRangeValidator = (
 }
 
 const COMMON_CASE_STUDIES = [
-  'NUMMI',
+  'Not Used',
+  'Nummi',
   'Tessei',
   'Virginia Mason',
-  'Tanpin Kanri 7-11',
+  'Other',
 ]
 
 @Component({
@@ -207,7 +208,7 @@ export class WorkshopFormComponent implements OnInit {
   tzOptions$: Observable<string[]> = of([])
 
   workshopTypes: string[] = ['Discover', 'Enable', 'Improve', 'Align', 'Build']
-  commonCaseStudies$: Observable<string[]> = of(COMMON_CASE_STUDIES)
+  commonCaseStudies: string[] = COMMON_CASE_STUDIES
   languages$: Observable<string[]> = of(Affiliate.DEFAULT_LANGUAGE_OPTIONS)
   statuses: string[] = [
     'Invoiced, Not Paid',
@@ -258,15 +259,6 @@ export class WorkshopFormComponent implements OnInit {
       map(value =>
         this.timezones.filter(tz =>
           tz.toLowerCase().includes(value.toLowerCase()),
-        ),
-      ),
-    )
-    this.commonCaseStudies$ = this.workshopForm.controls.caseStudy.valueChanges.pipe(
-      startWith(''),
-      map((v: any) => (typeof v === 'string' ? v : (v && String(v)) || '')),
-      map(value =>
-        COMMON_CASE_STUDIES.filter(c =>
-          c.toLowerCase().includes(value.toLowerCase()),
         ),
       ),
     )
@@ -347,7 +339,9 @@ export class WorkshopFormComponent implements OnInit {
       (this.initialWorkshop && this.initialWorkshop.Timezone__c) ||
       moment.tz.guess()
 
-    const formgroupConfig: { [k in keyof WorkshopForm]: any } = {
+    const formgroupConfig: {
+      [k in keyof WorkshopForm | 'caseStudyOther']: any
+    } = {
       affiliate: [affiliate, Validators.required],
       type: [
         (this.initialWorkshop && this.initialWorkshop.type) || 'Discover',
@@ -357,7 +351,11 @@ export class WorkshopFormComponent implements OnInit {
         this.initialWorkshop && this.initialWorkshop.status,
         ...(!this.isNewWorkshop ? [Validators.required] : []),
       ],
-      caseStudy: [this.initialWorkshop && this.initialWorkshop.Case_Study__c],
+      caseStudy: [
+        this.initialWorkshop && this.initialWorkshop.Case_Study__c,
+        Validators.required,
+      ],
+      caseStudyOther: [''],
       language: [
         (this.initialWorkshop && this.initialWorkshop.language) || 'English',
         Validators.required,
@@ -497,27 +495,41 @@ export class WorkshopFormComponent implements OnInit {
     this.tzPickerControl.valueChanges.subscribe(v => {
       ;(this.workshopForm.controls.timezone as FormControl).setValue(v)
     })
+
+    const caseStudyOther = this.workshopForm.controls.caseStudyOther
+    this.workshopForm.controls.caseStudy.valueChanges.subscribe(val => {
+      if (val === 'Other') {
+        caseStudyOther.setValidators([Validators.required])
+      } else {
+        caseStudyOther.setValidators([])
+      }
+
+      caseStudyOther.updateValueAndValidity()
+    })
   }
 
   onSubmit() {
     if (!this.auth.user) return
-    const value = this.workshopForm.value as Overwrite<
+    const baseValue = this.workshopForm.value as Overwrite<
       WorkshopForm,
       {
         dates: {
           startDate: Moment | Date
           endDate: Moment | Date
         }
+        caseStudyOther: string
       }
     >
-    const stringified: WorkshopForm = {
+    const { caseStudyOther, dates, ...value } = baseValue
+    const normalized: WorkshopForm = {
       ...value,
       dates: {
-        startDate: getIsoYMD(value.dates.startDate),
-        endDate: getIsoYMD(value.dates.endDate),
+        startDate: getIsoYMD(dates.startDate),
+        endDate: getIsoYMD(dates.endDate),
       },
+      caseStudy: value.caseStudy === 'Other' ? caseStudyOther : value.caseStudy,
     }
-    this.submitted.emit(stringified)
+    this.submitted.emit(normalized)
   }
 
   contactDisplayWith = (value: null | undefined | { name: string }) =>

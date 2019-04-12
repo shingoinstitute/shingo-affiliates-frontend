@@ -55,22 +55,24 @@
 
     <div class="input-item">
       <mat-form-field>
-        <input
-          type="text"
-          placeholder="Case Study"
-          matInput
-          formControlName="caseStudy"
-          [matAutocomplete]="auto"
-        />
+        <mat-label>Case Study</mat-label>
+        <mat-select formControlName="caseStudy">
+          <mat-option *ngFor="let study of commonCaseStudies" [value]="study">
+            {{ study }}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
-      <mat-autocomplete #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let study of (commonCaseStudies$ | async)"
-          [value]="study"
+      <mat-form-field
+        *ngIf="workshopForm.controls['caseStudy'].value === 'Other'"
+      >
+        <mat-label>Other Case Study</mat-label>
+        <input type="text" matInput formControlName="caseStudyOther" />
+        <mat-error
+          *ngIf="workshopForm.controls['caseStudyOther'].hasError('required')"
         >
-          {{ study }}
-        </mat-option>
-      </mat-autocomplete>
+          Must specify the case study used
+        </mat-error>
+      </mat-form-field>
     </div>
 
     <div class="input-item">
