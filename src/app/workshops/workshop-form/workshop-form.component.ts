@@ -155,6 +155,7 @@ const COMMON_CASE_STUDIES = [
   'Nummi',
   'Tessei',
   'Virginia Mason',
+  '7-11 in Japan',
   'Other',
 ]
 
