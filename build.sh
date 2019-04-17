@@ -15,6 +15,7 @@ OPTIONS:
     -e|--env        Specify env file
     -t|--tag TAG    Set image tag
     -p|--push       Push image to registry after build
+    -ng|--no-github Don't automatically push changes to github
     -h|--help       Show this
 "
 
@@ -32,6 +33,9 @@ build() {
         docker login docker.shingo.org
         docker push docker.shingo.org/"$IMG_NAME":"$TAG"
     fi
+    if [[ "$GITHUB" = true ]]; then
+        git push
+    fi
 
     if [[ -f "$TEMP" ]]; then
         mv "$TEMP" .env
@@ -46,6 +50,7 @@ read_build_args() {
 }
 
 PUSH=false
+GITHUB=true
 BUILD_ARGS=()
 while [[ $# -gt 0 ]]; do
     arg="$1"
@@ -56,6 +61,9 @@ while [[ $# -gt 0 ]]; do
             ;;
         -p|--push)
             PUSH=true
+            ;;
+        -ng|--no-git)
+            GITHUB=false
             ;;
         -t|--tag)
             shift
