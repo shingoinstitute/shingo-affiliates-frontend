@@ -71,7 +71,7 @@ export class AffiliateService extends ApiBase {
     return this.request<Base>('/affiliates/search', 'GET', {
       params: {
         0: { info: { kind: 'query', key: 'search' }, data: query },
-        1: { info: { kind: 'query', key: 'retreive' }, data: fields },
+        1: { info: { kind: 'query', key: 'retrieve' }, data: fields },
       },
     })
   }
